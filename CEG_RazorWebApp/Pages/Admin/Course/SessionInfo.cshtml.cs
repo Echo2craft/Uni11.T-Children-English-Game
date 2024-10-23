@@ -19,7 +19,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
 {
     public class SessionInfoModel : PageModel
     {
-        private readonly ILogger<SessionInfoModel> _logger;
+        /*private readonly ILogger<SessionInfoModel> _logger;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
         private readonly HttpClient _httpClient = null;
@@ -36,7 +36,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
             Secure = true,
             IsEssential = true,
         };
-        private CEG_RAZOR_Library methcall = new();
+        private CEG_RAZOR_Library methcall = new();*/
         public string? LayoutUrl { get; set; } = Constants.ADMIN_LAYOUT_URL;
         [BindProperty]
         public int? CourseID { get; set; }
@@ -45,7 +45,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
         public UpdateSessionVM? UpdateSessionInfo { get; set; } = new UpdateSessionVM();
         public CreateHomeworkVM? CreateHomework { get; set; } = new CreateHomeworkVM();
         // public List<AdminHomeworkInfoPVM>? Homeworks { get; set; }
-        public SessionInfoModel(ILogger<SessionInfoModel> logger, IConfiguration config, IMapper mapper)
+        /*public SessionInfoModel(ILogger<SessionInfoModel> logger, IConfiguration config, IMapper mapper)
         {
             _logger = logger;
             _config = config;
@@ -56,7 +56,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
             };
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             AdminAPI_URL = config.GetSection(Constants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value;
-        }
+        }*/
         public void OnGet(
             [FromRoute][Required] int courseId,
             [FromRoute][Required] int sessionId)

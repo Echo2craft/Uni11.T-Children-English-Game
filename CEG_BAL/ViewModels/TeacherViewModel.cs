@@ -8,6 +8,7 @@ namespace CEG_BAL.ViewModels
         {
             Account = new AccountViewModel();
         }
+        public int? AccountId { get; set; }
         [Required]
         [EmailAddress]
         [DataType(DataType.EmailAddress)]

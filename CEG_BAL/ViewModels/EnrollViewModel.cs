@@ -9,7 +9,7 @@ namespace CEG_BAL.ViewModels
 {
     public class EnrollViewModel
     {
-
+        public int? EnrollId { get; set; }
         public DateTime RegistrationDate { get; set; }
 
         public DateTime EnrolledDate { get; set; }

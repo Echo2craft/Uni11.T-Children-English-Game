@@ -55,7 +55,6 @@ namespace CEG_DAL.Repositories.Implements
                     GameConfigId = h.GameConfigId,
                     Hours = h.Hours,
                     Type = h.Type,
-                    Status = h.Status,
                     HomeworkQuestions = h.HomeworkQuestions,
                 })
                 .AsNoTrackingWithIdentityResolution()

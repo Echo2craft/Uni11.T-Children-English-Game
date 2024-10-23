@@ -51,9 +51,6 @@
                                     <!-- home1 -->
                                     <div class="tab-pane active" id="home1" role="tabpanel">
                                         <div id="question-table_wrapper" class="dataTables_wrapper no-footer">
-                                            <div class="col-sm-12 d-flex justify-content-end align-items-center">
-                                                <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createQuestion"></i>
-                                            </div>
                                             <table id="question-table"
                                                    class="table table-striped table-bordered dataTable no-footer"
                                                    aria-describedby="question-table_info">
@@ -137,6 +134,8 @@
                         { data: 'answersAmount' },
                     ]
                 });
+                var createQuestionToggleHtml = `<i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createQuestion"></i>`;
+                $('.dt-search').append(createQuestionToggleHtml);
                 $('#createQuestionForm').submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting normally
 

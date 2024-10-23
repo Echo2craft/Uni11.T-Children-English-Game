@@ -73,7 +73,7 @@ namespace CEG_BAL.Services.Implements
                 if (ques.HomeworkId != null)
                 {
                     var home = await _unitOfWork.HomeworkRepositories.GetByIdNoTracking(ques.HomeworkId.Value);
-                    quesvm.HomeworkStatus = home?.Status;
+                    //quesvm.HomeworkStatus = home?.Status;
                 }
                 quesvm.CourseStatus = await _unitOfWork.CourseRepositories.GetStatusByQuestionIdNoTracking(id);
                 return quesvm;

@@ -3,7 +3,6 @@ using CEG_BAL.ViewModels;
 using CEG_RazorWebApp.Libraries;
 using CEG_RazorWebApp.Models.Teacher.Response;
 using CEG_RazorWebApp.Models.HomeworkAnswer.Create;
-using CEG_RazorWebApp.Models.HomeworkAnswer.Get;
 using CEG_RazorWebApp.Models.HomeworkQuestion.Create;
 using CEG_RazorWebApp.Models.HomeworkQuestion.Get;
 using CEG_RazorWebApp.Models.HomeworkQuestion.Update;

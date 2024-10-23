@@ -243,14 +243,14 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Teacher not found."
                     });
                 }
-                if (newClass.WeeklySchedule == null || !CEG_BAL_Library.IsClassNewWeeklyScheduleValid(newClass.WeeklySchedule))
+                /*if (newClass.WeeklySchedule == null || !CEG_BAL_Library.IsClassNewWeeklyScheduleValid(newClass.WeeklySchedule))
                 {
                     return BadRequest(new
                     {
                         Status = false,
                         ErrorMessage = "Weekly schedule invalid."
                     });
-                }
+                }*/
                 ClassViewModel clas = new ClassViewModel();
                 _classService.Create(clas, newClass);
                 return Ok(new

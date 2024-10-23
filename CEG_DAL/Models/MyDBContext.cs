@@ -252,9 +252,6 @@ public partial class MyDBContext : DbContext
             entity.Property(e => e.StartDate)
                 .HasColumnType("datetime")
                 .HasColumnName("start_date");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .HasColumnName("title");
@@ -388,10 +385,7 @@ public partial class MyDBContext : DbContext
             entity.Property(e => e.CourseId).HasColumnName("course_id");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Hours).HasColumnName("hours");
-            entity.Property(e => e.Number).HasColumnName("number");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
+            entity.Property(e => e.Number).HasColumnName("session_number");
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .HasColumnName("title");

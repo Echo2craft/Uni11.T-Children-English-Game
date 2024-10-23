@@ -15,6 +15,7 @@ namespace CEG_BAL.Services.Interfaces
         void Update(CourseViewModel course);
         void UpdateStatus(int courseId, string courseStatus);
         Task<List<CourseViewModel>> GetCourseList();
+        Task<List<CourseViewModel>?> GetListByStatus(string status);
         Task<List<string>> GetCourseNameList();
         Task<List<string>> GetCourseNameByStatusList(string status);
         Task<CourseViewModel?> GetCourseById(int id);
