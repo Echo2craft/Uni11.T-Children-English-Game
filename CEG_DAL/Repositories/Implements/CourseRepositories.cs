@@ -47,8 +47,7 @@ namespace CEG_DAL.Repositories.Implements
                                 Title = s.Title,
                                 Description = s.Description,
                                 Hours = s.Hours,
-                                Number = s.Number,
-                                Status = s.Status,
+                                SessionNumber = s.SessionNumber,
                                 // Include Homeworks only if requested
                                 Homeworks = includeHomeworks ? s.Homeworks.ToList() : null
                             }).ToList() : null,

@@ -11,13 +11,13 @@ public partial class Schedule
 
     public int ClassId { get; set; }
 
-    public string DayOfWeek { get; set; } = null!;
+    public string? DayOfWeek { get; set; }
 
-    public TimeOnly StartTime { get; set; }
+    public TimeOnly? StartTime { get; set; }
 
-    public TimeOnly EndTime { get; set; }
+    public TimeOnly? EndTime { get; set; }
 
-    public string Status { get; set; } = null!;
+    public string? Status { get; set; }
 
     public virtual Class Class { get; set; } = null!;
 

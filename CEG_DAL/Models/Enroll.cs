@@ -17,7 +17,7 @@ public partial class Enroll
 
     public DateTime EnrolledDate { get; set; }
 
-    public string? Status { get; set; }
+    public string Status { get; set; } = null!;
 
     public virtual Class Class { get; set; } = null!;
 

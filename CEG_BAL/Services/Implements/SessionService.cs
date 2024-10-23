@@ -34,14 +34,14 @@ namespace CEG_BAL.Services.Implements
         public void Create(SessionViewModel model, CreateNewSession newSes)
         {
             var sess = _mapper.Map<Session>(model);
-            sess.Status = "Draft";
+            //sess.Status = "Draft";
 
             if (newSes != null)
             {
                 sess.Title = newSes.Title;
                 sess.Description = newSes.Description;
                 sess.Hours = newSes.Hours;
-                sess.Number = newSes.Number;
+                sess.SessionNumber = newSes.Number;
                 sess.CourseId = _unitOfWork.CourseRepositories.GetIdByName(newSes.CourseName).Result;
                 sess.Course = null;
             }
@@ -74,7 +74,7 @@ namespace CEG_BAL.Services.Implements
             {
                 sess.Title = model.Title;
                 sess.Description = model.Description;
-                sess.Number = model.Number;
+                sess.SessionNumber = model.Number;
                 sess.Hours = model.Hours;
             }
             _unitOfWork.SessionRepositories.Update(sess);
