@@ -410,9 +410,6 @@ public partial class MyDBContext : DbContext
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Image).HasColumnName("image");
             entity.Property(e => e.ParentId).HasColumnName("parent_id");
-            entity.Property(e => e.Playtime).HasColumnName("playtime");
-            entity.Property(e => e.Points).HasColumnName("points");
-            entity.Property(e => e.TotalPoint).HasColumnName("total_point");
 
             entity.HasOne(d => d.Account).WithMany(p => p.Students)
                 .HasForeignKey(d => d.AccountId)
@@ -431,13 +428,12 @@ public partial class MyDBContext : DbContext
 
             entity.Property(e => e.StudentHomeworkId).HasColumnName("student_homework_id");
             entity.Property(e => e.HomeworkId).HasColumnName("homework_id");
-            entity.Property(e => e.Hours).HasColumnName("hours");
             entity.Property(e => e.Playtime).HasColumnName("playtime");
+            entity.Property(e => e.Point).HasColumnName("point");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasColumnName("status");
             entity.Property(e => e.StudentProgressId).HasColumnName("student_progress_id");
-            entity.Property(e => e.TotalPoint).HasColumnName("total_point");
 
             entity.HasOne(d => d.Homework).WithMany(p => p.StudentHomeworks)
                 .HasForeignKey(d => d.HomeworkId)

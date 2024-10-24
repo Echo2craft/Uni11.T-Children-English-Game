@@ -11,11 +11,9 @@ public partial class StudentHomework
 
     public int StudentProgressId { get; set; }
 
-    public int? TotalPoint { get; set; }
+    public int? Point { get; set; }
 
     public TimeOnly? Playtime { get; set; }
-
-    public int? Hours { get; set; }
 
     public string? Status { get; set; }
 

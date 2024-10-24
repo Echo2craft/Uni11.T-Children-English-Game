@@ -11,15 +11,9 @@ public partial class Student
 
     public int AccountId { get; set; }
 
-    public int TotalPoint { get; set; }
-
     public string Description { get; set; } = null!;
 
-    public int? Playtime { get; set; }
-
     public int? CurLevel { get; set; }
-
-    public int? Points { get; set; }
 
     public int? Age { get; set; }
 

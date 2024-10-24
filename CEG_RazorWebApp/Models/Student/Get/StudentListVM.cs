@@ -6,7 +6,7 @@
 
         public string Fullname { get; set; } = null!;
 
-        public int Highscore { get; set; }
+        public int TotalScore { get; set; }
 
         public int? Playtime { get; set; }
 
