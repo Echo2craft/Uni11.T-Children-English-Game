@@ -278,10 +278,16 @@
                 }
             });
         });
+        $('#session-table tbody').on('click', 'tr', function () {
+            // var data = table.row(this).data();
+            $(this).toggleClass('selected');
+            // alert('You clicked on ' + data.homeworkQuestionId + "'s row");
+        });
         // dropdown js
         $('#search-course-dropdown').on('keyup', function () {
             var query = $(this).val().toLowerCase();
             if (query) {
+
                 // Filter options based on the search input
                 var results = courseList.filter(function (item) {
                     return item.courseName && item.courseName.toLowerCase().includes(query);
@@ -290,19 +296,31 @@
                 // Render the dropdown list
                 renderDropdown(results);
                 $('#search-course-results').show(); // Show the dropdown list
+                // Ensure that at least one course was found and has sessions
+                // if (results.length > 0 && results[0].sessions) {
+                //     table.clear().rows.add(results[0].sessions).draw();
+                // } else {
+                //     console.error('Selected course or its sessions not found.');
+                //     table.clear().draw();
+                // }
+
             } else {
                 $('#search-course-results').hide(); // Hide the dropdown if input is empty
+                table.clear().draw();
             }
         });
 
         // Close dropdown when clicking outside
         $(document).on('click', function (event) {
+            if ($(event.target).closest('#session-table').length) {
+                $('#search-course-results').hide();
+                $('#search-course-results').empty();
+            } else
             if (!$(event.target).closest('#search-course-dropdown').length) {
                 $('#search-course-results').hide();
                 $('#search-course-results').empty(); // Close dropdown
 
                 const selectedText = $('#search-course-dropdown').val();
-                console.log(courseList);
                 if (courseList && courseList.length > 0 && selectedText) {
                     var selectedCourse = courseList.filter(function (course) {
                         return course.courseName === selectedText;
@@ -316,7 +334,8 @@
                     }
                 }
 
-            } else if ($(event.target).closest('#search-course-dropdown').length) {
+            } else 
+            if ($(event.target).closest('#search-course-dropdown').length) {
                 renderDropdown(courseList);
                 $('#search-course-results').show();
             }
@@ -331,6 +350,18 @@
 
             // You can store the selected ID for further processing
             // console.log('Selected Question ID:', selectedId);
+
+            // Filter options based on the search input
+            // var results = courseList.filter(function (item) {
+            //     return item.courseName && item.courseName === selectedText;
+            // });
+
+            // if (results.length > 0 && results[0].sessions) {
+            //     table.clear().rows.add(results[0].sessions).draw();
+            // } else {
+            //     console.error('Selected course or its sessions not found.');
+            //     table.clear().draw();
+            // }
 
             // Optionally, close the dropdown
             $('#search-course-results').empty(); // Clear dropdown
@@ -421,9 +452,9 @@
                     </div>
                 </div>
             `;
-            var select = $('#createClass_WeeklySchedule'); // Reference to the <select> element
-            select.empty();
-            select.append(getScheduleOptions());
+            // var select = $('#createClass_WeeklySchedule'); Reference to the <select> element
+            // select.empty();
+            // select.append(getScheduleOptions());
             classList.append(cardCreateClassHtml);
             // Loop through the data array and append each class div
             $.each(data, function (index, classObj) {
@@ -482,17 +513,17 @@
                 classList.append(cardHtml);
             });
         }
-        function getScheduleOptions(selectedType) {
-            var options = @Html.Raw(Model.SchedulePresets); // Example types
-            console.log(options);
-            var html = '';
+        // function getScheduleOptions(selectedType) {
+        //     var options = @Html.Raw(Model.SchedulePresets); Example types
+        //     console.log(options);
+        //     var html = '';
 
-            options.forEach(function (type) {
-                html += `<option value="${type}" ${selectedType === type ? 'selected' : ''}>${type}</option>`;
-            });
+        //     options.forEach(function (type) {
+        //         html += `<option value="${type}" ${selectedType === type ? 'selected' : ''}>${type}</option>`;
+        //     });
 
-            return html;
-        }
+        //     return html;
+        // }
         function formatDate(date) {
             let d = new Date(date);
 
@@ -525,8 +556,8 @@
                 TeacherName: $("#createClass_TeacherName").val(),
                 CourseName: $("#createClass_CourseName").val(),
                 StartDate: $("#createClass_StartDate").val(),
-                EndDate: $("#createClass_EndDate").val(),
-                WeeklySchedule: $('#createClass_WeeklySchedule').val()
+                EndDate: $("#createClass_EndDate").val()
+                // WeeklySchedule: $('#createClass_WeeklySchedule').val()
             };
 
             // Make the AJAX POST request

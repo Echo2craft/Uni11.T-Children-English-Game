@@ -2,6 +2,7 @@
 @model CEG_RazorWebApp.Pages.Admin.Class.ClassInfoModel
 @{
     ViewData["Title"] = "Admin Class Info Page";
+    var updateClass = Model.UpdateClassVM;
     string? search = string.Empty;
     Layout = "~/Pages/Shared/_ALayout.cshtml";
 }
@@ -214,15 +215,15 @@
                     <div class="modal-header">
                         <h4 class="modal-title">Update Class Status</h4>
                     </div>
-                    @* <form method="post" id="updateCourseStatusForm">
+                    <form method="post" id="updateClassStatusForm">
                         <div class="modal-body">
                             <div class="row p-4">
                                 <div class="col-12">
                                     <div class="row form-group">
-                                        <label for="updateCourseStatus_Status" class="col-md-3 col-form-label mt-3 text-md-right">New Status (this action cannot be undone!)</label>
-                                        <select class="form-control col-md-7 custom-select" id="updateCourseStatus_Status"></select>
-                                        <span asp-validation-for="@updateCourse.Status" id="error_message"
-                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                        <label for="updateClassStatus_Status" class="col-md-3 col-form-label mt-3 text-md-right">New Status (this action cannot be undone!)</label>
+                                        <select class="form-control col-md-7 custom-select" id="updateClassStatus_Status"></select>
+                                        @* <span asp-validation-for="@updateClass.Status" id="error_message"
+                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
                                     </div>
                                 </div>
                             </div>
@@ -231,7 +232,7 @@
                             <button class="btn btn-success" type="submit">Update</button>
                             <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
                         </div>
-                    </form> *@
+                    </form>
                 </div>
             </div>
         </div>
@@ -245,22 +246,100 @@
                         <div class="modal-body">
                             <div class="modal-body">
                                 <div class="col-12">
-                                    @* <div class="row form-group">
-                                        <label asp-for="updateClass.ClassName" class="col-sm-4 col-form-label"></label>
+                                    <div class="row form-group">
+                                        <label asp-for="@updateClass.ClassName" class="col-sm-4 col-form-label"></label>
                                         <div class="col-sm-8">
-                                            <input asp-for="@updateClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-7">
-                                            <span asp-validation-for="@updateQuestion.Question" id="error_message"
+                                            <input asp-for="@updateClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-7">
+                                            <span asp-validation-for="@updateClass.ClassName" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                         </div>
                                     </div>
                                     <div class="row form-group">
-                                        <label asp-for="@updateQuestion.Question" class="col-sm-4 col-form-label"></label>
+                                        <label asp-for="@updateClass.MinStudents" class="col-sm-4 col-form-label"></label>
                                         <div class="col-sm-8">
-                                            <textarea asp-for="@updateQuestion.Question" value="@updateQuestion.Question" required class="form-control"></textarea>
-                                            <span asp-validation-for="@updateQuestion.Question" id="error_message"
+                                            <input asp-for="@updateClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                            <span asp-validation-for="@updateClass.MinStudents" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                         </div>
-                                    </div> *@
+                                    </div>
+                                    <div class="row form-group">
+                                        <label asp-for="@updateClass.MaxStudents" class="col-sm-4 col-form-label"></label>
+                                        <div class="col-sm-8">
+                                            <input asp-for="@updateClass.MaxStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                            <span asp-validation-for="@updateClass.MaxStudents" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <label asp-for="@updateClass.TeacherName" class="col-md-4 col-form-label">Select a Teacher</label>
+                                        <div class="col-sm-8">
+                                            <input data-courseName="A TeacherName" type="text" id="search-teacher-dropdown" class="form-control custom-select text-md-left" placeholder="Search a particular teacher..." required>
+                                            <ul class="search-teacher-results dropdown-menu" id="search-teacher-results"></ul>
+                                            <span asp-validation-for="@updateClass.TeacherName" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <label asp-for="@updateClass.CourseName" class="col-md-4 col-form-label">Select a available Course</label>
+                                        <div class="col-sm-8">
+                                            <input data-courseName="A Course" type="text" id="search-course-dropdown" class="form-control custom-select text-md-left" placeholder="Search a particular course..." required>
+                                            <ul class="search-course-results dropdown-menu" id="search-course-results"></ul>
+                                            <span asp-validation-for="@updateClass.CourseName" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <label asp-for="@updateClass.StartDate" class="col-sm-4 col-form-label"></label>
+                                        <div class="col-sm-8">
+                                            <input asp-for="@updateClass.StartDate" type="datetime-local" required class="form-control col-md-7">
+                                            <span asp-validation-for="@updateClass.StartDate" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <label asp-for="@updateClass.EndDate" class="col-sm-4 col-form-label"></label>
+                                        <div class="col-sm-8">
+                                            <input asp-for="@updateClass.EndDate" type="datetime-local" required class="form-control col-md-7">
+                                            <span asp-validation-for="@updateClass.EndDate" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                        </div>
+                                    </div>
+                                    <div id="session-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
+                                        <table id="session-table"
+                                               class="table table-striped table-bordered dataTable no-footer"
+                                               aria-describedby="session-table_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="session-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Session ID: activate to sort column ascending">
+                                                        Session ID
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="session-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Session Number: activate to sort column ascending">
+                                                        Session Number
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="session-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Title: activate to sort column ascending">
+                                                        Session Title
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="session-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Description: activate to sort column ascending">
+                                                        Session Description
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

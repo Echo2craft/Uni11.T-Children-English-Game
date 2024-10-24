@@ -19,7 +19,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Class
         public string? SchedulePresets { get; set; }
         public void OnGet()
         {
-            SchedulePresets = JsonSerializer.Serialize(CreateClass.WeeklySchedulePresets);
+            // SchedulePresets = JsonSerializer.Serialize(CreateClass.WeeklySchedulePresets);
         }
     }
 }
