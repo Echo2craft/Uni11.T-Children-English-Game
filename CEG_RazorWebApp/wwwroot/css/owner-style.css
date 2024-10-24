@@ -1968,8 +1968,8 @@ html body {
         }
 /* end of use for Homework Info Page*/
 .search-course-results.dropdown-menu {
-/*    top: 43%;
-    left: 25%;*/
+    top: auto;
+    left: auto;
 }
 /**/
 .bx {

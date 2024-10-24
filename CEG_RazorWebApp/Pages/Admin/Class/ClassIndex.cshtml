@@ -117,7 +117,7 @@
                                     <ul class="search-course-results dropdown-menu" id="search-course-results"></ul> *@
                                     <div class="col-md-7">
                                         <!-- search bar with dropdown list-->
-                                        <input data-courseName="A Course" type="text" id="search-course-dropdown" class="form-control custom-select text-md-left" placeholder="Search a particular course...">
+                                        <input data-courseName="A Course" type="text" id="search-course-dropdown" class="form-control custom-select text-md-left" placeholder="Search a particular course..." required>
                                         <ul class="search-course-results dropdown-menu" id="search-course-results"></ul>
                                     </div>
                                     <span asp-validation-for="@createClass.CourseName" id="error_message"
@@ -164,8 +164,8 @@
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="session-table" rowspan="1"
                                                         colspan="1" aria-sort="ascending"
-                                                        aria-label="Status: activate to sort column ascending">
-                                                        Session Title
+                                                        aria-label="Description: activate to sort column ascending">
+                                                        Session Description
                                                     </th>
                                                 </tr>
                                             </thead>
