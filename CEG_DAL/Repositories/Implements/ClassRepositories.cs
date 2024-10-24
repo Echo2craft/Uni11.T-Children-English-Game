@@ -18,7 +18,7 @@ namespace CEG_DAL.Repositories.Implements
             _dbContext = dbContext;
         }
 
-        public async Task<Class?> GetByIdNoTracking(int id)
+        public async Task<Class?> GetByIdNoTracking(int id, bool includeTeacher = false, bool includeCourse = false)
         {
             return await _dbContext.Classes
                 .Select(c => new Class
@@ -32,7 +32,7 @@ namespace CEG_DAL.Repositories.Implements
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
                     Status = c.Status,
-                    Teacher = new Teacher // Create a new Teacher object
+                    Teacher = includeTeacher ? new Teacher // Create a new Teacher object
                     {
                         TeacherId = c.Teacher.TeacherId,
                         AccountId = c.Teacher.AccountId,
@@ -45,13 +45,13 @@ namespace CEG_DAL.Repositories.Implements
                             Gender = c.Teacher.Account.Gender,
                         }
                         // Add other necessary properties here, but do NOT include Classes
-                    },
-                    Course = new Course // Create a new Course object
+                    } : null,
+                    Course = includeCourse ? new Course // Create a new Course object
                     {
                         CourseId = c.Course.CourseId,
                         CourseName = c.Course.CourseName
                         // Add other necessary properties here, but do NOT include Classes
-                    },
+                    } : null,
                     Schedules = c.Schedules,
                     Enrolls = c.Enrolls.Select(s => new Enroll()
                     {

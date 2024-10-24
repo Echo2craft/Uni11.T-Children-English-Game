@@ -164,7 +164,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
         [HttpPut("{id}/Update/Status")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -181,7 +181,7 @@ namespace CEG_WebAPI.Controllers
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Course Does Not Exist!"
+                        ErrorMessage = "Class Does Not Exist!"
                     });
                 }
                 bool isValid = CEG_BAL_Library.IsClassNewStatusValid(result.Status, status);
@@ -200,7 +200,7 @@ namespace CEG_WebAPI.Controllers
                     return BadRequest(new
                     {
                         Status = false,
-                        ErrorMessage = "New status is either an old status or not a valid status for requested course"
+                        ErrorMessage = "New status is either an old status or not a valid status for requested class"
                     });
                 }
             }

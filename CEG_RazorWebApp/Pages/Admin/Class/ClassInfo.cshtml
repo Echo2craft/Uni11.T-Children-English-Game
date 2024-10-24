@@ -429,6 +429,18 @@
                 //     callApiPostCreateAnswer(formData);
                 //     $('#createAnswerForm').trigger("reset");
                 // });
+                $('#updateClassStatusForm').submit(function (event) {
+                    event.preventDefault(); // Prevent the form from submitting normally
+
+                    //Get the form data
+                    // var formData = {
+                    //     status: $('select[id="updateCourseStatus_Status"]').val()
+                    // };
+
+                    //Make the AJAX request
+                    callApiPutUpdateClassStatus($('select[id="updateClassStatus_Status"]').val());
+                    $('#updateClassStatusForm').trigger("reset");
+                });
                 $(document).on('submit', 'form[id^="editAnswerForm_"]', function (event) {
                     event.preventDefault();
                     // Extract the answerId from the form's id
@@ -677,6 +689,56 @@
             //     <hr class="container my-0">
             //     ` + answerUpdateHtml;
             // }
+            function getStatusOptions(selectedStatus) {
+                var options = ['Draft', 'Open', 'Postponed', 'Cancelled', 'Ended']; // Example statuses
+                var html = '';
+                switch (selectedStatus) {
+                    case 'Open':
+                        options = ['Open', 'Postponed', 'Cancelled', 'Ended']
+                        break;
+                    case 'Draft':
+                        options = ['Draft', 'Open']
+                        break;
+                    case 'Postponed':
+                        options = ['Open', 'Postponed', 'Cancelled', 'Ended']
+                        break;
+                    case 'Ended':
+                        options = ['Open', 'Ended']
+                        break;
+                    case 'Cancelled':
+                        options = ['Open', 'Cancelled', 'Ended']
+                        break;
+                }
+                options.forEach(function (status) {
+                    html += `<option value="${status}" ${selectedStatus === status ? 'selected' : ''} >${status}</option>`;
+                });
+
+                return html;
+            }
+            function callApiPutUpdateClassStatus(formData) {
+                $.ajax({
+                    url: apiUrl + 'Class/'+ @Model.ClassID + '/Update/Status', // Specify your Razor Page here
+                    type: 'PUT',
+                    data: JSON.stringify(formData),
+                    headers: {
+                        'Authorization': 'Bearer ' + token, // Token for authentication
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        // Handle success (display a success message or redirect, etc.)
+                        if (response.status) {
+                            showAlert('success', "Class Status update successfully");
+                            callApiGetClassDetail();
+                        } else {
+                            showAlert('error', response.errorMessage);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error (display the validation message, etc.)
+                        showAlert('error',"Error in api call:" + error);
+                    }
+                });
+            }
             function formatDate(date) {
                 let d = new Date(date);
 
@@ -739,8 +801,10 @@
                 // $('#question-allow-add-answer').append(answerAddHtml);
                 $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
 
-                $('#updateQuestion_Question').text(data.question);
-                $('#createAnswer_Type').append(getTypeOptions());
+                // $('#updateQuestion_Question').text(data.question);
+                // $('#createAnswer_Type').append(getTypeOptions());
+
+                $('select[id="updateClassStatus_Status"]').append(getStatusOptions(data.status));
             }
         </script>
     </body>
