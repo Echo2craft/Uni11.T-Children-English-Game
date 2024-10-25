@@ -700,7 +700,7 @@ html body {
         }
 
         .cardFB .card-body {
-            padding-top: 0;
+            /*padding-top: 0;*/
         }
 
         .cardFB .imgBx {
@@ -1975,7 +1975,33 @@ html body {
 .bx {
     line-height: 1.5;
 }
-i.bx.bxs-add-to-queue.bx-sm {
+.bx.bx-search-alt{
+    line-height: normal;
+}
+.dt-search{
+    display: flex;
+    align-items: center;
+}
+    .dt-search input {
+        padding: 15px 0px 15px 35px;
+        position: relative;
+        margin-left: 0.5em;
+        border-radius: 30px;
+        outline: none;
+    }
+    .dt-search .bx.bx-search-alt.question-search-icon {
+        position: absolute;
+        top: 10px;
+        margin-left: 20px;
+        font-size: 1.2em;
+    }
+    .dt-search .bx.bx-search-alt.enroll-search-icon {
+        position: absolute;
+        top: 8px;
+        margin-left: 20px;
+        font-size: 1.2em;
+    }
+.bxs-add-to-queue.bx-sm {
     margin: 0px 5px;
 }
 div.dt-container div.dt-paging ul.pagination {

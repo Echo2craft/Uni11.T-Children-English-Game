@@ -399,9 +399,27 @@
                     columns: [
                         { data: 'enrollId' },
                         { data: 'student.account.fullname' },
-                        { data: 'status' }
+                        // { data: 'status' },
+                        { // Add a select box in the last column
+                            data: null, // No need to map it to a specific data field
+                            render: function (data, type, row, meta) {
+                                // Customize the select box based on your needs
+                                return `
+                                <select class="custom-select form-control" data-enroll-id="${row.enrollId}">
+                                    <option value="enrolled" ${row.status === 'enrolled' ? 'selected' : ''}>Enrolled</option>
+                                    <option value="pending" ${row.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                </select>
+                                `;
+                            }
+                        }
                     ]
                 });
+                var createQuestionToggleHtml = `
+                    <i class="bx bx-search-alt enroll-search-icon"></i>
+                `;
+                $('.dt-search').append(createQuestionToggleHtml);
+                $('.dt-search label').text('');
+                $('.dt-search input').attr('placeholder', 'Search enroll...')
                 callApiGetClassDetail();
                 $('#editClassForm').submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting normally

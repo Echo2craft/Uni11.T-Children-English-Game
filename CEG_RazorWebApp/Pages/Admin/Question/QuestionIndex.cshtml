@@ -134,8 +134,13 @@
                         { data: 'answersAmount' },
                     ]
                 });
-                var createQuestionToggleHtml = `<i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createQuestion"></i>`;
+                var createQuestionToggleHtml = `
+                    <i class="bx bx-search-alt question-search-icon"></i>
+                    <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createQuestion"></i>
+                `;
                 $('.dt-search').append(createQuestionToggleHtml);
+                $('.dt-search label').text('');
+                $('.dt-search input').attr('placeholder', 'Search question...')
                 $('#createQuestionForm').submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting normally
 
