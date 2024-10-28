@@ -54,8 +54,8 @@ namespace CEG_BAL.Configurations
                         validStatuses =
                         [
                             Constants.COURSE_STATUS_CANCELLED,
-                            Constants.COURSE_STATUS_AVAILABLE,
-                            Constants.COURSE_STATUS_END_OF_SERVICE
+                            /*Constants.COURSE_STATUS_AVAILABLE,
+                            Constants.COURSE_STATUS_END_OF_SERVICE*/
                         ];
                         return validStatuses.Contains(newStatus);
                     }
