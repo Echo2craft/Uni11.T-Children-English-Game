@@ -383,7 +383,7 @@ public partial class MyDBContext : DbContext
             entity.Property(e => e.CourseId).HasColumnName("course_id");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Hours).HasColumnName("hours");
-            entity.Property(e => e.Number).HasColumnName("session_number");
+            entity.Property(e => e.SessionNumber).HasColumnName("session_number");
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .HasColumnName("title");
@@ -451,7 +451,7 @@ public partial class MyDBContext : DbContext
             entity.ToTable("StudentProgress");
 
             entity.Property(e => e.StudentProgressId).HasColumnName("student_progress_id");
-            entity.Property(e => e.Playtime).HasColumnName("playtime");
+            entity.Property(e => e.Playtimes).HasColumnName("playtime");
             entity.Property(e => e.StudentId).HasColumnName("student_id");
             entity.Property(e => e.TotalPoint).HasColumnName("total_point");
 
