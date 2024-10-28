@@ -13,8 +13,6 @@ public partial class StudentProgress
 
     public TimeOnly? Playtime { get; set; }
 
-    public virtual ICollection<HomeworkResult> HomeworkResults { get; set; } = new List<HomeworkResult>();
-
     public virtual Student Student { get; set; } = null!;
 
     public virtual ICollection<StudentHomework> StudentHomeworks { get; set; } = new List<StudentHomework>();
