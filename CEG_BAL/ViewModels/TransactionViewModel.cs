@@ -9,14 +9,22 @@ namespace CEG_BAL.ViewModels
 {
     public class TransactionViewModel
     {
-        public DateTime PaymentDate { get; set; }
+        public int TransactionId { get; set; }
 
-        public bool PaymentStatus { get; set; }
+        public string VnpayId { get; set; } = null!;
 
-        public string PaymentType { get; set; } = null!;
+        public int TransactionAmount { get; set; }
+
+        public DateTime TransactionDate { get; set; }
+
+        public bool TransactionStatus { get; set; }
+
+        public string TransactionType { get; set; } = null!;
 
         public DateTime ConfirmDate { get; set; }
 
-        public virtual Parent Parents { get; set; } = null!;
+        public virtual ICollection<EnrollViewModel> Enrolls { get; set; } = new List<EnrollViewModel>();
+
+        public virtual ParentViewModel Parents { get; set; } = null!;
     }
 }

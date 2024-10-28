@@ -1,4 +1,4 @@
-﻿
+
 namespace CEG_BAL.ViewModels
 {
     public class ScheduleViewModel
