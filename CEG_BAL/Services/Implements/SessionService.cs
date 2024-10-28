@@ -74,7 +74,7 @@ namespace CEG_BAL.Services.Implements
             {
                 sess.Title = model.Title;
                 sess.Description = model.Description;
-                sess.SessionNumber = model.Number;
+                sess.SessionNumber = model.SessionNumber;
                 sess.Hours = model.Hours;
             }
             _unitOfWork.SessionRepositories.Update(sess);
