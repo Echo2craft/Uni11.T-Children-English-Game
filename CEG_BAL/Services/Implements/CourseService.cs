@@ -65,17 +65,21 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<CourseViewModel>> GetCourseList()
         {
-            return _mapper.Map<List<CourseViewModel>>(await _unitOfWork.CourseRepositories.GetCourseList());
+            return _mapper.Map<List<CourseViewModel>>(await _unitOfWork.CourseRepositories.GetList());
+        }
+        public async Task<List<CourseViewModel>?> GetListByStatus(string status)
+        {
+            return _mapper.Map<List<CourseViewModel>>(await _unitOfWork.CourseRepositories.GetListByStatus(status));
         }
 
         public async Task<List<string>> GetCourseNameList()
         {
-            return await _unitOfWork.CourseRepositories.GetCourseNameList();
+            return await _unitOfWork.CourseRepositories.GetNameList();
         }
 
         public async Task<List<string>> GetCourseNameByStatusList(string status)
         {
-            return await _unitOfWork.CourseRepositories.GetCourseNameByStatusList(status);
+            return await _unitOfWork.CourseRepositories.GetNameListByStatus(status);
         }
 
         public void Update(CourseViewModel course)

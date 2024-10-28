@@ -47,7 +47,8 @@ namespace CEG_DAL.Repositories.Implements
                                 Title = s.Title,
                                 Description = s.Description,
                                 Hours = s.Hours,
-                                SessionNumber = s.SessionNumber,
+                                Number = s.Number,
+                                //Status = s.Status,
                                 // Include Homeworks only if requested
                                 Homeworks = includeHomeworks ? s.Homeworks.ToList() : null
                             }).ToList() : null,
@@ -58,7 +59,7 @@ namespace CEG_DAL.Repositories.Implements
             return await query.SingleOrDefaultAsync(cou => cou.CourseId == id);
         }
 
-        public async Task<List<Course>> GetCourseList()
+        public async Task<List<Course>> GetList()
         {
             return await _dbContext.Courses
                 .Select(c => new Course()
@@ -79,13 +80,34 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<string>?> GetCourseNameList()
+        public async Task<List<Course>?> GetListByStatus(string status)
+        {
+            return await _dbContext.Courses
+                .Where(c => c.Status == status)
+                .Select(c => new Course()
+                {
+                    CourseId = c.CourseId,
+                    CourseName = c.CourseName,
+                    CourseType = c.CourseType,
+                    Description = c.Description,
+                    Difficulty = c.Difficulty,
+                    Category = c.Category,
+                    Image = c.Image,
+                    RequiredAge = c.RequiredAge,
+                    TotalHours = c.TotalHours,
+                    Status = c.Status,
+                    Sessions = c.Sessions
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<string>?> GetNameList()
         {
             return await _dbContext.Courses
                 .Select(c => c.CourseName)
                 .ToListAsync();
         }
-        public async Task<List<string>?> GetCourseNameByStatusList(string status)
+        public async Task<List<string>?> GetNameListByStatus(string status)
         {
             return await _dbContext.Courses
                 .Where(c => c.Status == status)

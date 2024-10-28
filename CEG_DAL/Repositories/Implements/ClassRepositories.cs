@@ -18,16 +18,94 @@ namespace CEG_DAL.Repositories.Implements
             _dbContext = dbContext;
         }
 
-        public async Task<Class?> GetByIdNoTracking(int id)
+        public async Task<Class?> GetByIdNoTracking(int id, bool includeTeacher = false, bool includeCourse = false)
         {
-            return await _dbContext.Classes.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(cla => cla.ClassId == id);
+            return await _dbContext.Classes
+                .Select(c => new Class
+                {
+                    ClassId = c.ClassId,
+                    ClassName = c.ClassName,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    MinimumStudents = c.MinimumStudents,
+                    MaximumStudents = c.MaximumStudents,
+                    TeacherId = c.TeacherId,
+                    CourseId = c.CourseId,
+                    Status = c.Status,
+                    Teacher = includeTeacher ? new Teacher // Create a new Teacher object
+                    {
+                        TeacherId = c.Teacher.TeacherId,
+                        AccountId = c.Teacher.AccountId,
+                        Email = c.Teacher.Email,
+                        Phone = c.Teacher.Phone,
+                        Image = c.Teacher.Image,
+                        Account = new Account
+                        {
+                            Fullname = c.Teacher.Account.Fullname,
+                            Gender = c.Teacher.Account.Gender,
+                        }
+                        // Add other necessary properties here, but do NOT include Classes
+                    } : null,
+                    Course = includeCourse ? new Course // Create a new Course object
+                    {
+                        CourseId = c.Course.CourseId,
+                        CourseName = c.Course.CourseName
+                        // Add other necessary properties here, but do NOT include Classes
+                    } : null,
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls.Select(s => new Enroll()
+                    {
+                        EnrollId = s.EnrollId,
+                        Student = new Student()
+                        {
+                            Account = new Account()
+                            {
+                                Fullname = s.Student.Account.Fullname
+                            }
+                        },
+                        Status = s.Status
+                    }).ToList(),
+                })
+                .AsNoTrackingWithIdentityResolution()
+                .SingleOrDefaultAsync(cla => cla.ClassId == id);
         }
 
         public async Task<List<Class>> GetClassList()
         {
             return await _dbContext.Classes
-                .Include(c => c.Teacher)
-                .Include(c => c.Course)
+                .Select(c => new Class
+                {
+                    ClassId = c.ClassId,
+                    ClassName = c.ClassName,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    MinimumStudents = c.MinimumStudents,
+                    MaximumStudents = c.MaximumStudents,
+                    TeacherId = c.TeacherId,
+                    CourseId = c.CourseId,
+                    Status = c.Status,
+                    Teacher = new Teacher // Create a new Teacher object
+                    {
+                        TeacherId = c.Teacher.TeacherId,
+                        Email = c.Teacher.Email,
+                        Phone = c.Teacher.Phone,
+                        Image = c.Teacher.Image,
+                        Account = new Account
+                        {
+                            Fullname = c.Teacher.Account.Fullname,
+                            Gender = c.Teacher.Account.Gender,
+                        }
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Course = new Course // Create a new Course object
+                    {
+                        CourseId = c.Course.CourseId,
+                        CourseName = c.Course.CourseName
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
+                })
                 .ToListAsync();
         }
         public async Task<List<Class>> GetClassListAdmin()
@@ -43,6 +121,7 @@ namespace CEG_DAL.Repositories.Implements
                     MaximumStudents = c.MaximumStudents,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
+                    Status = c.Status,
                     Teacher = new Teacher // Create a new Teacher object
                     {
                         TeacherId = c.Teacher.TeacherId,
@@ -61,17 +140,18 @@ namespace CEG_DAL.Repositories.Implements
                         CourseId = c.Course.CourseId,
                         CourseName = c.Course.CourseName
                         // Add other necessary properties here, but do NOT include Classes
-                    }
+                    },
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
                 })
                 .ToListAsync();
         }
         public async Task<List<Class>> GetClassListByTeacherId(int teacherId)
         {
-            return await _dbContext.Classes.AsNoTrackingWithIdentityResolution().Where(c => c.TeacherId == teacherId)
-                .Include(c => c.Teacher)
-                .ThenInclude(t => t.Account)
-                .Include(c => c.Course).
-                Select(c => new Class
+            return await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Where(c => c.TeacherId == teacherId)
+                .Select(c => new Class
                 {
                     ClassId = c.ClassId,
                     ClassName = c.ClassName,
@@ -81,6 +161,7 @@ namespace CEG_DAL.Repositories.Implements
                     MaximumStudents = c.MaximumStudents,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
+                    Status = c.Status,
                     Teacher = new Teacher // Create a new Teacher object
                     {
                         TeacherId = c.Teacher.TeacherId,
@@ -99,8 +180,11 @@ namespace CEG_DAL.Repositories.Implements
                         CourseId = c.Course.CourseId,
                         CourseName = c.Course.CourseName
                         // Add other necessary properties here, but do NOT include Classes
-                    }
-                }).ToListAsync();
+                    },
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
+                })
+                .ToListAsync();
         }
 
         public async Task<int> GetIdByClassId(int id)

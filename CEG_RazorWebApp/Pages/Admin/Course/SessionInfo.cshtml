@@ -77,13 +77,6 @@
                                     </div>
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Status:</label>
-                                        </div>
-                                        <div class="col-sm-7" id="session-status">
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
                                             <label class="col-form-label">Session Number:</label>
                                         </div>
                                         <div class="col-md-7">
@@ -207,14 +200,6 @@
                                 <div class="col-sm-8">
                                     <input asp-for="@updateSession.Hours" value="@updateSession.Hours" type="number" min="1" class="form-control" required>
                                     <span asp-validation-for="@updateSession.Hours" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label asp-for="@updateSession.Status" class="col-sm-4 col-form-label"></label>
-                                <div class="col-sm-8">
-                                    <select class="form-control custom-select" asp-for="@updateSession.Status"></select>
-                                    <span asp-validation-for="@updateSession.Status" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                 </div>
                             </div>
@@ -452,7 +437,7 @@
                             // Loop through each answer and generate the HTML
                             response.data.homeworks.forEach(function (homework) {
                                 console.log(homework);;
-                                let homeworkHtml = generateHomeworkHtml(homework, response.data.status); // Assuming both homeworkInfo and updateAnswer are the same structure
+                                let homeworkHtml = generateHomeworkHtml(homework, response.data.courseStatus); // Assuming both homeworkInfo and updateAnswer are the same structure
                                 $('#homework_list').append(homeworkHtml);
                             });
                         } else {
@@ -531,20 +516,20 @@
                     </div>
                 </div>
             ` : '';
-            var statusText = '';
-            switch (status) {
-                case 'Available':
-                    statusText = `<span class="outcome" style="float: left;">${status}</span>`
-                    break;
-                case 'Draft':
-                case 'Postponed':
-                    statusText = `<span class="approval" style="float: left;">${status}</span>`
-                    break;
-                case 'EndofService':
-                case 'Cancelled':
-                    statusText = `<span class="destroy" style="float: left;">${status}</span>`
-                    break;
-            }
+            // var statusText = '';
+            // switch (status) {
+            //     case 'Available':
+            //         statusText = `<span class="outcome" style="float: left;">${status}</span>`
+            //         break;
+            //     case 'Draft':
+            //     case 'Postponed':
+            //         statusText = `<span class="approval" style="float: left;">${status}</span>`
+            //         break;
+            //     case 'EndofService':
+            //     case 'Cancelled':
+            //         statusText = `<span class="destroy" style="float: left;">${status}</span>`
+            //         break;
+            // }
             // <div class="row mb-sm-2">
             //     <div class="col-md-5 text-md-right">
             //         <label class="col-form-label">Status:</label>
@@ -624,57 +609,57 @@
 
             return html;
         }
-        function getStatusOptions(selectedStatus) {
-            var options = ['Draft', 'Available','Postponed','Cancelled','EndofService']; // Example statuses
-            var html = '';
-            switch (selectedStatus) {
-                case 'Available':
-                    options = ['Available','Postponed','Cancelled','EndofService']
-                    break;
-                case 'Draft':
-                    options = ['Draft', 'Available']
-                    break;
-                case 'Postponed':
-                    options = ['Available','Postponed','Cancelled','EndofService']
-                    break;
-                case 'EndofService':
-                    options = ['Available','EndofService']
-                    break;
-                case 'Cancelled':
-                    options = ['Available','Cancelled','EndofService']
-                    break;
-            }
-            options.forEach(function (status) {
-                html += `<option value="${status}" ${selectedStatus === status ? 'selected' : ''} >${status}</option>`;
-            });
+        // function getStatusOptions(selectedStatus) {
+        //     var options = ['Draft', 'Available','Postponed','Cancelled','EndofService']; Example statuses
+        //     var html = '';
+        //     switch (selectedStatus) {
+        //         case 'Available':
+        //             options = ['Available','Postponed','Cancelled','EndofService']
+        //             break;
+        //         case 'Draft':
+        //             options = ['Draft', 'Available']
+        //             break;
+        //         case 'Postponed':
+        //             options = ['Available','Postponed','Cancelled','EndofService']
+        //             break;
+        //         case 'EndofService':
+        //             options = ['Available','EndofService']
+        //             break;
+        //         case 'Cancelled':
+        //             options = ['Available','Cancelled','EndofService']
+        //             break;
+        //     }
+        //     options.forEach(function (status) {
+        //         html += `<option value="${status}" ${selectedStatus === status ? 'selected' : ''} >${status}</option>`;
+        //     });
 
-            return html;
-        }
+        //     return html;
+        // }
         function setCourseDisplay(data) {
-            var titleStatusHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
+            var titleStatusHtml = data.courseStatus === 'Draft' || data.courseStatus === 'Postponed' ? `
                             <div class="edit-info" id="session-session-status">
                                 <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editSession"></i>
                             </div>
                             ` : '';
-            var homeworkAddHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
+            var homeworkAddHtml = data.courseStatus === 'Draft' || data.courseStatus === 'Postponed' ? `
                             <div class="edit-info" id="session-add-homework">
                                 <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createHomework"></i>
                             </div>
                             ` : '';
-            var statusText = '';
-            switch (data.status) {
-                case 'Available':
-                    statusText = `<span class="outcome" style="float: left;">${data.status}</span>`
-                    break;
-                case 'Draft':
-                case 'Postponed':
-                    statusText = `<span class="approval" style="float: left;">${data.status}</span>`
-                    break;
-                case 'EndofService':
-                case 'Cancelled':
-                    statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
-                    break;
-            }
+            // var statusText = '';
+            // switch (data.status) {
+            //     case 'Available':
+            //         statusText = `<span class="outcome" style="float: left;">${data.status}</span>`
+            //         break;
+            //     case 'Draft':
+            //     case 'Postponed':
+            //         statusText = `<span class="approval" style="float: left;">${data.status}</span>`
+            //         break;
+            //     case 'EndofService':
+            //     case 'Cancelled':
+            //         statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
+            //         break;
+            // }
             $('#createHomework_SessionTitle').empty();
             $('#createHomework_Type').empty();
 
@@ -688,7 +673,6 @@
             $('#session-session-title').text(data.number + ' ' + data.title);
 
             $('#session-number').text(data.number);
-            $('#session-status').append(statusText);
             $('#session-description').text(data.description);
             $('#session-title').text(data.title);
             $('#session-hours').text(data.hours);
@@ -701,7 +685,7 @@
             $('textarea[id="updateSession_Description"]').val(data.description);
             $('input[id="updateSession_Number"]').val(data.number);
             $('input[id="updateSession_Hours"]').val(data.hours);
-            $('select[id="updateSession_Status"]').append(getStatusOptions(data.status));
+            //$('select[id="updateSession_Status"]').append(getStatusOptions(data.status));
         }
     </script>
 </body>

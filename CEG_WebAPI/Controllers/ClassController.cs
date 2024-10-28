@@ -164,7 +164,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
         [HttpPut("{id}/Update/Status")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher,Admin")]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -181,7 +181,7 @@ namespace CEG_WebAPI.Controllers
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Course Does Not Exist!"
+                        ErrorMessage = "Class Does Not Exist!"
                     });
                 }
                 bool isValid = CEG_BAL_Library.IsClassNewStatusValid(result.Status, status);
@@ -200,7 +200,7 @@ namespace CEG_WebAPI.Controllers
                     return BadRequest(new
                     {
                         Status = false,
-                        ErrorMessage = "New status is either an old status or not a valid status for requested course"
+                        ErrorMessage = "New status is either an old status or not a valid status for requested class"
                     });
                 }
             }
@@ -231,7 +231,7 @@ namespace CEG_WebAPI.Controllers
                     return BadRequest(new
                     {
                         Status = false,
-                        ErrorMessage = "Course Not Found or Course not Available!"
+                        ErrorMessage = "Course not found or course not Available."
                     });
                 }
                 var resultTeacherName = await _teacherService.IsTeacherExistByFullname(newClass.TeacherName);
@@ -240,16 +240,24 @@ namespace CEG_WebAPI.Controllers
                     return BadRequest(new
                     {
                         Status = false,
-                        ErrorMessage = "Teacher Not Found!"
+                        ErrorMessage = "Teacher not found."
                     });
                 }
+                /*if (newClass.WeeklySchedule == null || !CEG_BAL_Library.IsClassNewWeeklyScheduleValid(newClass.WeeklySchedule))
+                {
+                    return BadRequest(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Weekly schedule invalid."
+                    });
+                }*/
                 ClassViewModel clas = new ClassViewModel();
                 _classService.Create(clas, newClass);
                 return Ok(new
                 {
                     Data = true,
                     Status = true,
-                    SuccessMessage = "Class Create Successfully!"
+                    SuccessMessage = "Class create successfully."
                 });
             }
             catch (Exception ex)

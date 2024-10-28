@@ -17,7 +17,6 @@ using CEG_RazorWebApp.Models.Class.Get;
 using CEG_RazorWebApp.Models.HomeworkQuestion.Create;
 using CEG_RazorWebApp.Models.HomeworkQuestion.Get;
 using CEG_RazorWebApp.Models.HomeworkQuestion.Update;
-using CEG_RazorWebApp.Models.HomeworkAnswer.Get;
 using CEG_RazorWebApp.Models.HomeworkAnswer.Create;
 using CEG_RazorWebApp.Models.HomeworkAnswer.Update;
 using CEG_RazorWebApp.Models.Student.Get;
@@ -308,7 +307,7 @@ namespace CEG_RazorWebApp.Libraries
                 });
             CreateMap<UpdateQuestionVM, HomeworkQuestionViewModel>()
                 .ReverseMap();
-            CreateMap<AnswerInfoVM, HomeworkAnswerViewModel>()
+            /*CreateMap<AnswerInfoVM, HomeworkAnswerViewModel>()
                 .AfterMap((src, dest) =>
                 {
                     dest.Type = src.Type;
@@ -317,7 +316,7 @@ namespace CEG_RazorWebApp.Libraries
                 .AfterMap((src, dest) =>
                 {
                     dest.Type = src.Type;
-                });
+                });*/
             CreateMap<CreateAnswerVM, CreateNewAnswer>()
                 .ReverseMap();
             CreateMap<UpdateAnswerVM, HomeworkAnswerViewModel>()

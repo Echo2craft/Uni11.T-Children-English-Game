@@ -1,12 +1,11 @@
-﻿using CEG_BAL.Attributes;
-using CEG_RazorWebApp.Libraries;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using CEG_RazorWebApp.Libraries;
+using CEG_BAL.Attributes;
 
-namespace CEG_RazorWebApp.Models.Class.Create
+namespace CEG_RazorWebApp.Models.Class.Update
 {
-    public class CreateClassVM
+    public class UpdateClassVM
     {
         [Required(ErrorMessage = "Class name is required")]
         [DisplayName("Class Name")]
@@ -31,17 +30,9 @@ namespace CEG_RazorWebApp.Models.Class.Create
         //startDate (30/9), endDate(30/10), daysInWeek(T2, T5) Phải sync ngày và thứ tạo (30/9 là T2)
         public DateTime StartDate { get; set; } = DateTime.Now.AddDays(10);
         [Required(ErrorMessage = "Class end date is required")]
-        [DateGreaterThan("StartDate",Constants.CLASS_MINIMUM_DAYS_REQ)]
+        [DateGreaterThan("StartDate", Constants.CLASS_MINIMUM_DAYS_REQ)]
         [DisplayName("Class end date")]
         [DataType(DataType.DateTime)]
         public DateTime EndDate { get; set; } = DateTime.Now.AddDays(40);
-        /*[Required(ErrorMessage = "Class weekly schedule is required")]
-        [DisplayName("Class weekly schedule")]
-        public string? WeeklySchedule { get; set; } = Constants.CLASS_SCHEDULE_MONDAY_THURSDAY;
-        public List<string>? WeeklySchedulePresets { get; set; } = new List<string>{
-            Constants.CLASS_SCHEDULE_MONDAY_THURSDAY,
-            Constants.CLASS_SCHEDULE_TUESDAY_FRIDAY,
-            Constants.CLASS_SCHEDULE_WEDNESDAY_SATURDAY
-        };*/
     }
 }
