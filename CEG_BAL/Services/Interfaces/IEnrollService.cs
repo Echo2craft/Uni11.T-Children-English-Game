@@ -11,6 +11,7 @@ namespace CEG_BAL.Services.Interfaces
     {
         void Create (EnrollViewModel model);
         void Update (EnrollViewModel model);
+        void UpdateStatus(int enrollId, string enrollStatus);
         Task<List<EnrollViewModel>> GetEnrollsList();
         Task<EnrollViewModel> GetEnrollById (int id);
     }

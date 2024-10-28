@@ -47,7 +47,7 @@ namespace CEG_BAL.Services.Implements
                     if (sessionList.Count > 0 && clas.StartDate.HasValue)
                     {
                         // Extract logic to handle different schedules into a helper function
-                        AssignSchedulesBasedOnDays(newClass.WeeklySchedule, clas.StartDate.Value.DayOfWeek, clas, sessionList, newClass.StartDate, sessionList.Select(s => s.Hours).ToList());
+                        // AssignSchedulesBasedOnDays(newClass.WeeklySchedule, clas.StartDate.Value.DayOfWeek, clas, sessionList, newClass.StartDate, sessionList.Select(s => s.Hours).ToList());
                     }
                 }
             }
@@ -98,7 +98,7 @@ namespace CEG_BAL.Services.Implements
         }
 
         // Helper Function to handle schedule assignment
-        private void AssignSchedulesBasedOnDays(string scheduleType, DayOfWeek startDay, Class clas, List<Session> sessionList, DateTime startDate, List<int?> sessionHours)
+        /*private void AssignSchedulesBasedOnDays(string scheduleType, DayOfWeek startDay, Class clas, List<Session> sessionList, DateTime startDate, List<int?> sessionHours)
         {
             // Define possible day pairs for each schedule type
             var dayPairs = new Dictionary<string, (DayOfWeek, DayOfWeek)>
@@ -134,6 +134,6 @@ namespace CEG_BAL.Services.Implements
                     }
                 }
             }
-        }
+        }*/
     }
 }
