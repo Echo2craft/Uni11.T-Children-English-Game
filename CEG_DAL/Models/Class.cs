@@ -31,7 +31,5 @@ public partial class Class
 
     public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
 
-    public virtual ICollection<StudentProgress> StudentProgresses { get; set; } = new List<StudentProgress>();
-
     public virtual Teacher Teacher { get; set; } = null!;
 }
