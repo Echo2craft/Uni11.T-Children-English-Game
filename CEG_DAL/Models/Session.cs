@@ -13,8 +13,6 @@ public partial class Session
 
     public string? Description { get; set; }
 
-    public string? Status { get; set; }
-
     public int? Hours { get; set; }
 
     public int? Number { get; set; }

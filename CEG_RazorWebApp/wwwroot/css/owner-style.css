@@ -700,7 +700,7 @@ html body {
         }
 
         .cardFB .card-body {
-            padding-top: 0;
+            /*padding-top: 0;*/
         }
 
         .cardFB .imgBx {
@@ -1967,3 +1967,49 @@ html body {
             background-color: #f1f1f1;
         }
 /* end of use for Homework Info Page*/
+.search-course-results.dropdown-menu {
+    top: auto;
+    left: auto;
+}
+/**/
+.bx {
+    line-height: 1.5;
+}
+.bx.bx-search-alt{
+    line-height: normal;
+}
+.dt-search{
+    display: flex;
+    align-items: center;
+}
+    .dt-search input {
+        padding: 15px 0px 15px 35px;
+        position: relative;
+        margin-left: 0.5em;
+        border-radius: 30px;
+        outline: none;
+    }
+    .dt-search .bx.bx-search-alt.question-search-icon {
+        position: absolute;
+        top: 10px;
+        margin-left: 20px;
+        font-size: 1.2em;
+    }
+    .dt-search .bx.bx-search-alt.enroll-search-icon {
+        position: absolute;
+        top: 8px;
+        margin-left: 20px;
+        font-size: 1.2em;
+    }
+.bxs-add-to-queue.bx-sm {
+    margin: 0px 5px;
+}
+div.dt-container div.dt-paging ul.pagination {
+    gap: 0;
+}
+#question-table_wrapper 
+.pagination .active .page-link {
+    background-color: #34495e;
+    border-color: #34495e;
+}
+/**/
