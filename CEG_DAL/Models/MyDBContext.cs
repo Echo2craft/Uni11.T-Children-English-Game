@@ -8,6 +8,9 @@ namespace CEG_DAL.Models;
 
 public partial class MyDBContext : DbContext
 {
+    public MyDBContext()
+    {
+    }
     public MyDBContext(DbContextOptions<MyDBContext> options)
         : base(options)
     {
