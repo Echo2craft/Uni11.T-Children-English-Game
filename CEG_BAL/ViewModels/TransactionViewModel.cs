@@ -11,7 +11,7 @@ namespace CEG_BAL.ViewModels
     {
         public int TransactionId { get; set; }
 
-        public string VnpayId { get; set; }
+        public string VnpayId { get; set; } = null!;
 
         public int TransactionAmount { get; set; }
 

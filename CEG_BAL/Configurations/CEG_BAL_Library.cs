@@ -54,8 +54,8 @@ namespace CEG_BAL.Configurations
                         validStatuses =
                         [
                             Constants.COURSE_STATUS_CANCELLED,
-                            Constants.COURSE_STATUS_AVAILABLE,
-                            Constants.COURSE_STATUS_END_OF_SERVICE
+                            /*Constants.COURSE_STATUS_AVAILABLE,
+                            Constants.COURSE_STATUS_END_OF_SERVICE*/
                         ];
                         return validStatuses.Contains(newStatus);
                     }
@@ -138,7 +138,7 @@ namespace CEG_BAL.Configurations
             }
             return false;
         }
-        public static bool IsClassNewWeeklyScheduleValid(string newSchedule)
+        /*public static bool IsClassNewWeeklyScheduleValid(string newSchedule)
         {
             var validSchedule = new List<string>()
             {
@@ -147,6 +147,46 @@ namespace CEG_BAL.Configurations
                 Constants.CLASS_SCHEDULE_WEDNESDAY_SATURDAY
             };
             if (validSchedule.Contains(newSchedule)) return true;
+            return false;
+        }*/
+
+        public static bool IsEnrollNewStatusValid(string currentStatus, string newStatus)
+        {
+            var validStatuses = Array.Empty<string>();
+            if (currentStatus == null) return false;
+            switch (currentStatus)
+            {
+                case var value when value.Equals(Constants.ENROLL_STATUS_ENROLLED):
+                    {
+                        validStatuses =
+                        [
+                            Constants.ENROLL_STATUS_ENROLLED,
+                            Constants.ENROLL_STATUS_SUSPENDED
+                        ];
+                        return validStatuses.Contains(newStatus);
+                    }
+                case var value when value.Equals(Constants.ENROLL_STATUS_PENDING):
+                    {
+                        validStatuses =
+                        [
+                            Constants.ENROLL_STATUS_PENDING,
+                            Constants.ENROLL_STATUS_ENROLLED
+                        ];
+                        return validStatuses.Contains(newStatus);
+                    }
+                case var value when value.Equals(Constants.ENROLL_STATUS_SUSPENDED):
+                    {
+                        validStatuses =
+                        [
+                            Constants.ENROLL_STATUS_SUSPENDED
+                        ];
+                        return validStatuses.Contains(newStatus);
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
             return false;
         }
     }

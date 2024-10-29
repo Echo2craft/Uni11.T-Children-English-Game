@@ -147,9 +147,9 @@ namespace CEG_BAL.Configurations
         public readonly static string CLASS_STATUS_ENDED = "Ended";
         public readonly static string CLASS_STATUS_NAME_ENDED = "Ended";
 
-        public readonly static string CLASS_SCHEDULE_MONDAY_THURSDAY = "Monday and Thursday each week";
+        /*public readonly static string CLASS_SCHEDULE_MONDAY_THURSDAY = "Monday and Thursday each week";
         public readonly static string CLASS_SCHEDULE_TUESDAY_FRIDAY = "Tuesday and Friday each week";
-        public readonly static string CLASS_SCHEDULE_WEDNESDAY_SATURDAY = "Wednesday and Saturday each week";
+        public readonly static string CLASS_SCHEDULE_WEDNESDAY_SATURDAY = "Wednesday and Saturday each week";*/
 
         public readonly static string HOMEWORK_TYPE_VOCAB = "Vocabulary";
         public readonly static string HOMEWORK_TYPE_NAME_VOCAB = "Vocabulary";
@@ -160,6 +160,13 @@ namespace CEG_BAL.Configurations
         public readonly static string HOMEWORK_ANSWER_TYPE_NAME_CORRECT = "Correct";
         public readonly static string HOMEWORK_ANSWER_TYPE_INCORRECT = "Incorrect";
         public readonly static string HOMEWORK_ANSWER_TYPE_NAME_INCORRECT = "Incorrect";
+
+        public readonly static string ENROLL_STATUS_PENDING = "Pending";
+        public readonly static string ENROLL_STATUS_NAME_PENDING = "Pending";
+        public readonly static string ENROLL_STATUS_ENROLLED = "Enrolled";
+        public readonly static string ENROLL_STATUS_NAME_ENROLLED = "Enrolled";
+        public readonly static string ENROLL_STATUS_SUSPENDED = "Suspended";
+        public readonly static string ENROLL_STATUS_NAME_SUSPENDED = "Suspended";
 
         /*public readonly static string COURSE_STATUS_ENDED = "Ended";
         public readonly static string COURSE_STATUS_NAME_ENDED = "Ended";

@@ -41,7 +41,7 @@ namespace CEG_BAL.Services.Implements
                 sess.Title = newSes.Title;
                 sess.Description = newSes.Description;
                 sess.Hours = newSes.Hours;
-                sess.Number = newSes.Number;
+                sess.SessionNumber = newSes.Number;
                 sess.CourseId = _unitOfWork.CourseRepositories.GetIdByName(newSes.CourseName).Result;
                 sess.Course = null;
             }
@@ -74,7 +74,7 @@ namespace CEG_BAL.Services.Implements
             {
                 sess.Title = model.Title;
                 sess.Description = model.Description;
-                sess.Number = model.Number;
+                sess.SessionNumber = model.SessionNumber;
                 sess.Hours = model.Hours;
             }
             _unitOfWork.SessionRepositories.Update(sess);

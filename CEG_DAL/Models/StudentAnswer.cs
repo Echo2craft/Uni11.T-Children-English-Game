@@ -5,15 +5,19 @@ using System.Collections.Generic;
 
 namespace CEG_DAL.Models;
 
-public partial class HomeworkAnswer
+public partial class StudentAnswer
 {
-    public int HomeworkAnswerId { get; set; }
+    public int StudentAnswerId { get; set; }
 
-    public int HomeworkQuestionId { get; set; }
+    public int GameId { get; set; }
+
+    public int StudentHomeworkId { get; set; }
 
     public string Answer { get; set; }
 
     public string Type { get; set; }
 
-    public virtual HomeworkQuestion HomeworkQuestion { get; set; }
+    public virtual Game Game { get; set; }
+
+    public virtual StudentHomework StudentHomework { get; set; }
 }

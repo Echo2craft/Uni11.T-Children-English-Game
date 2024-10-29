@@ -6,15 +6,10 @@
         {
             Account = new AccountViewModel();
         }
-        public int TotalPoints { get; set; }
 
         public string Description { get; set; } = null!;
 
-        public int? Playtime { get; set; }
-
         public int? CurLevel { get; set; }
-
-        public int? Points { get; set; }
 
         public int? Age { get; set; }
 
@@ -28,6 +23,6 @@
 
         public virtual ParentViewModel Parents { get; set; } = null!;
 
-        public virtual ICollection<StudentProgressViewModel> StudentProgress { get; set; } = new List<StudentProgressViewModel>();
+        public virtual ICollection<StudentProgressViewModel> StudentProgresses { get; set; } = new List<StudentProgressViewModel>();
     }
 }
