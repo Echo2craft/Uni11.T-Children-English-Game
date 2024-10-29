@@ -81,14 +81,8 @@
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="history-table" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
-                                                            aria-label="Student Total Score: activate to sort column ascending">
-                                                            Total Score
-                                                        </th>
-                                                        <th class="sorting sorting_asc" tabindex="0"
-                                                            aria-controls="history-table" rowspan="1"
-                                                            colspan="1" aria-sort="ascending"
-                                                            aria-label="Student Playtime: activate to sort column ascending">
-                                                            Playtime
+                                                            aria-label="Student Description: activate to sort column ascending">
+                                                            Description
                                                         </th>
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="history-table" rowspan="1"
@@ -99,8 +93,8 @@
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="history-table" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
-                                                            aria-label="Student Points: activate to sort column ascending">
-                                                            Points
+                                                            aria-label="Student Age: activate to sort column ascending">
+                                                            Age
                                                         </th>
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="history-table" rowspan="1"
@@ -125,8 +119,8 @@
         </div>
 
         <script>
-            var token = '@HttpContext.Session.GetString(CEG_RazorWebApp.Libraries.Constants.ACC_TOKEN)';
-            var id = '@HttpContext.Session.GetString(CEG_RazorWebApp.Libraries.Constants.USR_ID)';
+        var token = sessionStorage.getItem('token');
+            var id = sessionStorage.getItem('usrId')
             var apiUrl = 'https://localhost:7143/api/';
             var studentList = [];
             $(document).ready(function () {
@@ -220,19 +214,15 @@
                                 ${student.account.fullname}
                             </td>
                             <td>
-                                <input type="hidden" name="listRequest[${index}].TotalPoint" value="${student.totalpoint}" class="form-control" />
-                                ${student.highscore}
-                            </td>
-                            <td>
-                                <input type="hidden" name="listRequest[${index}].Playtime" value="${student.playtime}" class="form-control" />
-                                ${student.playtime}
+                                <input type="hidden" name="listRequest[${index}].Description" value="${student.description}" class="form-control" />
+                                ${student.description}
                             </td>
                             <td>
                                 <input type="hidden" name="listRequest[${index}].CurLevel" value="${student.curLevel}" class="form-control" />
                                 ${student.curLevel}
                             </td>
                             <td>
-                                <input type="hidden" name="listRequest[${index}].Points" value="${student.points}" class="form-control" />
+                                <input type="hidden" name="listRequest[${index}].Age" value="${student.age}" class="form-control" />
                                 ${student.points}
                             </td>
                             <td>
