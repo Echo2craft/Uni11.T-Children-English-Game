@@ -545,7 +545,8 @@
                     data: JSON.stringify(newStatus), // Data sent in the request body data: JSON.stringify({ status: newStatus.toString() }),
                     success: function (response) {
                         if (response.status) {
-                            showAlert('success','Status updated!');
+                            callApiGetClassDetail();
+                            showAlert('success','Student enrollment status updated');
                         } else {
                             showAlert('error','Failed to update status. Error: ' + response.errorMessage);
                         }
