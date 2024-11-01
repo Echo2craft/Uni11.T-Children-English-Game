@@ -392,6 +392,51 @@
             var enrollList;
             var table;
             $(document).ready(function () {
+                // Registering the custom feature with DataTables
+                DataTable.feature.register('searchIcon', function (settings, opts) {
+                    // Set default options
+                    let options = Object.assign({
+                        iconClass: 'bx bx-search-alt question-search-icon',
+                        hideLabel: true // Hide search label
+                    }, opts);
+
+                    // Create a container for the icon
+                    let container = document.createElement('div');
+                    // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                    // Create the icon element
+                    let icon = document.createElement('i');
+                    icon.className = options.iconClass;
+
+                    // Check if pagination is enabled
+                    // if (settings.oFeatures.bFilter) {
+                    //     console.log(settings.oFeatures.bFilter);
+                    //     console.log('Pagination is enabled for this DataTable.');
+                    // }
+
+                    setTimeout(() => {
+                        // Find the .dt-search container inside the DataTable wrapper
+                        let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                        if (searchContainer.length) {
+                            searchContainer.append(icon);
+                        } else {
+                            // Append icon to container
+                            container.appendChild(icon);
+                            // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                            $(settings.nTableWrapper).prepend(container);
+                        }
+                        if (options.hideLabel) {
+                            // Find the .dt-search label container inside the DataTable wrapper
+                            let searchLabel = searchContainer.find('label');
+                            if (searchLabel.length) {
+                                searchLabel.text('');
+                            } else {
+                                console.log('Label of search div not found!');
+                            }
+                        }
+                    }, 100);
+                    return container;
+                });
                 table = new DataTable('#enroll-table', {
                     data: [],
                     deferRender: false,
@@ -408,7 +453,7 @@
                                 //<option value="enrolled" ${row.status === 'enrolled' ? 'selected' : ''}>Enrolled</option>
                                 //<option value="pending" ${row.status === 'pending' ? 'selected' : ''}>Pending</option>
                                 return `
-                                <select class="custom-select form-control" data-enroll-id="${row.enrollId}">
+                                <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
                                 `
                                 + getEnrollStatusOptions(row.status) +
                                 `
@@ -416,14 +461,17 @@
                                 `;
                             }
                         }
-                    ]
+                    ],
+                    layout: {
+                        topEnd: {
+                            search: {
+                                placeholder: 'Search enroll...'
+                            },
+                            searchIcon:{
+                            }
+                        }
+                    }
                 });
-                var createQuestionToggleHtml = `
-                    <i class="bx bx-search-alt enroll-search-icon"></i>
-                `;
-                $('.dt-search').append(createQuestionToggleHtml);
-                $('.dt-search label').text('');
-                $('.dt-search input').attr('placeholder', 'Search enroll...')
                 callApiGetClassDetail();
                 $('#editClassForm').submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting normally
@@ -481,6 +529,39 @@
                     //$(this).trigger("reset");
                 });
             });
+            $(document).on('change', '.enroll-status', function () {
+                var enrollId = $(this).data('enrollid');
+                var newStatus = $(this).val();
+                callApiUpdateEnrollStatus(enrollId, newStatus);
+            });
+            function callApiUpdateEnrollStatus(enrollId,newStatus){
+                $.ajax({
+                    url: apiUrl + `Enroll/${enrollId}/Update/Status`, // API endpoint for updating status
+                    type: 'PUT', // HTTP method PUT for updates
+                    headers: {
+                        'Authorization': 'Bearer ' + token, // Token for authentication
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(newStatus), // Data sent in the request body data: JSON.stringify({ status: newStatus.toString() }),
+                    success: function (response) {
+                        if (response.status) {
+                            showAlert('success','Status updated!');
+                        } else {
+                            showAlert('error','Failed to update status. Error: ' + response.errorMessage);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Attempt to parse the response text if it is available
+                        var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                        // Extract the custom error message if it exists
+                        var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error:" + errorMessage);
+                    }
+                });
+            }
             // Function to display alerts
             function showAlert(type, message) {
                 var alertHtml = '';
@@ -529,9 +610,14 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        // Handle error (display the validation message, etc.)
-                        alert("Error in api call:" + error);
-                        console.error("Error in api call:", error);
+                        // Attempt to parse the response text if it is available
+                        var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                        // Extract the custom error message if it exists
+                        var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error:" + errorMessage);
                     }
                 });
             }
@@ -561,9 +647,14 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        // Handle error (display the validation message, etc.)
-                        alert("Error in api call:" + error);
-                        console.error("Error in api call:", error);
+                        // Attempt to parse the response text if it is available
+                        var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                        // Extract the custom error message if it exists
+                        var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error:" + errorMessage);
                     }
                 });
             }
@@ -625,9 +716,14 @@
                         }
                     },
                     error: function (error) {
-                        alert("Error in api call:" + error);
-                        console.error("Error in api call:", error);
-                        //showAlert('success', 'Data fetched successfully.');
+                        // Attempt to parse the response text if it is available
+                        var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                        // Extract the custom error message if it exists
+                        var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error:" + errorMessage);
                     }
                 });
             }
@@ -773,8 +869,14 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        // Handle error (display the validation message, etc.)
-                        showAlert('error',"Error in api call:" + error);
+                        // Attempt to parse the response text if it is available
+                        var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                        // Extract the custom error message if it exists
+                        var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error:" + errorMessage);
                     }
                 });
             }

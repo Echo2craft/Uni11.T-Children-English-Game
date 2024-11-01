@@ -41,7 +41,7 @@ namespace CEG_BAL.Services.Implements
                 clas.MaximumStudents = newClass.MaxStudents;
                 clas.Status = "Draft";
                 clas.Schedules = new List<Schedule>();
-                if (newClass.WeeklySchedule != null)
+                /*if (newClass.WeeklySchedule != null)
                 {
                     var sessionList = _unitOfWork.SessionRepositories.GetSessionListByCourseId(clas.CourseId).Result;
                     if (sessionList.Count > 0 && clas.StartDate.HasValue)
@@ -49,7 +49,7 @@ namespace CEG_BAL.Services.Implements
                         // Extract logic to handle different schedules into a helper function
                         // AssignSchedulesBasedOnDays(newClass.WeeklySchedule, clas.StartDate.Value.DayOfWeek, clas, sessionList, newClass.StartDate, sessionList.Select(s => s.Hours).ToList());
                     }
-                }
+                }*/
             }
             _unitOfWork.ClassRepositories.Create(clas);
             _unitOfWork.Save();
