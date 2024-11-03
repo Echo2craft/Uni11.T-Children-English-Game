@@ -34,7 +34,7 @@ namespace CEG_BAL.Services.Implements
         public void Create(HomeworkViewModel model, CreateNewHomework newHw)
         {
             var hw = _mapper.Map<Homework>(model);
-            hw.Status = "Draft";
+            //hw.Status = "Draft";
             if (newHw != null)
             {
                 hw.Title = newHw.Title;
@@ -58,6 +58,7 @@ namespace CEG_BAL.Services.Implements
             if(user != null)
             {
                 var urs = _mapper.Map<HomeworkViewModel>(user);
+                urs.CourseStatus = await _unitOfWork.CourseRepositories.GetStatusByHomeworkIdNoTracking(id);
                 return urs;
             }
             return null;
@@ -67,7 +68,7 @@ namespace CEG_BAL.Services.Implements
         {
             var home = _mapper.Map<Homework>(model);
             var homeDefault = _unitOfWork.HomeworkRepositories.GetByIdNoTracking(model.HomeworkId.Value).Result;
-            home.Status = homeDefault.Status;
+            //home.Status = homeDefault.Status;
             home.SessionId = homeDefault.SessionId;
             _unitOfWork.HomeworkRepositories.Update(home);
             _unitOfWork.Save();

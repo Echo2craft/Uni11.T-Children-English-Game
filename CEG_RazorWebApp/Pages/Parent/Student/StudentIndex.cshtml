@@ -25,7 +25,7 @@
                                     <span>/</span>
                                 </li>
                                 <li class="breadcrumd-item">
-                                    <a href="/Parent/Student/Index">Account</a>
+                                    <a href="/Parent/Student/Index">Student</a>
                                 </li>
                             </ol>
                         </div>
@@ -44,7 +44,6 @@
                                     </li>
                                 </ul>
                             <div id="alertContainer"></div>
-
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <!-- home1 -->
@@ -82,20 +81,14 @@
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="history-table" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
-                                                            aria-label="Student High Score: activate to sort column ascending">
-                                                            High Score
+                                                            aria-label="Student Total Score: activate to sort column ascending">
+                                                            Total Score
                                                         </th>
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="history-table" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
                                                             aria-label="Student Playtime: activate to sort column ascending">
                                                             Playtime
-                                                        </th>
-                                                        <th class="sorting sorting_asc" tabindex="0"
-                                                            aria-controls="history-table" rowspan="1"
-                                                            colspan="1" aria-sort="ascending"
-                                                            aria-label="Student High Score: activate to sort column ascending">
-                                                            High Score
                                                         </th>
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="history-table" rowspan="1"
@@ -227,7 +220,7 @@
                                 ${student.account.fullname}
                             </td>
                             <td>
-                                <input type="hidden" name="listRequest[${index}].Highscore" value="${student.highscore}" class="form-control" />
+                                <input type="hidden" name="listRequest[${index}].TotalPoint" value="${student.totalpoint}" class="form-control" />
                                 ${student.highscore}
                             </td>
                             <td>

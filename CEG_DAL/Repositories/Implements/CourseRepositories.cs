@@ -21,42 +21,96 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<Course?> GetByIdNoTracking(int id)
         {
             return await _dbContext.Courses
-                .Include(c => c.Sessions)
-                .ThenInclude(s => s.Homeworks)
-                .Include(c => c.Classes)
-                .AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(cou => cou.CourseId == id);
+                .AsNoTrackingWithIdentityResolution()
+                .SingleOrDefaultAsync(cou => cou.CourseId == id);
         }
 
-        public async Task<Course?> GetByIdNoTracking(int id, bool includeSessions, bool includeHomeworks)
+        public async Task<Course?> GetByIdNoTracking(int id, bool includeSessions = false, bool includeClasses = false, bool includeHomeworks = false)
         {
-            if (includeSessions && !includeHomeworks)
-            {
-                return await _dbContext.Courses
-                    .Include(c => c.Sessions)
-                    .AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(cou => cou.CourseId == id);
-            }
-            else if(includeHomeworks || (includeSessions && includeHomeworks))
-            {
-                return await _dbContext.Courses
-                    .Include(c => c.Sessions)
-                    .ThenInclude(s => s.Homeworks)
-                    .AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(cou => cou.CourseId == id);
-            }
-            return await _dbContext.Courses
-                .AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(cou => cou.CourseId == id);
+            var query = _dbContext.Courses
+                        .Select(c => new Course
+                        {
+                            CourseId = c.CourseId,
+                            CourseName = c.CourseName,
+                            CourseType = c.CourseType,
+                            Description = c.Description,
+                            Difficulty = c.Difficulty,
+                            Category = c.Category,
+                            Image = c.Image,
+                            RequiredAge = c.RequiredAge,
+                            TotalHours = c.TotalHours,
+                            Status = c.Status,
+                            // Include Sessions only if requested
+                            Sessions = includeSessions ? c.Sessions.Select(s => new Session
+                            {
+                                SessionId = s.SessionId,
+                                Title = s.Title,
+                                Description = s.Description,
+                                Hours = s.Hours,
+                                SessionNumber = s.SessionNumber,
+                                //Status = s.Status,
+                                // Include Homeworks only if requested
+                                Homeworks = includeHomeworks ? s.Homeworks.ToList() : null
+                            }).ToList() : null,
+                            // Include Classes only if requested
+                            Classes = includeClasses ? c.Classes.ToList() : null
+                        }).AsNoTrackingWithIdentityResolution();
+
+            return await query.SingleOrDefaultAsync(cou => cou.CourseId == id);
         }
 
-        public async Task<List<Course>> GetCourseList()
+        public async Task<List<Course>> GetList()
         {
             return await _dbContext.Courses
-                .Include(c => c.Sessions)
-                .Include(c => c.Classes)
+                .Select(c => new Course()
+                {
+                    CourseId = c.CourseId,
+                    CourseName = c.CourseName,
+                    CourseType = c.CourseType,
+                    Description = c.Description,
+                    Difficulty = c.Difficulty,
+                    Category = c.Category,
+                    Image = c.Image,
+                    RequiredAge = c.RequiredAge,
+                    TotalHours = c.TotalHours,
+                    Status = c.Status,
+                    Sessions = c.Sessions,
+                    Classes = c.Classes
+                })
                 .ToListAsync();
         }
 
-        public async Task<List<string>> GetCourseNameList()
+        public async Task<List<Course>?> GetListByStatus(string status)
         {
             return await _dbContext.Courses
+                .Where(c => c.Status == status)
+                .Select(c => new Course()
+                {
+                    CourseId = c.CourseId,
+                    CourseName = c.CourseName,
+                    CourseType = c.CourseType,
+                    Description = c.Description,
+                    Difficulty = c.Difficulty,
+                    Category = c.Category,
+                    Image = c.Image,
+                    RequiredAge = c.RequiredAge,
+                    TotalHours = c.TotalHours,
+                    Status = c.Status,
+                    Sessions = c.Sessions
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<string>?> GetNameList()
+        {
+            return await _dbContext.Courses
+                .Select(c => c.CourseName)
+                .ToListAsync();
+        }
+        public async Task<List<string>?> GetNameListByStatus(string status)
+        {
+            return await _dbContext.Courses
+                .Where(c => c.Status == status)
                 .Select(c => c.CourseName)
                 .ToListAsync();
         }
@@ -71,6 +125,40 @@ namespace CEG_DAL.Repositories.Implements
             var result = await (from c in _dbContext.Courses where c.CourseName == name select c).FirstOrDefaultAsync();
             if (result != null) return result.CourseId;
             return 0;
+        }
+
+        public async Task<string?> GetStatusByHomeworkIdNoTracking(int homeworkId)
+        {
+            return await _dbContext.Homeworks
+                .Where(h => h.HomeworkId == homeworkId)
+                .Select(h => h.Session.Course.Status)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<string?> GetStatusByCourseIdNoTracking(int courseId)
+        {
+            return await _dbContext.Courses
+                .Where(h => h.CourseId == courseId)
+                .Select(h => h.Status)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<string?> GetStatusBySessionIdNoTracking(int sessionId)
+        {
+            return await _dbContext.Sessions
+                .Where(h => h.SessionId == sessionId)
+                .Select(h => h.Course.Status)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<string?> GetStatusByQuestionIdNoTracking(int questionId)
+        {
+            return await _dbContext.HomeworkQuestions
+                .Where(h => h.HomeworkQuestionId == questionId)
+                .Select(hq => hq.Homework != null
+                      ? hq.Homework.Session.Course.Status
+                      : "NotFound")
+                .FirstOrDefaultAsync();
         }
     }
 }

@@ -50,35 +50,22 @@
                                 <div class="tab-content">
                                     <!-- home1 -->
                                     <div class="tab-pane active" id="home1" role="tabpanel">
-                                        <div class="row search">
-                                            <div class="col-sm-12 d-flex">
-                                                <div class="col-sm-12 d-flex justify-content-end align-items-center">
-                                                    <div>
-                                                        <label>
-                                                            <input id="search" class="form-control" type="text" placeholder="Search Question...">
-                                                            <i class='bx bx-search-alt'></i>
-                                                        </label>
-                                                    </div>
-                                                    <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createQuestion"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="history-table_wrapper" class="dataTables_wrapper no-footer">
-                                            <table id="history-table"
+                                        <div id="question-table_wrapper" class="dataTables_wrapper no-footer">
+                                            <table id="question-table"
                                                    class="table table-striped table-bordered dataTable no-footer"
-                                                   aria-describedby="history-table_info">
+                                                   aria-describedby="question-table_info">
                                                 <thead>
                                                     <tr>
                                                         <th class="sorting sorting_asc" tabindex="0"
-                                                            aria-controls="history-table" rowspan="1"
+                                                            aria-controls="question-table" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
-                                                            aria-label="Account User Name: activate to sort column ascending">
+                                                            aria-label="Question: activate to sort column ascending">
                                                             Question
                                                         </th>
                                                         <th class="sorting sorting_asc" tabindex="0"
-                                                            aria-controls="history-table" rowspan="1"
+                                                            aria-controls="question-table" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
-                                                            aria-label="Account Full Name: activate to sort column ascending">
+                                                            aria-label="Answers amount: activate to sort column ascending">
                                                             Amount of Answers
                                                         </th>
                                                     </tr>
@@ -126,11 +113,124 @@
 
         @* <partial name="PartialViews/_CreateTeacherPartial" model="new AccountIndexModel.CreateTeacherModel(createTeacher)"/> *@
         <script>
-            var token = '@HttpContext.Session.GetString(CEG_RazorWebApp.Libraries.Constants.ACC_TOKEN)';
-            var apiUrl = 'https://localhost:7143/api/';
+            var token = sessionStorage.getItem('token');
+            var apiUrl = sessionStorage.getItem('apiUrl');
+            var table;
             var questionList = [];
             $(document).ready(function () {
-                callApiGetQuestionList();
+                // Registering the custom feature with DataTables
+                DataTable.feature.register('toggle', function (settings, opts) {
+                    // Set default options
+                    let options = Object.assign({
+                        iconClass: 'bx bxs-add-to-queue bx-sm',
+                        modalId: 'createQuestion' // Modal ID that the icon will trigger
+                    }, opts);
+
+                    // Create a container for the icon
+                    let container = document.createElement('div');
+                    // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                    // Create the icon element
+                    let icon = document.createElement('i');
+                    icon.className = options.iconClass;
+                    icon.setAttribute('data-toggle', 'modal');
+                    icon.setAttribute('data-target', `#${options.modalId}`);
+
+                    // Append icon to container
+                    container.appendChild(icon);
+
+                    // Insert the container in the DataTable toolbar
+                    $(settings.nTableWrapper).prepend(container);
+
+                    return container;
+                });
+                // Registering the custom feature with DataTables
+                DataTable.feature.register('searchIcon', function (settings, opts) {
+                    // Set default options
+                    let options = Object.assign({
+                        iconClass: 'bx bx-search-alt question-search-icon',
+                        hideLabel: true // Hide search label
+                    }, opts);
+
+                    // Create a container for the icon
+                    let container = document.createElement('div');
+                    // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                    // Create the icon element
+                    let icon = document.createElement('i');
+                    icon.className = options.iconClass;
+
+                    // Check if pagination is enabled
+                    // if (settings.oFeatures.bFilter) {
+                    //     console.log(settings.oFeatures.bFilter);
+                    //     console.log('Pagination is enabled for this DataTable.');
+                    // }
+
+                    setTimeout(() => {
+                        // Find the .dt-search container inside the DataTable wrapper
+                        let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                        if (searchContainer.length) {
+                            searchContainer.append(icon);
+                        } else {
+                            // Append icon to container
+                            container.appendChild(icon);
+                            // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                            $(settings.nTableWrapper).prepend(container);
+                        }
+                        if (options.hideLabel) {
+                            // Find the .dt-search label container inside the DataTable wrapper
+                            let searchLabel = searchContainer.find('label');
+                            if (searchLabel.length) {
+                                searchLabel.text('');
+                            } else {
+                                console.log('Label of search div not found!');
+                            }
+                        }
+                    }, 100);
+                    return container;
+                });
+                table = new DataTable('#question-table', {
+                    ajax: {
+                        url: apiUrl + 'Question/All/Ordered',
+                        dataSrc: 'data',
+                        headers: {
+                            'Authorization': 'Bearer ' + token// Include the JWT token
+                        }
+                    },
+                    deferRender: false,
+                    responsive: true,
+                    columns: [
+                        { data: 'question' },
+                        { data: 'answersAmount' },
+                    ],
+                    select: {
+                        style: 'single'
+                    },
+                    layout: {
+                        topEnd: {
+                            search: {
+                                placeholder: 'Search question...'
+                            },
+                            toggle: {
+                            },
+                            searchIcon:{
+                            }
+                        }
+                    }
+                }).on('select', function (e, dt, type, indexes) {
+                    if (type === 'row') {
+                        var data = table
+                            .row(indexes)
+                            .data()
+                            .homeworkQuestionId;
+                        window.location.href = '/Admin/Question/' + data + '/Info';
+                    }
+                });
+                // var createQuestionToggleHtml = `
+                //     <i class="bx bx-search-alt question-search-icon"></i>
+                // `;
+                // $('.dt-search').append(createQuestionToggleHtml);
+                // $('.dt-search label').text('');
                 $('#createQuestionForm').submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting normally
 
@@ -143,19 +243,30 @@
                     callApiPostCreateQuestion(formData);
                     $('#createQuestionForm').trigger("reset");
                 });
-                $('#search').on('keyup', function (event) {
-                    // Get the search term
-                    var searchTerm = $(this).val().toLowerCase();
-
-                    // Filter the classes based on the search term
-                    var filteredquestionList = questionList.filter(function (question) {
-                        return question.question.toLowerCase().includes(searchTerm);
-                    });
-
-                    // Display the filtered questionList
-                    setQuestionDisplay(filteredquestionList);
-                });
             });
+            // table.on('select', function (e, dt, type, indexes) {
+            //     if (type === 'row') {
+            //         var data = table
+            //             .rows(indexes)
+            //             .data();
+
+            //         do something with the ID of the selected items
+            //     }
+            //     window.location.href = '/Admin/Question/' + data.homeworkQuestionId + '/Info';
+            // });
+            // $('#question-table tbody').on('click', 'tr', function () {
+            //     var table = $('#question-table').DataTable();
+            //     var data = table.row(this).data();
+            //     if ($(this).hasClass('selected')) {
+            //         $(this).removeClass('selected');
+            //     }
+            //     else {
+            //         table.$('tr.selected').removeClass('selected');
+            //         $(this).addClass('selected');
+            //     }
+            //     window.location.href = '/Admin/Question/' + data.homeworkQuestionId + '/Info';
+            //     alert('You clicked on ' + data.homeworkQuestionId + "'s row");
+            // });
             // Function to display alerts
             function showAlert(type, message) {
                 var alertHtml = '';
@@ -194,68 +305,66 @@
                     success: function (response) {
                         // Handle success (display a success message or redirect, etc.)
                         if (response.status) {
-                            alert('Question created successfully!');
-                            callApiGetQuestionList();
+                            showAlert('success', "Question created successfully");
+                            table.ajax.reload();
                         } else {
                             console.error("API returned false status.");
                         }
                     },
                     error: function (xhr, status, error) {
+                        showAlert('error', "Error in api call:" + error);
                         // Handle error (display the validation message, etc.)
-                        alert("Error in api call:" + error);
                         console.error("Error in api call:", error);
                     }
                 });
             }
-            function callApiGetQuestionList() {
-                $.ajax({
-                    url: apiUrl + 'Question/All/Ordered', // API endpoint
-                    type: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + token// Include the JWT token
-                    },
-                    success: function (response) {
-                        // Log the entire response to the console for debugging
-                        // console.log("Returned object:", response);
+            // function callApiGetQuestionList() {
+            //     $.ajax({
+            //         url: apiUrl + 'Question/All/Ordered', API endpoint
+            //         type: 'GET',
+            //         headers: {
+            //             'Authorization': 'Bearer ' + tokenInclude the JWT token
+            //         },
+            //         success: function (response) {
+            //             Log the entire response to the console for debugging
+            //             console.log("Returned object:", response);
 
-                        // Check if the status is true
-                        if (response.status) {
-                            questionList = response.data;
-
-                            setQuestionDisplay(questionList);
-                        } else {
-                            console.error("API returned false status.");
-                        }
-                    },
-                    error: function (error) {
-                        alert("Error in api call:" + error);
-                        console.error("Error in api call:", error);
-                        //showAlert('success', 'Data fetched successfully.');
-                    }
-                });
-            }
-            function setQuestionDisplay(data){
-                var tableBody = $('#history-table tbody'); // Reference to the <id="history-table"> element
-                tableBody.empty(); // Clear any existing options
-                // Loop through the data array and append each class div
-                $.each(data, function (index, question) {
-                    // Construct card HTML
-                    var rowHtml = `
-                        <tr class="${index % 2 === 0 ? 'even' : 'odd'}">
-                            <td class="sorting_1">
-                                <input type="hidden" name="listRequest[${index}].Question" value="${question.homeworkQuestionId}" class="form-control" />
-                                <a href="/Admin/Question/${question.homeworkQuestionId}/Info">${question.question}</a>
-                            </td>
-                            <td>
-                                <input type="hidden" name="listRequest[${index}].AnswerAmounts" value="${question.answerAmounts}" class="form-control" />
-                                ${question.answersAmount}
-                            </td>
-                        </tr>
-                    `;
-                    // Append the constructed HTML to the class list container
-                    tableBody.append(rowHtml);
-                });
-            }
+            //             Check if the status is true
+            //             if (response.status) {
+            //                 questionList = response.data;
+            //                 setQuestionDisplay(questionList);
+            //             } else {
+            //                 console.error("API returned false status.");
+            //             }
+            //         },
+            //         error: function (error) {
+            //             console.error("Error in api call:", error);
+            //             showAlert('success', 'Data fetched successfully.');
+            //         }
+            //     });
+            // }
+            // function setQuestionDisplay(data){
+            //     var tableBody = $('#question-table tbody'); Reference to the <id="question-table"> element
+            //     tableBody.empty(); Clear any existing options
+            //     Loop through the data array and append each class div
+            //     $.each(data, function (index, question) {
+            //         Construct card HTML
+            //         var rowHtml = `
+            //             <tr class="${index % 2 === 0 ? 'even' : 'odd'}">
+            //                 <td class="sorting_1">
+            //                     <input type="hidden" name="listRequest[${index}].Question" value="${question.homeworkQuestionId}" class="form-control" />
+            //                     <a href="/Admin/Question/${question.homeworkQuestionId}/Info">${question.question}</a>
+            //                 </td>
+            //                 <td>
+            //                     <input type="hidden" name="listRequest[${index}].AnswerAmounts" value="${question.answerAmounts}" class="form-control" />
+            //                     ${question.answersAmount}
+            //                 </td>
+            //             </tr>
+            //         `;
+            //         Append the constructed HTML to the class list container
+            //         tableBody.append(rowHtml);
+            //     });
+            // }
             function getStatusOptions(selectedStatus) {
                 var options = ['Inactive', 'Active', 'Expired','Denied','Suspended']; // Example statuses
                 var html = '';

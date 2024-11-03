@@ -37,17 +37,15 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
             Secure = true,
             IsEssential = true,
         };
-        private ChildrenEnglishGameLibrary methcall = new();
+        private CEG_RAZOR_Library methcall = new();
         public string? LayoutUrl { get; set; } = Constants.ADMIN_LAYOUT_URL;
         [BindProperty]
-        public int? CourseId { get; set; }
+        public int? CourseID { get; set; }
         [BindProperty]
-        public int? SessionId { get; set; }
-        public int? HomeworkId { get; set; }
+        public int? SessionID { get; set; }
+        public int? HomeworkID { get; set; }
         public UpdateHomeworkVM? UpdateHomeworkInfo { get; set; } = new UpdateHomeworkVM();
         public UpdateQuestionVM? AddQuestion { get; set; } = new UpdateQuestionVM();
-        public string? AccToken;
-        public string? ApiUrl;
         public HomeworkInfoModel(ILogger<HomeworkInfoModel> logger, IConfiguration config, IMapper mapper)
         {
             _logger = logger;
@@ -59,59 +57,16 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
             };
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             AdminAPI_URL = config.GetSection(Constants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value;
-            ApiUrl = _config.GetSection(Constants.SYSTEM_DEFAULT_API_HTTPS_URL_CONFIG_PATH).Value + _config.GetSection(Constants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value;
         }
         public void OnGet(
             [FromRoute][Required] int courseId,
             [FromRoute][Required] int sessionId,
             [FromRoute][Required] int homeworkId)
         {
-            methcall.InitTempData(this);
-            CourseId = courseId;
-            SessionId = sessionId;
-            AccToken = HttpContext.Session.GetString(Constants.ACC_TOKEN);
-            HomeworkId = homeworkId;
-        }
-        public async Task<IActionResult> OnPostQuestionUpdate(
-            [FromRoute][Required] int homeworkId,
-            [Required] int questionId,
-            [FromForm][Required] UpdateQuestionVM updateQuestion)
-        {
-            AdminAPI_URL += "Question/" + questionId + "/Update";
-            string? accToken = HttpContext.Session.GetString(Constants.ACC_TOKEN);
-            if (!ModelState.IsValid)
-            {
-                TempData = methcall.SetValidationTempData(TempData, Constants.UPDATE_HOMEWORK_QUESTION_DETAILS_VALID, updateQuestion, jsonOptions);
-                return Redirect("/Admin/Course/" + CourseId + "/Session/" + SessionId + "/Homework/" + homeworkId + "/Info");
-            }
-            var courseInfoResponse = await methcall.CallMethodReturnObject<AdminQuestionUpdateResponseVM>(
-                _httpClient: _httpClient,
-                options: jsonOptions,
-                methodName: Constants.PUT_METHOD,
-                url: AdminAPI_URL,
-                accessToken: accToken,
-                inputType: _mapper.Map<HomeworkQuestionViewModel>(updateQuestion),
-                _logger: _logger);
-
-            if (courseInfoResponse == null)
-            {
-                _logger.LogError("Error while updating question info");
-
-                TempData[Constants.ALERT_DEFAULT_ERROR_NAME] = "Error while updating question info !";
-
-                return Redirect("/Admin/Course/" + CourseId + "/Session/" + SessionId + "/Homework/" + homeworkId + "/Info");
-            }
-            if (!courseInfoResponse.Status)
-            {
-                _logger.LogError("Error while updating question info");
-
-                TempData[Constants.ALERT_DEFAULT_ERROR_NAME] = "Error while updating question info !";
-
-                return Redirect("/Admin/Course/" + CourseId + "/Session/" + SessionId + "/Homework/" + homeworkId + "/Info");
-            }
-            TempData[Constants.ALERT_DEFAULT_SUCCESS_NAME] = "Question Update Successfully!";
-
-            return Redirect("/Admin/Course/" + CourseId + "/Session/" + SessionId + "/Homework/" + homeworkId + "/Info");
+            // methcall.InitTempData(this);
+            CourseID = courseId;
+            SessionID = sessionId;
+            HomeworkID = homeworkId;
         }
         public IActionResult OnGetLogout()
         {

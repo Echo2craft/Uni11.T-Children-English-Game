@@ -34,27 +34,16 @@ namespace CEG_BAL.Services.Implements
         public void Create(SessionViewModel model, CreateNewSession newSes)
         {
             var sess = _mapper.Map<Session>(model);
-            sess.Status = "Draft";
+            //sess.Status = "Draft";
 
             if (newSes != null)
             {
                 sess.Title = newSes.Title;
                 sess.Description = newSes.Description;
                 sess.Hours = newSes.Hours;
-                sess.Number = newSes.Number;
+                sess.SessionNumber = newSes.Number;
                 sess.CourseId = _unitOfWork.CourseRepositories.GetIdByName(newSes.CourseName).Result;
-
-                /*var sessionList = _unitOfWork.SessionRepositories.GetSessionListByCourseId(sess.CourseId).Result;
-                if (sessionList != null && sessionList.Count > 0)
-                {
-                    foreach(var session in sessionList)
-                    {
-                        
-                    }
-                } else
-                {
-                    sess.Number = 1;
-                }*/
+                sess.Course = null;
             }
 
             _unitOfWork.SessionRepositories.Create(sess);
@@ -72,6 +61,7 @@ namespace CEG_BAL.Services.Implements
             if (user != null)
             {
                 var urs = _mapper.Map<SessionViewModel>(user);
+                urs.CourseStatus = await _unitOfWork.CourseRepositories.GetStatusBySessionIdNoTracking(id);
                 return urs;
             }
             return null;
@@ -79,8 +69,14 @@ namespace CEG_BAL.Services.Implements
 
         public void Update(SessionViewModel model)
         {
-            var sess = _mapper.Map<Session>(model);
-            sess.CourseId = _unitOfWork.SessionRepositories.GetByIdNoTracking(model.SessionId.Value).Result.CourseId;
+            var sess = _unitOfWork.SessionRepositories.GetByIdNoTracking(model.SessionId.Value).Result;
+            if(model != null)
+            {
+                sess.Title = model.Title;
+                sess.Description = model.Description;
+                sess.SessionNumber = model.SessionNumber;
+                sess.Hours = model.Hours;
+            }
             _unitOfWork.SessionRepositories.Update(sess);
             _unitOfWork.Save();
         }

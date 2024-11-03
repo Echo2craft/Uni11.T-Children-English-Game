@@ -482,7 +482,7 @@ html body {
 
     .header .float-right .dropdown {
         position: relative;
-        padding: 15px 20px;
+        padding: 20px 20px;
         margin-right: 80px;
     }
 
@@ -490,6 +490,7 @@ html body {
     background: #34495e;
     color: #fff;
     border-radius: .5rem;
+    
 }
 
     .float-right .dropdown button:hover {
@@ -497,13 +498,19 @@ html body {
     }
 
 .float-right .dropdown-menu.show {
-    transform: translate3d(5px, 55px, 0px) !important;
+    min-width: 8rem;
+    /*min-width: fit-content;
+    transform: translate3d(5px, 58px, 0px) !important;*/
 }
 
 .float-right .dropdown-menu a i {
     position: relative;
     display: inline-flex;
     font-size: 15px;
+}
+
+.float-right .dropdown-item {
+    cursor: pointer;
 }
 
 
@@ -693,7 +700,7 @@ html body {
         }
 
         .cardFB .card-body {
-            padding-top: 0;
+            /*padding-top: 0;*/
         }
 
         .cardFB .imgBx {
@@ -846,6 +853,10 @@ html body {
 
 
     /* club list */
+    ul.nav.nav-tabs {
+        padding: 0px;
+    }
+
     .navs .nav-item .nav-link {
         color: #34495e;
     }
@@ -1711,7 +1722,7 @@ html body {
     }
 
     .dropdown-menu.show {
-        transform: translate3d(-135px, 35px, 0px) !important;
+        /*transform: translate3d(-135px, 35px, 0px) !important;*/
     }
 
 
@@ -1956,3 +1967,49 @@ html body {
             background-color: #f1f1f1;
         }
 /* end of use for Homework Info Page*/
+.search-course-results.dropdown-menu {
+    top: auto;
+    left: auto;
+}
+/**/
+.bx {
+    line-height: 1.5;
+}
+.bx.bx-search-alt{
+    line-height: normal;
+}
+.dt-search{
+    display: flex;
+    align-items: center;
+}
+    .dt-search input {
+        padding: 15px 0px 15px 35px;
+        position: relative;
+        margin-left: 0.5em;
+        border-radius: 30px;
+        outline: none;
+    }
+    .dt-search .bx.bx-search-alt.question-search-icon {
+        position: absolute;
+        /*top: 10px;*/
+        margin-left: 20px;
+        font-size: 1.2em;
+    }
+    .dt-search .bx.bx-search-alt.enroll-search-icon {
+        position: absolute;
+        /*top: 8px;*/
+        margin-left: 20px;
+        font-size: 1.2em;
+    }
+.bxs-add-to-queue.bx-sm {
+    margin: 0px 5px;
+}
+div.dt-container div.dt-paging ul.pagination {
+    gap: 0;
+}
+#question-table_wrapper 
+.pagination .active .page-link {
+    background-color: #34495e;
+    border-color: #34495e;
+}
+/**/

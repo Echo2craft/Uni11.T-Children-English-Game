@@ -13,6 +13,7 @@ namespace CEG_RazorWebApp.Libraries
         public readonly static string LOGOUT_REDIRECT_URL = "/Home/Index";
 
         public readonly static string ADMIN_LAYOUT_URL = "~/Pages/Shared/_ALayout.cshtml";
+        public readonly static string TEACHER_LAYOUT_URL = "~/Pages/Shared/_TLayout.cshtml";
         public readonly static string PARENT_LAYOUT_URL = "~/Pages/Shared/_PLayout.cshtml";
         //public readonly static string NEW_MEMBER_CONFIRM_REGISTRATION_URL = "/Auth/SignUp";
 
@@ -146,6 +147,10 @@ namespace CEG_RazorWebApp.Libraries
         public readonly static string CLASS_STATUS_NAME_CANCELLED = "Cancelled";
         public readonly static string CLASS_STATUS_ENDED = "Ended";
         public readonly static string CLASS_STATUS_NAME_ENDED = "Ended";
+
+        public readonly static string CLASS_SCHEDULE_MONDAY_THURSDAY = "Monday and Thursday each week";
+        public readonly static string CLASS_SCHEDULE_TUESDAY_FRIDAY = "Tuesday and Friday each week";
+        public readonly static string CLASS_SCHEDULE_WEDNESDAY_SATURDAY = "Wednesday and Saturday each week";
 
         public readonly static string HOMEWORK_TYPE_VOCAB = "Vocabulary";
         public readonly static string HOMEWORK_TYPE_NAME_VOCAB = "Vocabulary";

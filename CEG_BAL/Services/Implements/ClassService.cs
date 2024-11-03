@@ -5,11 +5,6 @@ using CEG_BAL.ViewModels.Admin;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CEG_BAL.Services.Implements
 {
@@ -44,6 +39,17 @@ namespace CEG_BAL.Services.Implements
                 clas.EndDate = newClass.EndDate;
                 clas.MinimumStudents = newClass.MinStudents;
                 clas.MaximumStudents = newClass.MaxStudents;
+                clas.Status = "Draft";
+                clas.Schedules = new List<Schedule>();
+                /*if (newClass.WeeklySchedule != null)
+                {
+                    var sessionList = _unitOfWork.SessionRepositories.GetSessionListByCourseId(clas.CourseId).Result;
+                    if (sessionList.Count > 0 && clas.StartDate.HasValue)
+                    {
+                        // Extract logic to handle different schedules into a helper function
+                        // AssignSchedulesBasedOnDays(newClass.WeeklySchedule, clas.StartDate.Value.DayOfWeek, clas, sessionList, newClass.StartDate, sessionList.Select(s => s.Hours).ToList());
+                    }
+                }*/
             }
             _unitOfWork.ClassRepositories.Create(clas);
             _unitOfWork.Save();
@@ -51,7 +57,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<ClassViewModel?> GetClassById(int id)
         {
-            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id);
+            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id, true, true);
             if(user != null)
             {
                 var usr = _mapper.Map<ClassViewModel>(user);
@@ -69,12 +75,65 @@ namespace CEG_BAL.Services.Implements
         {
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassListAdmin());
         }
-
+        public async Task<List<ClassViewModel>> GetClassListByTeacherAccountId(int id)
+        {
+            var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
+            if (teacherId == 0) return null;
+            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassListByTeacherId(teacherId));
+        }
         public void Update(ClassViewModel classModel)
         {
             var clas = _mapper.Map<Class>(classModel);
             _unitOfWork.ClassRepositories.Update(clas);
             _unitOfWork.Save();
         }
+
+        public void UpdateStatus(int classId, string classStatus)
+        {
+            var clas = _unitOfWork.ClassRepositories.GetByIdNoTracking(classId).Result;
+            if (clas == null) return;
+            clas.Status = classStatus;
+            _unitOfWork.ClassRepositories.Update(clas);
+            _unitOfWork.Save();
+        }
+
+        // Helper Function to handle schedule assignment
+        /*private void AssignSchedulesBasedOnDays(string scheduleType, DayOfWeek startDay, Class clas, List<Session> sessionList, DateTime startDate, List<int?> sessionHours)
+        {
+            // Define possible day pairs for each schedule type
+            var dayPairs = new Dictionary<string, (DayOfWeek, DayOfWeek)>
+            {
+                { Configurations.Constants.CLASS_SCHEDULE_MONDAY_THURSDAY, (DayOfWeek.Monday, DayOfWeek.Thursday) },
+                { Configurations.Constants.CLASS_SCHEDULE_TUESDAY_FRIDAY, (DayOfWeek.Tuesday, DayOfWeek.Friday) },
+                { Configurations.Constants.CLASS_SCHEDULE_WEDNESDAY_SATURDAY, (DayOfWeek.Wednesday, DayOfWeek.Saturday) }
+            };
+
+            if (!dayPairs.TryGetValue(scheduleType, out (DayOfWeek, DayOfWeek) value))
+                return; // Invalid schedule type
+
+            var (firstDay, secondDay) = value;
+
+            // Only proceed if the start day matches one of the schedule days
+            if (startDay == firstDay || startDay == secondDay)
+            {
+                TimeOnly startTime = TimeOnly.FromDateTime(startDate);
+
+                for (int i = 0; i < sessionList.Count; i++)
+                {
+                    int? sessionDuration = sessionHours[i];
+                    if (sessionDuration.HasValue)
+                    {
+                        clas.Schedules.Add(new Schedule()
+                        {
+                            SessionId = sessionList[i].SessionId,
+                            DayOfWeek = i % 2 == 0 ? firstDay.ToString() : secondDay.ToString(),
+                            StartTime = startTime,
+                            EndTime = startTime.AddHours(sessionDuration.Value),
+                            Status = "Draft"
+                        });
+                    }
+                }
+            }
+        }*/
     }
 }

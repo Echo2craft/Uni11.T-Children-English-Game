@@ -4,7 +4,6 @@ using CEG_BAL.ViewModels;
 using CEG_RazorWebApp.Libraries;
 using CEG_RazorWebApp.Models.Admin.Response;
 using CEG_RazorWebApp.Models.HomeworkAnswer.Create;
-using CEG_RazorWebApp.Models.HomeworkAnswer.Get;
 using CEG_RazorWebApp.Models.HomeworkQuestion.Create;
 using CEG_RazorWebApp.Models.HomeworkQuestion.Get;
 using CEG_RazorWebApp.Models.HomeworkQuestion.Update;
@@ -23,7 +22,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Question
         private readonly IConfiguration _config;
         private readonly ILogger<QuestionInfoModel> _logger;
         private readonly IMapper _mapper;
-        private ChildrenEnglishGameLibrary methcall = new();
+        private CEG_RAZOR_Library methcall = new();
         public int? QuestionId { get; set; }
         public string? AccToken;
         public string? ApiUrl;
@@ -40,21 +39,8 @@ namespace CEG_RazorWebApp.Pages.Admin.Question
         public void OnGet(
             [FromRoute][Required] int questionId)
         {
-            methcall.InitTempData(this);
             AccToken = HttpContext.Session.GetString(Constants.ACC_TOKEN);
             QuestionId = questionId;
-        }
-        public IActionResult OnGetLogout()
-        {
-            //_httpClient.DefaultRequestHeaders.Authorization = null;
-            HttpContext.Session.Clear();
-            TempData.Clear();
-            SignOut();
-
-            // If using ASP.NET Identity, you may want to sign out the user
-            // Example: await SignInManager.SignOutAsync();
-
-            return RedirectToPage(Constants.LOGOUT_REDIRECT_URL);
         }
     }
 }

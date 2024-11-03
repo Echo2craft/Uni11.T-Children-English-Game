@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace CEG_RazorWebApp.Pages.Parent
 {
-    [Authorize(Policy = "SessionAuthorize")]
+    //[Authorize(Policy = "SessionAuthorize")]
     public class ParentIndexModel : PageModel
     {
         private readonly ILogger<ParentIndexModel> _logger;
@@ -17,7 +17,7 @@ namespace CEG_RazorWebApp.Pages.Parent
         private readonly IConfiguration _config;
         private readonly HttpClient _httpClient = null;
         private string ParentAPI_URL = "";
-        private ChildrenEnglishGameLibrary methcall = new();
+        private CEG_RAZOR_Library methcall = new();
         private readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,

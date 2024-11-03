@@ -33,13 +33,13 @@
                                     <span>/</span>
                                 </li>
                                 <li class="breadcrumd-item">
-                                    <a href="/Admin/Account/@accountId/Info">@accountId</a>
+                                    <a href="/Admin/Parent/@accountId/Info">@accountId</a>
                                 </li>
                                 <li class="breadcrumd-item">
                                     <span>/</span>
                                 </li>
                                 <li class="breadcrumd-item">
-                                    <a href="/Admin/Account/@accountId/Info">Info</a>
+                                    <a href="/Admin/Parent/@accountId/Info">Info</a>
                                 </li>
                             </ol>
                         </div>
@@ -324,8 +324,8 @@
             </div>
         </div>
         <script>
-            var token = '@HttpContext.Session.GetString(CEG_RazorWebApp.Libraries.Constants.ACC_TOKEN)';
-            var apiUrl = 'https://localhost:7143/api/';
+            var token = sessionStorage.getItem('token');
+            var apiUrl = sessionStorage.getItem('apiUrl');
             $(document).ready(function () {
                 callApiGetTeacherDetail();
                 // Function to display alerts

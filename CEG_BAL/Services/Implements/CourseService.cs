@@ -54,7 +54,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<CourseViewModel?> GetCourseById(int id)
         {
-            var user = await _unitOfWork.CourseRepositories.GetByIdNoTracking(id);
+            var user = await _unitOfWork.CourseRepositories.GetByIdNoTracking(id, true, true ,true);
             if (user != null)
             {
                 var urs = _mapper.Map<CourseViewModel>(user);
@@ -65,17 +65,35 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<CourseViewModel>> GetCourseList()
         {
-            return _mapper.Map<List<CourseViewModel>>(await _unitOfWork.CourseRepositories.GetCourseList());
+            return _mapper.Map<List<CourseViewModel>>(await _unitOfWork.CourseRepositories.GetList());
+        }
+        public async Task<List<CourseViewModel>?> GetListByStatus(string status)
+        {
+            return _mapper.Map<List<CourseViewModel>>(await _unitOfWork.CourseRepositories.GetListByStatus(status));
         }
 
         public async Task<List<string>> GetCourseNameList()
         {
-            return await _unitOfWork.CourseRepositories.GetCourseNameList();
+            return await _unitOfWork.CourseRepositories.GetNameList();
+        }
+
+        public async Task<List<string>> GetCourseNameByStatusList(string status)
+        {
+            return await _unitOfWork.CourseRepositories.GetNameListByStatus(status);
         }
 
         public void Update(CourseViewModel course)
         {
             var cou = _mapper.Map<Course>(course);
+            _unitOfWork.CourseRepositories.Update(cou);
+            _unitOfWork.Save();
+        }
+
+        public void UpdateStatus(int courseId, string courseStatus)
+        {
+            var cou = _unitOfWork.CourseRepositories.GetByIdNoTracking(courseId, includeClasses: true).Result;
+            if (cou == null) return;
+            cou.Status = courseStatus;
             _unitOfWork.CourseRepositories.Update(cou);
             _unitOfWork.Save();
         }
