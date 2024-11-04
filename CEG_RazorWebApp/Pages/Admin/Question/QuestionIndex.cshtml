@@ -118,7 +118,77 @@
             var table;
             var questionList = [];
             $(document).ready(function () {
-                //callApiGetQuestionList();
+                // Registering the custom feature with DataTables
+                DataTable.feature.register('toggle', function (settings, opts) {
+                    // Set default options
+                    let options = Object.assign({
+                        iconClass: 'bx bxs-add-to-queue bx-sm',
+                        modalId: 'createQuestion' // Modal ID that the icon will trigger
+                    }, opts);
+
+                    // Create a container for the icon
+                    let container = document.createElement('div');
+                    // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                    // Create the icon element
+                    let icon = document.createElement('i');
+                    icon.className = options.iconClass;
+                    icon.setAttribute('data-toggle', 'modal');
+                    icon.setAttribute('data-target', `#${options.modalId}`);
+
+                    // Append icon to container
+                    container.appendChild(icon);
+
+                    // Insert the container in the DataTable toolbar
+                    $(settings.nTableWrapper).prepend(container);
+
+                    return container;
+                });
+                // Registering the custom feature with DataTables
+                DataTable.feature.register('searchIcon', function (settings, opts) {
+                    // Set default options
+                    let options = Object.assign({
+                        iconClass: 'bx bx-search-alt question-search-icon',
+                        hideLabel: true // Hide search label
+                    }, opts);
+
+                    // Create a container for the icon
+                    let container = document.createElement('div');
+                    // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                    // Create the icon element
+                    let icon = document.createElement('i');
+                    icon.className = options.iconClass;
+
+                    // Check if pagination is enabled
+                    // if (settings.oFeatures.bFilter) {
+                    //     console.log(settings.oFeatures.bFilter);
+                    //     console.log('Pagination is enabled for this DataTable.');
+                    // }
+
+                    setTimeout(() => {
+                        // Find the .dt-search container inside the DataTable wrapper
+                        let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                        if (searchContainer.length) {
+                            searchContainer.append(icon);
+                        } else {
+                            // Append icon to container
+                            container.appendChild(icon);
+                            // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                            $(settings.nTableWrapper).prepend(container);
+                        }
+                        if (options.hideLabel) {
+                            // Find the .dt-search label container inside the DataTable wrapper
+                            let searchLabel = searchContainer.find('label');
+                            if (searchLabel.length) {
+                                searchLabel.text('');
+                            } else {
+                                console.log('Label of search div not found!');
+                            }
+                        }
+                    }, 100);
+                    return container;
+                });
                 table = new DataTable('#question-table', {
                     ajax: {
                         url: apiUrl + 'Question/All/Ordered',
@@ -132,15 +202,35 @@
                     columns: [
                         { data: 'question' },
                         { data: 'answersAmount' },
-                    ]
+                    ],
+                    select: {
+                        style: 'single'
+                    },
+                    layout: {
+                        topEnd: {
+                            search: {
+                                placeholder: 'Search question...'
+                            },
+                            toggle: {
+                            },
+                            searchIcon:{
+                            }
+                        }
+                    }
+                }).on('select', function (e, dt, type, indexes) {
+                    if (type === 'row') {
+                        var data = table
+                            .row(indexes)
+                            .data()
+                            .homeworkQuestionId;
+                        window.location.href = '/Admin/Question/' + data + '/Info';
+                    }
                 });
-                var createQuestionToggleHtml = `
-                    <i class="bx bx-search-alt question-search-icon"></i>
-                    <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createQuestion"></i>
-                `;
-                $('.dt-search').append(createQuestionToggleHtml);
-                $('.dt-search label').text('');
-                $('.dt-search input').attr('placeholder', 'Search question...')
+                // var createQuestionToggleHtml = `
+                //     <i class="bx bx-search-alt question-search-icon"></i>
+                // `;
+                // $('.dt-search').append(createQuestionToggleHtml);
+                // $('.dt-search label').text('');
                 $('#createQuestionForm').submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting normally
 
@@ -153,32 +243,30 @@
                     callApiPostCreateQuestion(formData);
                     $('#createQuestionForm').trigger("reset");
                 });
-                // $('#search').on('keyup', function (event) {
-                //     Get the search term
-                //     var searchTerm = $(this).val().toLowerCase();
-
-                //     Filter the classes based on the search term
-                //     var filteredquestionList = questionList.filter(function (question) {
-                //         return question.question.toLowerCase().includes(searchTerm);
-                //     });
-
-                //     Display the filtered questionList
-                //     setQuestionDisplay(filteredquestionList);
-                // });
             });
-            $('#question-table tbody').on('click', 'tr', function () {
-                var table = $('#question-table').DataTable();
-                var data = table.row(this).data();
-                if ($(this).hasClass('selected')) {
-                    $(this).removeClass('selected');
-                }
-                else {
-                    table.$('tr.selected').removeClass('selected');
-                    $(this).addClass('selected');
-                }
-                window.location.href = '/Admin/Question/' + data.homeworkQuestionId + '/Info';
-                // alert('You clicked on ' + data.homeworkQuestionId + "'s row");
-            });
+            // table.on('select', function (e, dt, type, indexes) {
+            //     if (type === 'row') {
+            //         var data = table
+            //             .rows(indexes)
+            //             .data();
+
+            //         do something with the ID of the selected items
+            //     }
+            //     window.location.href = '/Admin/Question/' + data.homeworkQuestionId + '/Info';
+            // });
+            // $('#question-table tbody').on('click', 'tr', function () {
+            //     var table = $('#question-table').DataTable();
+            //     var data = table.row(this).data();
+            //     if ($(this).hasClass('selected')) {
+            //         $(this).removeClass('selected');
+            //     }
+            //     else {
+            //         table.$('tr.selected').removeClass('selected');
+            //         $(this).addClass('selected');
+            //     }
+            //     window.location.href = '/Admin/Question/' + data.homeworkQuestionId + '/Info';
+            //     alert('You clicked on ' + data.homeworkQuestionId + "'s row");
+            // });
             // Function to display alerts
             function showAlert(type, message) {
                 var alertHtml = '';

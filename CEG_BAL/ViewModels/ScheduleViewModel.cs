@@ -5,7 +5,7 @@ namespace CEG_BAL.ViewModels
     {
         public int? ScheduleId { get; set; }
 
-        public string? DayOfWeek { get; set; }
+        public DateTime? ScheduleDate { get; set; }
 
         public TimeOnly StartTime { get; set; }
 

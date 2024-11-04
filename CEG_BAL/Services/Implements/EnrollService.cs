@@ -59,5 +59,13 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.EnrollRepositories.Update(en);
             _unitOfWork.Save();
         }
+        public void UpdateStatus(int enrollId, string enrollStatus)
+        {
+            var enr = _unitOfWork.EnrollRepositories.GetByIdNoTracking(enrollId).Result;
+            if (enr == null) return;
+            enr.Status = enrollStatus;
+            _unitOfWork.EnrollRepositories.Update(enr);
+            _unitOfWork.Save();
+        }
     }
 }

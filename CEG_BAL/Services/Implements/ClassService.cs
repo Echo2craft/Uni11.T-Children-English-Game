@@ -40,16 +40,22 @@ namespace CEG_BAL.Services.Implements
                 clas.MinimumStudents = newClass.MinStudents;
                 clas.MaximumStudents = newClass.MaxStudents;
                 clas.Status = "Draft";
-                clas.Schedules = new List<Schedule>();
-                if (newClass.WeeklySchedule != null)
+                clas.Schedules = _mapper.Map<List<Schedule>>(newClass.Schedules);
+                foreach(var schedule in clas.Schedules)
+                {
+                    schedule.Status = "Draft";
+                    schedule.StartTime = schedule.ScheduleDate.HasValue ? TimeOnly.FromDateTime(schedule.ScheduleDate.Value) : default;
+                    schedule.EndTime = schedule.StartTime.Value.AddHours(_unitOfWork.SessionRepositories.GetByIdNoTracking(schedule.SessionId).Result.Hours.Value);
+                }
+                /*if (newClass.WeeklySchedule != null)
                 {
                     var sessionList = _unitOfWork.SessionRepositories.GetSessionListByCourseId(clas.CourseId).Result;
                     if (sessionList.Count > 0 && clas.StartDate.HasValue)
                     {
                         // Extract logic to handle different schedules into a helper function
-                        AssignSchedulesBasedOnDays(newClass.WeeklySchedule, clas.StartDate.Value.DayOfWeek, clas, sessionList, newClass.StartDate, sessionList.Select(s => s.Hours).ToList());
+                        // AssignSchedulesBasedOnDays(newClass.WeeklySchedule, clas.StartDate.Value.DayOfWeek, clas, sessionList, newClass.StartDate, sessionList.Select(s => s.Hours).ToList());
                     }
-                }
+                }*/
             }
             _unitOfWork.ClassRepositories.Create(clas);
             _unitOfWork.Save();
@@ -98,7 +104,7 @@ namespace CEG_BAL.Services.Implements
         }
 
         // Helper Function to handle schedule assignment
-        private void AssignSchedulesBasedOnDays(string scheduleType, DayOfWeek startDay, Class clas, List<Session> sessionList, DateTime startDate, List<int?> sessionHours)
+        /*private void AssignSchedulesBasedOnDays(string scheduleType, DayOfWeek startDay, Class clas, List<Session> sessionList, DateTime startDate, List<int?> sessionHours)
         {
             // Define possible day pairs for each schedule type
             var dayPairs = new Dictionary<string, (DayOfWeek, DayOfWeek)>
@@ -134,6 +140,6 @@ namespace CEG_BAL.Services.Implements
                     }
                 }
             }
-        }
+        }*/
     }
 }

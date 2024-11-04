@@ -91,93 +91,141 @@
                         <div class="row p-4">
                             <div class="col-12">
                                 <div class="row form-group">
-                                    <label asp-for="@createClass.ClassName" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-7">
-                                    <span asp-validation-for="@createClass.ClassName" id="error_message"
-                                            class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                    <div class="row form-group justify-content-center">
+                                        <label asp-for="@createClass.ClassName" class="col-md-3 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-7">
+                                        <span asp-validation-for="@createClass.ClassName" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                    <label asp-for="@createClass.MinStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createClass.MinStudents" value="@createClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
-                                    <span asp-validation-for="@createClass.MinStudents" id="error_message"
-                                            class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                        <label asp-for="@createClass.MinStudents" class="col-md-3 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.MinStudents" value="@createClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <span asp-validation-for="@createClass.MinStudents" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                    <label asp-for="@createClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
-                                    <span asp-validation-for="@createClass.MaxStudents" id="error_message"
-                                            class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                        <label asp-for="@createClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <span asp-validation-for="@createClass.MaxStudents" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                    <label asp-for="@createClass.TeacherName" class="col-md-3 col-form-label text-md-right"></label>
-                                    <select class="form-control col-md-7 custom-select" asp-for="@createClass.TeacherName" required></select>
-                                    <span asp-validation-for="@createClass.TeacherName" id="error_message"
-                                            class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                        <label asp-for="@createClass.TeacherName" class="col-md-3 col-form-label text-md-right">Select a Teacher</label>
+                                        <div class="col-md-7">
+                                            <!-- search bar with dropdown list-->
+                                            <select id="searchableTeacherDropdown" class="form-control custom-select" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="@createClass.TeacherName" id="error_message"
+                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
 
-                                    <label asp-for="@createClass.CourseName" class="col-md-3 col-form-label text-md-right">Select a available Course</label>
-                                    @* <input data-courseName="A Course" type="text" id="search-course-dropdown" class="form-control col-md-7 custom-select text-md-left" placeholder="Search a particular course...">
-                                    <ul class="search-course-results dropdown-menu" id="search-course-results"></ul> *@
-                                    <div class="col-md-7">
-                                        <!-- search bar with dropdown list-->
-                                        <input data-courseName="A Course" type="text" id="search-course-dropdown" class="form-control custom-select text-md-left" placeholder="Search a particular course..." required>
-                                        <ul class="search-course-results dropdown-menu" id="search-course-results"></ul>
+                                        <label asp-for="@createClass.CourseName" class="col-md-3 col-form-label text-md-right">Select a available Course</label>
+                                        <div class="col-md-7">
+                                            <!-- search bar with dropdown list-->
+                                            <select id="searchableCourseDropdown" class="form-control custom-select" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="@createClass.CourseName" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+
+                                        <label asp-for="@createClass.StartDate" class="col-md-3 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.StartDate" type="datetime-local" value="@createClass.StartDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
+                                        <span asp-validation-for="@createClass.StartDate" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+
+                                        <label asp-for="@createClass.EndDate" class="col-md-3 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.EndDate" type="datetime-local" value="@createClass.EndDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
+                                        <span asp-validation-for="@createClass.EndDate" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                     </div>
-                                    <span asp-validation-for="@createClass.CourseName" id="error_message"
-                                            class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                    @* <label asp-for="@createClass.CourseName" class="col-md-3 col-form-label text-md-right"></label>
-                                    <select class="form-control col-md-7 custom-select" asp-for="@createClass.CourseName" required></select>
-                                    <span asp-validation-for="@createClass.CourseName" id="error_message"
-                                            class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
-
-                                    <label asp-for="@createClass.StartDate" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createClass.StartDate" type="datetime-local" value="@createClass.StartDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
-                                    <span asp-validation-for="@createClass.StartDate" id="error_message"
-                                            class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createClass.EndDate" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createClass.EndDate" type="datetime-local" value="@createClass.EndDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
-                                    <span asp-validation-for="@createClass.EndDate" id="error_message"
-                                            class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <div id="session-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
-                                        <table id="session-table"
-                                               class="table table-striped table-bordered dataTable no-footer"
-                                               aria-describedby="session-table_info">
-                                            <thead>
-                                                <tr>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="session-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Session ID: activate to sort column ascending">
-                                                        Session ID
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="session-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Session Number: activate to sort column ascending">
-                                                        Session Number
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="session-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Title: activate to sort column ascending">
-                                                        Session Title
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="session-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Description: activate to sort column ascending">
-                                                        Session Description
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
+                                    <hr />
+                                    <div class ="row form-group justify-content-center course-content-view">
+                                        <label class="col-form-label">Course's Sessions preview</label>
+                                        <div id="session-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
+                                            <table id="session-table"
+                                                   class="table table-striped table-bordered dataTable no-footer"
+                                                   aria-describedby="session-table_info">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="session-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Session ID: activate to sort column ascending">
+                                                            Session ID
+                                                        </th>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="session-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Session Number: activate to sort column ascending">
+                                                            Session Number
+                                                        </th>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="session-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Title: activate to sort column ascending">
+                                                            Session Title
+                                                        </th>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="session-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Description: activate to sort column ascending">
+                                                            Session Description
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <hr />
+                                        <label class="col-form-label">Selected Sessions</label>
+                                        <div id="schedule-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
+                                            <table id="schedule-table"
+                                                   class="table table-striped table-bordered dataTable no-footer"
+                                                   aria-describedby="schedule-table_info">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="schedule-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Session ID: activate to sort column ascending">
+                                                            Session Id
+                                                        </th>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="schedule-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Session Number: activate to sort column ascending">
+                                                            Session Number
+                                                        </th>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="schedule-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Title: activate to sort column ascending">
+                                                            Session Title
+                                                        </th>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="schedule-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Description: activate to sort column ascending">
+                                                            Schedule Start Date & Time
+                                                        </th>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="schedule-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="hour: activate to sort column ascending">
+                                                            Hours
+                                                        </th>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="schedule-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Description: activate to sort column ascending">
+                                                            Schedule End Date & Time
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-
-                                    @* <label asp-for="@createClass.WeeklySchedule" class="col-md-3 col-form-label text-md-right"></label>
-                                    <select class="form-control col-md-7 custom-select" asp-for="@createClass.WeeklySchedule" required></select>
-                                    <span asp-validation-for="@createClass.WeeklySchedule" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
                                 </div>
                             </div>
                         </div>
@@ -195,20 +243,222 @@
         var apiUrl = sessionStorage.getItem('apiUrl');
         var classList = [];
         var courseList;
-        var table;
+        var sessionTable;
+        var scheduleTable;
+        var selectedSessionIds = new Set();
         $(document).ready(function () {
-            table = new DataTable('#session-table', {
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('searchIcon', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bx-search-alt question-search-icon',
+                    hideLabel: true // Hide search label
+                }, opts);
+
+                // Create a container for the icon
+                let container = document.createElement('div');
+                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                // Create the icon element
+                let icon = document.createElement('i');
+                icon.className = options.iconClass;
+
+                // Check if pagination is enabled
+                // if (settings.oFeatures.bFilter) {
+                //     console.log(settings.oFeatures.bFilter);
+                //     console.log('Pagination is enabled for this DataTable.');
+                // }
+
+                setTimeout(() => {
+                    // Find the .dt-search container inside the DataTable wrapper
+                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                    if (searchContainer.length) {
+                        searchContainer.append(icon);
+                    } else {
+                        // Append icon to container
+                        container.appendChild(icon);
+                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                        $(settings.nTableWrapper).prepend(container);
+                    }
+                    if (options.hideLabel) {
+                        // Find the .dt-search label container inside the DataTable wrapper
+                        let searchLabel = searchContainer.find('label');
+                        if (searchLabel.length) {
+                            searchLabel.text('');
+                        } else {
+                            console.log('Label of search div not found!');
+                        }
+                    }
+                }, 100);
+                return container;
+            });
+            sessionTable = new DataTable('#session-table', {
                 data: [],
                 deferRender: false,
                 responsive: true,
                 columns: [
                     { data: 'sessionId' },
-                    { data: 'number' },
+                    { data: 'sessionNumber' },
                     { data: 'title' },
                     { data: 'description' }
-                ]
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'type session title...'
+                        },
+                        searchIcon: {
+                        }
+                    }
+                },
+                select: {
+                    style: 'multi'
+                }
+            }).on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    var data = sessionTable
+                        .row(indexes)
+                        .data();
+                    // console.log(data);
+                    var sessionId = data.sessionId;
+                    // If not selected, add to selected set and add to scheduleTable
+                    selectedSessionIds.add(sessionId);
+                    var startDateTime = getDefaultDate();
+                    // console.log(startDateTime);
+                    var endDateTime = new Date(startDateTime);
+                    endDateTime.setHours(endDateTime.getHours() + data.hours);
+                    // Create a new row data for scheduleTable based on selected sessionTable row
+                    var newRowData = { // Customize if needed, or leave empty for manual input
+                        sessionId: sessionId,
+                        sessionNumber: data.sessionNumber,
+                        title: data.title,
+                        startDate: startDateTime,
+                        hour: data.hours,
+                        endDate: endDateTime
+                    };
+
+                    // Add new row data to scheduleTable
+                    scheduleTable.row.add(newRowData).draw();
+                }
+            }).on('deselect', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    var data = sessionTable
+                        .row(indexes)
+                        .data();
+                    // console.log(data);
+                    var sessionId = data.sessionId;
+                    // If already selected, unselect and remove from scheduleTable
+                    selectedSessionIds.delete(sessionId);
+
+                    // Find and remove the row with the same sessionId in scheduleTable
+                    scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                        if (this.data().sessionId === data.sessionId) {
+                            scheduleTable.row(rowIdx).remove();
+                        }
+                    });
+                    scheduleTable.draw(); // Re-render table after removal
+                }
             });
+
+            scheduleTable = new DataTable('#schedule-table', {
+                data: [],
+                deferRender: false,
+                responsive: true,
+                columns: [
+                    { 
+                        data: 'sessionId',
+                        render: function (data, type, row, meta) {
+                            return '<span id="schedule-session-id">' + data + '</span >';
+                        }
+                    },
+                    { data: 'sessionNumber' },
+                    { data: 'title' },
+                    { // Add a select box in the last column
+                        data: 'startDate', // No need to map it to a specific data field
+                        render: function (data, type, row, meta) {
+                            // return data ? $.fn.dataTable.render.datetime(data, 'YYYY-MM-DD HH:mm').display(data) : '';
+                            return '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
+                        }
+                    },
+                    {
+                        data: 'hour',
+                        render: function (data, type, row, meta) {
+                            return '<span id="schedule-hour">' + data + '</span >';
+                        }
+                    },
+                    {
+                        data: 'endDate',
+                        render: function (data, type, row, meta) {
+                            return '<span id="schedule-end-date">' + formatDate(data) + '</span >';
+                        }
+                    }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'type session title...'
+                        },
+                        searchIcon: {
+                        }
+                    }
+                },
+            }).on('draw', function () {
+                // Select all datetime-local inputs within the table
+                // console.log( $('#schedule-table').find('input[type="datetime-local"]#schedule-start-date'));
+                $('#schedule-table').find('input[type="datetime-local"]#schedule-start-date').each(function () {
+                    // Add change event listener for each input
+                    $(this).on('change', function () {
+                        const selectedDate = new Date(this.value);
+                        var rowData = $(this).closest('tr');
+                        let hourText = rowData.find('#schedule-hour');
+                        let endDateText = rowData.find('#schedule-end-date');
+                        if (hourText && hourText.length > 0 && endDateText && endDateText.length > 0) {
+                            // console.log(hourText[0].textContent);
+                            const hoursToAdd = parseFloat(hourText[0].textContent);
+                            const endDate = new Date(selectedDate);
+                            endDate.setHours(endDate.getHours() + hoursToAdd);
+                            // Format and display the end date in the corresponding span
+                            const formattedEndDate = formatDate(endDate); // Format as needed
+                            endDateText.text(formattedEndDate);
+                        }
+                    });
+                });
+            });
+
+            $('#searchableCourseDropdown').select2({
+                placeholder: 'Select a course name',
+                allowClear: true,
+                width: 'resolve',
+                theme: 'bootstrap4'
+            })
+            .on('select2:close', function (e) {
+                // console.log(e);
+                var text = $('#searchableCourseDropdown').select2('data')[0].text;
+                // Filter options based on the search input
+                var results = courseList.filter(function (item) {
+                    return item.courseName && item.courseName === text;
+                });
+
+                if (results.length > 0 && results[0].sessions) {
+                    sessionTable.clear().rows.add(results[0].sessions).draw();
+                    scheduleTable.clear().draw();
+                } else {
+                    console.error('Selected course or its sessions not found.');
+                    sessionTable.clear().draw();
+                    scheduleTable.clear().draw();
+                }
+            })
+            ;
+
+            $('#searchableTeacherDropdown').select2({
+                placeholder: 'Select a teacher name',
+                allowClear: true,
+                width: 'resolve',
+                theme: 'bootstrap4'
+            })
+
             callApiGetClassList();
+
             $('#search').on('keyup', function (event) {
                 // Get the search term
                 var searchTerm = $(this).val().toLowerCase();
@@ -229,23 +479,28 @@
 
                     // Check if the status is true
                     if (response.status) {
-                        var select = $('#createClass_TeacherName'); // Reference to the <select> element
-                        select.empty(); // Clear any existing options
-
-                        // Append a default option
-                        // select.append('<option value="">--Select a Teacher--</option>');
-
-                        // Loop through the data array and append each name as an option
-                        $.each(response.data, function (index, teacherName) {
-                            select.append('<option value="' + teacherName + '">' + teacherName + '</option>');
-                        });
+                        addTeacherOptions(response.data);
                     } else {
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    alert("Error in api call:" + error);
-                    console.error("Error in api call:", error);
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
             // Call API to get the list of course names
@@ -256,133 +511,82 @@
 
                     // Check if the status is true
                     if (response.status) {
-                        //var select = $('#createClass_CourseName');// Reference to the <select> element
-                        //select.empty();// Clear any existing options
-
-                        //Append a default option
-                        //select.append('<option value="">--Select a Teacher--</option>');
-
-                        //Loop through the data array and append each name as an option
-                        // $.each(response.data, function (index, course) {
-                        //     select.append('<option value="' + course.courseName + '">' + course.courseName + '</option>');
-                        // });
                         courseList = response.data;
+                        addCourseOptions(courseList);
+                        renderDefaultCourse(courseList);
                     } else {
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    alert("Error in api call:" + error);
-                    console.error("Error in api call:", error);
-                    showAlert('success', 'Data fetched successfully.');
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
         });
-        $('#session-table tbody').on('click', 'tr', function () {
-            // var data = table.row(this).data();
-            $(this).toggleClass('selected');
-            // alert('You clicked on ' + data.homeworkQuestionId + "'s row");
-        });
-        // dropdown js
-        $('#search-course-dropdown').on('keyup', function () {
-            var query = $(this).val().toLowerCase();
-            if (query) {
-
-                // Filter options based on the search input
-                var results = courseList.filter(function (item) {
-                    return item.courseName && item.courseName.toLowerCase().includes(query);
-                });
-
-                // Render the dropdown list
-                renderDropdown(results);
-                $('#search-course-results').show(); // Show the dropdown list
-                // Ensure that at least one course was found and has sessions
-                // if (results.length > 0 && results[0].sessions) {
-                //     table.clear().rows.add(results[0].sessions).draw();
-                // } else {
-                //     console.error('Selected course or its sessions not found.');
-                //     table.clear().draw();
-                // }
-
-            } else {
-                $('#search-course-results').hide(); // Hide the dropdown if input is empty
-                table.clear().draw();
-            }
-        });
-
-        // Close dropdown when clicking outside
-        $(document).on('click', function (event) {
-            if ($(event.target).closest('#session-table').length) {
-                $('#search-course-results').hide();
-                $('#search-course-results').empty();
-            } else
-            if (!$(event.target).closest('#search-course-dropdown').length) {
-                $('#search-course-results').hide();
-                $('#search-course-results').empty(); // Close dropdown
-
-                const selectedText = $('#search-course-dropdown').val();
-                if (courseList && courseList.length > 0 && selectedText) {
-                    var selectedCourse = courseList.filter(function (course) {
-                        return course.courseName === selectedText;
-                    });
-                    // Ensure that at least one course was found and has sessions
-                    if (selectedCourse.length > 0 && selectedCourse[0].sessions) {
-                        table.clear().rows.add(selectedCourse[0].sessions).draw();
-                    } else {
-                        console.error('Selected course or its sessions not found.');
-                        table.clear().draw();
-                    }
-                }
-
-            } else 
-            if ($(event.target).closest('#search-course-dropdown').length) {
-                renderDropdown(courseList);
-                $('#search-course-results').show();
-            }
-        });
-        $(document).on('click', '.search-course-results li', function () {
-            const selectedText = $(this).text();
-            const selectedId = $(this).data('courseName');
-
-            // Fill the input with the selected text
-            $('#search-course-dropdown').val(selectedText);
-            $('#search-course-dropdown').attr('data-courseName', selectedId);
-
-            // You can store the selected ID for further processing
-            // console.log('Selected Question ID:', selectedId);
-
+        function renderDefaultCourse(data){
+            // var text = $('#searchableCourseDropdown').select2('data')[0].text;
             // Filter options based on the search input
-            // var results = courseList.filter(function (item) {
-            //     return item.courseName && item.courseName === selectedText;
-            // });
+            var results = data[0]
 
-            // if (results.length > 0 && results[0].sessions) {
-            //     table.clear().rows.add(results[0].sessions).draw();
-            // } else {
-            //     console.error('Selected course or its sessions not found.');
-            //     table.clear().draw();
-            // }
-
-            // Optionally, close the dropdown
-            $('#search-course-results').empty(); // Clear dropdown
-        });
-        // end of dropdown js
-        // Ensure dropdown behavior in modal is smooth
-        $('#addClass').on('shown.bs.modal', function () {
-            $('#search-course-dropdown').focus();  // Auto-focus on the input when modal opens
-        });
-        // Function to render the dropdown with filtered results
-        function renderDropdown(options) {
-            $('#search-course-results').empty(); // Clear the dropdown list
-
-            if (options.length === 0) {
-                $('#search-course-results').append('<li class="dropdown-item disabled">No Course Found</li>');
+            if (results && results.sessions) {
+                sessionTable.clear().rows.add(results.sessions).draw();
             } else {
-                options.forEach(function (option) {
-                    $('#search-course-results').append('<li data-courseName="' + option.courseName + '" class="dropdown-item">' + option.courseName + '</li>');
-                });
+                console.error('Selected course or its sessions not found.');
+                sessionTable.clear().draw();
             }
+        }
+        function addTeacherOptions(data) {
+            data.forEach(item => {
+                // Add each item as an option
+                let newOption = new Option(item, item, false, false);
+                $('#searchableTeacherDropdown').append(newOption);
+            });
+            // Refresh the Select2 dropdown to show new options
+            $('#searchableTeacherDropdown').trigger('change'); // Ensure Select2 is updated
+        }
+        function addCourseOptions(data) {
+            data.forEach(item => {
+                // Add each item as an option
+                let newOption = new Option(item.courseName, item.courseName, false, false);
+                $('#searchableCourseDropdown').append(newOption);
+            });
+            // Refresh the Select2 dropdown to show new options
+            $('#searchableCourseDropdown').trigger('change'); // Ensure Select2 is updated
+        }
+        // Function to calculate today's date + 10 days
+        function getDefaultDate() {
+            let currentDate = new Date(); // Get the current date and time
+            let defaultDate = new Date(currentDate); // Copy the current date
 
+            // Add 10 days to the date
+            defaultDate.setDate(currentDate.getDate() + 10);
+            // console.log(currentDate);
+            // console.log(defaultDate);
+
+            // Get year, month, day, hours, and minutes in local time
+            let year = defaultDate.getFullYear();
+            let month = String(defaultDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            let day = String(defaultDate.getDate()).padStart(2, '0');
+            let hours = String(defaultDate.getHours()).padStart(2, '0');
+            let minutes = String(defaultDate.getMinutes()).padStart(2, '0');
+
+            // Construct formatted string in 'YYYY-MM-DDTHH:MM' format
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
         }
         // Function to display alerts
         function showAlert(type, message) {
@@ -429,10 +633,23 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    alert("Error in api call:" + error);
-                    console.error("Error in api call:", error);
-                    //showAlert('success', 'Data fetched successfully.');
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
         }
@@ -553,12 +770,26 @@
                 ClassName: $("#createClass_ClassName").val(),
                 MinStudents: $("#createClass_MinStudents").val(),
                 MaxStudents: $("#createClass_MaxStudents").val(),
-                TeacherName: $("#createClass_TeacherName").val(),
-                CourseName: $("#createClass_CourseName").val(),
-                StartDate: $("#createClass_StartDate").val(),
-                EndDate: $("#createClass_EndDate").val()
+                TeacherName: $('#searchableTeacherDropdown').select2('data')[0].text,
+                CourseName: $('#searchableCourseDropdown').select2('data')[0].text,
+                StartDate: new DateTime($("#createClass_StartDate").val()).date(), // $("#createClass_StartDate").val(),
+                EndDate: $("#createClass_EndDate").val(),
+                Schedules: []
                 // WeeklySchedule: $('#createClass_WeeklySchedule').val()
             };
+            // Gather schedule data dynamically (example assuming each schedule is in a row in a table)
+            $('#schedule-table tbody tr').each(function () {
+                var schedule = {
+                    ScheduleDate: $(this).find('#schedule-start-date').val(), // Example date input
+                    SessionId: $(this).find('#schedule-session-id').text()
+                    // Hours: parseInt($(this).find('.schedule-hours').text(), 10) || 0, // Example hours input
+                    // Add additional fields as needed
+                };
+                // console.log(schedule);
+
+                // Push each schedule object to the Schedules array
+                classData.Schedules.push(schedule);
+            });
 
             // Make the AJAX POST request
             $.ajax({
@@ -580,10 +811,25 @@
                         console.error("API returned false status. Message:", response.ErrorMessage);
                     }
                 },
-                error: function (error) {
-                    alert("Error in api call:" + error);
-                    console.error("Error in api call", error);
-                    //showAlert('success', 'Data fetched successfully.');
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         });
