@@ -17,7 +17,7 @@ namespace CEG_BAL.ViewModels
 
         public DateTime TransactionDate { get; set; }
 
-        public bool TransactionStatus { get; set; }
+        public string TransactionStatus { get; set; } = null!;
 
         public string TransactionType { get; set; } = null!;
 

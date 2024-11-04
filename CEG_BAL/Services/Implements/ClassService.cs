@@ -63,7 +63,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<ClassViewModel?> GetClassById(int id)
         {
-            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id, true, true);
+            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id);
             if(user != null)
             {
                 var usr = _mapper.Map<ClassViewModel>(user);

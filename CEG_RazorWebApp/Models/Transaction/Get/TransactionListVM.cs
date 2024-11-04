@@ -2,13 +2,17 @@
 {
     public class TransactionListVM
     {
-        //public int PaymentId { get; set; }
+        public int TransactionId { get; set; }
 
-        public DateTime PaymentDate { get; set; }
+        public string VnpayId { get; set; } = null!;
 
-        public bool PaymentStatus { get; set; }
+        public int TransactionAmount { get; set; }
 
-        public string PaymentType { get; set; } = null!;
+        public DateTime TransactionDate { get; set; }
+
+        public bool TransactionStatus { get; set; }
+
+        public string TransactionType { get; set; } = null!;
 
         public DateTime ConfirmDate { get; set; }
     }
