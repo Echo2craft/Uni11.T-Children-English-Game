@@ -34,10 +34,13 @@ namespace CEG_BAL.ViewModels.Admin
         [DataType(DataType.DateTime)]
         //startDate (30/9), endDate(30/10), daysInWeek(T2, T5) Phải sync ngày và thứ tạo (30/9 là T2)
         public DateTime StartDate { get; set; }
-        [Required(ErrorMessage = "Course end date is required")]
+        [Required(ErrorMessage = "Class end date is required")]
         [DateGreaterThan("StartDate", Configurations.Constants.CLASS_MINIMUM_DAYS_REQ)]
         [DisplayName("Class end date")]
         [DataType(DataType.DateTime)]
         public DateTime EndDate { get; set; }
+        [Required(ErrorMessage = "Class schedule list is required")]
+        [DisplayName("Class schedule list")]
+        public List<CreateNewSchedule> Schedules { get; set; } = new List<CreateNewSchedule> { };
     }
 }

@@ -186,6 +186,12 @@
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="schedule-table" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
+                                                            aria-label="Session ID: activate to sort column ascending">
+                                                            Session Id
+                                                        </th>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="schedule-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
                                                             aria-label="Session Number: activate to sort column ascending">
                                                             Session Number
                                                         </th>
@@ -318,10 +324,12 @@
                     // If not selected, add to selected set and add to scheduleTable
                     selectedSessionIds.add(sessionId);
                     var startDateTime = getDefaultDate();
+                    // console.log(startDateTime);
                     var endDateTime = new Date(startDateTime);
                     endDateTime.setHours(endDateTime.getHours() + data.hours);
                     // Create a new row data for scheduleTable based on selected sessionTable row
                     var newRowData = { // Customize if needed, or leave empty for manual input
+                        sessionId: sessionId,
                         sessionNumber: data.sessionNumber,
                         title: data.title,
                         startDate: startDateTime,
@@ -344,7 +352,7 @@
 
                     // Find and remove the row with the same sessionId in scheduleTable
                     scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                        if (this.data().sessionNumber === data.sessionNumber) {
+                        if (this.data().sessionId === data.sessionId) {
                             scheduleTable.row(rowIdx).remove();
                         }
                     });
@@ -357,12 +365,19 @@
                 deferRender: false,
                 responsive: true,
                 columns: [
+                    { 
+                        data: 'sessionId',
+                        render: function (data, type, row, meta) {
+                            return '<span id="schedule-session-id">' + data + '</span >';
+                        }
+                    },
                     { data: 'sessionNumber' },
                     { data: 'title' },
                     { // Add a select box in the last column
                         data: 'startDate', // No need to map it to a specific data field
                         render: function (data, type, row, meta) {
-                            return '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" />';
+                            // return data ? $.fn.dataTable.render.datetime(data, 'YYYY-MM-DD HH:mm').display(data) : '';
+                            return '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
                         }
                     },
                     {
@@ -398,7 +413,7 @@
                         let hourText = rowData.find('#schedule-hour');
                         let endDateText = rowData.find('#schedule-end-date');
                         if (hourText && hourText.length > 0 && endDateText && endDateText.length > 0) {
-                            console.log(hourText[0].textContent);
+                            // console.log(hourText[0].textContent);
                             const hoursToAdd = parseFloat(hourText[0].textContent);
                             const endDate = new Date(selectedDate);
                             endDate.setHours(endDate.getHours() + hoursToAdd);
@@ -417,7 +432,7 @@
                 theme: 'bootstrap4'
             })
             .on('select2:close', function (e) {
-                console.log(e);
+                // console.log(e);
                 var text = $('#searchableCourseDropdown').select2('data')[0].text;
                 // Filter options based on the search input
                 var results = courseList.filter(function (item) {
@@ -469,15 +484,23 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    // Attempt to parse the response text if it is available
-                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
+                error: function (xhr, status, error) {
                     // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
 
                     // Display the error message using your custom showAlert function
-
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
             // Call API to get the list of course names
@@ -495,12 +518,20 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    // Attempt to parse the response text if it is available
-                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
+                error: function (xhr, status, error) {
                     // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
 
                     // Display the error message using your custom showAlert function
                     showAlert('error', "Error:" + errorMessage);
@@ -539,9 +570,23 @@
         }
         // Function to calculate today's date + 10 days
         function getDefaultDate() {
-            var defaultDate = new Date();
-            defaultDate.setDate(defaultDate.getDate() + 10);
-            return defaultDate.toISOString().slice(0, 16); // Format as 'YYYY-MM-DDTHH:MM'
+            let currentDate = new Date(); // Get the current date and time
+            let defaultDate = new Date(currentDate); // Copy the current date
+
+            // Add 10 days to the date
+            defaultDate.setDate(currentDate.getDate() + 10);
+            // console.log(currentDate);
+            // console.log(defaultDate);
+
+            // Get year, month, day, hours, and minutes in local time
+            let year = defaultDate.getFullYear();
+            let month = String(defaultDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            let day = String(defaultDate.getDate()).padStart(2, '0');
+            let hours = String(defaultDate.getHours()).padStart(2, '0');
+            let minutes = String(defaultDate.getMinutes()).padStart(2, '0');
+
+            // Construct formatted string in 'YYYY-MM-DDTHH:MM' format
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
         }
         // Function to display alerts
         function showAlert(type, message) {
@@ -588,12 +633,20 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    // Attempt to parse the response text if it is available
-                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
+                error: function (xhr, status, error) {
                     // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
 
                     // Display the error message using your custom showAlert function
                     showAlert('error', "Error:" + errorMessage);
@@ -719,10 +772,24 @@
                 MaxStudents: $("#createClass_MaxStudents").val(),
                 TeacherName: $('#searchableTeacherDropdown').select2('data')[0].text,
                 CourseName: $('#searchableCourseDropdown').select2('data')[0].text,
-                StartDate: $("#createClass_StartDate").val(),
-                EndDate: $("#createClass_EndDate").val()
+                StartDate: new DateTime($("#createClass_StartDate").val()).date(), // $("#createClass_StartDate").val(),
+                EndDate: $("#createClass_EndDate").val(),
+                Schedules: []
                 // WeeklySchedule: $('#createClass_WeeklySchedule').val()
             };
+            // Gather schedule data dynamically (example assuming each schedule is in a row in a table)
+            $('#schedule-table tbody tr').each(function () {
+                var schedule = {
+                    ScheduleDate: $(this).find('#schedule-start-date').val(), // Example date input
+                    SessionId: $(this).find('#schedule-session-id').text()
+                    // Hours: parseInt($(this).find('.schedule-hours').text(), 10) || 0, // Example hours input
+                    // Add additional fields as needed
+                };
+                // console.log(schedule);
+
+                // Push each schedule object to the Schedules array
+                classData.Schedules.push(schedule);
+            });
 
             // Make the AJAX POST request
             $.ajax({
@@ -744,15 +811,25 @@
                         console.error("API returned false status. Message:", response.ErrorMessage);
                     }
                 },
-                error: function (error) {
+                error: function (xhr, status, error) {
                     // Attempt to parse the response text if it is available
                     var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
 
                     // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
-
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         });

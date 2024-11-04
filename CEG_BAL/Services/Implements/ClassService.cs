@@ -40,7 +40,13 @@ namespace CEG_BAL.Services.Implements
                 clas.MinimumStudents = newClass.MinStudents;
                 clas.MaximumStudents = newClass.MaxStudents;
                 clas.Status = "Draft";
-                clas.Schedules = new List<Schedule>();
+                clas.Schedules = _mapper.Map<List<Schedule>>(newClass.Schedules);
+                foreach(var schedule in clas.Schedules)
+                {
+                    schedule.Status = "Draft";
+                    schedule.StartTime = schedule.ScheduleDate.HasValue ? TimeOnly.FromDateTime(schedule.ScheduleDate.Value) : default;
+                    schedule.EndTime = schedule.StartTime.Value.AddHours(_unitOfWork.SessionRepositories.GetByIdNoTracking(schedule.SessionId).Result.Hours.Value);
+                }
                 /*if (newClass.WeeklySchedule != null)
                 {
                     var sessionList = _unitOfWork.SessionRepositories.GetSessionListByCourseId(clas.CourseId).Result;
