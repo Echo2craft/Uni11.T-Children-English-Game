@@ -32,7 +32,7 @@ namespace CEG_RazorWebApp.Pages.Parent.Course
         };
         public string? LayoutUrl { get; set; } = Constants.PARENT_LAYOUT_URL;
         private readonly CEG_RAZOR_Library methcall = new();
-        public List<IndexCourseInfoVM>? Courses { get; set; }
+        //public List<IndexCourseInfoVM>? Courses { get; set; }
 
         public CourseIndexModel(ILogger<CourseIndexModel> logger, IConfiguration config, IMapper mapper)
         {
@@ -46,13 +46,13 @@ namespace CEG_RazorWebApp.Pages.Parent.Course
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             ParentAPI_URL = config.GetSection(Constants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value;
         }
-        public IActionResult OnGetInfo(
+        /*public IActionResult OnGetInfo(
             [Required] int courseId)
         {
             return Redirect("/Parent/Course/" + courseId + "/Info");
-        }
+        }*/
 
-        public async Task<IActionResult> OnGetAsync()
+        /*public async Task<IActionResult> OnGetAsync()
         {
             methcall.InitTempData(this);
             ParentAPI_URL += "Course/All";
@@ -86,6 +86,6 @@ namespace CEG_RazorWebApp.Pages.Parent.Course
             Courses = _mapper.Map<List<IndexCourseInfoVM>>(courseListResponse.Data);
 
             return Page();
-        }
+        }*/
     }
 }
