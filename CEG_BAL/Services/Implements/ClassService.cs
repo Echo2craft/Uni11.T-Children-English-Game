@@ -2,6 +2,7 @@
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -91,6 +92,24 @@ namespace CEG_BAL.Services.Implements
         {
             var clas = _mapper.Map<Class>(classModel);
             _unitOfWork.ClassRepositories.Update(clas);
+            _unitOfWork.Save();
+        }
+        public void Update(ClassViewModel classModel,UpdateClass classNewModel)
+        {
+            var mainClass = _mapper.Map<Class>(classModel);
+            if (classNewModel != null)
+            {
+                mainClass.TeacherId = _unitOfWork.TeacherRepositories.GetByFullname(classNewModel.TeacherName).Result.TeacherId;
+                mainClass.ClassName = classNewModel.ClassName;
+                mainClass.MinimumStudents = classNewModel.MinimumStudents;
+                mainClass.MaximumStudents = classNewModel.MaximumStudents;
+                mainClass.StartDate = classNewModel.StartDate;
+                mainClass.EndDate = classNewModel.EndDate;
+            }
+            mainClass.CourseId = mainClass.Course.CourseId;
+            mainClass.Course = null;
+            mainClass.Teacher = null;
+            _unitOfWork.ClassRepositories.Update(mainClass);
             _unitOfWork.Save();
         }
 

@@ -52,7 +52,20 @@ namespace CEG_DAL.Repositories.Implements
                         CourseName = c.Course.CourseName
                         // Add other necessary properties here, but do NOT include Classes
                     } : null,
-                    Schedules = c.Schedules,
+                    Schedules = c.Schedules.Select(sch => new Schedule()
+                    {
+                        ScheduleId = sch.ScheduleId,
+                        ScheduleDate = sch.ScheduleDate,
+                        StartTime = sch.StartTime,
+                        EndTime = sch.EndTime,
+                        Status = sch.Status,
+                        Session = new Session()
+                        {
+                            SessionId = sch.SessionId,
+                            SessionNumber = sch.Session.SessionNumber,
+                            Title = sch.Session.Title
+                        }
+                    }).ToList(),
                     Enrolls = c.Enrolls.Select(s => new Enroll()
                     {
                         EnrollId = s.EnrollId,

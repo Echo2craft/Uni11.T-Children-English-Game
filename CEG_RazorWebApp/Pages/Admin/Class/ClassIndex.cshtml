@@ -389,7 +389,7 @@
                     {
                         data: 'endDate',
                         render: function (data, type, row, meta) {
-                            return '<span id="schedule-end-date">' + formatDate(data) + '</span >';
+                            return '<span id="schedule-end-date">' + formatDate(data,false,false,true,true) + '</span >';
                         }
                     }
                 ],
@@ -418,7 +418,7 @@
                             const endDate = new Date(selectedDate);
                             endDate.setHours(endDate.getHours() + hoursToAdd);
                             // Format and display the end date in the corresponding span
-                            const formattedEndDate = formatDate(endDate); // Format as needed
+                            const formattedEndDate = formatDate(endDate,false,false,true,true); // Format as needed
                             endDateText.text(formattedEndDate);
                         }
                     });
@@ -675,11 +675,12 @@
             classList.append(cardCreateClassHtml);
             // Loop through the data array and append each class div
             $.each(data, function (index, classObj) {
-                var formattedStartDate = formatDate(classObj.startDate);
-                var formattedEndDate = formatDate(classObj.endDate);
+                var formattedStartDate = formatDate(classObj.startDate,true);
+                var formattedEndDate = formatDate(classObj.endDate,true);
                 var statusText = '';
                 switch (classObj.status) {
                     case 'Open':
+                    case 'Ongoing':
                         statusText = `<span class="outcome" style="float: left;">Status: ${classObj.status}</span>`
                         break;
                     case 'Draft':
@@ -741,7 +742,7 @@
 
         //     return html;
         // }
-        function formatDate(date) {
+        function formatDate(date, ignoreHour = false, addDayOfWeek = false, includeAmPm = false, monthBeforeDate = false) {
             let d = new Date(date);
 
             // Get day, month, year
@@ -756,8 +757,31 @@
             // Optionally, get seconds
             let seconds = String(d.getSeconds()).padStart(2, '0');
 
-            // Return the formatted date and time as `dd/mm/yyyy hh:mm`
-            return `${day}/${month}/${year} ${hours}:${minutes}`;
+            let amPm = '';
+            if (includeAmPm) {
+                amPm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12 || 12; // Convert to 12-hour format, with 12 instead of 0
+            }
+            hours = String(hours).padStart(2, '0'); // Pad with zero if needed
+
+            // Optional: Get day of the week if `addDayOfWeek` is true
+            let dayOfWeek = '';
+            if (addDayOfWeek) {
+                const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                dayOfWeek = daysOfWeek[d.getDay()] + ', ';
+            }
+            // Return only the date if `ignoreHour` is true
+            if (ignoreHour) {
+                return `${dayOfWeek}${day}/${month}/${year}`;
+            }
+
+            if(monthBeforeDate){
+                // Return the formatted date and time as `day, mm/dd/yyyy hh:mm AM/PM` if `addDayOfWeek` and `includeAmPm` are true
+                return `${dayOfWeek}${month}/${day}/${year} ${hours}:${minutes} ${amPm}`.trim();
+            }
+
+            // Return the formatted date and time as `day, dd/mm/yyyy hh:mm AM/PM` if `addDayOfWeek` and `includeAmPm` are true
+            return `${dayOfWeek}${day}/${month}/${year} ${hours}:${minutes} ${amPm}`.trim();
 
             // If you want to include seconds as well, use this return:
             // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
@@ -772,7 +796,7 @@
                 MaxStudents: $("#createClass_MaxStudents").val(),
                 TeacherName: $('#searchableTeacherDropdown').select2('data')[0].text,
                 CourseName: $('#searchableCourseDropdown').select2('data')[0].text,
-                StartDate: new DateTime($("#createClass_StartDate").val()).date(), // $("#createClass_StartDate").val(),
+                StartDate: $("#createClass_StartDate").val(), // $("#createClass_StartDate").val(),
                 EndDate: $("#createClass_EndDate").val(),
                 Schedules: []
                 // WeeklySchedule: $('#createClass_WeeklySchedule').val()

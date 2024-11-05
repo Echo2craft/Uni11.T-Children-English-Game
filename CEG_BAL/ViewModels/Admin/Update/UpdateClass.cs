@@ -1,13 +1,12 @@
-﻿using CEG_DAL.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CEG_BAL.ViewModels
+namespace CEG_BAL.ViewModels.Admin.Update
 {
-    public class ClassViewModel
+    public class UpdateClass
     {
         public int? ClassId { get; set; }
 
@@ -16,18 +15,11 @@ namespace CEG_BAL.ViewModels
         public int? MinimumStudents { get; set; }
 
         public int? MaximumStudents { get; set; }
-
-        public int? NumberOfStudent { get; set; }
         //startDate (30/9), endDate(30/10), daysInWeek(T2, T5) Phải sync ngày và thứ tạo (30/9 là T2)
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? Status { get; set; }
-        public List<EnrollViewModel>? Enrolls { get; set; } = new List<EnrollViewModel>();
-        public List<ScheduleViewModel>? Schedules { get; set; } = new List<ScheduleViewModel>();
-        public List<StudentProgressViewModel>? StudentProgress { get; set; } = new List<StudentProgressViewModel>();
+        public string? TeacherName { get; set; }
 
-        public TeacherViewModel? Teacher { get; set; }
-
-        public CourseViewModel? Course { get; set; }
     }
 }
