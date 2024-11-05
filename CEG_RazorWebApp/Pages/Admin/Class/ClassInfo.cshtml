@@ -1058,7 +1058,7 @@
                     url: apiUrl + 'Teacher/All/Fullname', // API endpoint
                     type: 'GET',
                     success: function (response) {
-
+                        $('#searchableTeacherDropdown').empty()
                         // Check if the status is true
                         if (response.status) {
                             addTeacherOptions(response.data,data.teacher.account.fullname);
