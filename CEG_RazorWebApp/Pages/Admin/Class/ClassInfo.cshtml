@@ -388,17 +388,6 @@
             var table;
             var scheduleTable;
             var selectedSessionIds = new Set();
-            const ClassStatusManager = {
-                classStatus: 'Unknown',
-
-                setStatus(newStatus) {
-                    this.classStatus = newStatus;
-                },
-
-                getStatus() {
-                    return this.classStatus;
-                }
-            };
             $(document).ready(function () {
                 // Registering the custom feature with DataTables
                 DataTable.feature.register('searchIcon', function (settings, opts) {
@@ -443,7 +432,7 @@
                             }
                         }
                     }, 100);
-                    return container;
+                    return '';
                 });
                 table = new DataTable('#enroll-table', {
                     data: [],
@@ -487,10 +476,41 @@
                     width: 'resolve',
                     theme: 'bootstrap4'
                 })
-                ClassStatusManager.setStatus(callApiGetClassDetail());
-                console.log(ClassStatusManager.getStatus());
+                callApiGetClassDetail();
+                // console.log(ClassStatusManager.getStatus());
                 // Registering the custom feature with DataTables
                 DataTable.feature.register('toggle', function (settings, opts) {
+                    // setTimeout(function () {
+                    //     Set default options
+                    //     let options = Object.assign({
+                    //         iconClass: 'bx bxs-add-to-queue bx-sm',
+                    //         modalId: 'createSchedule', Modal ID that the icon will trigger
+                    //         hasValidStatus: false
+                    //     }, opts);
+
+                    //     Create a container for the icon
+                    //     let container = document.createElement('div');
+                    //     container.classList.add('dt-custom-toolbar'); Optional custom class for styling
+
+                    //     if (options.hasValidStatus == true) {
+                    //         let statusText = 'Draft'
+                    //         statusText = $('#class-status').text().trim();
+                    //         if (statusText != 'Draft' && statusText != 'Postponed') return container;
+                    //     }
+
+                    //     Create the icon element
+                    //     let icon = document.createElement('i');
+                    //     icon.className = options.iconClass;
+                    //     icon.setAttribute('data-toggle', 'modal');
+                    //     icon.setAttribute('data-target', `#${options.modalId}`);
+
+                    //     Append icon to container
+                    //     container.appendChild(icon);
+
+                    //     Insert the container in the DataTable toolbar
+                    //     $(settings.nTableWrapper).prepend(container);
+                    //     return container;
+                    // }, 200);
                     // Set default options
                     let options = Object.assign({
                         iconClass: 'bx bxs-add-to-queue bx-sm',
@@ -502,14 +522,18 @@
                     let container = document.createElement('div');
                     // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
 
-                    if (options.hasValidStatus === true) {
-                        // console.log(ClassStatusManager.getStatus());
-                        if (ClassStatusManager.getStatus() !== 'Draft' || ClassStatusManager.getStatus() !== 'Postponed') return container;
+                    if (options.hasValidStatus == true) {
+                        setTimeout(function () {
+                            let statusText = 'Draft'
+                            statusText = $('#class-status').text().trim();
+                            if (statusText != 'Draft' && statusText != 'Postponed') return '';
+                        }, 100);
                     }
 
                     // Create the icon element
                     let icon = document.createElement('i');
                     icon.className = options.iconClass;
+                    container.className = 'dt-modal-toggle';
                     icon.setAttribute('data-toggle', 'modal');
                     icon.setAttribute('data-target', `#${options.modalId}`);
 
@@ -518,7 +542,6 @@
 
                     // Insert the container in the DataTable toolbar
                     $(settings.nTableWrapper).prepend(container);
-
                     return container;
                 });
                 scheduleTable = new DataTable('#schedule-table', {
@@ -552,10 +575,16 @@
                             data: 'status'
                         },
                         {
-                            data: null,
+                            data: 'options',
+                            defaultContent: '<i>Not set</i>',
                             render: function (data, type, row, meta) {
-
-                                return '<span>' + data + '</span >';
+                                setTimeout(function () {
+                                    let statusText = 'Draft'
+                                    statusText = $('#class-status').text().trim(); // Adjust the delay if needed
+                                    if (statusText != 'Draft' && statusText != 'Postponed')
+                                        return '<button class="btn btn-success">Edit</button> <button class="btn btn-danger">Delete</button>';
+                                    else return '';
+                                }, 500);
                             }
                         }
                     ],
@@ -567,11 +596,22 @@
                             searchIcon: {
                             },
                             toggle: {
-                                hasValidStatus: true
                             }
                         }
                     },
                 });
+                setTimeout(function () {
+                    statusText = $('#class-status').text().trim(); // Adjust the delay if needed
+                    // console.log(statusText);
+                    if (statusText != 'Draft' && statusText != 'Postponed') {
+                        scheduleTable.column(6).visible(false, false);
+                        let dadiv = $('div.dt-modal-toggle').parent();
+                        console.log(dadiv);
+                        dadiv.find('div.dt-modal-toggle').remove();
+                    }
+
+                }, 100);
+                
                 $('#editClassForm').submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting normally
 
@@ -865,7 +905,6 @@
                                 // });
 
                             }
-                            return response.data.status;
                         } else {
                             console.error("API returned false status.");
                         }
