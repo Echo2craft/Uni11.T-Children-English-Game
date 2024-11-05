@@ -108,6 +108,7 @@ namespace CEG_DAL.Repositories.Implements
                 })
                 .ToListAsync();
         }
+
         public async Task<List<Class>> GetClassListAdmin()
         {
             return await _dbContext.Classes
@@ -146,6 +147,46 @@ namespace CEG_DAL.Repositories.Implements
                 })
                 .ToListAsync();
         }
+
+        public async Task<List<Class>> GetClassListParent()
+        {
+            return await _dbContext.Classes
+                .Select(c => new Class
+                {
+                    ClassId = c.ClassId,
+                    ClassName = c.ClassName,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    MinimumStudents = c.MinimumStudents,
+                    MaximumStudents = c.MaximumStudents,
+                    TeacherId = c.TeacherId,
+                    CourseId = c.CourseId,
+                    Status = c.Status,
+                    Teacher = new Teacher // Create a new Teacher object
+                    {
+                        TeacherId = c.Teacher.TeacherId,
+                        Email = c.Teacher.Email,
+                        Phone = c.Teacher.Phone,
+                        Image = c.Teacher.Image,
+                        Account = new Account
+                        {
+                            Fullname = c.Teacher.Account.Fullname,
+                            Gender = c.Teacher.Account.Gender,
+                        }
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Course = new Course // Create a new Course object
+                    {
+                        CourseId = c.Course.CourseId,
+                        CourseName = c.Course.CourseName
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
+                })
+                .ToListAsync();
+        }
+
         public async Task<List<Class>> GetClassListByTeacherId(int teacherId)
         {
             return await _dbContext.Classes

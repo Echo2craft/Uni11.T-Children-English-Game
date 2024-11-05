@@ -1,0 +1,315 @@
+﻿@page "/Parent/Class/Index"
+@model CEG_RazorWebApp.Pages.Parent.Class.ClassIndexModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Parent All Classes Page";
+    string? search = string.Empty;
+    Layout = "~/Pages/Shared/_PLayout.cshtml";
+}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="main-content">
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-sm-6 col-sm-6  d-flex justify-content-sm-end p-md-0 mt-2 mt-sm-0 ">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumd-item">
+                                <a href="#">Manage</a>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <span>/</span>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <a href="/Parent/Class/Index">Class</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <section>
+                    <div id="alertContainer"></div>
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs">
+                                <!-- dung vong for o day -->
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="/Parent/Class/Index">
+                                        <i class='bx bx-home-alt-2'></i>
+                                        <span>All Classes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <!-- home1 -->
+                                <div class="tab-pane active" id="home1" role="tabpanel">
+                                    <div class="row search">
+                                        <div class="col-sm-12 d-flex">
+                                            <div class="col-sm-6 d-flex address-home">
+                                            </div>
+                                            <div class="col-sm-6 d-flex justify-content-end">
+                                                <form method="get" asp-route-search="@search">
+                                                    <div>
+                                                        <label>
+                                                            <input asp-for="@search" class="form-control" type="text" placeholder="Search..." value="@search">
+                                                            <i class='bx bx-search-alt'></i>
+                                                        </label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row card-content" id="classList">
+                                        <!-- dung vong for o day -->
+                                    </div>
+                                    <!-- end tapnet -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script>
+        var token = sessionStorage.getItem('token');
+        var apiUrl = sessionStorage.getItem('apiUrl');
+        var classList = [];
+        $(document).ready(function () {
+            callApiGetClassList();
+
+            $('#search').on('keyup', function (event) {
+                // Get the search term
+                var searchTerm = $(this).val().toLowerCase();
+
+                // Filter the classes based on the search term
+                var filteredclassList = classList.filter(function (classObject) {
+                    return classObject.className.toLowerCase().includes(searchTerm);
+                });
+
+                // Display the filtered classList
+                setClassDisplay(filteredclassList);
+            });
+            // Call API to get the list of teacher names
+            $.ajax({
+                url: apiUrl + 'Teacher/All/Fullname', // API endpoint
+                type: 'GET',
+                success: function (response) {
+
+                    // Check if the status is true
+                    if (response.status) {
+                        addTeacherOptions(response.data);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+            // Call API to get the list of course names
+            $.ajax({
+                url: apiUrl + 'Course/All/Available',// API endpoint
+                type: 'GET',
+                success: function (response) {
+
+                    // Check if the status is true
+                    if (response.status) {
+                        courseList = response.data;
+                        addCourseOptions(courseList);
+                        renderDefaultCourse(courseList);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+        });
+        function showAlert(type, message) {
+            var alertHtml = '';
+
+            if (type === 'success') {
+                alertHtml = `
+                                <div class="alert alert-success alert-dismissible fade show" id="notif">
+                                    <i class='bx bx-message-alt-x p-1'></i>
+                                    <strong class="mr-1">` + message + `</strong>
+                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                        <span><i class='bx bx-x'></i></span>
+                                    </button>
+                                </div>`;
+            } else if (type === 'error') {
+                alertHtml = `
+                                <div class="alert alert-danger alert-dismissible fade show" id="notif">
+                                    <i class='bx bx-message-alt-x p-1'></i>
+                                    <strong class="mr-1">` + message + `</strong>
+                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                        <span><i class='bx bx-x'></i></span>
+                                    </button>
+                                </div>`;
+            }
+
+            // Inject the alert HTML into the alert container
+            $('#alertContainer').html(alertHtml);
+        }
+        function callApiGetClassList(){
+            $.ajax({
+                url: apiUrl + 'Class/Parent/All', // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token// Include the JWT token
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+
+                    // Check if the status is true
+                    if (response.status) {
+                        classList = response.data;
+                        setClassDisplay(classList);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+        }
+        function setClassDisplay(data) {
+            var classList = $('#classList');
+            // Reference to the <classList> element
+            classList.empty(); // Clear any existing options
+            // Loop through the data array and append each class div
+            $.each(data, function (index, classObj) {
+                var formattedStartDate = formatDate(classObj.startDate);
+                var formattedEndDate = formatDate(classObj.endDate);
+                var statusText = '';
+                switch (classObj.status) {
+                    case 'Open':
+                        statusText = `<span class="outcome" style="float: left;">Status: ${classObj.status}</span>`
+                        break;
+                    case 'Draft':
+                    case 'Postponed':
+                        statusText = `<span class="approval" style="float: left;">Status: ${classObj.status}</span>`
+                        break;
+                    case 'Ended':
+                    case 'Cancelled':
+                        statusText = `<span class="destroy" style="float: left;">Status: ${classObj.status}</span>`
+                        break;
+                }
+                // Construct card HTML
+                var cardHtml = `
+                    <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                        <div class="card1 card-child">
+                            <div class="club-name">
+                                Class ID: ${classObj.classId}
+                                <div class="status">
+                                    ${statusText}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="club-title">
+                                    <ul>
+                                        <li><h6>Class name:</h6><span>${classObj.className}</span></li>
+                                        <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
+                                        <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
+                                        <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
+                                        <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
+                                        <li><h6>Minimum students amount:</h6><span>${classObj.minimumStudents}</span></li>
+                                        <li><h6>Maximum students amount:</h6><span>${classObj.maximumStudents}</span></li>
+                                        <li><h6>Current students amount:</h6><span>${classObj.studentProgress.length}</span></li>
+                                        <li><h6>Weekly scheduled sessions amount:</h6><span>${classObj.schedules.length}</span></li>
+                                        <li><h6>Current enrolls amount:</h6><span>${classObj.enrolls.length}</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group mx-auto">
+                                <a class="btn btn-primary clickable-row" href="/Parent/Class/${classObj.classId}/Info" role="button">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // Append the constructed HTML to the class list container
+                // <form method="get" asp-route-id="${classObj.classId}">
+                //     <button class="btn btn-primary clickable-row" type="submit">See Detail</button>
+                // </form>
+                classList.append(cardHtml);
+            });
+        }
+        function formatDate(date) {
+            let d = new Date(date);
+
+            // Get day, month, year
+            let day = String(d.getDate()).padStart(2, '0');
+            let month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            let year = d.getFullYear();
+
+            // Get hours, minutes
+            let hours = String(d.getHours()).padStart(2, '0');
+            let minutes = String(d.getMinutes()).padStart(2, '0');
+
+            // Optionally, get seconds
+            let seconds = String(d.getSeconds()).padStart(2, '0');
+
+            // Return the formatted date and time as `dd/mm/yyyy hh:mm`
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+
+            // If you want to include seconds as well, use this return:
+            // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        }
+    </script>
+</body>
+</html>
