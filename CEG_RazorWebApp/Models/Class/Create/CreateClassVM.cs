@@ -35,13 +35,5 @@ namespace CEG_RazorWebApp.Models.Class.Create
         [DisplayName("Class end date")]
         [DataType(DataType.DateTime)]
         public DateTime EndDate { get; set; } = DateTime.Now.AddDays(40);
-        /*[Required(ErrorMessage = "Class weekly schedule is required")]
-        [DisplayName("Class weekly schedule")]
-        public string? WeeklySchedule { get; set; } = Constants.CLASS_SCHEDULE_MONDAY_THURSDAY;
-        public List<string>? WeeklySchedulePresets { get; set; } = new List<string>{
-            Constants.CLASS_SCHEDULE_MONDAY_THURSDAY,
-            Constants.CLASS_SCHEDULE_TUESDAY_FRIDAY,
-            Constants.CLASS_SCHEDULE_WEDNESDAY_SATURDAY
-        };*/
     }
 }

@@ -103,7 +103,7 @@
                                                 class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@createClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
                                         <span asp-validation-for="@createClass.MaxStudents" id="error_message"
                                                 class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -136,7 +136,7 @@
                                         <span asp-validation-for="@createClass.EndDate" id="error_message"
                                                 class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                     </div>
-                                    <hr />
+                                    <hr>
                                     <div class ="row form-group justify-content-center course-content-view">
                                         <label class="col-form-label">Course's Sessions preview</label>
                                         <div id="session-table_wrapper" class="dataTables_wrapper no-footer col-md-12">

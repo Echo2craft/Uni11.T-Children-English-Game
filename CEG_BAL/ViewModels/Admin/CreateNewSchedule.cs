@@ -17,5 +17,8 @@ namespace CEG_BAL.ViewModels.Admin
         [Required(ErrorMessage = "Schedule Session Id is required")]
         [DisplayName("Schedule Session Id")]
         public int SessionId { get; set; }
+        [Required(ErrorMessage = "Schedule Class Id is required")]
+        [DisplayName("Schedule Class Id")]
+        public int ClassId { get; set; }
     }
 }

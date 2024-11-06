@@ -20,7 +20,7 @@ namespace CEG_BAL.ViewModels.Admin
         [DisplayName("Minimum students amount")]
         public int MinStudents { get; set; }
         [Required(ErrorMessage = "Maximum students amount is required")]
-        [Range(Configurations.Constants.CLASS_MAXIMUM_STUDENTS_REQ, int.MaxValue)]
+        [Range(10, Configurations.Constants.CLASS_MAXIMUM_STUDENTS_REQ)]
         [DisplayName("Maximum students amount")]
         public int MaxStudents { get; set; }
         [Required(ErrorMessage = "Assign teacher name is required")]

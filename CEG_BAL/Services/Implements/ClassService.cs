@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
@@ -73,12 +74,23 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
+        public async Task<ClassViewModel?> GetByIdAdmin(int id)
+        {
+            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id,true,true,true,true);
+            if(user != null)
+            {
+                var usr = _mapper.Map<ClassViewModel>(user);
+                return usr;
+            }
+            return null;
+        }
+
         public async Task<List<ClassViewModel>> GetClassList()
         {
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassList());
         }
 
-        public async Task<List<ClassViewModel>> GetClassListAdmin()
+        public async Task<List<ClassViewModel>> GetListAdmin()
         {
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassListAdmin());
         }
@@ -120,6 +132,13 @@ namespace CEG_BAL.Services.Implements
             clas.Status = classStatus;
             _unitOfWork.ClassRepositories.Update(clas);
             _unitOfWork.Save();
+        }
+
+        public async Task<bool> IsClassEditableById(int id)
+        {
+            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id);
+            if (clas != null && (clas.Status.Equals(Constants.CLASS_STATUS_DRAFT) || clas.Status.Equals(Constants.CLASS_STATUS_POSTPONED))) return true;
+            return false;
         }
 
         // Helper Function to handle schedule assignment

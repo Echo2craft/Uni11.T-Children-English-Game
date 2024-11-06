@@ -1,49 +1,47 @@
 ﻿using CEG_BAL.Configurations;
 using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
-using CEG_BAL.ViewModels;
-using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace CEG_WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ClassController : ControllerBase
+    public class ScheduleController : ControllerBase
     {
         private readonly IClassService _classService;
-        private readonly ICourseService _courseService;
-        private readonly ITeacherService _teacherService;
+        private readonly IScheduleService _scheduleService;
+        private readonly ISessionService _sessionService;
         private readonly IConfiguration _config;
 
-        public ClassController(IClassService classService, ICourseService courseService, ITeacherService teacherService, IConfiguration config)
+        public ScheduleController(IClassService classService, IScheduleService scheduleService, ISessionService sessionService, IConfiguration config)
         {
             _classService = classService;
-            _courseService = courseService;
-            _teacherService = teacherService;
+            _scheduleService = scheduleService;
+            _sessionService = sessionService;
             _config = config;
         }
 
         [HttpGet("All")]
-        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<ScheduleViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassList()
+        public async Task<IActionResult> GetScheduleList()
         {
             try
             {
-                var result = await _classService.GetClassList();
+                var result = await _scheduleService.GetList();
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class List Not Found!"
+                        ErrorMessage = "Schedule List Not Found!"
                     });
                 }
                 return Ok(new
@@ -65,54 +63,20 @@ namespace CEG_WebAPI.Controllers
 
         [HttpGet("Admin/All")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<ScheduleViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassListAdmin()
+        public async Task<IActionResult> GetScheduleListAdmin()
         {
             try
             {
-                var result = await _classService.GetListAdmin();
+                var result = await _scheduleService.GetListAdmin();
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class List Not Found!"
-                    });
-                }
-                return Ok(new
-                {
-                    Status = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Status = false,
-                    ErrorMessage = ex.Message,
-                    InnerExceptionMessage = ex.InnerException?.Message
-                });
-            }
-        }
-        [HttpGet("{id}/All")]
-        [Authorize(Roles = "Teacher")]
-        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassListTeacher([FromRoute] int id)
-        {
-            try
-            {
-                var result = await _classService.GetClassListByTeacherAccountId(id);
-                if (result == null)
-                {
-                    return NotFound(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Class List Not Found!"
+                        ErrorMessage = "Schedule List Not Found!"
                     });
                 }
                 return Ok(new
@@ -132,20 +96,20 @@ namespace CEG_WebAPI.Controllers
             }
         }
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassById([FromRoute] int id)
+        public async Task<IActionResult> GetScheduleById([FromRoute] int id)
         {
             try
             {
-                var result = await _classService.GetClassById(id);
+                var result = await _scheduleService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class Not Found!"
+                        ErrorMessage = "Schedule Not Found!"
                     });
                 }
                 return Ok(new
@@ -164,42 +128,42 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpGet("Admin/{id}")]
-        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassByIdAdmin([FromRoute] int id)
-        {
-            try
-            {
-                var result = await _classService.GetByIdAdmin(id);
-                if (result == null)
-                {
-                    return NotFound(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Class Not Found!"
-                    });
-                }
-                return Ok(new
-                {
-                    Status = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Status = false,
-                    ErrorMessage = ex.Message,
-                    InnerExceptionMessage = ex.InnerException?.Message
-                });
-            }
-        }
+        //[HttpGet("Admin/{id}")]
+        //[ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<IActionResult> GetClassByIdAdmin([FromRoute] int id)
+        //{
+        //    try
+        //    {
+        //        var result = await _classService.GetByIdAdmin(id);
+        //        if (result == null)
+        //        {
+        //            return NotFound(new
+        //            {
+        //                Status = false,
+        //                ErrorMessage = "Class Not Found!"
+        //            });
+        //        }
+        //        return Ok(new
+        //        {
+        //            Status = true,
+        //            Data = result
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new
+        //        {
+        //            Status = false,
+        //            ErrorMessage = ex.Message,
+        //            InnerExceptionMessage = ex.InnerException?.Message
+        //        });
+        //    }
+        //}
         [HttpPut("{id}/Update/Status")]
         [Authorize(Roles = "Teacher,Admin")]
-        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateStatus(
@@ -209,20 +173,20 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetClassById(id);
+                var result = await _scheduleService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class Does Not Exist!"
+                        ErrorMessage = "Schedule Does Not Exist!"
                     });
                 }
                 bool isValid = CEG_BAL_Library.IsClassNewStatusValid(result.Status, status);
                 if (isValid)
                 {
-                    _classService.UpdateStatus(id, status);
-                    result = await _classService.GetClassById(id);
+                    _scheduleService.UpdateStatus(id, status);
+                    result = await _scheduleService.GetById(id);
                     return Ok(new
                     {
                         Status = true,
@@ -250,27 +214,27 @@ namespace CEG_WebAPI.Controllers
         }
         [HttpPut("{id}/Update")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] UpdateClass classVM
+            [FromBody][Required] UpdateSchedule scheduleVM
             )
         {
             try
             {
-                var result = await _classService.GetClassById(id);
+                var result = await _scheduleService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class Does Not Exist!"
+                        ErrorMessage = "Schedule Does Not Exist!"
                     });
                 }
-                _classService.Update(result,classVM);
-                result = await _classService.GetClassById(id);
+                _scheduleService.Update(result, scheduleVM);
+                result = await _scheduleService.GetById(id);
                 return Ok(new
                 {
                     Status = true,
@@ -289,48 +253,40 @@ namespace CEG_WebAPI.Controllers
         }
         [HttpPost("Create")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateClass(
-            [FromBody][Required] CreateNewClass newClass
+            [FromBody][Required] CreateNewSchedule newSchedule
             )
         {
             try
             {
-                var resultCourseName = await _courseService.IsCourseAvailableByName(newClass.CourseName);
-                if (!resultCourseName)
+                var resultClassName = await _classService.IsClassEditableById(newSchedule.ClassId);
+                if (!resultClassName)
                 {
                     return BadRequest(new
                     {
                         Status = false,
-                        ErrorMessage = "Course not found or course not Available."
+                        ErrorMessage = "Class not found or not in Editable state."
                     });
                 }
-                var resultTeacherName = await _teacherService.IsTeacherExistByFullname(newClass.TeacherName);
-                if (!resultTeacherName)
+                var resultSessionName = await _sessionService.GetSessionById(newSchedule.SessionId);
+                if (resultSessionName == null)
                 {
                     return BadRequest(new
                     {
                         Status = false,
-                        ErrorMessage = "Teacher not found."
+                        ErrorMessage = "Session not found."
                     });
                 }
-                /*if (newClass.WeeklySchedule == null || !CEG_BAL_Library.IsClassNewWeeklyScheduleValid(newClass.WeeklySchedule))
-                {
-                    return BadRequest(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Weekly schedule invalid."
-                    });
-                }*/
-                ClassViewModel clas = new ClassViewModel();
-                _classService.Create(clas, newClass);
+                ScheduleViewModel clas = new ScheduleViewModel();
+                _scheduleService.Create(clas, newSchedule);
                 return Ok(new
                 {
                     Data = true,
                     Status = true,
-                    SuccessMessage = "Class create successfully."
+                    SuccessMessage = "Schedule create successfully."
                 });
             }
             catch (Exception ex)

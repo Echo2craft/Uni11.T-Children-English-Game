@@ -140,12 +140,25 @@ namespace CEG_BAL.Configurations
         public readonly static string CLASS_STATUS_NAME_DRAFT = "Draft";
         public readonly static string CLASS_STATUS_OPEN = "Open";
         public readonly static string CLASS_STATUS_NAME_OPEN = "Open";
+        public readonly static string CLASS_STATUS_ONGOING = "Ongoing";
+        public readonly static string CLASS_STATUS_NAME_ONGOING = "Ongoing";
         public readonly static string CLASS_STATUS_POSTPONED = "Postponed";
         public readonly static string CLASS_STATUS_NAME_POSTPONED = "Postponed";
         public readonly static string CLASS_STATUS_CANCELLED = "Cancelled";
         public readonly static string CLASS_STATUS_NAME_CANCELLED = "Cancelled";
         public readonly static string CLASS_STATUS_ENDED = "Ended";
         public readonly static string CLASS_STATUS_NAME_ENDED = "Ended";
+
+        public readonly static string SCHEDULE_STATUS_DRAFT = "Draft";
+        public readonly static string SCHEDULE_STATUS_NAME_DRAFT = "Draft";
+        public readonly static string SCHEDULE_STATUS_OPEN = "Upcoming";
+        public readonly static string SCHEDULE_STATUS_NAME_OPEN = "Upcoming";
+        public readonly static string SCHEDULE_STATUS_ONGOING = "Ongoing";
+        public readonly static string SCHEDULE_STATUS_NAME_ONGOING = "Ongoing";
+        public readonly static string SCHEDULE_STATUS_CANCELLED = "Cancelled";
+        public readonly static string SCHEDULE_STATUS_NAME_CANCELLED = "Cancelled";
+        public readonly static string SCHEDULE_STATUS_ENDED = "Ended";
+        public readonly static string SCHEDULE_STATUS_NAME_ENDED = "Ended";
 
         /*public readonly static string CLASS_SCHEDULE_MONDAY_THURSDAY = "Monday and Thursday each week";
         public readonly static string CLASS_SCHEDULE_TUESDAY_FRIDAY = "Tuesday and Friday each week";
@@ -186,7 +199,7 @@ namespace CEG_BAL.Configurations
         public const int COURSE_MINIMUM_AGE_REQ = 11;
         public const int COURSE_MAXIMUM_AGE_REQ = 18;
         public const int CLASS_MINIMUM_STUDENTS_REQ = 10;
-        public const int CLASS_MAXIMUM_STUDENTS_REQ = 50;
+        public const int CLASS_MAXIMUM_STUDENTS_REQ = 20;
         public const int CLASS_MINIMUM_DAYS_REQ = 30;
         public const int COURSE_TOTAL_HOURS = 1;
         public const int HOMEWORK_HOURS = 1;
