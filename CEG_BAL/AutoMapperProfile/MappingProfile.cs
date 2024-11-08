@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -207,6 +208,7 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Class, ClassViewModel>()
                 .ReverseMap();
+            CreateMap<UpdateClass, Class>();
             CreateMap<Enroll, EnrollViewModel>()
                 .ReverseMap();
             CreateMap<Schedule, ScheduleViewModel>()

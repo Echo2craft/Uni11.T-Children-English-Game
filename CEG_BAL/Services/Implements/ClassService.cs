@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -63,7 +65,18 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<ClassViewModel?> GetClassById(int id)
         {
-            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id);
+            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id,true,true);
+            if(user != null)
+            {
+                var usr = _mapper.Map<ClassViewModel>(user);
+                return usr;
+            }
+            return null;
+        }
+
+        public async Task<ClassViewModel?> GetByIdAdmin(int id)
+        {
+            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id,true,true,true,true);
             if(user != null)
             {
                 var usr = _mapper.Map<ClassViewModel>(user);
@@ -77,7 +90,7 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassList());
         }
 
-        public async Task<List<ClassViewModel>> GetClassListAdmin()
+        public async Task<List<ClassViewModel>> GetListAdmin()
         {
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassListAdmin());
         }
@@ -100,14 +113,46 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.ClassRepositories.Update(clas);
             _unitOfWork.Save();
         }
+        public void Update(ClassViewModel classModel,UpdateClass classNewModel)
+        {
+            var mainClass = _mapper.Map<Class>(classModel);
+            if (classNewModel != null)
+            {
+                mainClass.TeacherId = _unitOfWork.TeacherRepositories.GetByFullname(classNewModel.TeacherName).Result.TeacherId;
+                mainClass.ClassName = classNewModel.ClassName;
+                mainClass.MinimumStudents = classNewModel.MinimumStudents;
+                mainClass.MaximumStudents = classNewModel.MaximumStudents;
+                mainClass.StartDate = classNewModel.StartDate;
+                mainClass.EndDate = classNewModel.EndDate;
+            }
+            mainClass.CourseId = mainClass.Course.CourseId;
+            mainClass.Schedules = null;
+            mainClass.Course = null;
+            mainClass.Teacher = null;
+            _unitOfWork.ClassRepositories.Update(mainClass);
+            _unitOfWork.Save();
+        }
 
         public void UpdateStatus(int classId, string classStatus)
         {
             var clas = _unitOfWork.ClassRepositories.GetByIdNoTracking(classId).Result;
             if (clas == null) return;
+            foreach(var sche in clas.Schedules){
+                var schedule = _unitOfWork.ScheduleRepositories.GetByIdNoTracking(sche.ScheduleId).Result;
+                schedule.Status = Constants.SCHEDULE_STATUS_UPCOMING;
+                _unitOfWork.ScheduleRepositories.Update(schedule);
+            }
+            clas.Schedules = null;
             clas.Status = classStatus;
             _unitOfWork.ClassRepositories.Update(clas);
             _unitOfWork.Save();
+        }
+
+        public async Task<bool> IsClassEditableById(int id)
+        {
+            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id);
+            if (clas != null && (clas.Status.Equals(Constants.CLASS_STATUS_DRAFT) || clas.Status.Equals(Constants.CLASS_STATUS_POSTPONED))) return true;
+            return false;
         }
 
         // Helper Function to handle schedule assignment

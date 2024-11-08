@@ -170,7 +170,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] HomeworkAnswerViewModel session
+            [FromBody][Required] HomeworkAnswerViewModel answer
             )
         {
             try
@@ -184,9 +184,9 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Answer Does Not Exist"
                     });
                 }
-                session.HomeworkAnswerId = id;
-                _answerService.Update(session);
-                result = await _answerService.GetAnswerById(session.HomeworkAnswerId.Value);
+                answer.HomeworkAnswerId = id;
+                _answerService.Update(answer);
+                result = await _answerService.GetAnswerById(answer.HomeworkAnswerId.Value);
                 return Ok(new
                 {
                     Status = true,

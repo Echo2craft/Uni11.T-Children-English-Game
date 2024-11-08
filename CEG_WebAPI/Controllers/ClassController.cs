@@ -3,6 +3,7 @@ using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -71,7 +72,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetClassListAdmin();
+                var result = await _classService.GetListAdmin();
                 if (result == null)
                 {
                     return NotFound(new
@@ -197,6 +198,39 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
+        [HttpGet("Admin/{id}")]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassByIdAdmin([FromRoute] int id)
+        {
+            try
+            {
+                var result = await _classService.GetByIdAdmin(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
         [HttpPut("{id}/Update/Status")]
         [Authorize(Roles = "Teacher,Admin")]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
@@ -237,6 +271,45 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "New status is either an old status or not a valid status for requested class"
                     });
                 }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+        [HttpPut("{id}/Update")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update(
+            [FromRoute][Required] int id,
+            [FromBody][Required] UpdateClass classVM
+            )
+        {
+            try
+            {
+                var result = await _classService.GetClassById(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class Does Not Exist!"
+                    });
+                }
+                _classService.Update(result,classVM);
+                result = await _classService.GetClassById(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
             }
             catch (Exception ex)
             {
