@@ -12,6 +12,8 @@ namespace CEG_BAL.ViewModels
         public TimeOnly EndTime { get; set; }
 
         public string? Status { get; set; }
+        public int? ClassId { get; set; }
+        public int? SessionId { get; set; }
 
         public ClassViewModel? Class { get; set; }
 

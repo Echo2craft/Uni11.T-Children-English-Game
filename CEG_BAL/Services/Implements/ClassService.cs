@@ -119,6 +119,7 @@ namespace CEG_BAL.Services.Implements
                 mainClass.EndDate = classNewModel.EndDate;
             }
             mainClass.CourseId = mainClass.Course.CourseId;
+            mainClass.Schedules = null;
             mainClass.Course = null;
             mainClass.Teacher = null;
             _unitOfWork.ClassRepositories.Update(mainClass);
@@ -129,6 +130,12 @@ namespace CEG_BAL.Services.Implements
         {
             var clas = _unitOfWork.ClassRepositories.GetByIdNoTracking(classId).Result;
             if (clas == null) return;
+            foreach(var sche in clas.Schedules){
+                var schedule = _unitOfWork.ScheduleRepositories.GetByIdNoTracking(sche.ScheduleId).Result;
+                schedule.Status = Constants.SCHEDULE_STATUS_UPCOMING;
+                _unitOfWork.ScheduleRepositories.Update(schedule);
+            }
+            clas.Schedules = null;
             clas.Status = classStatus;
             _unitOfWork.ClassRepositories.Update(clas);
             _unitOfWork.Save();

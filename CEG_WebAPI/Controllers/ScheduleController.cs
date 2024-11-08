@@ -256,7 +256,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateClass(
+        public async Task<IActionResult> CreateSchedule(
             [FromBody][Required] CreateNewSchedule newSchedule
             )
         {

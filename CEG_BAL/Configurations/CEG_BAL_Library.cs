@@ -101,6 +101,17 @@ namespace CEG_BAL.Configurations
                         ];
                         return validStatuses.Contains(newStatus);
                     }
+                case var value when value.Equals(Constants.CLASS_STATUS_ONGOING):
+                    {
+                        validStatuses =
+                        [
+                            Constants.CLASS_STATUS_ONGOING,
+                            Constants.CLASS_STATUS_POSTPONED,
+                            Constants.CLASS_STATUS_CANCELLED,
+                            Constants.CLASS_STATUS_ENDED
+                        ];
+                        return validStatuses.Contains(newStatus);
+                    }
                 case var value when value.Equals(Constants.CLASS_STATUS_POSTPONED):
                     {
                         validStatuses =

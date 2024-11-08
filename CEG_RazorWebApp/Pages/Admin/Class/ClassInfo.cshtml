@@ -204,10 +204,10 @@
                                                             Status
                                                         </th>
                                                         <th class="sorting sorting_asc" tabindex="0"
-                                                            aria-controls="schedule-table" rowspan="1"
+                                                            aria-controls="session-table" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
-                                                            aria-label="Edit: activate to sort column ascending">
-                                                            Edit Schedule
+                                                            aria-label="Hours: activate to sort column ascending">
+                                                            Session Hours
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -605,6 +605,7 @@
                     theme: 'bootstrap4'
                 })
                 callApiGetClassDetail();
+
                 scheduleTable = new DataTable('#schedule-table', {
                     data: [],
                     deferRender: false,
@@ -613,41 +614,49 @@
                         {
                             data: 'scheduleId'
                         },
-                        { data: 'session.title' },
+                        { 
+                            data: 'session.title' 
+                        },
                         {
                             data: 'scheduleDate',
                             render: function (data, type, row, meta) {
-                                return '<span>' + formatDate(data, true, true) + '</span >';
+                                // '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
+                                return '<span id="schedule-start-date">' + formatDate(data, true, true) + '</span >';
                             }
                         },
                         {
                             data: 'startTime',
                             render: function (data, type, row, meta) {
-                                return '<span>' + formatTime(data, false, true) + '</span >';
+                                return '<span id="schedule-start-time">' + formatTime(data, false, true) + '</span >';
                             }
                         },
                         {
                             data: 'endTime',
                             render: function (data, type, row, meta) {
-                                return '<span>' + formatTime(data, false, true) + '</span >';
+                                return '<span id="schedule-end-time">' + formatTime(data, false, true) + '</span >';
                             }
                         },
                         {
                             data: 'status'
                         },
                         {
-                            data: 'options',
-                            defaultContent: '<i>Not set</i>',
-                            render: function (data, type, row, meta) {
-                                setTimeout(function () {
-                                    let statusText = 'Draft'
-                                    statusText = $('#class-status').text().trim(); // Adjust the delay if needed
-                                    if (statusText != 'Draft' && statusText != 'Postponed')
-                                        return '<button class="btn btn-success">Edit</button> <button class="btn btn-danger">Delete</button>';
-                                    else return '';
-                                }, 500);
-                            }
+                            data: 'session.hours'
                         }
+                        // ,
+                        // {
+                        //     data: 'options',
+                        //     defaultContent: '<i>Placeholder</i>',
+                        //     render: function (data, type, row, meta) {
+                        //         return '';
+                        //         setTimeout(function () {
+                        //             let statusText = 'Draft'
+                        //             statusText = $('#class-status').text().trim(); Adjust the delay if needed
+                        //             if (statusText != 'Draft' && statusText != 'Postponed')
+                        //                 return '<button class="btn btn-success">Edit</button> <button class="btn btn-danger">Delete</button>';
+                        //             else return '';
+                        //         }, 500);
+                        //     }
+                        // }
                     ],
                     layout: {
                         topEnd: {
@@ -660,6 +669,36 @@
                             }
                         }
                     },
+                }).on('draw', function (e, settings) {
+                    scheduleTable.column(6).visible(false, false);
+                    scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                        var data = this.cell(rowIdx, 2).data();
+                        var status = $('div#class-status').text().trim();
+                        if (status == 'Draft' || status == 'Postponed') {
+                            var node = $(this.cell(rowIdx, 2).node());
+                            // change display from span to input
+                            node.html('<input type="datetime-local" id="schedule-start-date-' + rowIdx + '" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>');
+                            // Add change event listener for each input
+                            node.children(0).on('change', function () {
+
+                                let formData = {
+                                    scheduleDate: $('input#schedule-start-date-' + rowIdx).val()
+                                };
+                                callApiPutUpdateSchedule(formData,scheduleTable.cell(rowIdx, 0).data());
+
+                                // const selectedStartDate = new Date(this.value);
+                                // const endDate = new Date(selectedStartDate);
+                                // endDate.setHours(endDate.getHours() + scheduleTable.cell(rowIdx, 6).data());
+
+                                // let startTimeData = getTimeFromDate(selectedStartDate);
+                                // let endTimeData = getTimeFromDate(endDate);
+
+                                // scheduleTable.cell(rowIdx, 3).data(startTimeData);
+
+                                // scheduleTable.cell(rowIdx, 4).data(endTimeData);
+                            });
+                        }
+                    });
                 });
                 
                 $('#editClassForm').submit(function (event) {
@@ -699,39 +738,25 @@
                     //Make the AJAX request
                     callApiPutUpdateClassStatus($('select[id="updateClassStatus_Status"]').val());
                     $('#updateClassStatusForm').trigger("reset");
-                    checkStatusForEdits();
                 });
-                $(document).on('submit', 'form[id^="editScheduleForm_"]', function (event) {
-                    event.preventDefault();
-                    // Extract the answerId from the form's id
-                    let answerId = $(this).attr('id').split('_')[1];
+                // $(document).on('submit', 'form[id^="editScheduleForm_"]', function (event) {
+                //     event.preventDefault();
+                //     Extract the answerId from the form's id
+                //     let answerId = $(this).attr('id').split('_')[1];
 
-                    // Collect form data
-                    let formData = {
-                        answer: $('#updateAnswer_' + answerId + '_Answer').val(),
-                        type: $('#updateAnswer_' + answerId + '_Type').val()
-                    };
+                //     Collect form data
+                //     let formData = {
+                //         answer: $('#updateAnswer_' + answerId + '_Answer').val(),
+                //         type: $('#updateAnswer_' + answerId + '_Type').val()
+                //     };
 
-                    // Call the API to update the answer
-                    callApiPutUpdateSchedule(formData, answerId);
+                //     Call the API to update the answer
+                //     callApiPutUpdateSchedule(formData, answerId);
 
-                    // Optionally reset the form
-                    //$(this).trigger("reset");
-                });
-                checkStatusForEdits();
+                //     Optionally reset the form
+                //     $(this).trigger("reset");
+                // });
             });
-            function checkStatusForEdits(){
-                setTimeout(function () {
-                    statusText = $('#class-status').text().trim(); // Adjust the delay if needed
-                    // console.log(statusText);
-                    if (statusText != 'Draft' && statusText != 'Postponed') {
-                        scheduleTable.column(6).visible(false, false);
-                        let dadiv = $('div.dt-modal-toggle').parent();
-                        // console.log(dadiv);
-                        dadiv.find('div.dt-modal-toggle').remove();
-                    }
-                }, 200);
-            }
             function addTeacherOptions(data, baseTeacher) {
                 data.forEach(item => {
                     // Add each item as an option=
@@ -859,9 +884,9 @@
                     }
                 });
             }
-            function callApiPutUpdateSchedule(formData,answerId) {
+            function callApiPutUpdateSchedule(formData,scheduleId) {
                 $.ajax({
-                    url: apiUrl + 'Schedule/' + answerId + '/Update', // Specify your Razor Page here
+                    url: apiUrl + 'Schedule/' + scheduleId + '/Update', // Specify your Razor Page here
                     type: 'PUT',
                     data: JSON.stringify(formData),
                     headers: {
@@ -871,15 +896,14 @@
                     success: function (response) {
                         // Handle success (display a success message or redirect, etc.)
                         if (response.status) {
-                            showAlert('success', "Answer update successfully");
-                            $('.modal-backdrop').remove();
+                            // showAlert('success', "Answer update successfully");
+                            // $('.modal-backdrop').remove();
                             // Remove specific class from body
-                            $('body').removeClass('modal-open');
+                            // $('body').removeClass('modal-open');
 
                             // Remove all inline styles from body
-                            $('body').removeAttr('style');
+                            // $('body').removeAttr('style');
                             callApiGetClassDetail();
-                            showAlert('','');
                         } else {
                             console.error("API returned false status.");
                         }
@@ -969,7 +993,7 @@
 
                             }
                             sessionTable.clear().rows.add(response.data.course.sessions).draw();
-                            console.log(response.data);
+                            // console.log(response.data);
                         } else {
                             console.error("API returned false status.");
                         }
@@ -1078,73 +1102,6 @@
                     }
                 });
             }
-            function formatDate(date, ignoreHour = false, addDayOfWeek = false, includeAmPm = false, monthBeforeDate = false) {
-                let d = new Date(date);
-
-                // Get day, month, year
-                let day = String(d.getDate()).padStart(2, '0');
-                let month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-                let year = d.getFullYear();
-
-                // Get hours, minutes
-                let hours = String(d.getHours()).padStart(2, '0');
-                let minutes = String(d.getMinutes()).padStart(2, '0');
-
-                // Optionally, get seconds
-                let seconds = String(d.getSeconds()).padStart(2, '0');
-
-                let amPm = '';
-                if (includeAmPm) {
-                    amPm = hours >= 12 ? 'PM' : 'AM';
-                    hours = hours % 12 || 12; // Convert to 12-hour format, with 12 instead of 0
-                }
-                hours = String(hours).padStart(2, '0'); // Pad with zero if needed
-
-                // Optional: Get day of the week if `addDayOfWeek` is true
-                let dayOfWeek = '';
-                if (addDayOfWeek) {
-                    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                    dayOfWeek = daysOfWeek[d.getDay()] + ', ';
-                }
-                // Return only the date if `ignoreHour` is true
-                if (ignoreHour) {
-                    return `${dayOfWeek}${day}/${month}/${year}`;
-                }
-
-                if (monthBeforeDate) {
-                    // Return the formatted date and time as `day, mm/dd/yyyy hh:mm AM/PM` if `addDayOfWeek` and `includeAmPm` are true
-                    return `${dayOfWeek}${month}/${day}/${year} ${hours}:${minutes} ${amPm}`.trim();
-                }
-
-                // Return the formatted date and time as `day, dd/mm/yyyy hh:mm AM/PM` if `addDayOfWeek` and `includeAmPm` are true
-                return `${dayOfWeek}${day}/${month}/${year} ${hours}:${minutes} ${amPm}`.trim();
-
-                // If you want to include seconds as well, use this return:
-                // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-            }
-
-            function formatTime(timeString, includeSeconds = false, includeAmPm = false) {
-                // Parse hours, minutes, and seconds from the input string
-                let [hours, minutes, seconds] = timeString.split(':').map(Number);
-
-                let amPm = '';
-                if (includeAmPm) {
-                    // Determine AM or PM
-                    amPm = hours >= 12 ? 'PM' : 'AM';
-                    hours = hours % 12 || 12; // Convert to 12-hour format, with 12 instead of 0
-                }
-
-                // Format hours and minutes to always have two digits
-                hours = String(hours).padStart(2, '0');
-                minutes = String(minutes).padStart(2, '0');
-                seconds = String(seconds).padStart(2, '0');
-                if (includeSeconds){
-                    // Return formatted time string
-                    return `${hours}:${minutes}:${seconds} ${amPm}`;
-                }
-                // Return formatted time string
-                return `${hours}:${minutes} ${amPm}`;
-            }
 
             function setClassDisplay(data) {
                 var titleStatusHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
@@ -1203,6 +1160,11 @@
                     case 'Cancelled':
                         statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
                         break;
+                }
+                if (data.status != 'Draft' && data.status != 'Postponed') {
+                    // scheduleTable.column(6).visible(false, false);
+                    let dadiv = $('div.dt-modal-toggle').parent();
+                    dadiv.find('div.dt-modal-toggle').remove();
                 }
                 // var answerAddHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
                 //     <div class="edit-info" id="question-add-answer">

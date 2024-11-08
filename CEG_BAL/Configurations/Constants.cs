@@ -151,8 +151,8 @@ namespace CEG_BAL.Configurations
 
         public readonly static string SCHEDULE_STATUS_DRAFT = "Draft";
         public readonly static string SCHEDULE_STATUS_NAME_DRAFT = "Draft";
-        public readonly static string SCHEDULE_STATUS_OPEN = "Upcoming";
-        public readonly static string SCHEDULE_STATUS_NAME_OPEN = "Upcoming";
+        public readonly static string SCHEDULE_STATUS_UPCOMING = "Upcoming";
+        public readonly static string SCHEDULE_STATUS_NAME_UPCOMING = "Upcoming";
         public readonly static string SCHEDULE_STATUS_ONGOING = "Ongoing";
         public readonly static string SCHEDULE_STATUS_NAME_ONGOING = "Ongoing";
         public readonly static string SCHEDULE_STATUS_CANCELLED = "Cancelled";

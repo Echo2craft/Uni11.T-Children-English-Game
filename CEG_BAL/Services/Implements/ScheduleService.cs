@@ -39,9 +39,15 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
         }
 
-        public Task<ScheduleViewModel?> GetById(int id)
+        public async Task<ScheduleViewModel?> GetById(int id)
         {
-            throw new NotImplementedException();
+            var sche = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(id);
+            if (sche != null)
+            {
+                var sch = _mapper.Map<ScheduleViewModel>(sche);
+                return sch;
+            }
+            return null;
         }
 
         public Task<ScheduleViewModel?> GetByIdAdmin(int id)
@@ -66,7 +72,18 @@ namespace CEG_BAL.Services.Implements
 
         public void Update(ScheduleViewModel scheduleModel, UpdateSchedule newSchedule)
         {
-            throw new NotImplementedException();
+            var mainSchedule = _mapper.Map<Schedule>(scheduleModel);
+            if (newSchedule != null)
+            {
+                // mainSchedule.TeacherId = _unitOfWork.TeacherRepositories.GetByFullname(classNewModel.TeacherName).Result.TeacherId;
+                mainSchedule.ScheduleDate = newSchedule.ScheduleDate;
+                mainSchedule.StartTime = newSchedule.ScheduleDate.HasValue ? TimeOnly.FromDateTime(newSchedule.ScheduleDate.Value) : default;
+                mainSchedule.EndTime = mainSchedule.StartTime.Value.AddHours(_unitOfWork.SessionRepositories.GetByIdNoTracking(mainSchedule.SessionId).Result.Hours.Value);
+            }
+            mainSchedule.Class = null;
+            mainSchedule.Session = null;
+            _unitOfWork.ScheduleRepositories.Update(mainSchedule);
+            _unitOfWork.Save();
         }
 
         public void UpdateStatus(int id, string status)

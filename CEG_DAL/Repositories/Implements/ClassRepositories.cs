@@ -83,7 +83,8 @@ namespace CEG_DAL.Repositories.Implements
                             SessionId = sch.SessionId,
                             SessionNumber = sch.Session.SessionNumber,
                             Title = sch.Session.Title,
-                            Description = sch.Session.Description
+                            Description = sch.Session.Description,
+                            Hours = sch.Session.Hours
                         }
                     }).ToList(),
                     Enrolls = c.Enrolls.Select(s => new Enroll()
