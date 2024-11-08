@@ -13,6 +13,8 @@ namespace CEG_BAL.ViewModels
 
         public string ClassName { get; set; } = null!;
 
+        public string? TeacherName { get; set; }
+
         public int? MinimumStudents { get; set; }
 
         public int? MaximumStudents { get; set; }
