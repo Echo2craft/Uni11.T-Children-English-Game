@@ -50,7 +50,14 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<EnrollViewModel>> GetEnrollsList()
         {
-            return _mapper.Map<List<EnrollViewModel>>(await  _unitOfWork.EnrollRepositories.GetEnrollsList());
+            return _mapper.Map<List<EnrollViewModel>>(await _unitOfWork.EnrollRepositories.GetEnrollsList());
+        }
+
+        public async Task<List<EnrollViewModel>> GetEnrollByParentAccountId(int id)
+        {
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            if (parentId == 0) return null;
+            return _mapper.Map<List<EnrollViewModel>>(await _unitOfWork.EnrollRepositories.GetEnrollByParentId(parentId));
         }
 
         public void Update(EnrollViewModel model)

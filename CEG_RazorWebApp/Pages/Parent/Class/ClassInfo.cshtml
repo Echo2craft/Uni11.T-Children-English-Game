@@ -6,160 +6,159 @@
     Layout = "~/Pages/Shared/_PLayout.cshtml";
 }
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@ViewData["Title"]</title>
-    </head>
-    <body>
-        <div class="main-content">
-            <div class="main">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="offset-sm-6 col-sm-6  d-flex justify-content-sm-end p-md-0 mt-2 mt-sm-0 ">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumd-item">
-                                    <a href="#">Manage</a>
-                                </li>
-                                <li class="breadcrumd-item">
-                                    <span>/</span>
-                                </li>
-                                <li class="breadcrumd-item">
-                                    <a href="/Parent/Class/Index">Class</a>
-                                </li>
-                                <li class="breadcrumd-item">
-                                    <span>/</span>
-                                </li>
-                                <li class="breadcrumd-item">
-                                    <a href="/Parent/Class/@Model.ClassID/Info">@Model.ClassID</a>
-                                </li>
-                                <li class="breadcrumd-item">
-                                    <span>/</span>
-                                </li>
-                                <li class="breadcrumd-item">
-                                    <a href="/Parent/Class/@Model.ClassID/Info">Info</a>
-                                </li>
-                            </ol>
-                        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="main-content">
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-sm-6 col-sm-6  d-flex justify-content-sm-end p-md-0 mt-2 mt-sm-0 ">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumd-item">
+                                <a href="#">Manage</a>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <span>/</span>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <a href="/Parent/Class/Index">Class</a>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <span>/</span>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <a href="/Parent/Class/@Model.ClassID/Info">@Model.ClassID</a>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <span>/</span>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <a href="/Parent/Class/@Model.ClassID/Info">Info</a>
+                            </li>
+                        </ol>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-7 customer-booking">
-                            <div class="row">
-                                <div class="card-profile col-12 mb-4">
-                                    <div class="card-header" id="class-title-status">
-                                        <h4>Class <label id="class-class-title" class="truncate"></label> Information</h4>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7 customer-booking">
+                        <div class="row">
+                            <div class="card-profile col-12 mb-4">
+                                <div class="card-header" id="class-title-status">
+                                    <h4>Class <label id="class-class-title" class="truncate"></label> Information</h4>
+                                </div>
+                                <div id="alertContainer"></div>
+                                <div class="card-body">
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Class ID:</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span id="class-id">
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div id="alertContainer"></div>
-                                    <div class="card-body">
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Class ID:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <span id="class-id">
-                                                </span>
-                                            </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Status:</label>
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Status:</label>
-                                            </div>
-                                            <div class="col-sm-7" id="class-status">
-                                            </div>
+                                        <div class="col-sm-7" id="class-status">
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Class Name:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <span id="class-name">
-                                                </span>
-                                            </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Class Name:</label>
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Course information:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <a id="class-course">
-                                                </a>
-                                            </div>
+                                        <div class="col-md-7">
+                                            <span id="class-name">
+                                            </span>
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Assigned Teacher:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <a id="class-teacher">
-                                                </a>
-                                            </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Course information:</label>
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Start Date:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <span id="class-start-date">
-                                                </span>
-                                            </div>
+                                        <div class="col-md-7">
+                                            <a id="class-course">
+                                            </a>
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">End Date:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <span id="class-end-date">
-                                                </span>
-                                            </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Assigned Teacher:</label>
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Current students amount:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <span id="class-current-students-amount">
-                                                </span>
-                                            </div>
+                                        <div class="col-md-7">
+                                            <a id="class-teacher">
+                                            </a>
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Minimum students amount:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <span id="class-minimum-students-amount">
-                                                </span>
-                                            </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Start Date:</label>
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Maximum students amount:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <span id="class-maximum-students-amount">
-                                                </span>
-                                            </div>
+                                        <div class="col-md-7">
+                                            <span id="class-start-date">
+                                            </span>
                                         </div>
-                                        <div class="row mb-sm-2">
-                                            <div class="col-md-5 text-md-right">
-                                                <label class="col-form-label">Scheduled sessions amount:</label>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <span id="class-schedules-amount">
-                                                </span>
-                                            </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">End Date:</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span id="class-end-date">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Current students amount:</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span id="class-current-students-amount">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Minimum students amount:</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span id="class-minimum-students-amount">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Maximum students amount:</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span id="class-maximum-students-amount">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Scheduled sessions amount:</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span id="class-schedules-amount">
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="card profile col-12 mb-4">
-                                    <div class="card-header" id="class-allow-add-schedule">
-                                        <h4>Scheduled Session List</h4>
-                                    </div>
-                                    <div class="card-body" id="schedule_list">
-                                        <h5>No scheduled session found</h5>
-                                    </div>
+                        </div>
+                        <div class="row">
+                            <div class="card profile col-12 mb-4">
+                                <div class="card-header" id="class-allow-add-schedule">
+                                    <h4>Scheduled Session List</h4>
+                                </div>
+                                <div class="card-body" id="schedule_list">
+                                    <h5>No scheduled session found</h5>
                                 </div>
                             </div>
                         </div>
@@ -167,5 +166,6 @@
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>

@@ -14,5 +14,6 @@ namespace CEG_BAL.Services.Interfaces
         void UpdateStatus(int enrollId, string enrollStatus);
         Task<List<EnrollViewModel>> GetEnrollsList();
         Task<EnrollViewModel> GetEnrollById (int id);
+        Task<List<EnrollViewModel>> GetEnrollByParentAccountId(int id);
     }
 }
