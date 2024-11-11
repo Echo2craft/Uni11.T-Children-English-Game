@@ -10,7 +10,7 @@ namespace CEG_DAL.Repositories.Interfaces
 {
     public interface ITransactionRepositories : IRepositoryBase<Transaction>
     {
-        Task<List<Transaction>> GetTransactionList();
+        Task<List<Transaction>> GetListNoTracking();
         Task<Transaction?> GetByIdNoTracking(int id);
         Task<List<Transaction>> GetTransactionByParentId(int parentId);
     }

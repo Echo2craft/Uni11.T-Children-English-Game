@@ -23,9 +23,29 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.Transactions.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(tran => tran.TransactionId == id);
         }
 
-        public async Task<List<Transaction>> GetTransactionList()
+        public async Task<List<Transaction>> GetListNoTracking()
         {
-            return await _dbContext.Transactions.ToListAsync();
+            return await _dbContext.Transactions
+                .Select( tra => new Transaction
+                {
+                    TransactionId = tra.TransactionId,
+                    VnpayId = tra.VnpayId,
+                    TransactionAmount = tra.TransactionAmount,
+                    TransactionType = tra.TransactionType,
+                    TransactionDate = tra.TransactionDate,
+                    ConfirmDate = tra.ConfirmDate,
+                    TransactionStatus = tra.TransactionStatus,
+                    Parent = new Parent
+                    {
+                        ParentId = tra.ParentId,
+                        Account = new Account
+                        {
+                            Fullname = tra.Parent.Account.Fullname,
+                        }
+                    }
+                })
+                .AsNoTrackingWithIdentityResolution()
+                .ToListAsync();
         }
 
         public async Task<List<Transaction>> GetTransactionByParentId(int parentId)

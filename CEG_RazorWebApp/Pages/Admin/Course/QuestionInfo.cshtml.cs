@@ -45,24 +45,11 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
             [FromRoute][Required] int homeworkId,
             [FromRoute][Required] int questionId)
         {
-            methcall.InitTempData(this);
             AccToken = HttpContext.Session.GetString(Constants.ACC_TOKEN);
             CourseId = courseId;
             SessionId = sessionId;
             HomeworkId = homeworkId;
             QuestionId = questionId;
-        }
-        public IActionResult OnGetLogout()
-        {
-            //_httpClient.DefaultRequestHeaders.Authorization = null;
-            HttpContext.Session.Clear();
-            TempData.Clear();
-            SignOut();
-
-            // If using ASP.NET Identity, you may want to sign out the user
-            // Example: await SignInManager.SignOutAsync();
-
-            return RedirectToPage(Constants.LOGOUT_REDIRECT_URL);
         }
     }
 }

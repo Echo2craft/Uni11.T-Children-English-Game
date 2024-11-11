@@ -275,27 +275,45 @@
                                 </div>
                             `;
             }
-
             // Inject the alert HTML into the alert container
             $('#alertContainer').html(alertHtml);
         }
-        function callApiPutUpdateQuestion(formData) {
-            $.ajax({
-                url: apiUrl + 'Question/@Model.QuestionId/Update', // Specify your Razor Page here
-                type: 'PUT',
-                data: JSON.stringify(formData),
-                headers: {
-                    'Authorization': 'Bearer ' + token, // Token for authentication
-                },
-                contentType: 'application/json; charset=utf-8',
-                success: function (response) {
-                    // Handle success (display a success message or redirect, etc.)
-                    if (response.status) {
-                        showAlert('success', "Question update successfully");
-                        callApiGetQuestionDetail();
-                        showAlert('', '');
-                    } else {
-                        console.error("API returned false status.");
+            function callApiPutUpdateQuestion(formData){
+                $.ajax({
+                    url: apiUrl + 'Question/@Model.QuestionId/Update', // Specify your Razor Page here
+                    type: 'PUT',
+                    data: JSON.stringify(formData),
+                    headers: {
+                        'Authorization': 'Bearer ' + token, // Token for authentication
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        // Handle success (display a success message or redirect, etc.)
+                        if (response.status) {
+                            showAlert('success',"Question update successfully");
+                            callApiGetQuestionDetail();
+                            showAlert('','');
+                        } else {
+                            console.error("API returned false status.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Extract the custom error message if it exists
+                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                        // Check if errorResponse.errors exists and is an object
+                        if (xhr.errors && typeof xhr.errors === 'object') {
+                            // Loop through each field in the errors object and append to the errorMessage
+                            for (var field in xhr.errors) {
+                                if (xhr.errors.hasOwnProperty(field)) {
+                                    // Add each error message for the field, joining multiple messages if they exist
+                                    var fieldErrors = xhr.errors[field].join(", ");
+                                    errorMessage += `\n${field}: ${fieldErrors}`;
+                                }
+                            }
+                        }
+
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error:" + errorMessage);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -321,39 +339,70 @@
                         $('.modal-backdrop').remove();
                         // Remove specific class from body
                         $('body').removeClass('modal-open');
+                            // Remove all inline styles from body
+                            $('body').removeAttr('style');
+                            callApiGetQuestionDetail();
+                            showAlert('','');
+                        } else {
+                            console.error("API returned false status.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Extract the custom error message if it exists
+                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                        // Check if errorResponse.errors exists and is an object
+                        if (xhr.errors && typeof xhr.errors === 'object') {
+                            // Loop through each field in the errors object and append to the errorMessage
+                            for (var field in xhr.errors) {
+                                if (xhr.errors.hasOwnProperty(field)) {
+                                    // Add each error message for the field, joining multiple messages if they exist
+                                    var fieldErrors = xhr.errors[field].join(", ");
+                                    errorMessage += `\n${field}: ${fieldErrors}`;
+                                }
+                            }
+                        }
 
-                        // Remove all inline styles from body
-                        $('body').removeAttr('style');
-                        callApiGetQuestionDetail();
-                        showAlert('', '');
-                    } else {
-                        console.error("API returned false status.");
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error:" + errorMessage);
                     }
-                },
-                error: function (xhr, status, error) {
-                    // Handle error (display the validation message, etc.)
-                    alert("Error in api call:" + error);
-                    console.error("Error in api call:", error);
-                }
-            });
-        }
-        function callApiPostCreateAnswer(formData) {
-            $.ajax({
-                url: apiUrl + 'Answer/Create', // Specify your Razor Page here
-                type: 'POST',
-                data: JSON.stringify(formData),
-                headers: {
-                    'Authorization': 'Bearer ' + token, // Token for authentication
-                },
-                contentType: 'application/json; charset=utf-8',
-                success: function (response) {
-                    // Handle success (display a success message or redirect, etc.)
-                    if (response.status) {
-                        showAlert('success', "Answer create successfully");
-                        callApiGetQuestionDetail();
-                        showAlert('', '');
-                    } else {
-                        console.error("API returned false status.");
+                });
+            }
+            function callApiPostCreateAnswer(formData){
+                $.ajax({
+                    url: apiUrl + 'Answer/Create', // Specify your Razor Page here
+                    type: 'POST',
+                    data: JSON.stringify(formData),
+                    headers: {
+                        'Authorization': 'Bearer ' + token, // Token for authentication
+                    },
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        // Handle success (display a success message or redirect, etc.)
+                        if (response.status) {
+                            showAlert('success',"Answer create successfully");
+                            callApiGetQuestionDetail();
+                            showAlert('','');
+                        } else {
+                            console.error("API returned false status.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Extract the custom error message if it exists
+                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                        // Check if errorResponse.errors exists and is an object
+                        if (xhr.errors && typeof xhr.errors === 'object') {
+                            // Loop through each field in the errors object and append to the errorMessage
+                            for (var field in xhr.errors) {
+                                if (xhr.errors.hasOwnProperty(field)) {
+                                    // Add each error message for the field, joining multiple messages if they exist
+                                    var fieldErrors = xhr.errors[field].join(", ");
+                                    errorMessage += `\n${field}: ${fieldErrors}`;
+                                }
+                            }
+                        }
+
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error:" + errorMessage);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -388,6 +437,24 @@
                         }
                     } else {
                         console.error("API returned false status.");
+                    },
+                    error: function (xhr, status, error) {
+                        // Extract the custom error message if it exists
+                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                        // Check if errorResponse.errors exists and is an object
+                        if (xhr.errors && typeof xhr.errors === 'object') {
+                            // Loop through each field in the errors object and append to the errorMessage
+                            for (var field in xhr.errors) {
+                                if (xhr.errors.hasOwnProperty(field)) {
+                                    // Add each error message for the field, joining multiple messages if they exist
+                                    var fieldErrors = xhr.errors[field].join(", ");
+                                    errorMessage += `\n${field}: ${fieldErrors}`;
+                                }
+                            }
+                        }
+
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error:" + errorMessage);
                     }
                 },
                 error: function (error) {

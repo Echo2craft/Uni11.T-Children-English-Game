@@ -19,6 +19,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpGet("All")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(List<TransactionViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
