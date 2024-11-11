@@ -507,19 +507,19 @@
                         // Check if the status is true
                         if (response.status) {
                             setCourseDisplay(response.data);
-                            // Check if homeworkAnswers is empty
+                            // Check if sessions is empty
                             if (response.data.sessions && response.data.sessions.length > 0) {
-                                // Clear any existing answers
+                                // Clear any existing sessions
                                 $('#session_list').empty();
 
                                 sessionList = response.data.sessions;
-                                // Loop through each answer and generate the HTML
+                                // Loop through each sessions and generate the HTML
                                 response.data.sessions.forEach(function (session) {
                                     let sessionHtml = generateSessionHtml(session, response.data.status); // Assuming both sessionInfo and updateAnswer are the same structure
                                     $('#session_list').append(sessionHtml);
                                 });
                             } else {
-                                // If the answer list is empty
+                                // If the session list is empty
                                 $('#session_list').html('<h5>No sessions found</h5>');
                             }
                         } else {

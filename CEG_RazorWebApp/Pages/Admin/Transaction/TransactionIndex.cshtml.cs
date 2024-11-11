@@ -42,22 +42,9 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             AdminAPI_URL = config.GetSection(Constants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value;
         }
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            return Page();
-        }
 
-        public IActionResult OnGetLogout()
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-            HttpContext.Session.Clear();
-            TempData.Clear();
-            SignOut();
-
-            // If using ASP.NET Identity, you may want to sign out the user
-            // Example: await SignInManager.SignOutAsync();
-
-            return RedirectToPage("/Home/Index");
         }
     }
 }

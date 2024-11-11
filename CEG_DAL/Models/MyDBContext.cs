@@ -10,6 +10,7 @@ public partial class MyDBContext : DbContext
 {
     public MyDBContext()
     {
+
     }
     public MyDBContext(DbContextOptions<MyDBContext> options)
         : base(options)
@@ -369,10 +370,10 @@ public partial class MyDBContext : DbContext
 
             entity.Property(e => e.ScheduleId).HasColumnName("schedule_id");
             entity.Property(e => e.ClassId).HasColumnName("class_id");
-            entity.Property(e => e.DayOfWeek)
-                .HasMaxLength(50)
-                .HasColumnName("day_of_week");
             entity.Property(e => e.EndTime).HasColumnName("end_time");
+            entity.Property(e => e.ScheduleDate)
+                .HasColumnType("datetime")
+                .HasColumnName("schedule_date");
             entity.Property(e => e.SessionId).HasColumnName("session_id");
             entity.Property(e => e.StartTime).HasColumnName("start_time");
             entity.Property(e => e.Status)

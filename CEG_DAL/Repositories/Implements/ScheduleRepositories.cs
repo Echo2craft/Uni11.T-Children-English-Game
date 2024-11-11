@@ -26,7 +26,7 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<Schedule?> GetByIdNoTracking(int id)
         {
-            return await _dbContext.Schedules.FirstOrDefaultAsync(s => s.ScheduleId == id);
+            return await _dbContext.Schedules.AsNoTrackingWithIdentityResolution().FirstOrDefaultAsync(s => s.ScheduleId == id);
         }
 
         public async Task<List<Schedule>?> GetListByClassId(int classId)

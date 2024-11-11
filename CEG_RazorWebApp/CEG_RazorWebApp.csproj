@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Libraries\Attributes\" />
+    <Folder Include="Models\Schedule\Update\" />
     <Folder Include="Pages\Admin\Transaction\" />
   </ItemGroup>
   <ItemGroup>

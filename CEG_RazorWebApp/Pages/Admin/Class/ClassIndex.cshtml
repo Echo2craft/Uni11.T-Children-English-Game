@@ -103,7 +103,7 @@
                                                 class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@createClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
                                         <span asp-validation-for="@createClass.MaxStudents" id="error_message"
                                                 class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -136,7 +136,7 @@
                                         <span asp-validation-for="@createClass.EndDate" id="error_message"
                                                 class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                     </div>
-                                    <hr />
+                                    <hr>
                                     <div class ="row form-group justify-content-center course-content-view">
                                         <label class="col-form-label">Course's Sessions preview</label>
                                         <div id="session-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
@@ -183,6 +183,12 @@
                                                    aria-describedby="schedule-table_info">
                                                 <thead>
                                                     <tr>
+                                                        <th class="sorting sorting_asc" tabindex="0"
+                                                            aria-controls="schedule-table" rowspan="1"
+                                                            colspan="1" aria-sort="ascending"
+                                                            aria-label="Session ID: activate to sort column ascending">
+                                                            Session Id
+                                                        </th>
                                                         <th class="sorting sorting_asc" tabindex="0"
                                                             aria-controls="schedule-table" rowspan="1"
                                                             colspan="1" aria-sort="ascending"
@@ -284,7 +290,7 @@
                         }
                     }
                 }, 100);
-                return container;
+                return '';
             });
             sessionTable = new DataTable('#session-table', {
                 data: [],
@@ -318,10 +324,12 @@
                     // If not selected, add to selected set and add to scheduleTable
                     selectedSessionIds.add(sessionId);
                     var startDateTime = getDefaultDate();
+                    // console.log(startDateTime);
                     var endDateTime = new Date(startDateTime);
                     endDateTime.setHours(endDateTime.getHours() + data.hours);
                     // Create a new row data for scheduleTable based on selected sessionTable row
                     var newRowData = { // Customize if needed, or leave empty for manual input
+                        sessionId: sessionId,
                         sessionNumber: data.sessionNumber,
                         title: data.title,
                         startDate: startDateTime,
@@ -344,7 +352,7 @@
 
                     // Find and remove the row with the same sessionId in scheduleTable
                     scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                        if (this.data().sessionNumber === data.sessionNumber) {
+                        if (this.data().sessionId === data.sessionId) {
                             scheduleTable.row(rowIdx).remove();
                         }
                     });
@@ -357,12 +365,19 @@
                 deferRender: false,
                 responsive: true,
                 columns: [
+                    { 
+                        data: 'sessionId',
+                        render: function (data, type, row, meta) {
+                            return '<span id="schedule-session-id">' + data + '</span >';
+                        }
+                    },
                     { data: 'sessionNumber' },
                     { data: 'title' },
                     { // Add a select box in the last column
                         data: 'startDate', // No need to map it to a specific data field
                         render: function (data, type, row, meta) {
-                            return '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" />';
+                            // return data ? $.fn.dataTable.render.datetime(data, 'YYYY-MM-DD HH:mm').display(data) : '';
+                            return '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
                         }
                     },
                     {
@@ -374,7 +389,7 @@
                     {
                         data: 'endDate',
                         render: function (data, type, row, meta) {
-                            return '<span id="schedule-end-date">' + formatDate(data) + '</span >';
+                            return '<span id="schedule-end-date">' + formatDate(data,false,false,true,true) + '</span >';
                         }
                     }
                 ],
@@ -398,12 +413,12 @@
                         let hourText = rowData.find('#schedule-hour');
                         let endDateText = rowData.find('#schedule-end-date');
                         if (hourText && hourText.length > 0 && endDateText && endDateText.length > 0) {
-                            console.log(hourText[0].textContent);
+                            // console.log(hourText[0].textContent);
                             const hoursToAdd = parseFloat(hourText[0].textContent);
                             const endDate = new Date(selectedDate);
                             endDate.setHours(endDate.getHours() + hoursToAdd);
                             // Format and display the end date in the corresponding span
-                            const formattedEndDate = formatDate(endDate); // Format as needed
+                            const formattedEndDate = formatDate(endDate,false,false,true,true); // Format as needed
                             endDateText.text(formattedEndDate);
                         }
                     });
@@ -417,7 +432,7 @@
                 theme: 'bootstrap4'
             })
             .on('select2:close', function (e) {
-                console.log(e);
+                // console.log(e);
                 var text = $('#searchableCourseDropdown').select2('data')[0].text;
                 // Filter options based on the search input
                 var results = courseList.filter(function (item) {
@@ -469,15 +484,23 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    // Attempt to parse the response text if it is available
-                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
+                error: function (xhr, status, error) {
                     // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
 
                     // Display the error message using your custom showAlert function
-
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
             // Call API to get the list of course names
@@ -495,12 +518,20 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    // Attempt to parse the response text if it is available
-                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
+                error: function (xhr, status, error) {
                     // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
 
                     // Display the error message using your custom showAlert function
                     showAlert('error', "Error:" + errorMessage);
@@ -539,9 +570,23 @@
         }
         // Function to calculate today's date + 10 days
         function getDefaultDate() {
-            var defaultDate = new Date();
-            defaultDate.setDate(defaultDate.getDate() + 10);
-            return defaultDate.toISOString().slice(0, 16); // Format as 'YYYY-MM-DDTHH:MM'
+            let currentDate = new Date(); // Get the current date and time
+            let defaultDate = new Date(currentDate); // Copy the current date
+
+            // Add 10 days to the date
+            defaultDate.setDate(currentDate.getDate() + 10);
+            // console.log(currentDate);
+            // console.log(defaultDate);
+
+            // Get year, month, day, hours, and minutes in local time
+            let year = defaultDate.getFullYear();
+            let month = String(defaultDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            let day = String(defaultDate.getDate()).padStart(2, '0');
+            let hours = String(defaultDate.getHours()).padStart(2, '0');
+            let minutes = String(defaultDate.getMinutes()).padStart(2, '0');
+
+            // Construct formatted string in 'YYYY-MM-DDTHH:MM' format
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
         }
         // Function to display alerts
         function showAlert(type, message) {
@@ -588,12 +633,20 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    // Attempt to parse the response text if it is available
-                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
+                error: function (xhr, status, error) {
                     // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
 
                     // Display the error message using your custom showAlert function
                     showAlert('error', "Error:" + errorMessage);
@@ -622,11 +675,12 @@
             classList.append(cardCreateClassHtml);
             // Loop through the data array and append each class div
             $.each(data, function (index, classObj) {
-                var formattedStartDate = formatDate(classObj.startDate);
-                var formattedEndDate = formatDate(classObj.endDate);
+                var formattedStartDate = formatDate(classObj.startDate,true);
+                var formattedEndDate = formatDate(classObj.endDate,true);
                 var statusText = '';
                 switch (classObj.status) {
                     case 'Open':
+                    case 'Ongoing':
                         statusText = `<span class="outcome" style="float: left;">Status: ${classObj.status}</span>`
                         break;
                     case 'Draft':
@@ -688,7 +742,7 @@
 
         //     return html;
         // }
-        function formatDate(date) {
+        function formatDate(date, ignoreHour = false, addDayOfWeek = false, includeAmPm = false, monthBeforeDate = false) {
             let d = new Date(date);
 
             // Get day, month, year
@@ -703,8 +757,31 @@
             // Optionally, get seconds
             let seconds = String(d.getSeconds()).padStart(2, '0');
 
-            // Return the formatted date and time as `dd/mm/yyyy hh:mm`
-            return `${day}/${month}/${year} ${hours}:${minutes}`;
+            let amPm = '';
+            if (includeAmPm) {
+                amPm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12 || 12; // Convert to 12-hour format, with 12 instead of 0
+            }
+            hours = String(hours).padStart(2, '0'); // Pad with zero if needed
+
+            // Optional: Get day of the week if `addDayOfWeek` is true
+            let dayOfWeek = '';
+            if (addDayOfWeek) {
+                const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                dayOfWeek = daysOfWeek[d.getDay()] + ', ';
+            }
+            // Return only the date if `ignoreHour` is true
+            if (ignoreHour) {
+                return `${dayOfWeek}${day}/${month}/${year}`;
+            }
+
+            if(monthBeforeDate){
+                // Return the formatted date and time as `day, mm/dd/yyyy hh:mm AM/PM` if `addDayOfWeek` and `includeAmPm` are true
+                return `${dayOfWeek}${month}/${day}/${year} ${hours}:${minutes} ${amPm}`.trim();
+            }
+
+            // Return the formatted date and time as `day, dd/mm/yyyy hh:mm AM/PM` if `addDayOfWeek` and `includeAmPm` are true
+            return `${dayOfWeek}${day}/${month}/${year} ${hours}:${minutes} ${amPm}`.trim();
 
             // If you want to include seconds as well, use this return:
             // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
@@ -719,10 +796,24 @@
                 MaxStudents: $("#createClass_MaxStudents").val(),
                 TeacherName: $('#searchableTeacherDropdown').select2('data')[0].text,
                 CourseName: $('#searchableCourseDropdown').select2('data')[0].text,
-                StartDate: $("#createClass_StartDate").val(),
-                EndDate: $("#createClass_EndDate").val()
+                StartDate: $("#createClass_StartDate").val(), // $("#createClass_StartDate").val(),
+                EndDate: $("#createClass_EndDate").val(),
+                Schedules: []
                 // WeeklySchedule: $('#createClass_WeeklySchedule').val()
             };
+            // Gather schedule data dynamically (example assuming each schedule is in a row in a table)
+            $('#schedule-table tbody tr').each(function () {
+                var schedule = {
+                    ScheduleDate: $(this).find('#schedule-start-date').val(), // Example date input
+                    SessionId: $(this).find('#schedule-session-id').text()
+                    // Hours: parseInt($(this).find('.schedule-hours').text(), 10) || 0, // Example hours input
+                    // Add additional fields as needed
+                };
+                // console.log(schedule);
+
+                // Push each schedule object to the Schedules array
+                classData.Schedules.push(schedule);
+            });
 
             // Make the AJAX POST request
             $.ajax({
@@ -744,15 +835,25 @@
                         console.error("API returned false status. Message:", response.ErrorMessage);
                     }
                 },
-                error: function (error) {
+                error: function (xhr, status, error) {
                     // Attempt to parse the response text if it is available
                     var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
 
                     // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
-
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         });

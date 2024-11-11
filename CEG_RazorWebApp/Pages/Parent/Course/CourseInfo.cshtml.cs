@@ -32,6 +32,7 @@ namespace CEG_RazorWebApp.Pages.Parent.Course
         };
         private CEG_RAZOR_Library methcall = new();
         public string? LayoutUrl { get; set; } = Constants.PARENT_LAYOUT_URL;
+        public int CourseID { get; set; }
         public CourseInfoVM? CourseInfo { get; set; }
         public CourseInfoModel(ILogger<CourseInfoModel> logger, IConfiguration config, IMapper mapper)
         {
@@ -45,52 +46,10 @@ namespace CEG_RazorWebApp.Pages.Parent.Course
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             ParentAPI_URL = config.GetSection(Constants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value;
         }
-        public async Task<IActionResult> OnGetAsync(
+        public void OnGet(
             [FromRoute][Required] int courseId)
         {
-            methcall.InitTempData(this);
-            ParentAPI_URL += "Course/" + courseId;
-            string? accToken = HttpContext.Session.GetString(Constants.ACC_TOKEN);
-
-            var courseInfoResponse = await methcall.CallMethodReturnObject<ParentCourseInfoResponseVM>(
-                _httpClient: _httpClient,
-                options: jsonOptions,
-                methodName: Constants.GET_METHOD,
-                url: ParentAPI_URL,
-                accessToken: accToken,
-                _logger: _logger);
-
-            if (courseInfoResponse == null)
-            {
-                _logger.LogError("Error while getting course info");
-
-                TempData[Constants.ALERT_DEFAULT_ERROR_NAME] = "Error while getting course info !";
-
-                return Redirect("/Parent/Course/Index");
-            }
-            if (!courseInfoResponse.Status || courseInfoResponse.Data == null)
-            {
-                _logger.LogError("Error while getting course info");
-
-                TempData[Constants.ALERT_DEFAULT_ERROR_NAME] = "Error while getting course info !";
-
-                return Redirect("/Parent/Course/Index");
-            }
-            TempData[Constants.ALERT_DEFAULT_SUCCESS_NAME] = "Course Info Get Successfully!";
-            CourseInfo = _mapper.Map<CourseInfoVM>(courseInfoResponse.Data);
-            return Page();
-        }
-        public IActionResult OnGetLogout()
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-            HttpContext.Session.Clear();
-            TempData.Clear();
-            SignOut();
-
-            // If using ASP.NET Identity, you may want to sign out the user
-            // Example: await SignInManager.SignOutAsync();
-
-            return RedirectToPage(Constants.LOGOUT_REDIRECT_URL);
+            CourseID = courseId;
         }
     }
 }
