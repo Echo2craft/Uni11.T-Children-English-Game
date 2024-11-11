@@ -233,6 +233,8 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Schedule, CreateNewSchedule>()
                 .ReverseMap();
+            CreateMap<StudentProgress, StudentProgressViewModel>()
+                .ReverseMap();
         }
     }
 }

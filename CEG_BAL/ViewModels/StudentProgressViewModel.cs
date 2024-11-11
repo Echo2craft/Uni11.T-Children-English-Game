@@ -11,6 +11,8 @@ namespace CEG_BAL.ViewModels
     {
         public int? TotalPoint { get; set; }
 
+        public int? StudentId { get; set; }
+
         public TimeOnly? Playtime { get; set; }
 
         public virtual Class Class { get; set; } = null!;
