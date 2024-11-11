@@ -145,24 +145,24 @@
 
             if (type === 'success') {
                 alertHtml = `
-                                <div class="alert alert-success alert-dismissible fade show" id="notif">
-                                    <i class='bx bx-message-alt-x p-1'></i>
-                                    <strong class="mr-1">` + message + `</strong>
-                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                        <span><i class='bx bx-x'></i></span>
-                                    </button>
-                                </div>
-                            `;
+                                        <div class="alert alert-success alert-dismissible fade show" id="notif">
+                                            <i class='bx bx-message-alt-x p-1'></i>
+                                            <strong class="mr-1">` + message + `</strong>
+                                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                                <span><i class='bx bx-x'></i></span>
+                                            </button>
+                                        </div>
+                                    `;
             } else if (type === 'error') {
                 alertHtml = `
-                                <div class="alert alert-danger alert-dismissible fade show" id="notif">
-                                    <i class='bx bx-message-alt-x p-1'></i>
-                                    <strong class="mr-1">` + message + `</strong>
-                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                        <span><i class='bx bx-x'></i></span>
-                                    </button>
-                                </div>
-                            `;
+                                        <div class="alert alert-danger alert-dismissible fade show" id="notif">
+                                            <i class='bx bx-message-alt-x p-1'></i>
+                                            <strong class="mr-1">` + message + `</strong>
+                                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                                <span><i class='bx bx-x'></i></span>
+                                            </button>
+                                        </div>
+                                    `;
             }
 
             // Inject the alert HTML into the alert container
@@ -205,33 +205,33 @@
                 //var url = `href="/Parent/Student/${student.account.accountId}/Info"`
                 // Construct card HTML
                 var rowHtml = `
-                                <tr class="${index % 2 === 0 ? 'even' : 'odd'}">
-                                    <td class="sorting_1">
-                                        <input type="hidden" name="listRequest[${index}].UserName" value="${student.account.username}" class="form-control" />
-                                        ${student.account.username}
-                                    </td>
-                                    <td>
-                                        <input type="hidden" name="listRequest[${index}].FullName" value="${student.account.fullname}" class="form-control" />
-                                        ${student.account.fullname}
-                                    </td>
-                                    <td>
-                                        <input type="hidden" name="listRequest[${index}].Description" value="${student.description}" class="form-control" />
-                                        ${student.description}
-                                    </td>
-                                    <td>
-                                        <input type="hidden" name="listRequest[${index}].CurLevel" value="${student.curLevel}" class="form-control" />
-                                        ${student.curLevel}
-                                    </td>
-                                    <td>
-                                        <input type="hidden" name="listRequest[${index}].Age" value="${student.age}" class="form-control" />
-                                        ${student.points}
-                                    </td>
-                                    <td>
-                                        <input type="hidden" name="listRequest[${index}].Birthdate" value="${student.birthdate}" class="form-control" />
-                                        ${formatDate(student.birthdate)}
-                                    </td>
-                                <tr>
-                            `;
+                                        <tr class="${index % 2 === 0 ? 'even' : 'odd'}">
+                                            <td class="sorting_1">
+                                                <input type="hidden" name="listRequest[${index}].UserName" value="${student.account.username}" class="form-control" />
+                                                ${student.account.username}
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="listRequest[${index}].FullName" value="${student.account.fullname}" class="form-control" />
+                                                ${student.account.fullname}
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="listRequest[${index}].Description" value="${student.description}" class="form-control" />
+                                                ${student.description}
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="listRequest[${index}].CurLevel" value="${student.curLevel}" class="form-control" />
+                                                ${student.curLevel}
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="listRequest[${index}].Age" value="${student.age}" class="form-control" />
+                                                ${student.points}
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="listRequest[${index}].Birthdate" value="${student.birthdate}" class="form-control" />
+                                                ${formatDate(student.birthdate)}
+                                            </td>
+                                        <tr>
+                                    `;
                 // Append the constructed HTML to the class list container
                 tableBody.append(rowHtml);
             });
