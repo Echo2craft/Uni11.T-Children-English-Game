@@ -165,18 +165,23 @@
 								break;
 						}
 						$('#loginForm').trigger("reset");
-						console.log(window.location.href);
 					} else {
-						console.error("API returned false status.");
+						console.log(response.status);
+						showAlert('error', "Login failed! Error: " + response.errorMessage);
 					}
 				},
 				error: function (xhr, status, error) {
-					// Handle error (display the validation message, etc.)
-					alert("Error in api call:" + error);
-					console.error("Error in api call:", error);
+					// Attempt to parse the response text if it is available
+					var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+					// Extract the custom error message if it exists
+					var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+
+					// Display the error message using your custom showAlert function
+					showAlert('error', "Login failed! Error: " + errorMessage);
 				}
 			});
-    }
+		}
 		function formValidation() {
 			var isValid = true;
 			if ($("#FlowerBouquetName").val().trim() == "") {

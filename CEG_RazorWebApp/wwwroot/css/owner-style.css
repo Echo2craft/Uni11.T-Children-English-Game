@@ -1991,13 +1991,13 @@ html body {
     }
     .dt-search .bx.bx-search-alt.question-search-icon {
         position: absolute;
-        top: 10px;
+        /*top: 10px;*/
         margin-left: 20px;
         font-size: 1.2em;
     }
     .dt-search .bx.bx-search-alt.enroll-search-icon {
         position: absolute;
-        top: 8px;
+        /*top: 8px;*/
         margin-left: 20px;
         font-size: 1.2em;
     }
