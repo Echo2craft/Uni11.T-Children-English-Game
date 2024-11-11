@@ -282,7 +282,7 @@
             // Return formatted time string
             return `${hours}:${minutes}:${seconds}`;
         };
-        function formatDate(date, ignoreHour = false, addDayOfWeek = false, includeAmPm = false, monthBeforeDate = false) {
+        function formatDate(date, ignoreHour = false, addDayOfWeek = false, includeAmPm = false, monthBeforeDate = false, lineBreak = false) {
             let d = new Date(date);
 
             // Get day, month, year
@@ -312,20 +312,51 @@
             }
             // Return only the date if `ignoreHour` is true
             if (ignoreHour) {
+                if (lineBreak) return `${dayOfWeek}<br />${day}/${month}/${year}`;
                 return `${dayOfWeek}${day}/${month}/${year}`;
             }
 
             if (monthBeforeDate) {
+                if (lineBreak) return `${dayOfWeek}<br />${month}/${day}/${year}<br />${hours}:${minutes} ${amPm}`.trim();
                 // Return the formatted date and time as `day, mm/dd/yyyy hh:mm AM/PM` if `addDayOfWeek` and `includeAmPm` are true
                 return `${dayOfWeek}${month}/${day}/${year} ${hours}:${minutes} ${amPm}`.trim();
             }
-
+            if (lineBreak) return `${dayOfWeek}<br />${day}/${month}/${year}<br />${hours}:${minutes} ${amPm}`.trim();
             // Return the formatted date and time as `day, dd/mm/yyyy hh:mm AM/PM` if `addDayOfWeek` and `includeAmPm` are true
             return `${dayOfWeek}${day}/${month}/${year} ${hours}:${minutes} ${amPm}`.trim();
 
             // If you want to include seconds as well, use this return:
             // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         };
+        // Function to display alerts
+        function showAlert(type, message) {
+            var alertHtml = '';
+
+            if (type === 'success') {
+                alertHtml = `
+                    <div class="alert alert-success alert-dismissible fade show" id="notif">
+                        <i class='bx bx-message-alt-x p-1'></i>
+                        <strong class="mr-1">` + message + `</strong>
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                            <span><i class='bx bx-x'></i></span>
+                        </button>
+                    </div>
+                `;
+            } else if (type === 'error') {
+                alertHtml = `
+                    <div class="alert alert-danger alert-dismissible fade show" id="notif">
+                        <i class='bx bx-message-alt-x p-1'></i>
+                        <strong class="mr-1">` + message + `</strong>
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                            <span><i class='bx bx-x'></i></span>
+                        </button>
+                    </div>
+                `;
+            }
+
+            // Inject the alert HTML into the alert container
+            $('#alertContainer').html(alertHtml);
+        }
 
         // document.getElementById("logout").addEventListener("click", function () {
         //     Replace with your actual API endpoint URL
