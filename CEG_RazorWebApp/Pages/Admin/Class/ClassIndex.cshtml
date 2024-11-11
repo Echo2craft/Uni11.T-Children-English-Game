@@ -95,17 +95,17 @@
                                         <label asp-for="@createClass.ClassName" class="col-md-3 col-form-label text-md-right"></label>
                                         <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-7">
                                         <span asp-validation-for="@createClass.ClassName" id="error_message"
-                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@createClass.MinStudents" class="col-md-3 col-form-label text-md-right"></label>
                                         <input asp-for="@createClass.MinStudents" value="@createClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
                                         <span asp-validation-for="@createClass.MinStudents" id="error_message"
-                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@createClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
                                         <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
                                         <span asp-validation-for="@createClass.MaxStudents" id="error_message"
-                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@createClass.TeacherName" class="col-md-3 col-form-label text-md-right">Select a Teacher</label>
                                         <div class="col-md-7">
@@ -124,20 +124,20 @@
                                             </select>
                                         </div>
                                         <span asp-validation-for="@createClass.CourseName" id="error_message"
-                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@createClass.StartDate" class="col-md-3 col-form-label text-md-right"></label>
                                         <input asp-for="@createClass.StartDate" type="datetime-local" value="@createClass.StartDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
                                         <span asp-validation-for="@createClass.StartDate" id="error_message"
-                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@createClass.EndDate" class="col-md-3 col-form-label text-md-right"></label>
                                         <input asp-for="@createClass.EndDate" type="datetime-local" value="@createClass.EndDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
                                         <span asp-validation-for="@createClass.EndDate" id="error_message"
-                                                class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                     </div>
                                     <hr>
-                                    <div class ="row form-group justify-content-center course-content-view">
+                                    <div class="row form-group justify-content-center course-content-view">
                                         <label class="col-form-label">Course's Sessions preview</label>
                                         <div id="session-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
                                             <table id="session-table"
@@ -365,7 +365,7 @@
                 deferRender: false,
                 responsive: true,
                 columns: [
-                    { 
+                    {
                         data: 'sessionId',
                         render: function (data, type, row, meta) {
                             return '<span id="schedule-session-id">' + data + '</span >';
@@ -389,7 +389,7 @@
                     {
                         data: 'endDate',
                         render: function (data, type, row, meta) {
-                            return '<span id="schedule-end-date">' + formatDate(data,false,false,true,true) + '</span >';
+                            return '<span id="schedule-end-date">' + formatDate(data, false, false, true, true) + '</span >';
                         }
                     }
                 ],
@@ -418,7 +418,7 @@
                             const endDate = new Date(selectedDate);
                             endDate.setHours(endDate.getHours() + hoursToAdd);
                             // Format and display the end date in the corresponding span
-                            const formattedEndDate = formatDate(endDate,false,false,true,true); // Format as needed
+                            const formattedEndDate = formatDate(endDate, false, false, true, true); // Format as needed
                             endDateText.text(formattedEndDate);
                         }
                     });
@@ -431,24 +431,24 @@
                 width: 'resolve',
                 theme: 'bootstrap4'
             })
-            .on('select2:close', function (e) {
-                // console.log(e);
-                var text = $('#searchableCourseDropdown').select2('data')[0].text;
-                // Filter options based on the search input
-                var results = courseList.filter(function (item) {
-                    return item.courseName && item.courseName === text;
-                });
+                .on('select2:close', function (e) {
+                    // console.log(e);
+                    var text = $('#searchableCourseDropdown').select2('data')[0].text;
+                    // Filter options based on the search input
+                    var results = courseList.filter(function (item) {
+                        return item.courseName && item.courseName === text;
+                    });
 
-                if (results.length > 0 && results[0].sessions) {
-                    sessionTable.clear().rows.add(results[0].sessions).draw();
-                    scheduleTable.clear().draw();
-                } else {
-                    console.error('Selected course or its sessions not found.');
-                    sessionTable.clear().draw();
-                    scheduleTable.clear().draw();
-                }
-            })
-            ;
+                    if (results.length > 0 && results[0].sessions) {
+                        sessionTable.clear().rows.add(results[0].sessions).draw();
+                        scheduleTable.clear().draw();
+                    } else {
+                        console.error('Selected course or its sessions not found.');
+                        sessionTable.clear().draw();
+                        scheduleTable.clear().draw();
+                    }
+                })
+                ;
 
             $('#searchableTeacherDropdown').select2({
                 placeholder: 'Select a teacher name',
@@ -538,7 +538,7 @@
                 }
             });
         });
-        function renderDefaultCourse(data){
+        function renderDefaultCourse(data) {
             // var text = $('#searchableCourseDropdown').select2('data')[0].text;
             // Filter options based on the search input
             var results = data[0]
@@ -594,28 +594,28 @@
 
             if (type === 'success') {
                 alertHtml = `
-                                <div class="alert alert-success alert-dismissible fade show" id="notif">
-                                    <i class='bx bx-message-alt-x p-1'></i>
-                                    <strong class="mr-1">` + message + `</strong>
-                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                        <span><i class='bx bx-x'></i></span>
-                                    </button>
-                                </div>`;
+                    <div class="alert alert-success alert-dismissible fade show" id="notif">
+                        <i class='bx bx-message-alt-x p-1'></i>
+                        <strong class="mr-1">` + message + `</strong>
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                            <span><i class='bx bx-x'></i></span>
+                        </button>
+                    </div>`;
             } else if (type === 'error') {
                 alertHtml = `
-                                <div class="alert alert-danger alert-dismissible fade show" id="notif">
-                                    <i class='bx bx-message-alt-x p-1'></i>
-                                    <strong class="mr-1">` + message + `</strong>
-                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                        <span><i class='bx bx-x'></i></span>
-                                    </button>
-                                </div>`;
+                    <div class="alert alert-danger alert-dismissible fade show" id="notif">
+                        <i class='bx bx-message-alt-x p-1'></i>
+                        <strong class="mr-1">` + message + `</strong>
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                            <span><i class='bx bx-x'></i></span>
+                        </button>
+                    </div>`;
             }
 
             // Inject the alert HTML into the alert container
             $('#alertContainer').html(alertHtml);
         }
-        function callApiGetClassList(){
+        function callApiGetClassList() {
             $.ajax({
                 url: apiUrl + 'Class/Admin/All', // API endpoint
                 type: 'GET',
@@ -653,30 +653,30 @@
                 }
             });
         }
-        function setClassDisplay(data){
+        function setClassDisplay(data) {
             var classList = $('#classList');
             // Reference to the <classList> element
             classList.empty(); // Clear any existing options
             var cardCreateClassHtml = `
-                <div class="col-xl-3 col-lg-6 col-sm-6 my-3 item">
-                    <div class="card1 card-child">
-                        <div class="card-body add-club">
-                            <button class="border-0" data-toggle="modal" data-target="#addClass">
-                                <span>Add Class</span>
-                                <i class='bx bx-add-to-queue'></i>
-                            </button>
+                        <div class="col-xl-3 col-lg-6 col-sm-6 my-3 item">
+                            <div class="card1 card-child">
+                                <div class="card-body add-club">
+                                    <button class="border-0" data-toggle="modal" data-target="#addClass">
+                                        <span>Add Class</span>
+                                        <i class='bx bx-add-to-queue'></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            `;
+                    `;
             // var select = $('#createClass_WeeklySchedule'); Reference to the <select> element
             // select.empty();
             // select.append(getScheduleOptions());
             classList.append(cardCreateClassHtml);
             // Loop through the data array and append each class div
             $.each(data, function (index, classObj) {
-                var formattedStartDate = formatDate(classObj.startDate,true);
-                var formattedEndDate = formatDate(classObj.endDate,true);
+                var formattedStartDate = formatDate(classObj.startDate, true);
+                var formattedEndDate = formatDate(classObj.endDate, true);
                 var statusText = '';
                 switch (classObj.status) {
                     case 'Open':
@@ -694,36 +694,36 @@
                 }
                 // Construct card HTML
                 var cardHtml = `
-                    <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
-                        <div class="card1 card-child">
-                            <div class="club-name">
-                                Class ID: ${classObj.classId}
-                                <div class="status">
-                                    ${statusText}
+                            <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                                <div class="card1 card-child">
+                                    <div class="club-name">
+                                        Class ID: ${classObj.classId}
+                                        <div class="status">
+                                            ${statusText}
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="club-title">
+                                            <ul>
+                                                <li><h6>Class name:</h6><span>${classObj.className}</span></li>
+                                                <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
+                                                <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
+                                                <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
+                                                <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
+                                                <li><h6>Minimum students amount:</h6><span>${classObj.minimumStudents}</span></li>
+                                                <li><h6>Maximum students amount:</h6><span>${classObj.maximumStudents}</span></li>
+                                                <li><h6>Current students amount:</h6><span>${classObj.studentProgress.length}</span></li>
+                                                <li><h6>Weekly scheduled sessions amount:</h6><span>${classObj.schedules.length}</span></li>
+                                                <li><h6>Current enrolls amount:</h6><span>${classObj.enrolls.length}</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mx-auto">
+                                        <a class="btn btn-primary clickable-row" href="/Admin/Class/${classObj.classId}/Info" role="button">Details</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="club-title">
-                                    <ul>
-                                        <li><h6>Class name:</h6><span>${classObj.className}</span></li>
-                                        <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
-                                        <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
-                                        <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
-                                        <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
-                                        <li><h6>Minimum students amount:</h6><span>${classObj.minimumStudents}</span></li>
-                                        <li><h6>Maximum students amount:</h6><span>${classObj.maximumStudents}</span></li>
-                                        <li><h6>Current students amount:</h6><span>${classObj.studentProgress.length}</span></li>
-                                        <li><h6>Weekly scheduled sessions amount:</h6><span>${classObj.schedules.length}</span></li>
-                                        <li><h6>Current enrolls amount:</h6><span>${classObj.enrolls.length}</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="form-group mx-auto">
-                                <a class="btn btn-primary clickable-row" href="/Admin/Class/${classObj.classId}/Info" role="button">Details</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                        `;
                 // Append the constructed HTML to the class list container
                 // <form method="get" asp-route-id="${classObj.classId}">
                 //     <button class="btn btn-primary clickable-row" type="submit">See Detail</button>
@@ -775,7 +775,7 @@
                 return `${dayOfWeek}${day}/${month}/${year}`;
             }
 
-            if(monthBeforeDate){
+            if (monthBeforeDate) {
                 // Return the formatted date and time as `day, mm/dd/yyyy hh:mm AM/PM` if `addDayOfWeek` and `includeAmPm` are true
                 return `${dayOfWeek}${month}/${day}/${year} ${hours}:${minutes} ${amPm}`.trim();
             }
