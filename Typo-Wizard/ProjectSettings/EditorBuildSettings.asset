@@ -20,7 +20,25 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: cd178d0531fbbbe4389c9b801a05b354
-  - enabled: 1
-    path: Assets/Scenes/Main.unity
+  - enabled: 0
+    path: Assets/Scenes/wordfinder/Main.unity
     guid: c9b9317e7f7f3de4cb6a1e77f6d51a9b
+  - enabled: 1
+    path: Assets/Scenes/wordfinder/FindPuzzle.unity
+    guid: 430e910fc1568f641b9a3d824bbfa8a3
+  - enabled: 1
+    path: Assets/Scenes/wordfinder/GameScene.unity
+    guid: 87ef2d481defc9e48873a39bff0fb787
+  - enabled: 1
+    path: Assets/Scenes/wordfinder/ScoreBoard.unity
+    guid: 3ac0d8a70e9c8744fbcade723c376531
+  - enabled: 1
+    path: Assets/Scenes/wordfinder/SelectCategory.unity
+    guid: caf86e551dacd694e88b2d4b3e4b04b9
+  - enabled: 1
+    path: Assets/Scenes/wordfinder/Settings.unity
+    guid: 9a35e91c7b453224c97158bb43e2e776
+  - enabled: 0
+    path: Assets/Scenes/wordfinder/TestPuzzle.unity
+    guid: 3cf31e5619e23a34da0cd72f821c8495
   m_configObjects: {}

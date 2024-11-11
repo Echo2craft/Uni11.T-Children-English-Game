@@ -35,6 +35,7 @@ public class AccountManager : MonoBehaviour
 
     [Header("UserData")]
     public UserObject _user;
+    public string userRole; // Store role as "admin" or "student"
 
     [Header("Scoreboard")]
     public static List<UserObject> _scoreboard;
@@ -47,7 +48,8 @@ public class AccountManager : MonoBehaviour
     public GameObject LoginScreen;
     public static int count = 0;
     public static string welcomeName = "";
-
+    private const string loginKey = "IsLoggedIn";
+    private const string usernameKey = "Username";
 
     private void Awake()
     {
@@ -64,109 +66,60 @@ public class AccountManager : MonoBehaviour
 
     private void Start()
     {
-        checkActive();
+        // Check if a user is already logged in and load the appropriate UI
+        if (PlayerPrefs.HasKey("IsLoggedIn") && PlayerPrefs.GetInt("IsLoggedIn") == 1)
+        {
+            userRole = PlayerPrefs.GetString("UserRole");
+            SetUIForRole();
+        }
+        else
+        {
+            checkActive();
+        }
     }
 
     private void checkActive()
     {
-        if (count > 0)
+        // Check login status from PlayerPrefs
+        if (PlayerPrefs.GetInt(loginKey, 0) == 1)
         {
+            // User is already logged in, show game UI
             if (canvasToActivate != null)
             {
-                // Log to verify the canvas reference
-                Debug.Log("Activating canvasToActivate.");
                 canvasToActivate.SetActive(true);
             }
-            else
-            {
-                Debug.LogError("CanvasToActivate is not assigned in the Inspector");
-            }
-
             if (LoginScreen != null)
             {
-                // Log to verify the LoginScreen reference
-                Debug.Log("Deactivating LoginScreen.");
                 LoginScreen.SetActive(false);
             }
-            else
+
+            var username = PlayerPrefs.GetString(usernameKey, "Player");
+            welcomeName = $"Welcome {username}";
+
+            var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
+            if (usernameTextObj != null)
             {
-                Debug.LogError("LoginScreen is not assigned in the Inspector");
-            }
-        }
-
-        count++;
-
-        if (canvasToActivate != null)
-        {
-            // Check for UsernameText
-            var textObj = canvasToActivate.transform.Find("UsernameText");
-            if (textObj == null)
-            {
-                Debug.LogWarning("UsernameText not found directly. Searching in children...");
-
-                var usernameText = canvasToActivate.GetComponentInChildren<TMPro.TMP_Text>();
+                var usernameText = usernameTextObj.GetComponent<TMP_Text>();
                 if (usernameText != null)
                 {
-                    Debug.Log("Found UsernameText using GetComponentInChildren.");
-                    if (_user != null)
-                    {
-                        welcomeName = $"Welcome {_user.Username}";
-                        usernameText.text = welcomeName;
-                    }
-                    else
-                    {
-                        usernameText.text = welcomeName;
-                        Debug.LogWarning("_user is null, using default welcome message");
-                    }
-                }
-                else
-                {
-                    Debug.LogError("UsernameText not found in canvasToActivate or its children.");
-                }
-            }
-            else
-            {
-                var tmpUsernameText = textObj.GetComponent<TMPro.TMP_Text>();
-                if (tmpUsernameText != null)
-                {
-                    if (_user != null)
-                    {
-                        welcomeName = $"Welcome {_user.Username}";
-                        tmpUsernameText.text = welcomeName;
-                    }
-                    else
-                    {
-                        tmpUsernameText.text = welcomeName;
-                        Debug.LogWarning("_user is null, using default welcome message");
-                    }
-                }
-                else
-                {
-                    var uiUsernameText = textObj.GetComponent<UnityEngine.UI.Text>();
-                    if (uiUsernameText != null)
-                    {
-                        if (_user != null)
-                        {
-                            welcomeName = $"Welcome {_user.Username}";
-                            uiUsernameText.text = welcomeName;
-                        }
-                        else
-                        {
-                            uiUsernameText.text = welcomeName;
-                            Debug.LogWarning("_user is null, using default welcome message");
-                        }
-                    }
-                    else
-                    {
-                        Debug.LogError("Neither TMP_Text nor UI Text component found on UsernameText object.");
-                    }
+                    usernameText.text = welcomeName;
                 }
             }
         }
         else
         {
-            Debug.LogError("CanvasToActivate is null");
+            // User is not logged in, show login UI
+            if (LoginScreen != null)
+            {
+                LoginScreen.SetActive(true);
+            }
+            if (canvasToActivate != null)
+            {
+                canvasToActivate.SetActive(false);
+            }
         }
+
+        count++;
     }
     public void LoginButton()
     {
@@ -211,8 +164,16 @@ public class AccountManager : MonoBehaviour
             Debug.Log("User logged in successfully");
             warningLoginText.text = "Logged In";
 
-            canvasToActivate.SetActive(true);
-            LoginScreen.SetActive(false);
+            var response = request.downloadHandler.text;
+            _user = JsonUtility.FromJson<UserObject>(response);
+            userRole = _user.Role; // Assume the role is in the response as "role"
+
+            PlayerPrefs.SetInt("IsLoggedIn", 1);
+            PlayerPrefs.SetString("UserRole", userRole);
+            PlayerPrefs.Save();
+
+            SetUIForRole();
+
 
             var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
             if (usernameTextObj != null)
@@ -238,12 +199,38 @@ public class AccountManager : MonoBehaviour
             }
 
             // Further actions like loading game data and scoreboard
-            StartCoroutine(LoadGameData());
-            StartCoroutine(LoadScoreBoard());
+            //StartCoroutine(LoadGameData());
+            //StartCoroutine(LoadScoreBoard());
             
         }
     }
+    private void SetUIForRole()
+    {
+        LoginScreen.SetActive(false);
+        canvasToActivate.SetActive(true);
 
+        var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
+        if (usernameTextObj != null)
+        {
+            var usernameText = usernameTextObj.GetComponent<TMP_Text>();
+            if (usernameText != null)
+            {
+                welcomeName = $"Welcome {_user.Username} ({userRole})";
+                usernameText.text = welcomeName;
+            }
+        }
+
+        if (userRole == "admin")
+        {
+            // Load Admin-specific UI elements or enable admin privileges
+            Debug.Log("User is an admin");
+        }
+        else if (userRole == "student")
+        {
+            // Load Student-specific UI elements
+            Debug.Log("User is a student");
+        }
+    }
     private UserObject LoadUserData(List<UserObject> scoreboard)
     {
         try
@@ -379,6 +366,9 @@ public class AccountManager : MonoBehaviour
     {
         _user = null;
         _gameData = new Dictionary<string, List<LevelObject>>();
+        PlayerPrefs.SetInt(loginKey, 0);
+        PlayerPrefs.DeleteKey(usernameKey);
+        PlayerPrefs.Save();
         Debug.Log("User logged out successfully");
     }
 }
