@@ -39,7 +39,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<TransactionViewModel>> GetTransactionList()
         {
-            return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetTransactionList());
+            return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetListNoTracking());
         }
 
         public async Task<TransactionViewModel?> GetTransactionById(int id)

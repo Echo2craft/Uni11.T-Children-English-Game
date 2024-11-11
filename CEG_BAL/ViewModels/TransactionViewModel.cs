@@ -25,6 +25,6 @@ namespace CEG_BAL.ViewModels
 
         public virtual ICollection<EnrollViewModel> Enrolls { get; set; } = new List<EnrollViewModel>();
 
-        public virtual ParentViewModel Parents { get; set; } = null!;
+        public virtual ParentViewModel Parent { get; set; } = null!;
     }
 }

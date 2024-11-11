@@ -188,10 +188,10 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label asp-for="@updateSession.Number" class="col-sm-4 col-form-label"></label>
+                                <label asp-for="@updateSession.SessionNumber" class="col-sm-4 col-form-label">Session Number</label>
                                 <div class="col-sm-8">
-                                    <input asp-for="@updateSession.Number" value="@updateSession.Number" type="number" min="1" class="form-control" required>
-                                    <span asp-validation-for="@updateSession.Number" id="error_message"
+                                    <input asp-for="@updateSession.SessionNumber" value="@updateSession.SessionNumber" type="number" min="1" class="form-control" required>
+                                    <span asp-validation-for="@updateSession.SessionNumber" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                 </div>
                             </div>
@@ -243,8 +243,6 @@
                                     <select class="form-control col-md-7 custom-select" asp-for="@createHomework.Type"></select>
                                     <span asp-validation-for="@createHomework.Type" id="error_message"
                                             class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <input asp-for="@createHomework.SessionTitle" type="text" required hidden readonly>
                                 </div>
                             </div>
                         </div>
@@ -288,7 +286,7 @@
                         description: $('#createHomework_Description').val(),
                         hours: $('#createHomework_Hours').val(),
                         type: $('#createHomework_Type').val(),
-                        sessionTitle: $('#createHomework_SessionTitle').val()
+                        sessionId: $('#session-id').text()
                     };
                 callApiPostCreateHomework(formData);
                 $('#AddHomeworkForm').trigger("reset");
@@ -355,15 +353,28 @@
                     // Handle success (display a success message or redirect, etc.)
                     if (response.status) {
                         showAlert('success', "Session update successfully");
+                        callApiGetSessionDetail();
                     } else {
                         showAlert('error', response.errorMessage);
                     }
-                    callApiGetSessionDetail();
                 },
                 error: function (xhr, status, error) {
-                    // Handle error (display the validation message, etc.)
-                    showAlert('error',"Error in api call:" + error);
-                    callApiGetSessionDetail();
+                    // Extract the custom error message if it exists
+                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (xhr.errors && typeof xhr.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in xhr.errors) {
+                            if (xhr.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = xhr.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
         }
@@ -377,15 +388,28 @@
                     // Handle success (display a success message or redirect, etc.)
                     if (response.status) {
                         showAlert('success', "Session create successfully");
+                        callApiGetSessionDetail();
                     } else {
                         showAlert('error', response.errorMessage);
                     }
-                    callApiGetSessionDetail();
                 },
                 error: function (xhr, status, error) {
-                    // Handle error (display the validation message, etc.)
-                    showAlert('error',"Error in api call:" + error);
-                    callApiGetSessionDetail();
+                    // Extract the custom error message if it exists
+                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (xhr.errors && typeof xhr.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in xhr.errors) {
+                            if (xhr.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = xhr.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
         }
@@ -414,8 +438,22 @@
                     }
                 },
                 error: function (xhr, status, error) {
-                    // Handle error (display the validation message, etc.)
-                    showAlert('error',"Error in api call:" + error);
+                    // Extract the custom error message if it exists
+                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (xhr.errors && typeof xhr.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in xhr.errors) {
+                            if (xhr.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = xhr.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
         }
@@ -448,10 +486,23 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    alert("Error in api call:" + error);
-                    console.error("Error in api call:", error);
-                    //showAlert('success', 'Data fetched successfully.');
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (xhr.errors && typeof xhr.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in xhr.errors) {
+                            if (xhr.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = xhr.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
         }
@@ -516,28 +567,6 @@
                     </div>
                 </div>
             ` : '';
-            // var statusText = '';
-            // switch (status) {
-            //     case 'Available':
-            //         statusText = `<span class="outcome" style="float: left;">${status}</span>`
-            //         break;
-            //     case 'Draft':
-            //     case 'Postponed':
-            //         statusText = `<span class="approval" style="float: left;">${status}</span>`
-            //         break;
-            //     case 'EndofService':
-            //     case 'Cancelled':
-            //         statusText = `<span class="destroy" style="float: left;">${status}</span>`
-            //         break;
-            // }
-            // <div class="row mb-sm-2">
-            //     <div class="col-md-5 text-md-right">
-            //         <label class="col-form-label">Status:</label>
-            //     </div>
-            //     <div class="col-sm-7">
-            //         ` + statusText + `
-            //     </div>
-            // </div>
             return `
                 <div class="card-header">
                     <h5>Homework <label class="truncate">${homeworkInfo.title}</label> Details</h5>
@@ -609,32 +638,6 @@
 
             return html;
         }
-        // function getStatusOptions(selectedStatus) {
-        //     var options = ['Draft', 'Available','Postponed','Cancelled','EndofService']; Example statuses
-        //     var html = '';
-        //     switch (selectedStatus) {
-        //         case 'Available':
-        //             options = ['Available','Postponed','Cancelled','EndofService']
-        //             break;
-        //         case 'Draft':
-        //             options = ['Draft', 'Available']
-        //             break;
-        //         case 'Postponed':
-        //             options = ['Available','Postponed','Cancelled','EndofService']
-        //             break;
-        //         case 'EndofService':
-        //             options = ['Available','EndofService']
-        //             break;
-        //         case 'Cancelled':
-        //             options = ['Available','Cancelled','EndofService']
-        //             break;
-        //     }
-        //     options.forEach(function (status) {
-        //         html += `<option value="${status}" ${selectedStatus === status ? 'selected' : ''} >${status}</option>`;
-        //     });
-
-        //     return html;
-        // }
         function setCourseDisplay(data) {
             var titleStatusHtml = data.courseStatus === 'Draft' || data.courseStatus === 'Postponed' ? `
                             <div class="edit-info" id="session-session-status">
@@ -660,7 +663,6 @@
             //         statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
             //         break;
             // }
-            $('#createHomework_SessionTitle').empty();
             $('#createHomework_Type').empty();
 
             $('#session-title-status').find('#session-session-status').remove();
@@ -672,13 +674,12 @@
             $('#session-allow-add-homework').append(homeworkAddHtml);
             $('#session-session-title').text(data.number + ' ' + data.title);
 
-            $('#session-number').text(data.number);
+            $('#session-number').text(data.sessionNumber ? data.sessionNumber : '0');
             $('#session-description').text(data.description);
             $('#session-title').text(data.title);
             $('#session-hours').text(data.hours);
             $('#session-homeworks-amount').text(data.homeworks.length + ' Homework(s)');
 
-            $('#createHomework_SessionTitle').val(data.title);
             $('#createHomework_Type').append(getTypeOptions());
 
             $('input[id="updateSession_Title"]').val(data.title);

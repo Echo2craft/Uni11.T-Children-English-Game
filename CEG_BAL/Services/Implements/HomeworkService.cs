@@ -41,7 +41,8 @@ namespace CEG_BAL.Services.Implements
                 hw.Description = newHw.Description;
                 hw.Hours = newHw.Hours;
                 hw.Type = newHw.Type;
-                hw.SessionId = _unitOfWork.SessionRepositories.GetIdByTitle(newHw.SessionTitle).Result;
+                // hw.SessionId = _unitOfWork.SessionRepositories.GetIdByTitle(newHw.SessionTitle).Result;
+                hw.SessionId = newHw.SessionId.Value;
             }
             _unitOfWork.HomeworkRepositories.Create(hw);
             _unitOfWork.Save();

@@ -8,7 +8,7 @@ namespace CEG_RazorWebApp.Models.Session.Update
         public UpdateSessionVM()
         {
             var lib = new CEG_RAZOR_Library();
-            Number = 1;
+            SessionNumber = 1;
             Hours = Constants.SESSION_HOURS;
             Status = Constants.SESSION_STATUS_DRAFT;
             DefaultSessionStatusSelectList = lib.GetSessionStatusSelectableList(Status);
@@ -16,7 +16,7 @@ namespace CEG_RazorWebApp.Models.Session.Update
         public int? SessionId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public int? Number { get; set; }
+        public int? SessionNumber { get; set; }
         public int? Hours { get; set; }
         public string? Status { get; set; }
         public List<SelectListItem> DefaultSessionStatusSelectList { get; set; }

@@ -102,8 +102,8 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var resultSessionTitle = await _sessionService.IsSessionExistByTitle(newHw.SessionTitle);
-                if (!resultSessionTitle)
+                var resultSessionTitle = await _sessionService.GetSessionById(newHw.SessionId.Value);
+                if (resultSessionTitle == null)
                 {
                     return BadRequest(new
                     {

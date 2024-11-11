@@ -365,12 +365,20 @@
                             showAlert('error', "Error:" + response.errorMessage);
                         }
                     },
-                    error: function (error) {
-                        // Attempt to parse the response text if it is available
-                        var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
+                    error: function (xhr, status, error) {
                         // Extract the custom error message if it exists
-                        var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                        // Check if errorResponse.errors exists and is an object
+                        if (xhr.errors && typeof xhr.errors === 'object') {
+                            // Loop through each field in the errors object and append to the errorMessage
+                            for (var field in xhr.errors) {
+                                if (xhr.errors.hasOwnProperty(field)) {
+                                    // Add each error message for the field, joining multiple messages if they exist
+                                    var fieldErrors = xhr.errors[field].join(", ");
+                                    errorMessage += `\n${field}: ${fieldErrors}`;
+                                }
+                            }
+                        }
 
                         // Display the error message using your custom showAlert function
                         showAlert('error', "Error:" + errorMessage);
@@ -394,11 +402,19 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        // Attempt to parse the response text if it is available
-                        var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
                         // Extract the custom error message if it exists
-                        var errorMessage = errorResponse.errorMessage || "An unknown error occurred.";
+                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                        // Check if errorResponse.errors exists and is an object
+                        if (xhr.errors && typeof xhr.errors === 'object') {
+                            // Loop through each field in the errors object and append to the errorMessage
+                            for (var field in xhr.errors) {
+                                if (xhr.errors.hasOwnProperty(field)) {
+                                    // Add each error message for the field, joining multiple messages if they exist
+                                    var fieldErrors = xhr.errors[field].join(", ");
+                                    errorMessage += `\n${field}: ${fieldErrors}`;
+                                }
+                            }
+                        }
 
                         // Display the error message using your custom showAlert function
                         showAlert('error', "Error:" + errorMessage);
