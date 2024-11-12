@@ -431,24 +431,24 @@
                 width: 'resolve',
                 theme: 'bootstrap4'
             })
-                .on('select2:close', function (e) {
-                    // console.log(e);
-                    var text = $('#searchableCourseDropdown').select2('data')[0].text;
-                    // Filter options based on the search input
-                    var results = courseList.filter(function (item) {
-                        return item.courseName && item.courseName === text;
-                    });
+            .on('select2:close', function (e) {
+                // console.log(e);
+                var text = $('#searchableCourseDropdown').select2('data')[0].text;
+                // Filter options based on the search input
+                var results = courseList.filter(function (item) {
+                    return item.courseName && item.courseName === text;
+                });
 
-                    if (results.length > 0 && results[0].sessions) {
-                        sessionTable.clear().rows.add(results[0].sessions).draw();
-                        scheduleTable.clear().draw();
-                    } else {
-                        console.error('Selected course or its sessions not found.');
-                        sessionTable.clear().draw();
-                        scheduleTable.clear().draw();
-                    }
-                })
-                ;
+                if (results.length > 0 && results[0].sessions) {
+                    sessionTable.clear().rows.add(results[0].sessions).draw();
+                    scheduleTable.clear().draw();
+                } else {
+                    console.error('Selected course or its sessions not found.');
+                    sessionTable.clear().draw();
+                    scheduleTable.clear().draw();
+                }
+            })
+            ;
 
             $('#searchableTeacherDropdown').select2({
                 placeholder: 'Select a teacher name',

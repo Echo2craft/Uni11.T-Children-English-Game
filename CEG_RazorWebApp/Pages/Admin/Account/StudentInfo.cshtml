@@ -95,6 +95,15 @@
                                     </div>
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Age:</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span id="student-account-age">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
                                             <label class="col-form-label">Date of Birth:</label>
                                         </div>
                                         <div class="col-md-7">
@@ -432,7 +441,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Edit Student Account Infomations</h4>
                 </div>
-                <form method="post" asp-page-handler="Teacher" id="UpdateStudentForm">
+                <form method="post" id="updateStudentForm">
                     <div class="modal-body">
                         <div class="row p-4">
                             <div class="col-12">
@@ -452,13 +461,13 @@
                                     <span asp-validation-for="@updateStudent.Description" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                    <label asp-for="@updateStudent.ParentFullName" class="col-md-4 col-form-label text-md-right">Parent Fullname</label>
+                                    <label asp-for="@updateStudent.ParentFullname" class="col-md-4 col-form-label text-md-right">Parent Fullname</label>
                                     <div class="col-md-8 p-0">
                                         <!-- search bar with dropdown list-->
                                         <select id="select2-parent-fullname-dropdown" class="form-control custom-select" style="width: 100%;">
                                         </select>
                                     </div>
-                                    <span asp-validation-for="@updateStudent.ParentFullName" id="error_message"
+                                    <span asp-validation-for="@updateStudent.ParentFullname" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                     <label asp-for="@updateStudent.Birthdate" class="col-md-4 col-form-label text-md-right"></label>
@@ -662,6 +671,39 @@
             if (data.enrolls && data.enrolls.length > 0) {
                 enrollTable.clear().rows.add(data.enrolls).draw();
             }
+            // Call API to get the list of teacher names
+            $.ajax({
+                url: apiUrl + 'Parent/All/Fullname', // API endpoint
+                type: 'GET',
+                success: function (response) {
+                    // Check if the status is true
+                    if (response.status) {
+                        addParentOptions(response.data, data.parent.account.fullname);
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
             // Student info
             $('#account-status').empty();
 
@@ -669,6 +711,7 @@
             $('#account-id').text(data.account.accountId);
             $('#account-username').text(data.account.username);
             $('#account-fullname').text(data.account.fullname);
+            $('#student-account-age').text(data.age);
             $('#student-account-birthdate').text(formatDate(data.birthdate, { ignoreHour : true }));
             $('#student-account-description').text(data.description);
             $('#student-account-highscore').text(data.highscore);
@@ -703,6 +746,62 @@
             var enrollId = $(this).data('enrollid');
             var newStatus = $(this).val();
             callApiUpdateEnrollStatus(enrollId, newStatus);
+        });
+        $("#updateStudentForm").submit(function (event) {
+            event.preventDefault(); // Prevent the form from submitting
+
+
+            // Gather form data
+            var studentData = {
+                Description: $("#updateStudent_Description").val(),
+                Birthdate: $("#updateStudent_Birthdate").val(),
+                ParentFullname: $('#select2-parent-fullname-dropdown').select2('data')[0].text,
+                Account: {
+                    Fullname: $("#updateStudent_Account_Fullname").val(),
+                    Gender: $("#updateStudent_Account_Gender").val(),
+                }
+            };
+            console.log(studentData);
+            // Make the AJAX POST request
+            $.ajax({
+                url: apiUrl + 'Student/Account/@accountId/Update',
+                headers: {
+                    'Authorization': 'Bearer ' + token// Include the JWT token
+                },
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(studentData),
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+                    // Check if the status is true
+                    if (response.status) {
+                        showAlert('error', "Error: \n" + errorMessage);
+                        callApiGetStudentDetail();
+                    } else {
+                        console.error("API returned false status. Message:", response.ErrorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
         });
         function callApiUpdateEnrollStatus(enrollId, newStatus) {
             $.ajax({
@@ -762,6 +861,16 @@
             });
 
             return html;
+        }
+        function addParentOptions(data, parentFullname) {
+            data.forEach(item => {
+                // Add each item as an option
+
+                let newOption = parentFullname == item ? new Option(item, item, true, true) : new Option(item, item, false, false);
+                $('#select2-parent-fullname-dropdown').append(newOption);
+            });
+            // Refresh the Select2 dropdown to show new options
+            $('#select2-parent-fullname-dropdown').trigger('change'); // Ensure Select2 is updated
         }
         function getStatusDisplay(currentStatus){
             var html = '';
