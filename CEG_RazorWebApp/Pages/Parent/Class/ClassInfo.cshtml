@@ -167,5 +167,192 @@
             </div>
         </div>
     </div>
+    <script>
+        var token = sessionStorage.getItem('token');
+        var apiUrl = sessionStorage.getItem('apiUrl');
+        $(document).ready(function () {
+            callApiGetClassDetail();
+        });
+        // Function to display alerts
+        function showAlert(type, message) {
+            var alertHtml = '';
+
+            if (type === 'success') {
+                alertHtml = `
+                                        <div class="alert alert-success alert-dismissible fade show" id="notif">
+                                            <i class='bx bx-message-alt-x p-1'></i>
+                                            <strong class="mr-1">` + message + `</strong>
+                                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                                <span><i class='bx bx-x'></i></span>
+                                            </button>
+                                        </div>
+                                    `;
+            } else if (type === 'error') {
+                alertHtml = `
+                                        <div class="alert alert-danger alert-dismissible fade show" id="notif">
+                                            <i class='bx bx-message-alt-x p-1'></i>
+                                            <strong class="mr-1">` + message + `</strong>
+                                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                                <span><i class='bx bx-x'></i></span>
+                                            </button>
+                                        </div>
+                                    `;
+            }
+
+            // Inject the alert HTML into the alert container
+            $('#alertContainer').html(alertHtml);
+        }
+        function callApiGetClassDetail() {
+            $.ajax({
+                url: apiUrl + 'Class/Admin/@Model.ClassID', // API endpoint
+                type: 'GET',
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+                    // Check if the status is true
+                    if (response.status) {
+                        // console.log(response.data);
+                        setClassDisplay(response.data);
+                        // Check if homeworkAnswers is empty
+                        if (response.data.enrolls && response.data.enrolls.length > 0) {
+                            table.clear().rows.add(response.data.enrolls).draw();
+                        }
+                        if (response.data.schedules && response.data.schedules.length > 0) {
+                            // Clear any existing answers
+                            // $('#schedule_list').empty();
+                            // console.log(response.data.schedules);
+                            scheduleTable.clear().rows.add(response.data.schedules).draw();
+                            // Loop through each answer and generate the HTML
+                            // response.data.homeworkAnswers.forEach(function (answer) {
+                            //     let answerHtml = generateAnswerHtml(answer,response.data.courseStatus); Assuming both answerInfo and updateAnswer are the same structure
+                            //     $('#schedule_list').append(answerHtml);
+                            // });
+
+                        }
+                        sessionTable.clear().rows.add(response.data.course.sessions).draw();
+                        // console.log(response.data);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (xhr.errors && typeof xhr.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in xhr.errors) {
+                            if (xhr.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = xhr.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+        }
+        function setClassDisplay(data) {
+            var titleStatusHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
+                                    <div class="edit-info" id="class-class-status">
+                                        <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeClassStatus"></i>
+                                        <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editClass"></i>
+                                    </div>
+                                    ` : '';
+            // classStatus = data.status;
+            var filteredEnrollList = data.enrolls.filter(function (enroll) {
+                return enroll.status === 'Enrolled';
+            });
+            // Call API to get the list of teacher names
+            $.ajax({
+                url: apiUrl + 'Teacher/All/Fullname', // API endpoint
+                type: 'GET',
+                success: function (response) {
+                    $('#searchableTeacherDropdown').empty()
+                    // Check if the status is true
+                    if (response.status) {
+                        addTeacherOptions(response.data, data.teacher.account.fullname);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (xhr.errors && typeof xhr.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in xhr.errors) {
+                            if (xhr.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = xhr.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+            var statusText = '';
+            switch (data.status) {
+                case 'Open':
+                case 'Ongoing':
+                    statusText = `<span class="outcome" style="float: left;">${data.status}</span>`
+                    break;
+                case 'Draft':
+                case 'Postponed':
+                    statusText = `<span class="approval" style="float: left;">${data.status}</span>`
+                    break;
+                case 'Ended':
+                case 'Cancelled':
+                    statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
+                    break;
+            }
+            if (data.status != 'Draft' && data.status != 'Postponed') {
+                // scheduleTable.column(6).visible(false, false);
+                let dadiv = $('div.dt-modal-toggle').parent();
+                dadiv.find('div.dt-modal-toggle').remove();
+            }
+            // var answerAddHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
+            //     <div class="edit-info" id="question-add-answer">
+            //         <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createAnswer"></i>
+            //     </div>
+            //     ` : '';
+            $('#class-title-status').find('#class-class-status').remove();
+            $('#class-status').empty();
+            $('select[id="updateClassStatus_Status"]').empty();
+            // $('#class-allow-add-').find('#class-add-answer').remove();
+            $('#class-status').append(statusText);
+            $('#class-id').text(data.classId);
+            $('#class-class-title').text(data.className);
+            $('#class-name').text(data.className);
+            $('#class-teacher').text(data.teacher.account.fullname);
+            //$('#class-teacher').attr('href', `/Admin/Teacher/${data.teacher.accountId}/Info`);
+            $('#class-course').text(data.course.courseName);
+            //$('#class-course').attr('href', `/Admin/Course/${data.course.courseId}/Info`);
+            $('#class-start-date').text(formatDate(data.startDate));
+            $('#class-end-date').text(formatDate(data.endDate));
+            $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
+            $('#class-minimum-students-amount').text(data.minimumStudents);
+            $('#class-maximum-students-amount').text(data.maximumStudents);
+            $('#class-title-status').append(titleStatusHtml);
+            // $('#question-allow-add-answer').append(answerAddHtml);
+            $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
+
+            // $('#updateQuestion_Question').text(data.question);
+            // $('#createAnswer_Type').append(getTypeOptions());
+            $('input[id="updateClass_ClassName"]').val(data.className);
+            $('input[id="updateClass_MinStudents"]').val(data.minimumStudents);
+            $('input[id="updateClass_MaxStudents"]').val(data.maximumStudents);
+            $('input[id="updateClass_StartDate"]').val(data.startDate);
+            $('input[id="updateClass_EndDate"]').val(data.endDate);
+
+            $('select[id="updateClassStatus_Status"]').append(getStatusOptions(data.status));
+        }
+    </script>
 </body>
 </html>

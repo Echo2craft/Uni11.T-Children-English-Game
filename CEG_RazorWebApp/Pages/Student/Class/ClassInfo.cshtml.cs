@@ -1,12 +1,19 @@
+using CEG_RazorWebApp.Libraries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 
 namespace CEG_RazorWebApp.Pages.Student.Class
 {
     public class ClassInfoModel : PageModel
     {
-        public void OnGet()
+        private readonly CEG_RAZOR_Library methcall = new();
+
+        public int? ClassID;
+        public void OnGet(
+            [FromRoute][Required] int classId)
         {
+            ClassID = classId;
         }
     }
 }
