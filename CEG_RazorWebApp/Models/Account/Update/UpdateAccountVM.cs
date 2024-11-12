@@ -1,20 +1,10 @@
-﻿using CEG_RazorWebApp.Libraries;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
-namespace CEG_RazorWebApp.Models.Account.Create
+namespace CEG_RazorWebApp.Models.Account.Update
 {
-    public class CreateAccountVM
+    public class UpdateAccountVM
     {
-        public CreateAccountVM()
-        {
-            CEG_RAZOR_Library lib = new CEG_RAZOR_Library();
-            DefaultAccountGenderSelectList = lib.GetGenderSelectableList(Constants.GENDER_TITLE);
-            Status = Constants.ACCOUNT_STATUS_ACTIVE;
-            // DefaultAccountStatusSelectList = lib.GetAccountStatusSelectableList(Status);
-            CreatedDate = DateTime.Now;
-        }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Account Username is required")]
         [StringLength(20, ErrorMessage = "Username must have more than or equal 6 characters and less than or equal 20 characters", MinimumLength = 6)]
         [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Username is invalid")]
@@ -34,14 +24,9 @@ namespace CEG_RazorWebApp.Models.Account.Create
         [StringLength(50, ErrorMessage = "Full Name must have more than or equal 6 characters and less than or equal 50 characters", MinimumLength = 6)]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Fullname is invalid")]
         public string? Fullname { get; set; }
-        public DateTime CreatedDate { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please select a gender")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Gender is invalid")]
         public string? Gender { get; set; }
-        public List<SelectListItem> DefaultAccountGenderSelectList { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please select a status")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Status is invalid")]
-        public string? Status { get; set; }
-        // public List<SelectListItem> DefaultAccountStatusSelectList { get; set; }
     }
 }

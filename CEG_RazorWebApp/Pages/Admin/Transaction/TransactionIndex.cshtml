@@ -188,13 +188,13 @@
                     {
                         data: 'transactionDate',
                         render: function (data, type, row, meta) {
-                            return '<span>' + formatDate(data, false, true, true, false) + '</span >';
+                            return '<span>' + formatDate(data, { addDayOfWeek: true, includeAmPm: true }) + '</span >';
                         }
                     },
                     {
                         data: 'confirmDate',
                         render: function (data, type, row, meta) {
-                            return '<span>' + formatDate(data, false, true, true, false) + '</span >';
+                            return '<span>' + formatDate(data, { addDayOfWeek: true, includeAmPm: true }) + '</span >';
                         }
                     },
                     { data: 'transactionStatus' }

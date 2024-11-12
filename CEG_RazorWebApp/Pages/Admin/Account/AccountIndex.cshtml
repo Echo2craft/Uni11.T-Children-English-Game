@@ -448,7 +448,7 @@
                                     </td>
                                     <td>
                                         <input type="hidden" name="listRequest[${index}].CreatedDate" value="${account.createdDate}" class="form-control" />
-                                        ${formatDate(account.createdDate)}
+                                        ${formatDate(account.createdDate, { includeAmPm : true })}
                                     </td>
                                     <td>
                                         <input type="hidden" name="listRequest[${index}].Role" value="${account.role.roleName}" class="form-control" />

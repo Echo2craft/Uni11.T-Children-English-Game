@@ -46,6 +46,7 @@ namespace CEG_BAL.Services.Implements
                 acc.Description = newStu.Description;
                 //acc.TotalPoint = newStu.TotalPoints;
                 acc.Birthdate = newStu.Birthdate;
+                acc.Age = CalculateAge(acc.Birthdate.Value);
                 acc.ParentId = _unitOfWork.ParentRepositories.GetIdByUsername(newStu.ParentUsername).Result;
             }
             _unitOfWork.StudentRepositories.Create(acc);
@@ -97,6 +98,19 @@ namespace CEG_BAL.Services.Implements
             var stu = _mapper.Map<Student>(student);
              _unitOfWork.StudentRepositories.Update(stu); 
             _unitOfWork.Save();
+        }
+        private int CalculateAge(DateTime birthdate)
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - birthdate.Year;
+
+            // Check if the birthday has not occurred yet this year
+            if (birthdate.Date > today.AddYears(-age))
+            {
+                age--;
+            }
+
+            return age;
         }
     }
 }

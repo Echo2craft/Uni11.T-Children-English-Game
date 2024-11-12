@@ -91,24 +91,24 @@
                         <div class="row p-4">
                             <div class="col-12">
                                 <div class="row form-group">
-                                    <div class="row form-group justify-content-center">
-                                        <label asp-for="@createClass.ClassName" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-7">
+                                    <div class="row form-group">
+                                        <label asp-for="@createClass.ClassName" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-8">
                                         <span asp-validation-for="@createClass.ClassName" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.MinStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.MinStudents" value="@createClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <label asp-for="@createClass.MinStudents" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.MinStudents" value="@createClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-8">
                                         <span asp-validation-for="@createClass.MinStudents" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <label asp-for="@createClass.MaxStudents" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-8">
                                         <span asp-validation-for="@createClass.MaxStudents" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.TeacherName" class="col-md-3 col-form-label text-md-right">Select a Teacher</label>
-                                        <div class="col-md-7">
+                                        <label asp-for="@createClass.TeacherName" class="col-md-4 col-form-label text-md-right">Select a Teacher</label>
+                                        <div class="col-md-8 p-0">
                                             <!-- search bar with dropdown list-->
                                             <select id="searchableTeacherDropdown" class="form-control custom-select" style="width: 100%;">
                                             </select>
@@ -117,8 +117,8 @@
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
 
-                                        <label asp-for="@createClass.CourseName" class="col-md-3 col-form-label text-md-right">Select a available Course</label>
-                                        <div class="col-md-7">
+                                        <label asp-for="@createClass.CourseName" class="col-md-4 col-form-label text-md-right">Select a available Course</label>
+                                        <div class="col-md-8 p-0">
                                             <!-- search bar with dropdown list-->
                                             <select id="searchableCourseDropdown" class="form-control custom-select" style="width: 100%;">
                                             </select>
@@ -126,13 +126,13 @@
                                         <span asp-validation-for="@createClass.CourseName" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.StartDate" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.StartDate" type="datetime-local" value="@createClass.StartDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
+                                        <label asp-for="@createClass.StartDate" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.StartDate" type="datetime-local" value="@createClass.StartDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-8" required>
                                         <span asp-validation-for="@createClass.StartDate" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.EndDate" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.EndDate" type="datetime-local" value="@createClass.EndDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
+                                        <label asp-for="@createClass.EndDate" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.EndDate" type="datetime-local" value="@createClass.EndDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-8" required>
                                         <span asp-validation-for="@createClass.EndDate" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                     </div>
@@ -389,7 +389,7 @@
                     {
                         data: 'endDate',
                         render: function (data, type, row, meta) {
-                            return '<span id="schedule-end-date">' + formatDate(data, false, false, true, true) + '</span >';
+                            return '<span id="schedule-end-date">' + formatDate(data, { includeAmPm : true, monthBeforeDate : true }) + '</span >';
                         }
                     }
                 ],
@@ -681,8 +681,8 @@
             classList.append(cardCreateClassHtml);
             // Loop through the data array and append each class div
             $.each(data, function (index, classObj) {
-                var formattedStartDate = formatDate(classObj.startDate, true);
-                var formattedEndDate = formatDate(classObj.endDate, true);
+                var formattedStartDate = formatDate(classObj.startDate, { ignoreHour : true });
+                var formattedEndDate = formatDate(classObj.endDate, { ignoreHour: true });
                 var statusText = '';
                 switch (classObj.status) {
                     case 'Open':
