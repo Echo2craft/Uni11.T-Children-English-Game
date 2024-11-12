@@ -678,6 +678,7 @@
                 success: function (response) {
                     // Check if the status is true
                     if (response.status) {
+
                         addParentOptions(response.data, data.parent.account.fullname);
                     } else {
                         showAlert('error', "Error: \n" + response.errorMessage);
@@ -775,10 +776,10 @@
                     // Log the entire response to the console for debugging
                     // Check if the status is true
                     if (response.status) {
-                        showAlert('error', "Error: \n" + errorMessage);
                         callApiGetStudentDetail();
+                        showAlert('success', 'Student infomation updated');
                     } else {
-                        console.error("API returned false status. Message:", response.ErrorMessage);
+                        showAlert('error', "Error: \n" + response.errorMessage);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -863,6 +864,7 @@
             return html;
         }
         function addParentOptions(data, parentFullname) {
+            $('#select2-parent-fullname-dropdown').empty();
             data.forEach(item => {
                 // Add each item as an option
 

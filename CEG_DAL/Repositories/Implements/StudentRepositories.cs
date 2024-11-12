@@ -121,5 +121,13 @@ namespace CEG_DAL.Repositories.Implements
                 .Select(e => e.Student)
                 .ToListAsync();
         }
+
+        public async Task<int?> GetIdByAccountIdNoTracking(int id)
+        {
+            return await _dbContext.Students
+                .Where(stu => stu.AccountId == id)
+                .Select(e => e.StudentId)
+                .FirstOrDefaultAsync();
+        }
     }
 }

@@ -99,6 +99,8 @@ namespace CEG_BAL.Services.Implements
             var stu = _mapper.Map<Student>(student);
             if(studentNewInfo != null)
             {
+                stu.StudentId = _unitOfWork.StudentRepositories.GetIdByAccountIdNoTracking(stu.Account.AccountId).Result.Value;
+                stu.AccountId = stu.Account.AccountId;
                 stu.Account.Fullname = studentNewInfo.Account.Fullname;
                 stu.Account.Gender = studentNewInfo.Account.Gender;
                 stu.Birthdate = studentNewInfo.Birthdate;
