@@ -9,17 +9,6 @@ namespace CEG_RazorWebApp.Models.Account.Update
         [StringLength(20, ErrorMessage = "Username must have more than or equal 6 characters and less than or equal 20 characters", MinimumLength = 6)]
         [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Username is invalid")]
         public string? Username { get; set; }*/
-        /*[PasswordPropertyText]
-        [DataType(DataType.Password)]
-        [StringLength(maximumLength: int.MaxValue, ErrorMessage = "Password must have more than or equal 8 characters", MinimumLength = 8)]
-        [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Password is invalid")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required")]
-        public string? Password { get; set; }
-        [PasswordPropertyText]
-        [Compare(otherProperty: "Password", ErrorMessage = "Password and Confirmation Password must match.")]
-        [DataType(DataType.Password)]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Confirm Password is required")]
-        public string? ConfirmPassword { get; set; }*/
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Full Name is required")]
         [StringLength(50, ErrorMessage = "Full Name must have more than or equal 6 characters and less than or equal 50 characters", MinimumLength = 6)]

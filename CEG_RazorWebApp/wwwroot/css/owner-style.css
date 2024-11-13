@@ -372,10 +372,10 @@ html body {
     pointer-events: none;
 }
 
-.slide-menu > li:nth-child(3) a::before,
+/*.slide-menu > li:nth-child(3) a::before,
 .slide-menu > li:nth-child(3).active a::before {
     display: none;
-}
+}*/
 
 .sub-menu li:hover a::after,
 .slide-menu > li:hover a::after,
@@ -392,10 +392,10 @@ html body {
     pointer-events: none;
 }
 
-.slide-menu > li:nth-child(3) a::after,
+/*.slide-menu > li:nth-child(3) a::after,
 .slide-menu > li:nth-child(3).active a::after {
     display: none;
-}
+}*/
 
 .navigation .sub-menu {
     position: static;
