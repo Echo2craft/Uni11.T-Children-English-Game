@@ -389,7 +389,7 @@
         }
         function callApiUpdateAccountStatus(accountId,newStatus){
             $.ajax({
-                url: apiUrl + `Account/${accountId}/Status`, // API endpoint for updating status
+                url: apiUrl + `Account/${accountId}/Update/Status`, // API endpoint for updating status
                 type: 'PUT', // HTTP method PUT for updates
                 headers: {
                     'Authorization': 'Bearer ' + token, // Token for authentication
@@ -468,7 +468,23 @@
         function getStatusOptions(selectedStatus) {
             var options = ['Inactive', 'Active', 'Expired', 'Denied', 'Suspended']; // Example statuses
             var html = '';
-
+            switch (selectedStatus) {
+                case 'Inactive':
+                    options = ['Inactive', 'Active', 'Suspended']
+                    break;
+                case 'Active':
+                    options = ['Active', 'Suspended']
+                    break;
+                case 'Expired':
+                    options = ['Expired', 'Active', 'Suspended']
+                    break;
+                case 'Denied':
+                    options = ['Denied']
+                    break;
+                case 'Suspended':
+                    options = ['Suspended']
+                    break;
+            }
             options.forEach(function (status) {
                 html += `<option value="${status}" ${selectedStatus === status ? 'selected' : ''}>${status}</option>`;
             });

@@ -185,6 +185,8 @@ namespace CEG_RazorWebApp.Libraries
         public const int COURSE_TOTAL_HOURS = 1;
         public const int HOMEWORK_HOURS = 1;
         public const int SESSION_HOURS = 1;
+        public const int TRANSACTION_MINIMUM_AMOUNT = 5000;
+        public const int TRANSACTION_CONFIRM_DATE_DIFF = 0;
 
         /* public readonly static string BIRD_STATUS_ACTIVE = "Active";
          public readonly static string BIRD_STATUS_INJURED = "Injured";
