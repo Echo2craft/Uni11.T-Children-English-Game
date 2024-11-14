@@ -27,6 +27,12 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Parents.ToListAsync();
         }
+        public async Task<List<string>> GetParentNameList()
+        {
+            return await _dbContext.Parents
+                .Select(p => p.Account.Fullname)
+                .ToListAsync();
+        }
 
         public async Task<Parent?> GetByEmail(string email)
         {
@@ -37,6 +43,13 @@ namespace CEG_DAL.Repositories.Implements
         {
             var result = await (from p in _dbContext.Parents where p.Account.Username == username select p).FirstOrDefaultAsync();
             if (result != null)  return result.ParentId;
+            return 0;
+        }
+
+        public async Task<int> GetIdByFullname(string fullname)
+        {
+            var result = await (from p in _dbContext.Parents where p.Account.Fullname == fullname select p).FirstOrDefaultAsync();
+            if (result != null) return result.ParentId;
             return 0;
         }
 

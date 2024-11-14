@@ -621,19 +621,19 @@
                         data: 'scheduleDate',
                         render: function (data, type, row, meta) {
                             // '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
-                            return '<span id="schedule-start-date">' + formatDate(data, true, true) + '</span >';
+                            return '<span id="schedule-start-date">' + formatDate(data, { ignoreHour : true , addDayOfWeek : true }) + '</span >';
                         }
                     },
                     {
                         data: 'startTime',
                         render: function (data, type, row, meta) {
-                            return '<span id="schedule-start-time">' + formatTime(data, false, true) + '</span >';
+                            return '<span id="schedule-start-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
                         }
                     },
                     {
                         data: 'endTime',
                         render: function (data, type, row, meta) {
-                            return '<span id="schedule-end-time">' + formatTime(data, false, true) + '</span >';
+                            return '<span id="schedule-end-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
                         }
                     },
                     {
@@ -798,22 +798,24 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
-                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
-                    if (xhr.errors && typeof xhr.errors === 'object') {
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
                         // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in xhr.errors) {
-                            if (xhr.errors.hasOwnProperty(field)) {
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
                                 // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = xhr.errors[field].join(", ");
+                                var fieldErrors = errorResponse.errors[field].join(", ");
                                 errorMessage += `\n${field}: ${fieldErrors}`;
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
@@ -865,22 +867,24 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
-                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
-                    if (xhr.errors && typeof xhr.errors === 'object') {
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
                         // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in xhr.errors) {
-                            if (xhr.errors.hasOwnProperty(field)) {
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
                                 // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = xhr.errors[field].join(", ");
+                                var fieldErrors = errorResponse.errors[field].join(", ");
                                 errorMessage += `\n${field}: ${fieldErrors}`;
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
@@ -909,22 +913,24 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
-                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
-                    if (xhr.errors && typeof xhr.errors === 'object') {
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
                         // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in xhr.errors) {
-                            if (xhr.errors.hasOwnProperty(field)) {
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
                                 // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = xhr.errors[field].join(", ");
+                                var fieldErrors = errorResponse.errors[field].join(", ");
                                 errorMessage += `\n${field}: ${fieldErrors}`;
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
@@ -947,22 +953,24 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
-                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
-                    if (xhr.errors && typeof xhr.errors === 'object') {
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
                         // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in xhr.errors) {
-                            if (xhr.errors.hasOwnProperty(field)) {
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
                                 // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = xhr.errors[field].join(", ");
+                                var fieldErrors = errorResponse.errors[field].join(", ");
                                 errorMessage += `\n${field}: ${fieldErrors}`;
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
@@ -999,22 +1007,24 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
-                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
-                    if (xhr.errors && typeof xhr.errors === 'object') {
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
                         // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in xhr.errors) {
-                            if (xhr.errors.hasOwnProperty(field)) {
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
                                 // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = xhr.errors[field].join(", ");
+                                var fieldErrors = errorResponse.errors[field].join(", ");
                                 errorMessage += `\n${field}: ${fieldErrors}`;
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
@@ -1083,22 +1093,24 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
-                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
-                    if (xhr.errors && typeof xhr.errors === 'object') {
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
                         // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in xhr.errors) {
-                            if (xhr.errors.hasOwnProperty(field)) {
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
                                 // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = xhr.errors[field].join(", ");
+                                var fieldErrors = errorResponse.errors[field].join(", ");
                                 errorMessage += `\n${field}: ${fieldErrors}`;
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
@@ -1124,26 +1136,28 @@
                     if (response.status) {
                         addTeacherOptions(response.data, data.teacher.account.fullname);
                     } else {
-                        console.error("API returned false status.");
+                        showAlert('error', "Error: \n" + response.errorMessage);
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
-                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
-                    if (xhr.errors && typeof xhr.errors === 'object') {
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
                         // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in xhr.errors) {
-                            if (xhr.errors.hasOwnProperty(field)) {
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
                                 // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = xhr.errors[field].join(", ");
+                                var fieldErrors = errorResponse.errors[field].join(", ");
                                 errorMessage += `\n${field}: ${fieldErrors}`;
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
             var statusText = '';
@@ -1162,19 +1176,13 @@
                     break;
             }
             if (data.status != 'Draft' && data.status != 'Postponed') {
-                // scheduleTable.column(6).visible(false, false);
                 let dadiv = $('div.dt-modal-toggle').parent();
                 dadiv.find('div.dt-modal-toggle').remove();
             }
-            // var answerAddHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-            //     <div class="edit-info" id="question-add-answer">
-            //         <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createAnswer"></i>
-            //     </div>
-            //     ` : '';
+            // Display Class Info
             $('#class-title-status').find('#class-class-status').remove();
             $('#class-status').empty();
             $('select[id="updateClassStatus_Status"]').empty();
-            // $('#class-allow-add-').find('#class-add-answer').remove();
             $('#class-status').append(statusText);
             $('#class-id').text(data.classId);
             $('#class-class-title').text(data.className);
@@ -1183,23 +1191,21 @@
             $('#class-teacher').attr('href', `/Admin/Teacher/${data.teacher.accountId}/Info`);
             $('#class-course').text(data.course.courseName);
             $('#class-course').attr('href', `/Admin/Course/${data.course.courseId}/Info`);
-            $('#class-start-date').text(formatDate(data.startDate));
-            $('#class-end-date').text(formatDate(data.endDate));
+            $('#class-start-date').text(formatDate(data.startDate, { ignoreHour : true }));
+            $('#class-end-date').text(formatDate(data.endDate, { ignoreHour: true }));
             $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
             $('#class-minimum-students-amount').text(data.minimumStudents);
             $('#class-maximum-students-amount').text(data.maximumStudents);
             $('#class-title-status').append(titleStatusHtml);
-            // $('#question-allow-add-answer').append(answerAddHtml);
             $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
 
-            // $('#updateQuestion_Question').text(data.question);
-            // $('#createAnswer_Type').append(getTypeOptions());
+            // Update Class Info
             $('input[id="updateClass_ClassName"]').val(data.className);
             $('input[id="updateClass_MinStudents"]').val(data.minimumStudents);
             $('input[id="updateClass_MaxStudents"]').val(data.maximumStudents);
             $('input[id="updateClass_StartDate"]').val(data.startDate);
             $('input[id="updateClass_EndDate"]').val(data.endDate);
-
+            // Update Class Status
             $('select[id="updateClassStatus_Status"]').append(getStatusOptions(data.status));
         }
     </script>

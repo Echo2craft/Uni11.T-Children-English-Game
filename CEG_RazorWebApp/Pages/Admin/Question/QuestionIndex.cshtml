@@ -311,72 +311,27 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
-                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
-                    if (xhr.errors && typeof xhr.errors === 'object') {
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
                         // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in xhr.errors) {
-                            if (xhr.errors.hasOwnProperty(field)) {
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
                                 // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = xhr.errors[field].join(", ");
+                                var fieldErrors = errorResponse.errors[field].join(", ");
                                 errorMessage += `\n${field}: ${fieldErrors}`;
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
-        // function callApiGetQuestionList() {
-        //     $.ajax({
-        //         url: apiUrl + 'Question/All/Ordered', API endpoint
-        //         type: 'GET',
-        //         headers: {
-        //             'Authorization': 'Bearer ' + tokenInclude the JWT token
-        //         },
-        //         success: function (response) {
-        //             Log the entire response to the console for debugging
-        //             console.log("Returned object:", response);
-
-        //             Check if the status is true
-        //             if (response.status) {
-        //                 questionList = response.data;
-        //                 setQuestionDisplay(questionList);
-        //             } else {
-        //                 console.error("API returned false status.");
-        //             }
-        //         },
-        //         error: function (error) {
-        //             console.error("Error in api call:", error);
-        //             showAlert('success', 'Data fetched successfully.');
-        //         }
-        //     });
-        // }
-        // function setQuestionDisplay(data){
-        //     var tableBody = $('#question-table tbody'); Reference to the <id="question-table"> element
-        //     tableBody.empty(); Clear any existing options
-        //     Loop through the data array and append each class div
-        //     $.each(data, function (index, question) {
-        //         Construct card HTML
-        //         var rowHtml = `
-        //             <tr class="${index % 2 === 0 ? 'even' : 'odd'}">
-        //                 <td class="sorting_1">
-        //                     <input type="hidden" name="listRequest[${index}].Question" value="${question.homeworkQuestionId}" class="form-control" />
-        //                     <a href="/Admin/Question/${question.homeworkQuestionId}/Info">${question.question}</a>
-        //                 </td>
-        //                 <td>
-        //                     <input type="hidden" name="listRequest[${index}].AnswerAmounts" value="${question.answerAmounts}" class="form-control" />
-        //                     ${question.answersAmount}
-        //                 </td>
-        //             </tr>
-        //         `;
-        //         Append the constructed HTML to the class list container
-        //         tableBody.append(rowHtml);
-        //     });
-        // }
         function getStatusOptions(selectedStatus) {
             var options = ['Inactive', 'Active', 'Expired', 'Denied', 'Suspended']; // Example statuses
             var html = '';
@@ -390,4 +345,3 @@
     </script>
 </body>
 </html>
-

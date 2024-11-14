@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CEG_BAL.ViewModels.Admin.Update;
 
 namespace CEG_BAL.Services.Interfaces
 {
@@ -16,6 +17,6 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<StudentViewModel>> GetStudentByParentAccountId(int id);
         Task<List<StudentViewModel>> GetStudentByClassId(int id);
         void Create(StudentViewModel student, CreateNewStudent newStu);
-        void Update(StudentViewModel student);
+        void Update(StudentViewModel student, UpdateStudent studentNewInfo);
     }
 }

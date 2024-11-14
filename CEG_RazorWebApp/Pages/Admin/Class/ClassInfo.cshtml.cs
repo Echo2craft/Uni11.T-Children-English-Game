@@ -9,8 +9,6 @@ namespace CEG_RazorWebApp.Pages.Admin.Class
 {
     public class ClassInfoModel : PageModel
     {
-        private readonly CEG_RAZOR_Library methcall = new();
-
         public int? ClassID;
         public UpdateClassVM UpdateClassVM { get; set; } = new UpdateClassVM();
         public CreateScheduleVM CreateScheduleVM { get; set; } = new CreateScheduleVM();

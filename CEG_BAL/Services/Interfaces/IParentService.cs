@@ -11,6 +11,7 @@ namespace CEG_BAL.Services.Interfaces
     public interface IParentService
     {
         Task<List<ParentViewModel>> GetParentList();
+        Task<List<string>> GetParentNameList();
         Task<ParentViewModel?> GetParentById(int id);
         Task<ParentViewModel?> GetParentByAccountId(int id);
         Task<bool> IsParentExistByEmail(string email);

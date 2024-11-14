@@ -2,6 +2,7 @@
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
+using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +47,7 @@ namespace CEG_BAL.Services.Implements
                 acc.Description = newStu.Description;
                 //acc.TotalPoint = newStu.TotalPoints;
                 acc.Birthdate = newStu.Birthdate;
+                acc.Age = CalculateAge(acc.Birthdate.Value);
                 acc.ParentId = _unitOfWork.ParentRepositories.GetIdByUsername(newStu.ParentUsername).Result;
             }
             _unitOfWork.StudentRepositories.Create(acc);
@@ -65,7 +67,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<StudentViewModel?> GetStudentById(int id)
         {
-            var user = await _unitOfWork.AccountRepositories.GetByIdNoTracking(id);
+            var user = await _unitOfWork.StudentRepositories.GetByIdNoTracking(id);
             if (user != null)
             {
                 //var mem = await _unitOfWork.MemberRepository.GetByIdNoTracking(user.MemberId);
@@ -92,11 +94,38 @@ namespace CEG_BAL.Services.Implements
             if (classId == 0) return null;
             return _mapper.Map<List<StudentViewModel>>(await _unitOfWork.StudentRepositories.GetStudentByClassId(classId));
         }
-        public void Update(StudentViewModel student)
+        public void Update(StudentViewModel student, UpdateStudent studentNewInfo)
         {
             var stu = _mapper.Map<Student>(student);
-             _unitOfWork.StudentRepositories.Update(stu); 
+            if(studentNewInfo != null)
+            {
+                stu.StudentId = _unitOfWork.StudentRepositories.GetIdByAccountIdNoTracking(stu.Account.AccountId).Result.Value;
+                stu.AccountId = stu.Account.AccountId;
+                stu.Account.Fullname = studentNewInfo.Account.Fullname;
+                stu.Account.Gender = studentNewInfo.Account.Gender;
+                stu.Birthdate = studentNewInfo.Birthdate;
+                stu.Age = CalculateAge(stu.Birthdate.Value);
+                stu.Description = studentNewInfo.Description;
+                stu.ParentId = _unitOfWork.ParentRepositories.GetIdByFullname(studentNewInfo.ParentFullname).Result;
+            }
+            stu.Parent = null;
+            stu.Enrolls = null;
+            stu.StudentProgresses = null;
+            _unitOfWork.StudentRepositories.Update(stu); 
             _unitOfWork.Save();
+        }
+        private int CalculateAge(DateTime birthdate)
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - birthdate.Year;
+
+            // Check if the birthday has not occurred yet this year
+            if (birthdate.Date > today.AddYears(-age))
+            {
+                age--;
+            }
+
+            return age;
         }
     }
 }
