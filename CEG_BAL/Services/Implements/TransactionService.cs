@@ -60,6 +60,12 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetTransactionByParentId(parentId));
         }
 
+        public async Task<TransactionViewModel?> GetTransactionByVnpayId(string? vnpayId)
+        {
+            return _mapper.Map<TransactionViewModel>(await
+                _unitOfWork.TransactionRepositories.GetTransactionByVnpayId(vnpayId));
+        }
+
         public void Update(TransactionViewModel model)
         {
             var pay = _mapper.Map<Transaction>(model);
