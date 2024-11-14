@@ -239,7 +239,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/Status")]
+        [HttpPut("{id}/Update/Status")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

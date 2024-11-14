@@ -348,7 +348,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Change Student Account Password</h4>
                 </div>
-                <form method="post" id="ChangeAccountPasswordForm">
+                <form method="post" id="updateAccountPasswordForm">
                     <div class="modal-body">
                         <div class="row p-4">
                             <div class="col-12">
@@ -380,15 +380,13 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Change Student Status</h4>
                 </div>
-                <form method="post" id="ChangeAccountStatusForm">
+                <form method="post" id="updateAccountStatusForm">
                     <div class="modal-body">
                         <div class="row p-4">
                             <div class="col-12">
                                 <div class="row form-group">
-                                    @* <label asp-for="@updateStudent.Account.Password" class="col-md-4 col-form-label mt-3 text-md-right"></label>
-                                    <input asp-for="@updateStudent.Account.Password" value="@updateStudent.Account.Password" type="password" placeholder="Password" class="form-control col-md-8 mt-3" required>
-                                    <span asp-validation-for="@updateStudent.Account.Password" id="error_message"
-                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>*@
+                                    <label for="updateStudentStatus_Status" class="col-md-3 col-form-label mt-3 text-md-right">New Status (this action cannot be undone!)</label>
+                                    <select class="form-control col-md-7 custom-select" id="updateStudentStatus_Status"></select>
                                 </div>
                             </div>
                         </div>
@@ -527,6 +525,13 @@
                 }
             });
             callApiGetStudentDetail();
+            $('#updateAccountStatusForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                //Make the AJAX request
+                callApiPutUpdateStudentStatus($('select[id="updateStudentStatus_Status"]').val());
+                $('#updateAccountStatusForm').trigger("reset");
+            });
         });
         function callApiGetStudentDetail() {
             $.ajax({
@@ -636,6 +641,9 @@
             $('textarea[id="updateStudent_Description"]').val(data.description);
             $('input[id="updateStudent_Birthdate"]').val(formatDate(data.birthdate, { inputDateFormat : true }));
 
+            // Update Class Status
+            $('select[id="updateStudentStatus_Status"]').append(getStatusOptions(data.account.status));
+
             // Parent Url
             var url = `/Admin/${data.parent.account.role.roleName}/${data.parent.account.accountId}/Info`
             // Parent Info
@@ -708,6 +716,46 @@
                 }
             });
         });
+        function callApiPutUpdateStudentStatus(newStatus) {
+            $.ajax({
+                url: apiUrl + 'Account/@accountId/Update/Status', // Specify your Razor Page here
+                type: 'PUT',
+                data: JSON.stringify(newStatus),
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', 'Status updated!');
+                        callApiGetStudentDetail();
+                    } else {
+                        showAlert('error', 'Failed to update status. Error:' + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
         function callApiUpdateEnrollStatus(enrollId, newStatus) {
             $.ajax({
                 url: apiUrl + `Enroll/${enrollId}/Update/Status`, // API endpoint for updating status
@@ -760,7 +808,23 @@
         function getStatusOptions(selectedStatus) {
             var options = ['Inactive', 'Active', 'Expired', 'Denied', 'Suspended']; // Example statuses
             var html = '';
-
+            switch (selectedStatus) {
+                case 'Inactive':
+                    options = ['Inactive', 'Active', 'Suspended']
+                    break;
+                case 'Active':
+                    options = ['Active', 'Suspended']
+                    break;
+                case 'Expired':
+                    options = ['Expired', 'Active', 'Suspended']
+                    break;
+                case 'Denied':
+                    options = ['Denied']
+                    break;
+                case 'Suspended':
+                    options = ['Suspended']
+                    break;
+            }
             options.forEach(function (status) {
                 html += `<option value="${status}" ${selectedStatus === status ? 'selected' : ''}>${status}</option>`;
             });
