@@ -12,7 +12,7 @@ namespace CEG_RazorWebApp.Models.Account.Create
             CEG_RAZOR_Library lib = new CEG_RAZOR_Library();
             DefaultAccountGenderSelectList = lib.GetGenderSelectableList(Constants.GENDER_TITLE);
             Status = Constants.ACCOUNT_STATUS_ACTIVE;
-            DefaultAccountStatusSelectList = lib.GetAccountStatusSelectableList(Status);
+            // DefaultAccountStatusSelectList = lib.GetAccountStatusSelectableList(Status);
             CreatedDate = DateTime.Now;
         }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Account Username is required")]
@@ -42,6 +42,6 @@ namespace CEG_RazorWebApp.Models.Account.Create
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please select a status")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Status is invalid")]
         public string? Status { get; set; }
-        public List<SelectListItem> DefaultAccountStatusSelectList { get; set; }
+        // public List<SelectListItem> DefaultAccountStatusSelectList { get; set; }
     }
 }

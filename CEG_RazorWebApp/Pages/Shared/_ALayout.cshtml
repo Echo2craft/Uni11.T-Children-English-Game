@@ -248,7 +248,10 @@
                 return container;
             });
         });
-        function formatTime(timeString, includeSeconds = false, includeAmPm = false) {
+        function formatTime(timeString, { 
+            includeSeconds = false,
+            includeAmPm = false 
+        } = {}) {
             // Parse hours, minutes, and seconds from the input string
             let [hours, minutes, seconds] = timeString.split(':').map(Number);
 
@@ -282,7 +285,14 @@
             // Return formatted time string
             return `${hours}:${minutes}:${seconds}`;
         };
-        function formatDate(date, ignoreHour = false, addDayOfWeek = false, includeAmPm = false, monthBeforeDate = false, lineBreak = false) {
+        function formatDate(date, {
+            ignoreHour = false,
+            addDayOfWeek = false,
+            includeAmPm = false,
+            monthBeforeDate = false,
+            lineBreak = false,
+            inputDateFormat = false // New option for YYYY-MM-DD format
+        } = {}) {
             let d = new Date(date);
 
             // Get day, month, year
@@ -309,6 +319,10 @@
             if (addDayOfWeek) {
                 const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                 dayOfWeek = daysOfWeek[d.getDay()] + ', ';
+            }
+            // Handle input format: return only `YYYY-MM-DD`
+            if (inputDateFormat) {
+                return `${year}-${month}-${day}`;
             }
             // Return only the date if `ignoreHour` is true
             if (ignoreHour) {

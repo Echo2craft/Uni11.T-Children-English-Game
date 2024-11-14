@@ -25,7 +25,6 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<List<string>> GetTeacherNameList()
         {
             return await _dbContext.Teachers
-                .Include(t => t.Account)
                 .Select(t => t.Account.Fullname)
                 .ToListAsync();
         }
