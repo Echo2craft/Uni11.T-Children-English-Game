@@ -167,7 +167,7 @@
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button class="btn btn-success" type="submit">Create</button>
+                        <button class="btn btn-success" type="button" onclick="createTransaction()">Create</button>
                         <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -430,6 +430,34 @@
                     }
                     // Display the error message using your custom showAlert function
                     showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function createTransaction() {
+            // Serialize form data
+            var formData = {
+                ParentFullname: $('#select2-parent-fullname-dropdown').val(),
+                TransactionAmount: $('input[name="TransactionAmount"]').val(),
+                TransactionDate: $('input[name="TransactionDate"]').val(),
+                TransactionStatus: $('select[name="TransactionStatus"]').val(),
+                TransactionType: $('select[name="TransactionType"]').val(),
+                ConfirmDate: $('input[name="ConfirmDate"]').val()
+            };
+
+            // Send AJAX request
+            $.ajax({
+                url: '@Url.Page("TransactionIndex", "GeneratePaymentUrl")',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        window.location.href = response.paymentUrl; // Redirect to VNPay
+                    } else {
+                        alert(response.message || "Failed to create transaction.");
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while processing the transaction.");
                 }
             });
         }
