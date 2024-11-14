@@ -29,12 +29,7 @@ namespace CEG_RazorWebApp.Pages.Parent.Transaction
             Secure = true,
             IsEssential = true,
         };
-
         private readonly CEG_RAZOR_Library methcall = new();
-
-        public string? LayoutUrl { get; set; } = Constants.PARENT_LAYOUT_URL;
-
-        public List<TransactionListVM> TransactionList { get; set; } = new List<TransactionListVM>();
 
         public TransactionIndexModel(ILogger<TransactionIndexModel> logger, IConfiguration config, IMapper mapper)
         {
@@ -51,19 +46,7 @@ namespace CEG_RazorWebApp.Pages.Parent.Transaction
 
         public void OnGet()
         {
-            methcall.InitTempData(this);
-        }
-        public IActionResult OnGetLogout()
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-            HttpContext.Session.Clear();
-            TempData.Clear();
-            SignOut();
 
-            // If using ASP.NET Identity, you may want to sign out the user
-            // Example: await SignInManager.SignOutAsync();
-
-            return RedirectToPage(Constants.LOGOUT_REDIRECT_URL);
         }
     }
 }

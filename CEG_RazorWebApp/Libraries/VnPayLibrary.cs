@@ -51,7 +51,7 @@ namespace CEG_RazorWebApp.Libraries
                 Value = amount,
                 TransactionId = transactionId,
                 TransactionType = orderInfos[2],
-                DocNo = vnPayTranId.ToString(),
+                VnpayId = vnPayTranId.ToString(),
                 Token = vnpSecureHash,
                 VnPayResponseCode = vnpResponseCode,
                 Message = "Payment Success"
