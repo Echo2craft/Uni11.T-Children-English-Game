@@ -15,6 +15,7 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<List<Class>> GetClassListParent();
         Task<Class?> GetByIdNoTracking(int id, bool includeTeacher = false, bool includeCourse = false, bool includeSession = false, bool filterSession = false);
         Task<List<Class>> GetClassListByTeacherId(int teacherId);
+        Task<Class?> GetByClassName(string className);
         Task<int> GetIdByClassId(int id);
     }
 }

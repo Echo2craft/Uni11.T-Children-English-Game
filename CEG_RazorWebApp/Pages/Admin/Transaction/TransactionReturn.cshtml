@@ -4,27 +4,36 @@
     ViewData["Title"] = "Admin Transaction Return Page";
     Layout = "~/Pages/Shared/_ALayout.cshtml";
 }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">@Model.TransactionResponse.Message</h2>
 
-<div class="container mt-5">
-    <h2 class="text-center">@Model.TransactionResponse.Message</h2>
-
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <p><strong>Transaction ID:</strong> @Model.TransactionResponse.TransactionId</p>
-                    <p><strong>Order Description:</strong> @Model.TransactionResponse.OrderDescription</p>
-                    <p><strong>Transaction Type:</strong> @Model.TransactionResponse.TransactionType</p>
-                    <p><strong>Amount:</strong> @Model.TransactionResponse.Value.ToString("C")</p>
-                    <p><strong>Payment Method:</strong> @Model.TransactionResponse.PaymentMethod</p>
-                    <p><strong>VNPay Transaction ID:</strong> @Model.TransactionResponse.VnpayId</p>
-                    <p><strong>Response Code:</strong> @Model.TransactionResponse.VnPayResponseCode</p>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><strong>Transaction ID:</strong> @Model.TransactionResponse.TransactionId</p>
+                        <p><strong>Order Description:</strong> @Model.TransactionResponse.OrderDescription</p>
+                        <p><strong>Transaction Type:</strong> @Model.TransactionResponse.TransactionType</p>
+                        <p><strong>Amount:</strong> @Model.TransactionResponse.Value.ToString("C")</p>
+                        <p><strong>Payment Method:</strong> @Model.TransactionResponse.PaymentMethod</p>
+                        <p><strong>VNPay Transaction ID:</strong> @Model.TransactionResponse.VnpayId</p>
+                        <p><strong>Response Code:</strong> @Model.TransactionResponse.VnPayResponseCode</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="text-center mt-4">
-                <a asp-page="/TransactionIndex" class="btn btn-primary">Back to Transactions</a>
+                <div class="text-center mt-4">
+                    <a asp-page="/Admin/Transaction/Index" class="btn btn-primary">Back to Transactions</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</body>
+</html>

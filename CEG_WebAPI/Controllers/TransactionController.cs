@@ -1,5 +1,7 @@
-﻿using CEG_BAL.Services.Interfaces;
+﻿using CEG_BAL.Services.Implements;
+using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Transaction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +14,14 @@ namespace CEG_WebAPI.Controllers
     public class TransactionController : ControllerBase
     {
         private readonly ITransactionService _transactionService;
+        private readonly IVnpayService _vnpayService;
+        private readonly IParentService _parentService;
 
-        public TransactionController(ITransactionService transactionService)
+        public TransactionController(ITransactionService transactionService, IVnpayService vnpayService, IParentService parentService)
         {
             _transactionService = transactionService;
+            _vnpayService = vnpayService;
+            _parentService = parentService;
         }
 
         [HttpGet("All")]
@@ -122,30 +128,65 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Create")]
-        [ProducesResponseType(typeof(TransactionViewModel), StatusCodes.Status200OK)]
+        [HttpPost("GenerateUrl")]
+        [ProducesResponseType(typeof(TransactionRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateTransaction(
-            [Required][FromBody] TransactionViewModel transaction)
+        public IActionResult GeneratePaymentUrl([FromBody] TransactionRequest request)
         {
             try
             {
-                _transactionService.Create(transaction);
-                var result = await _transactionService.GetTransactionByVnpayId(transaction.VnpayId);
+                var result = _vnpayService.CreatePaymentUrl(request);
                 if (result == null)
                 {
-                    return NotFound(new
+                    return BadRequest(new
                     {
                         Status = false,
-                        ErrorMessage = "Transaction Create Failed!"
+                        ErrorMessage = "An error occured when creating transaction."
                     });
                 }
                 return Ok(new
                 {
                     Status = true,
-                    SuccessMessage = "Transaction Create successfully!",
                     Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(TransactionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateTransaction(
+            [Required][FromBody] CreateTransaction newTran)
+        {
+            try
+            {
+                var resultParentName = await _parentService.IsParentExistByFullname(newTran.ParentFullname);
+                if (!resultParentName)
+                {
+                    return BadRequest(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Parent not found."
+                    });
+                }
+                TransactionViewModel tran = new TransactionViewModel();
+                _transactionService.Create(tran, newTran);
+                return Ok(new
+                {
+                    Data = true,
+                    Status = true,
+                    SuccessMessage = "Transaction create successfully."
                 });
             }
             catch (Exception ex)
