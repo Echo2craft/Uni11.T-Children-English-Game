@@ -420,13 +420,13 @@
 
             // Send AJAX request
             $.ajax({
-                url: '@Url.Page("TransactionIndex", "GeneratePaymentUrl")',
+                url: apiUrl + 'Transaction/GenerateUrl',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(formData),
                 success: function (response) {
                     if (response.status) {
-                        window.location.href = response.paymentUrl; // Redirect to VNPay
+                        window.location.href = response.data; // Redirect to VNPay
                     } else {
                         alert(response.message || "Failed to create transaction.");
                     }
