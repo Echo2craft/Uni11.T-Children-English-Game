@@ -32,6 +32,8 @@ namespace CEG_BAL.Services.Implements
         }
         public void Create(TransactionViewModel model)
         {
+            var parentId = _unitOfWork.ParentRepositories.GetIdByFullname(model.ParentFullname);
+            model.ParentId = parentId.Result;
             var pay = _mapper.Map<Transaction>(model);
             _unitOfWork.TransactionRepositories.Create(pay);
             _unitOfWork.Save();
