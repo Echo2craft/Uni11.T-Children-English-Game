@@ -343,7 +343,20 @@
                 ;
 
             callApiGetTransactionList();
-            callApiGetParentNameList();
+        });
+        $('#createTransactionForm').submit(function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Get the form data
+            // var formData = {
+            //     sessionId: $('input#createSchedule_SessionId').val(),
+            //     classId: $('span#class-id').text(),
+            //     scheduleDate: $('input#createSchedule_ScheduleDate').val(),
+            // };
+
+            // Make the AJAX request
+            // callApiPostCreateSchedule(formData);
+            // $('#createScheduleForm').trigger("reset");
         });
         function callApiGetParentNameList(){
             // Call API to get the list of teacher names
@@ -391,6 +404,24 @@
             // Refresh the Select2 dropdown to show new options
             $('#select2-parent-fullname-dropdown').trigger('change'); // Ensure Select2 is updated
         }
+        function getTransactionTypeOptions() {
+            var options = ['Enrollment', 'Donation']; // Example statuses
+            var html = '';
+            options.forEach(function (type) {
+                html += `<option value="${type}">${type}</option>`;
+            });
+
+            return html;
+        }
+        function getTransactionStatusOptions() {
+            var options = ['Processing', 'Completed']; // Example statuses
+            var html = '';
+            options.forEach(function (status) {
+                html += `<option value="${status}">${status}</option>`;
+            });
+
+            return html;
+        }
         function callApiGetTransactionList() {
             $.ajax({
                 url: apiUrl + 'Transaction/All', // API endpoint
@@ -404,9 +435,12 @@
                     // Check if the status is true
                     if (response.status) {
                         transactionList = response.data;
-                        console.log(transactionList);
                         sessionTable.clear().rows.add(transactionList).draw();
-                        // setClassDisplay(classList);
+                        callApiGetParentNameList();
+                        $('#createTransaction_TransactionType').empty();
+                        $('#createTransaction_TransactionStatus').empty();
+                        $('#createTransaction_TransactionType').append(getTransactionTypeOptions());
+                        $('#createTransaction_TransactionStatus').append(getTransactionStatusOptions());
                     } else {
                         console.error("API returned false status.");
                     }
@@ -433,6 +467,7 @@
                 }
             });
         }
+
     </script>
 </body>
 </html>

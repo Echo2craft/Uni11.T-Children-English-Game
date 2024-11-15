@@ -28,6 +28,6 @@ namespace CEG_RazorWebApp.Models.Transaction.Create
         [DateGreaterThan("TransactionDate", Constants.TRANSACTION_CONFIRM_DATE_DIFF)]
         [DisplayName("Confirm Date")]
         [DataType(DataType.DateTime)]
-        public DateTime ConfirmDate { get; set; } = new DateTime();
+        public DateTime ConfirmDate { get; set; } = DateTime.Now;
     }
 }
