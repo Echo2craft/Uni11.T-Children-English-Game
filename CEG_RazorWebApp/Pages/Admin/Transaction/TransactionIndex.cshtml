@@ -295,7 +295,7 @@
                 width: 'resolve',
                 theme: 'bootstrap4'
             })
-            .on('select2:close', function (e) {
+            .on('select2:select', function (e) {
                 var text = $('#select2-parent-fullname-enrollment-dropdown').select2('data')[0].text;
                 // var parentNameObj = {
                 //     parentName: text
@@ -581,6 +581,8 @@
             });
             // Refresh the Select2 dropdown to show new options
             $('#select2-parent-fullname-enrollment-dropdown').trigger('change'); // Ensure Select2 is updated
+            // Set up Student list based on the first data
+            callApiGetStudentNameList(data[0]);
         }
         function addParentDonationOptions(data) {
             $('#select2-parent-fullname-donation-dropdown').empty();
