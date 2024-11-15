@@ -129,16 +129,16 @@
                         <div class="row p-4">
                             <div class="col-12">
                                 <div class="row form-group">
-                                    <label asp-for="CreateTransactionInfo.ParentFullname" class="col-md-4 col-form-label text-md-right">Parent Fullname</label>
+                                    <label asp-for="@createTransaction.ParentFullname" class="col-md-4 col-form-label text-md-right">Parent Fullname</label>
                                     <div class="col-md-8 p-0">
-                                        <select id="select2-parent-fullname-dropdown" name="CreateTransactionInfo.ParentFullname" class="form-control custom-select" style="width: 100%;"></select>
+                                        <select id="select2-parent-fullname-dropdown" name="@createTransaction.ParentFullname" class="form-control custom-select" style="width: 100%;"></select>
                                     </div>
 
-                                    <label asp-for="CreateTransactionInfo.TransactionAmount" class="col-md-4 col-form-label text-md-right">Amount</label>
-                                    <input asp-for="CreateTransactionInfo.TransactionAmount" name="CreateTransactionInfo.TransactionAmount" type="number" min="5000" required class="form-control col-md-8">
+                                    <label asp-for="@createTransaction.TransactionAmount" class="col-md-4 col-form-label text-md-right">Amount</label>
+                                    <input asp-for="@createTransaction.TransactionAmount" name="@createTransaction.TransactionAmount" type="number" min="5000" required class="form-control col-md-8">
 
-                                    <label asp-for="CreateTransactionInfo.TransactionType" class="col-md-4 col-form-label text-md-right">Type</label>
-                                    <input asp-for="CreateTransactionInfo.TransactionType" name="CreateTransactionInfo.TransactionType" class="form-control col-md-8" required>
+                                    <label asp-for="@createTransaction.TransactionType" class="col-md-4 col-form-label text-md-right">Type</label>
+                                    <input asp-for="@createTransaction.TransactionType" name="@createTransaction.TransactionType" class="form-control col-md-8" required>
                                 </div>
                             </div>
                         </div>
@@ -413,27 +413,43 @@
         function createTransaction() {
             // Serialize form data
             var formData = {
-                "CreateTransactionInfo.ParentFullname": $('#select2-parent-fullname-dropdown').val(),
-                "CreateTransactionInfo.TransactionAmount": $('input[name="CreateTransactionInfo.TransactionAmount"]').val(),
-                "CreateTransactionInfo.TransactionType": $('input[name="CreateTransactionInfo.TransactionType"]').val(),
+                ParentFullname: $('#select2-parent-fullname-dropdown').select2('data')[0].text,
+                TransactionAmount: $('#createTransaction_TransactionAmount').val(),
+                TransactionType: $('#createTransaction_TransactionType').val(),
             };
 
             // Send AJAX request
             $.ajax({
                 url: '@Url.Page("TransactionIndex", "GeneratePaymentUrl")',
                 type: 'POST',
-                data: formData, // Send as form-encoded data
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
                 success: function (response) {
-                    if (response.success) {
+                    if (response.status) {
                         window.location.href = response.paymentUrl; // Redirect to VNPay
                     } else {
                         alert(response.message || "Failed to create transaction.");
                     }
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error("AJAX Error: ", textStatus, errorThrown);
-                    console.error("Response Text: ", jqXHR.responseText);
-                    alert("An error occurred while processing the transaction.");
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }

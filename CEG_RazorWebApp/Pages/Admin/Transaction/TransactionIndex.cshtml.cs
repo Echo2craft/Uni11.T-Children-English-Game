@@ -31,8 +31,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
 
         }
 
-        // Update the method name to follow Razor Page conventions
-        public IActionResult OnPostGeneratePaymentUrl(CreateTransactionVM CreateTransactionInfo)
+        public IActionResult OnPostGeneratePaymentUrl([FromBody] CreateTransactionVM createTransaction)
         {
             if (!ModelState.IsValid)
             {
@@ -41,11 +40,11 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
                     .Select(x => new { x.Key, x.Value.Errors })
                     .ToList();
 
-                return new JsonResult(new { success = false, message = "Model validation failed", errors });
+                return new JsonResult(new { status = false, message = "Model validation failed", errors });
             }
 
-            var paymentUrl = _vnPayService.CreatePaymentUrl(CreateTransactionInfo, HttpContext);
-            return new JsonResult(new { success = true, paymentUrl = paymentUrl });
+            var paymentUrl = _vnPayService.CreatePaymentUrl(createTransaction, HttpContext);
+            return new JsonResult(new { status = true, paymentUrl = paymentUrl });
         }
     }
 }
