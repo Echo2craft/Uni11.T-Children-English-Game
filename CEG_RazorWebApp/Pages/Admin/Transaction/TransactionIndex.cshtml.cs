@@ -31,7 +31,9 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
 
         }
 
-        public IActionResult OnPostGeneratePaymentUrl([FromBody] CreateTransactionVM createTransaction)
+        public IActionResult OnPostGeneratePaymentUrl(
+            [FromBody] CreateTransactionVM createTransaction
+            )
         {
             if (!ModelState.IsValid)
             {
@@ -44,7 +46,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
             }
 
             var paymentUrl = _vnPayService.CreatePaymentUrl(createTransaction, HttpContext);
-            return new JsonResult(new { status = true, paymentUrl = paymentUrl });
+            return new JsonResult(new { status = true, paymentUrl });
         }
     }
 }

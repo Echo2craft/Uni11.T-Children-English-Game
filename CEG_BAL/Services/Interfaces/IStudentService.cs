@@ -12,6 +12,8 @@ namespace CEG_BAL.Services.Interfaces
     public interface IStudentService
     {
         Task<List<StudentViewModel>> GetStudentList();
+        Task<List<string>> GetStudentNameList();
+        Task<List<string>> GetStudentNameListByParentName(string parentName);
         Task<StudentViewModel?> GetStudentById(int id);
         Task<StudentViewModel?> GetStudentByAccountId(int id);
         Task<List<StudentViewModel>> GetStudentByParentAccountId(int id);
