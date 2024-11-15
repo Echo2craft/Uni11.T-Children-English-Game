@@ -1,0 +1,30 @@
+﻿@page "/Admin/Transaction/Return"
+@model CEG_RazorWebApp.Pages.Admin.Transaction.TransactionReturnModel
+@{
+    ViewData["Title"] = "Admin Transaction Return Page";
+    Layout = "~/Pages/Shared/_ALayout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">@Model.TransactionResponse.Message</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <p><strong>Transaction ID:</strong> @Model.TransactionResponse.TransactionId</p>
+                    <p><strong>Order Description:</strong> @Model.TransactionResponse.OrderDescription</p>
+                    <p><strong>Transaction Type:</strong> @Model.TransactionResponse.TransactionType</p>
+                    <p><strong>Amount:</strong> @Model.TransactionResponse.Value.ToString("C")</p>
+                    <p><strong>Payment Method:</strong> @Model.TransactionResponse.PaymentMethod</p>
+                    <p><strong>VNPay Transaction ID:</strong> @Model.TransactionResponse.VnpayId</p>
+                    <p><strong>Response Code:</strong> @Model.TransactionResponse.VnPayResponseCode</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a asp-page="/TransactionIndex" class="btn btn-primary">Back to Transactions</a>
+            </div>
+        </div>
+    </div>
+</div>
