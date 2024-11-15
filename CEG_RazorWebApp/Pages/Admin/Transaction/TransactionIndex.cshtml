@@ -144,23 +144,8 @@
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                     <label asp-for="@createTransaction.TransactionType" class="col-md-4 col-form-label text-md-right"></label>
-                                    <select class="form-control col-md-8 custom-select" asp-for="@createTransaction.TransactionType"></select>
+                                    <input asp-for="@createTransaction.TransactionType" value="@createTransaction.TransactionType" placeholder="Create Transaction Test">
                                     <span asp-validation-for="@createTransaction.TransactionType" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createTransaction.TransactionDate" class="col-md-4 col-form-label text-md-right"></label>
-                                    <input asp-for="@createTransaction.TransactionDate" type="datetime-local" value="@createTransaction.TransactionDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-8" required>
-                                    <span asp-validation-for="@createTransaction.TransactionDate" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createTransaction.ConfirmDate" class="col-md-4 col-form-label text-md-right"></label>
-                                    <input asp-for="@createTransaction.ConfirmDate" type="datetime-local" value="@createTransaction.ConfirmDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-8" required>
-                                    <span asp-validation-for="@createTransaction.ConfirmDate" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createTransaction.TransactionStatus" class="col-md-4 col-form-label text-md-right"></label>
-                                    <select class="form-control col-md-8 custom-select" asp-for="@createTransaction.TransactionStatus"></select>
-                                    <span asp-validation-for="@createTransaction.TransactionStatus" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                 </div>
                             </div>
@@ -438,17 +423,16 @@
             var formData = {
                 ParentFullname: $('#select2-parent-fullname-dropdown').val(),
                 TransactionAmount: $('input[name="TransactionAmount"]').val(),
-                TransactionDate: $('input[name="TransactionDate"]').val(),
-                TransactionStatus: $('select[name="TransactionStatus"]').val(),
-                TransactionType: $('select[name="TransactionType"]').val(),
-                ConfirmDate: $('input[name="ConfirmDate"]').val()
+                TransactionType: $('input[name="TransactionType"]').val(),
             };
 
             // Send AJAX request
             $.ajax({
                 url: '@Url.Page("TransactionIndex", "GeneratePaymentUrl")',
                 type: 'POST',
-                data: formData,
+                data: JSON.stringify(formData),
+                contentType: 'application/json', // Specify JSON format for the data sent to the server
+                dataType: 'json', // Expect JSON response from the server
                 success: function (response) {
                     if (response.success) {
                         window.location.href = response.paymentUrl; // Redirect to VNPay
@@ -456,7 +440,9 @@
                         alert(response.message || "Failed to create transaction.");
                     }
                 },
-                error: function () {
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("AJAX Error: ", textStatus, errorThrown); // Log error details
+                    console.log("Response Text: ", jqXHR.responseText); // Log the response text
                     alert("An error occurred while processing the transaction.");
                 }
             });
