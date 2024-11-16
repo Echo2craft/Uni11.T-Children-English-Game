@@ -7,12 +7,18 @@ namespace CEG_RazorWebApp.Models.Transaction.Create
 {
     public class CreateTransactionVM
     {
-        //[Required(ErrorMessage = "Parent's Fullname is required")]
-        //[DisplayName("Parent's Fullname")]
+        [Required(ErrorMessage = "Parent's Fullname is required")]
+        [DisplayName("Parent's Fullname")]
         public string? ParentFullname { get; set; }
-        //[Required(ErrorMessage = "Transaction Amount is required")]
-        //[Range(Constants.TRANSACTION_MINIMUM_AMOUNT, int.MaxValue)]
-        //[DisplayName("Amount")]
+        //[Required(ErrorMessage = "Student's Fullname is required")]
+        //[DisplayName("Student's Fullname")]
+        public string? StudentFullname { get; set; }
+        //[Required(ErrorMessage = "Class's Fullname is required")]
+        //[DisplayName("Class's Name")]
+        public string? Classname { get; set; }
+        [Required(ErrorMessage = "Transaction Amount is required")]
+        [Range(Constants.TRANSACTION_MINIMUM_AMOUNT, int.MaxValue)]
+        [DisplayName("Amount")]
         public int TransactionAmount { get; set; } = Constants.TRANSACTION_MINIMUM_AMOUNT;
         //[Required(ErrorMessage = "Transaction Date is required")]
         //[DisplayName("Transaction Date")]
@@ -21,8 +27,8 @@ namespace CEG_RazorWebApp.Models.Transaction.Create
         //[Required(ErrorMessage = "Transaction Status is required")]
         //[DisplayName("Status")]
         //public string TransactionStatus { get; set; } = null!;
-        //[Required(ErrorMessage = "Transaction Type is required")]
-        //[DisplayName("Type")]
+        [Required(ErrorMessage = "Transaction Type is required")]
+        [DisplayName("Type")]
         public string TransactionType { get; set; } = null!;
         //[Required(ErrorMessage = "Transaction Confirm Date is required")]
         //[DateGreaterThan("TransactionDate", Constants.TRANSACTION_CONFIRM_DATE_DIFF)]

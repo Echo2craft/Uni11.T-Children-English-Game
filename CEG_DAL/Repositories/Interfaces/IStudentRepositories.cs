@@ -11,6 +11,8 @@ namespace CEG_DAL.Repositories.Interfaces
     public interface IStudentRepositories : IRepositoryBase<Student>
     {
         Task<List<Student>> GetStudentList();
+        Task<List<string>> GetStudentNameList();
+        Task<List<string>> GetStudentNameListByParentName(string parentName);
         Task<Student?> GetByIdNoTracking(int id);
         Task<Student?> GetByAccountIdNoTracking(int id);
         Task<Student?> GetByFullname (string fullname);

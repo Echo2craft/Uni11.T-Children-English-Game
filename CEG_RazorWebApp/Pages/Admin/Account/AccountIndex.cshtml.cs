@@ -147,7 +147,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Account
 
             return Redirect("/Admin/Account/Index");
         }
-        public async Task<IActionResult> OnPostStudentAsync(
+        /*public async Task<IActionResult> OnPostStudentAsync(
             [FromForm][Required] CreateStudentVM? createStudent)
         {
             AdminAPI_URL += "Admin/Student/Create";
@@ -186,6 +186,6 @@ namespace CEG_RazorWebApp.Pages.Admin.Account
             TempData[Constants.ALERT_DEFAULT_SUCCESS_NAME] = "Student Account Create Successfully!";
 
             return Redirect("/Admin/Account/Index");
-        }
+        }*/
     }
 }

@@ -30,6 +30,7 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<List<string>> GetParentNameList()
         {
             return await _dbContext.Parents
+                .AsNoTrackingWithIdentityResolution()
                 .Select(p => p.Account.Fullname)
                 .ToListAsync();
         }

@@ -143,6 +143,14 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
+        public async Task<List<string>> GetClassNameList()
+        {
+            return await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Select(c => c.ClassName)
+                .ToListAsync();
+        }
+
         public async Task<List<Class>> GetClassListAdmin()
         {
             return await _dbContext.Classes

@@ -518,6 +518,22 @@
                 $(settings.nTableWrapper).prepend(container);
                 return container;
             });
+            DataTable.render.time = function (
+                { 
+                    includeId = "schedule-start-time" 
+                }
+            ) {
+                return function (data, type, row) {
+                    var str = moment(data, "HH:mm:ss");
+                    console.log(str);
+                    if (type === 'display') {
+                        return '<span id="' + includeId + '">' + str.format("hh:mm A") + '</span >';
+                    }
+
+                    // Search, order and type can use the original data
+                    return str;
+                };
+            };
             table = new DataTable('#enroll-table', {
                 data: [],
                 deferRender: false,
@@ -527,19 +543,15 @@
                     { data: 'student.account.fullname' },
                     // { data: 'status' },
                     { // Add a select box in the last column
-                        data: null, // No need to map it to a specific data field
+                        data: 'status',
                         render: function (data, type, row, meta) {
-                            getEnrollStatusOptions(row.status);
-                            // Customize the select box based on your needs
-                            //<option value="enrolled" ${row.status === 'enrolled' ? 'selected' : ''}>Enrolled</option>
-                            //<option value="pending" ${row.status === 'pending' ? 'selected' : ''}>Pending</option>
                             return `
-                                        <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
-                                        `
-                                + getEnrollStatusOptions(row.status) +
+                                <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
                                 `
-                                        </select>
-                                        `;
+                                + getEnrollStatusOptions(data) +
+                                `
+                                </select>
+                                `;
                         }
                     }
                 ],
@@ -619,22 +631,22 @@
                     },
                     {
                         data: 'scheduleDate',
-                        render: function (data, type, row, meta) {
-                            // '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
-                            return '<span id="schedule-start-date">' + formatDate(data, { ignoreHour : true , addDayOfWeek : true }) + '</span >';
-                        }
+                        // render: function (data, type, row, meta) {
+                        //     '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
+                        //     return '<span id="schedule-start-date">' + formatDate(data, { ignoreHour : true , addDayOfWeek : true }) + '</span >';
+                        // },
+                        render: DataTable.render.date("dddd, DD/MM/YYYY")
                     },
                     {
                         data: 'startTime',
-                        render: function (data, type, row, meta) {
-                            return '<span id="schedule-start-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
-                        }
+                        // render: function (data, type, row, meta) {
+                        //     return '<span id="schedule-start-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
+                        // },
+                        render: DataTable.render.time({ includeId: "schedule-start-time" })
                     },
                     {
                         data: 'endTime',
-                        render: function (data, type, row, meta) {
-                            return '<span id="schedule-end-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
-                        }
+                        render: DataTable.render.time({ includeId: "schedule-end-time" })
                     },
                     {
                         data: 'status'

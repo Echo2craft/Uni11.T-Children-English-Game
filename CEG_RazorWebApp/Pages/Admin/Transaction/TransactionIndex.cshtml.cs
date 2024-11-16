@@ -30,8 +30,10 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
         {
 
         }
-
         /*public IActionResult OnPostGeneratePaymentUrl([FromBody] CreateTransactionVM createTransaction)
+        public IActionResult OnPostGeneratePaymentUrl(
+            [FromBody] CreateTransactionVM createTransaction
+            )
         {
             if (!ModelState.IsValid)
             {
