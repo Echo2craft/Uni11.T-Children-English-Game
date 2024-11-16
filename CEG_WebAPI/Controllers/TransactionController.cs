@@ -1,6 +1,7 @@
 ﻿using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Parent;
 using CEG_BAL.ViewModels.Transaction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,12 +17,14 @@ namespace CEG_WebAPI.Controllers
         private readonly ITransactionService _transactionService;
         private readonly IVnpayService _vnpayService;
         private readonly IParentService _parentService;
+        private readonly IEnrollService _enrollService;
 
-        public TransactionController(ITransactionService transactionService, IVnpayService vnpayService, IParentService parentService)
+        public TransactionController(ITransactionService transactionService, IVnpayService vnpayService, IParentService parentService, IEnrollService enrollService)
         {
             _transactionService = transactionService;
             _vnpayService = vnpayService;
             _parentService = parentService;
+            _enrollService = enrollService;
         }
 
         [HttpGet("All")]
@@ -183,7 +186,18 @@ namespace CEG_WebAPI.Controllers
                     });
                 }
                 TransactionViewModel tran = new TransactionViewModel();
-                _transactionService.Create(tran, newTran);
+                var tranId = await _transactionService.Create(tran, newTran);
+                if (newTran.TransactionType.Equals("Enrollment"))
+                {
+                    var newEn = new CreateNewEnroll()
+                    {
+                        StudentName = newTran.StudentFullname,
+                        ClassName = newTran.ClassName,
+                        TransactionId = tranId,
+                    };
+                    EnrollViewModel newEnroll = new EnrollViewModel();
+                    _enrollService.Create(newEnroll, newEn);
+                }
                 return Ok(new
                 {
                     Data = true,

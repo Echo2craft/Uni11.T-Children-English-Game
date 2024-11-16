@@ -15,7 +15,7 @@ namespace CEG_BAL.ViewModels
 
         public string ParentFullname { get; set; } = null!;
         public string? StudentFullname { get; set; }
-        public string? Classname { get; set; }
+        public string? ClassName { get; set; }
 
         public string VnpayId { get; set; } = null!;
 
