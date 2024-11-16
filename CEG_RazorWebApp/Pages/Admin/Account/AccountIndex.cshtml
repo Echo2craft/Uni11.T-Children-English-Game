@@ -139,7 +139,7 @@
                         <div class="modal-header">
                             <h6 class="modal-title">Student Account</h6>
                         </div>
-                        <form method="post" asp-page-handler="Student" id="createStudentForm">
+                        <form method="post" id="createStudentForm">
                             <div class="modal-body">
                                 <div class="row p-4">
                                     <div class="col-12">
@@ -154,10 +154,19 @@
                                             <span asp-validation-for="@createStudent.Account.Fullname" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createStudent.ParentUsername" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createStudent.ParentUsername" value="@createStudent.ParentUsername" type="text" placeholder="Parent's Account User Name" required class="form-control col-md-8">
+                                            <label asp-for="@createStudent.ParentUsername" class="col-md-4 col-form-label text-md-right">Select existing Parent to be associated with this Student</label>
+                                            <div class="col-md-8 p-0">
+                                                <!-- search bar with dropdown list-->
+                                                <select id="select2-parent-fullname-dropdown" class="form-control custom-select" style="width: 100%;">
+                                                </select>
+                                            </div>
                                             <span asp-validation-for="@createStudent.ParentUsername" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+
+                                            @* <label asp-for="@createStudent.ParentUsername" class="col-md-4 col-form-label text-md-right"></label>
+                                            <input asp-for="@createStudent.ParentUsername" value="@createStudent.ParentUsername" type="text" placeholder="Parent's Account User Name" required class="form-control col-md-8">
+                                            <span asp-validation-for="@createStudent.ParentUsername" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
 
                                             <label asp-for="@createStudent.Birthdate" class="col-md-4 col-form-label text-md-right"></label>
                                             <input asp-for="@createStudent.Birthdate" value="@createStudent.Birthdate.ToString("yyyy-MM-ddTHH:mm")" type="datetime-local" min="@DateTime.Now.AddYears(-16).ToString("yyyy-MM-ddTHH:mm")" max="@DateTime.Now.AddYears(-12).ToString("yyyy-MM-ddTHH:mm")" asp-format="{0:yyyy-MM-ddTHH:mm}" required class="form-control col-md-8">
@@ -170,7 +179,7 @@
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                             <label asp-for="@createStudent.Account.Gender" class="col-md-4 col-form-label text-md-right"></label>
-                                            <select class="form-control col-md-8 custom-select" asp-for="@createStudent.Account.Gender" asp-items="@createStudent.Account.DefaultAccountGenderSelectList"></select>
+                                            <select class="form-control col-md-8 custom-select" asp-for="@createStudent.Account.Gender"></select>
                                             <span asp-validation-for="@createStudent.Account.Gender" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -218,7 +227,7 @@
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                             <label asp-for="@createParent.Account.Gender" class="col-md-4 col-form-label text-md-right"></label>
-                                            <select class="form-control col-md-8 custom-select" asp-for="@createParent.Account.Gender" asp-items="@createParent.Account.DefaultAccountGenderSelectList"></select>
+                                            <select class="form-control col-md-8 custom-select" asp-for="@createParent.Account.Gender"></select>
                                             <span asp-validation-for="@createParent.Account.Gender" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -276,7 +285,7 @@
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                             <label asp-for="@createTeacher.Account.Gender" class="col-md-4 col-form-label text-md-right"></label>
-                                            <select class="form-control col-md-8 custom-select" asp-for="@createTeacher.Account.Gender" asp-items="@createTeacher.Account.DefaultAccountGenderSelectList"></select>
+                                            <select class="form-control col-md-8 custom-select" asp-for="@createTeacher.Account.Gender"></select>
                                             <span asp-validation-for="@createTeacher.Account.Gender" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -449,29 +458,36 @@
                         callApiUpdateAccountStatus(accountId, newStatus);
                     });
                 });
-            })
-            // .on('select', function (e, dt, type, indexes) {
-            //     if (type === 'row') {
-            //         var data = sessionTable
-            //             .row(indexes)
-            //             .data();
-            //         $('input#createSchedule_SessionId').val(data.sessionId);
-            //         $('input#createSchedule_SessionNumber').val(data.sessionNumber);
-            //         $('input#createSchedule_SessionTitle').val(data.title);
-            //         $('textarea#createSchedule_SessionDescription').text(data.sessionId);
-            //         $('input#createSchedule_SessionHours').val(data.hours);
-            //     }
-            // }).on('deselect', function (e, dt, type, indexes) {
-            //     if (type === 'row') {
-            //         $('input#createSchedule_SessionId').val(0);
-            //         $('input#createSchedule_SessionNumber').val(0);
-            //         $('input#createSchedule_SessionTitle').val('');
-            //         $('textarea#createSchedule_SessionDescription').text('');
-            //         $('input#createSchedule_SessionHours').val(0);
-            //     }
-            // })
-            ;
+            });
+            $('#select2-parent-fullname-dropdown').select2({
+                placeholder: 'Select a parent to be associate with this student',
+                allowClear: true,
+                width: 'resolve',
+                theme: 'bootstrap4'
+            });
             callApiGetAccountList();
+
+            $('#createStudentForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                //Get the form data
+                var formData = {
+                    Account: {
+                        Username: $('#createStudent_Account_Username').val(),
+                        Fullname: $('#createStudent_Account_Fullname').val(),
+                        Gender: $('#createStudent_Account_Gender').val(),
+                        Password: $('#createStudent_Account_Password').val(),
+                        ConfirmPassword: $('#createStudent_Account_ConfirmPassword').val()
+                    },
+                    Birthdate: $('#createStudent_Birthdate').val(),
+                    Description: $('#createStudent_Description').val(),
+                    ParentFullname: $('#select2-parent-fullname-dropdown').select2('data')[0].text,
+                };
+                console.log(formData);
+                //Make the AJAX request
+                callApiPostCreateStudent(formData);
+                $('#createStudentForm').trigger("reset");
+            });
         });
         function callApiGetAccountList() {
             $.ajax({
@@ -490,7 +506,7 @@
                         if (accountList && accountList.length > 0) {
                             accountTable.clear().rows.add(accountList).draw();
                         }
-                        // setAccountDisplay(accountList);
+                        setAccountDisplay();
                         showAlert('success','Account list get successfully!');
                     } else {
                         showAlert('error', "Error:" + response.errorMessage);
@@ -556,46 +572,110 @@
                 }
             });
         }
-        // function setAccountDisplay(data) {
-        //     var tableBody = $('#history-table tbody'); Reference to the <id="history-table"> element
-        //     tableBody.empty(); Clear any existing options
-        //     Loop through the data array and append each class div
-        //     $.each(data, function (index, account) {
-        //         var url = account.role.roleName === 'Admin' ? '' : `href="/Admin/${account.role.roleName}/${account.accountId}/Info"`
-        //         Construct card HTML
-        //         var rowHtml = `
-        //                         <tr class="${index % 2 === 0 ? 'even' : 'odd'}">
-        //                             <td class="sorting_1">
-        //                                 <input type="hidden" name="listRequest[${index}].UserName" value="${account.username}" class="form-control" />
-        //                                 <a ${url}>${account.username}</a>
-        //                             </td>
-        //                             <td>
-        //                                 <input type="hidden" name="listRequest[${index}].FullName" value="${account.fullname}" class="form-control" />
-        //                                 ${account.fullname}
-        //                             </td>
-        //                             <td>
-        //                                 <input type="hidden" name="listRequest[${index}].Gender" value="${account.gender}" class="form-control" />
-        //                                 ${account.gender}
-        //                             </td>
-        //                             <td>
-        //                                 <input type="hidden" name="listRequest[${index}].CreatedDate" value="${account.createdDate}" class="form-control" />
-        //                                 ${formatDate(account.createdDate, { includeAmPm : true })}
-        //                             </td>
-        //                             <td>
-        //                                 <input type="hidden" name="listRequest[${index}].Role" value="${account.role.roleName}" class="form-control" />
-        //                                 ${account.role.roleName}
-        //                             </td>
-        //                             <td>
-        //                                 <select class="form-control custom-select status-dropdown" data-accountid="${account.accountId}" name="listRequest[${index}].Status" ${account.role.roleName === 'Admin' ? 'disabled' : ''}>
-        //                                     ${getStatusOptions(account.status)} <!-- Helper function to generate select options -->
-        //                                 </select>
-        //                             </td>
-        //                         </tr>
-        //                     `;
-        //         Append the constructed HTML to the class list container
-        //         tableBody.append(rowHtml);
-        //     });
-        // }
+        function callApiPostCreateStudent(formData) {
+            $.ajax({
+                url: apiUrl + 'Admin/Student/Create', // Specify your Razor Page here
+                type: 'POST',
+                data: JSON.stringify(formData),
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Student create successfully");
+                        callApiGetAccountList();
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function getParentNameList(){
+            // Call API to get the list of teacher names
+            $.ajax({
+                url: apiUrl + 'Parent/All/Fullname', // API endpoint
+                type: 'GET',
+                success: function (response) {
+                    // Check if the status is true
+                    if (response.status) {
+                        addParentOptions(response.data);
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function setAccountDisplay(){
+            getParentNameList();
+            $('#createStudent_Account_Gender').empty();
+            $('#createStudent_Account_Gender').append(getGenderOptions());
+            $('#createParent_Account_Gender').empty();
+            $('#createParent_Account_Gender').append(getGenderOptions());
+            $('#createTeacher_Account_Gender').empty();
+            $('#createTeacher_Account_Gender').append(getGenderOptions());
+        }
+        function getGenderOptions(selectedGender) {
+            var options = ['Male', 'Female', 'Other']; // Example genders
+            var html = '';
+            options.forEach(function (gender) {
+                html += `<option value="${gender}" ${selectedGender === gender ? 'selected' : ''} >${gender}</option>`;
+            });
+
+            return html;
+        }
+        function addParentOptions(data) {
+            $('#select2-parent-fullname-dropdown').empty();
+            data.forEach(item => {
+                // Add each item as an option
+
+                let newOption = new Option(item, item, false, false);
+                $('#select2-parent-fullname-dropdown').append(newOption);
+            });
+            // Refresh the Select2 dropdown to show new options
+            $('#select2-parent-fullname-dropdown').trigger('change'); // Ensure Select2 is updated
+        }
         function getStatusOptions(selectedStatus) {
             var options = ['Inactive', 'Active', 'Expired', 'Denied', 'Suspended']; // Example statuses
             var html = '';

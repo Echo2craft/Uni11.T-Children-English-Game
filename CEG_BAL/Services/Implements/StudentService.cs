@@ -38,17 +38,19 @@ namespace CEG_BAL.Services.Implements
             acc.Account.CreatedDate = DateTime.Now;
             acc.Account.Status = "Active";
             acc.Account.RoleId = _unitOfWork.RoleRepositories.GetRoleIdByRoleName("Student").Result;
+            if (_unitOfWork.ParentRepositories.GetIdByFullname(newStu.ParentFullname).Result == 0) throw new Exception("Parent Not Found!");
             if (newStu != null)
             {
                 acc.Account.Fullname = newStu.Account.Fullname;
                 acc.Account.Username = newStu.Account.Username;
                 acc.Account.Gender = newStu.Account.Gender;
                 acc.Account.Password = newStu.Account.Password;
+                acc.Account.RoleId = 2;
                 acc.Description = newStu.Description;
                 //acc.TotalPoint = newStu.TotalPoints;
                 acc.Birthdate = newStu.Birthdate;
                 acc.Age = CalculateAge(acc.Birthdate.Value);
-                acc.ParentId = _unitOfWork.ParentRepositories.GetIdByUsername(newStu.ParentUsername).Result;
+                acc.ParentId = _unitOfWork.ParentRepositories.GetIdByFullname(newStu.ParentFullname).Result;
             }
             _unitOfWork.StudentRepositories.Create(acc);
             _unitOfWork.Save();
