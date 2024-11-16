@@ -37,11 +37,11 @@ namespace CEG_BAL.Services.Implements
             if (newTran != null)
             {
                 trans.ParentId = _unitOfWork.ParentRepositories.GetIdByFullname(newTran.ParentFullname).Result;
-                trans.VnpayId = model.VnpayId;
-                trans.TransactionAmount = model.TransactionAmount;
+                trans.VnpayId = newTran.VnpayId;
+                trans.TransactionAmount = newTran.TransactionAmount;
                 trans.TransactionDate = DateTime.Now;
                 trans.TransactionStatus = "Completed";
-                trans.TransactionType = model.TransactionType;
+                trans.TransactionType = newTran.TransactionType;
                 trans.ConfirmDate = DateTime.Now;
             }
             _unitOfWork.TransactionRepositories.Create(trans);

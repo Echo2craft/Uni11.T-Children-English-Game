@@ -28,17 +28,24 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
             if (TransactionResponse.Success)
             {
                 TransactionResponse.Message = "Transaction Successful!";
+                string orderDetails = TransactionResponse.OrderDescription;
                 // Call the API to create the transaction in the database
                 var transactionData = new TransactionViewModel
                 {
-                    ParentFullname = TransactionResponse.OrderDescription,
+                    ParentFullname = ExtractValue(orderDetails, Constants.VNPAY_PARENT_NAME_LABEL),
                     TransactionAmount = (int)TransactionResponse.Value,
                     TransactionDate = DateTime.Now,
                     TransactionStatus = "Completed",
-                    TransactionType = TransactionResponse.TransactionType,
                     ConfirmDate = DateTime.Now,
+                    TransactionType = TransactionResponse.TransactionType,
                     VnpayId = TransactionResponse.VnpayId
                 };
+
+                if(transactionData.TransactionType == "Enrollment")
+                {
+                    transactionData.StudentFullname = ExtractValue(orderDetails, Constants.VNPAY_STUDENT_NAME_LABEL);
+                    transactionData.Classname = ExtractValue(orderDetails, Constants.VNPAY_CLASS_NAME_LABEL);
+                }
 
                 var apiResponse = await _httpClient.PostAsJsonAsync("https://localhost:7143/api/Transaction/Create", transactionData);
 
@@ -53,6 +60,16 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
             }
 
             return Page();
+        }
+        // Helper function for extracting values based on labels
+        private string ExtractValue(string details, string label)
+        {
+            int startIndex = details.IndexOf(label);
+            if (startIndex == -1) return string.Empty; // Label not found, return empty string
+            startIndex += label.Length; // Move to the end of the label
+            int endIndex = details.IndexOf(',', startIndex); // Find the next comma
+            if (endIndex == -1) endIndex = details.Length; // If no comma, take until the end
+            return details.Substring(startIndex, endIndex - startIndex).Trim();
         }
     }
 }

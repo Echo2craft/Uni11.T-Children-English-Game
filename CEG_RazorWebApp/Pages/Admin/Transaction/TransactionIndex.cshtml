@@ -372,53 +372,7 @@
                 select: {
                     style: 'single'
                 }
-            })
-                // .on('select', function (e, dt, type, indexes) {
-                //     if (type === 'row') {
-                //         var data = sessionTable
-                //             .row(indexes)
-                //             .data();
-                //         console.log(data);
-                //         var sessionId = data.sessionId;
-                //         If not selected, add to selected set and add to scheduleTable
-                //         selectedSessionIds.add(sessionId);
-                //         var startDateTime = getDefaultDate();
-                //         console.log(startDateTime);
-                //         var endDateTime = new Date(startDateTime);
-                //         endDateTime.setHours(endDateTime.getHours() + data.hours);
-                //         Create a new row data for scheduleTable based on selected sessionTable row
-                //         var newRowData = { Customize if needed, or leave empty for manual input
-                //             sessionId: sessionId,
-                //             sessionNumber: data.sessionNumber,
-                //             title: data.title,
-                //             startDate: startDateTime,
-                //             hour: data.hours,
-                //             endDate: endDateTime
-                //         };
-
-                //         Add new row data to scheduleTable
-                //         scheduleTable.row.add(newRowData).draw();
-                //     }
-                // }).on('deselect', function (e, dt, type, indexes) {
-                //     if (type === 'row') {
-                //         var data = sessionTable
-                //             .row(indexes)
-                //             .data();
-                //         console.log(data);
-                //         var sessionId = data.sessionId;
-                //         If already selected, unselect and remove from scheduleTable
-                //         selectedSessionIds.delete(sessionId);
-
-                //         Find and remove the row with the same sessionId in scheduleTable
-                //         scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                //             if (this.data().sessionId === data.sessionId) {
-                //                 scheduleTable.row(rowIdx).remove();
-                //             }
-                //         });
-                //         scheduleTable.draw(); Re-render table after removal
-                //     }
-                // })
-                ;
+            });
 
             callApiGetTransactionList();
         });
@@ -447,7 +401,8 @@
                     if (response.status) {
                         window.location.href = response.data; // Redirect to VNPay
                     } else {
-                        alert(response.message || "Failed to create transaction.");
+                        showAlert('error', "Error: \n" + (response.errorMessage || "Failed to create transaction."));
+                        // alert(response.message || "Failed to create transaction.");
                     }
                 },
                 error: function (xhr, status, error) {
