@@ -49,6 +49,8 @@
                             <div class="tab-content">
                                 <!-- home1 -->
                                 <div class="tab-pane active" id="home1" role="tabpanel">
+                                    <div class="row">
+                                    </div>
                                     <div id="transaction-table_wrapper" class="dataTables_wrapper no-footer">
                                         <table id="transaction-table"
                                                class="table table-striped table-bordered dataTable no-footer"
@@ -297,9 +299,6 @@
             })
             .on('select2:select', function (e) {
                 var text = $('#select2-parent-fullname-enrollment-dropdown').select2('data')[0].text;
-                // var parentNameObj = {
-                //     parentName: text
-                // };
                 callApiGetStudentNameList(text);
             })
             ;
@@ -332,19 +331,30 @@
                     { data: 'transactionId' },
                     { data: 'parent.account.fullname' },
                     { data: 'vnpayId' },
-                    { data: 'transactionAmount' },
+                    { 
+                        data: 'transactionAmount',
+                        render: function (data, type, row, meta) {
+                            formatter = new Intl.NumberFormat('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND',
+                            });
+                            return '<span>' + formatter.format(data) + '</span >';
+                        }
+                    },
                     { data: 'transactionType' },
                     {
                         data: 'transactionDate',
-                        render: function (data, type, row, meta) {
-                            return '<span>' + formatDate(data, { addDayOfWeek: true, includeAmPm: true }) + '</span >';
-                        }
+                        // render: function (data, type, row, meta) {
+                        //     return '<span>' + formatDate(data, { addDayOfWeek: true, includeAmPm: true }) + '</span >';
+                        // },
+                        render: DataTable.render.date("dddd, DD/MM/YYYY hh:mm A")
                     },
                     {
                         data: 'confirmDate',
-                        render: function (data, type, row, meta) {
-                            return '<span>' + formatDate(data, { addDayOfWeek: true, includeAmPm: true }) + '</span >';
-                        }
+                        // render: function (data, type, row, meta) {
+                        //     return '<span>' + formatDate(data, { addDayOfWeek: true, includeAmPm: true }) + '</span >';
+                        // },
+                        render: DataTable.render.date("dddd, DD/MM/YYYY hh:mm A")
                     },
                     { data: 'transactionStatus' }
                 ],

@@ -431,7 +431,7 @@
                 width: 'resolve',
                 theme: 'bootstrap4'
             })
-            .on('select2:close', function (e) {
+            .on('select2:select', function (e) {
                 // console.log(e);
                 var text = $('#searchableCourseDropdown').select2('data')[0].text;
                 // Filter options based on the search input
@@ -515,7 +515,6 @@
                     if (response.status) {
                         courseList = response.data;
                         addCourseOptions(courseList);
-                        renderDefaultCourse(courseList);
                     } else {
                         console.error("API returned false status.");
                     }
@@ -542,18 +541,6 @@
                 }
             });
         });
-        function renderDefaultCourse(data) {
-            // var text = $('#searchableCourseDropdown').select2('data')[0].text;
-            // Filter options based on the search input
-            var results = data[0]
-
-            if (results && results.sessions) {
-                sessionTable.clear().rows.add(results.sessions).draw();
-            } else {
-                console.error('Selected course or its sessions not found.');
-                sessionTable.clear().draw();
-            }
-        }
         function addTeacherOptions(data) {
             data.forEach(item => {
                 // Add each item as an option
@@ -571,6 +558,15 @@
             });
             // Refresh the Select2 dropdown to show new options
             $('#searchableCourseDropdown').trigger('change'); // Ensure Select2 is updated
+            // render default data using first data
+            var results = data[0]
+
+            if (results && results.sessions) {
+                sessionTable.clear().rows.add(results.sessions).draw();
+            } else {
+                console.error('Selected course or its sessions not found.');
+                sessionTable.clear().draw();
+            }
         }
         // Function to calculate today's date + 10 days
         function getDefaultDate() {
