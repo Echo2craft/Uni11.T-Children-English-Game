@@ -276,5 +276,10 @@ namespace CEG_DAL.Repositories.Implements
             if (result != null) return result.ClassId;
             return 0;
         }
+
+        public async Task<Class?> GetByClassName(string className)
+        {
+            return await _dbContext.Classes.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(c => c.ClassName == className);
+        }
     }
 }

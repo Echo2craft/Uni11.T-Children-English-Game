@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Transaction;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -30,12 +31,20 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public void Create(TransactionViewModel model)
+        public void Create(TransactionViewModel model, CreateTransaction newTran)
         {
-            var parentId = _unitOfWork.ParentRepositories.GetIdByFullname(model.ParentFullname);
-            model.ParentId = parentId.Result;
-            var pay = _mapper.Map<Transaction>(model);
-            _unitOfWork.TransactionRepositories.Create(pay);
+            var trans = _mapper.Map<Transaction>(model);
+            if (newTran != null)
+            {
+                trans.ParentId = _unitOfWork.ParentRepositories.GetIdByFullname(newTran.ParentFullname).Result;
+                trans.VnpayId = model.VnpayId;
+                trans.TransactionAmount = model.TransactionAmount;
+                trans.TransactionDate = DateTime.Now;
+                trans.TransactionStatus = "Completed";
+                trans.TransactionType = model.TransactionType;
+                trans.ConfirmDate = DateTime.Now;
+            }
+            _unitOfWork.TransactionRepositories.Create(trans);
             _unitOfWork.Save();
         }
 
