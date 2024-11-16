@@ -206,7 +206,7 @@
                         <div class="modal-header">
                             <h6 class="modal-title">Parent Account</h6>
                         </div>
-                        <form method="post" asp-page-handler="Parent" id="createParentForm">
+                        <form method="post" id="createParentForm">
                             <div class="modal-body">
                                 <div class="row p-4">
                                     <div class="col-12">
@@ -264,7 +264,7 @@
                         <div class="modal-header">
                             <h6 class="modal-title">Teacher Account</h6>
                         </div>
-                        <form method="post" asp-page-handler="Teacher" id="createTeacherForm">
+                        <form method="post" id="createTeacherForm">
                             <div class="modal-body">
                                 <div class="row p-4">
                                     <div class="col-12">
@@ -465,11 +465,11 @@
                 width: 'resolve',
                 theme: 'bootstrap4'
             });
+
             callApiGetAccountList();
 
             $('#createStudentForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
-
                 //Get the form data
                 var formData = {
                     Account: {
@@ -483,10 +483,49 @@
                     Description: $('#createStudent_Description').val(),
                     ParentFullname: $('#select2-parent-fullname-dropdown').select2('data')[0].text,
                 };
-                console.log(formData);
                 //Make the AJAX request
                 callApiPostCreateStudent(formData);
                 $('#createStudentForm').trigger("reset");
+            });
+
+            $('#createParentForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+                //Get the form data
+                var formData = {
+                    Account: {
+                        Username: $('#createParent_Account_Username').val(),
+                        Fullname: $('#createParent_Account_Fullname').val(),
+                        Gender: $('#createParent_Account_Gender').val(),
+                        Password: $('#createParent_Account_Password').val(),
+                        ConfirmPassword: $('#createParent_Account_ConfirmPassword').val()
+                    },
+                    Email: $('#createParent_Email').val(),
+                    Address: $('#createParent_Address').val(),
+                    Phone: $('#createParent_Phone').val(),
+                };
+                //Make the AJAX request
+                callApiPostCreateParent(formData);
+                $('#createParentForm').trigger("reset");
+            });
+
+            $('#createTeacherForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+                //Get the form data
+                var formData = {
+                    Account: {
+                        Username: $('#createTeacher_Account_Username').val(),
+                        Fullname: $('#createTeacher_Account_Fullname').val(),
+                        Gender: $('#createTeacher_Account_Gender').val(),
+                        Password: $('#createTeacher_Account_Password').val(),
+                        ConfirmPassword: $('#createTeacher_Account_ConfirmPassword').val()
+                    },
+                    Email: $('#createTeacher_Email').val(),
+                    Address: $('#createTeacher_Address').val(),
+                    Phone: $('#createTeacher_Phone').val(),
+                };
+                //Make the AJAX request
+                callApiPostCreateTeacher(formData);
+                $('#createTeacherForm').trigger("reset");
             });
         });
         function callApiGetAccountList() {
@@ -585,6 +624,86 @@
                     // Handle success (display a success message or redirect, etc.)
                     if (response.status) {
                         showAlert('success', "Student create successfully");
+                        callApiGetAccountList();
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiPostCreateParent(formData) {
+            $.ajax({
+                url: apiUrl + 'Admin/Parent/Create', // Specify your Razor Page here
+                type: 'POST',
+                data: JSON.stringify(formData),
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Parent create successfully");
+                        callApiGetAccountList();
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiPostCreateTeacher(formData) {
+            $.ajax({
+                url: apiUrl + 'Admin/Teacher/Create', // Specify your Razor Page here
+                type: 'POST',
+                data: JSON.stringify(formData),
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Teacher create successfully");
                         callApiGetAccountList();
                     } else {
                         showAlert('error', "Error: \n" + response.errorMessage);
