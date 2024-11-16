@@ -9,6 +9,8 @@ namespace CEG_BAL.ViewModels.Transaction
     public class TransactionRequest
     {
         public string? ParentFullname { get; set; }
+        public string? StudentFullname { get; set; }
+        public string? Classname { get; set; }
         public int TransactionAmount { get; set; }
         public string TransactionType { get; set; } = null!;
     }

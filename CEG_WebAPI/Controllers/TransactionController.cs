@@ -132,7 +132,9 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(TransactionRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GeneratePaymentUrl([FromBody] TransactionRequest request)
+        public IActionResult GeneratePaymentUrl(
+            [FromBody][Required] TransactionRequest request
+            )
         {
             try
             {
