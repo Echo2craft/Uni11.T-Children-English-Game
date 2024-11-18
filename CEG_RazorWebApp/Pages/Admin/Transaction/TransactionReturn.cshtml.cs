@@ -20,6 +20,8 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
             _vnPayLibrary = new VnPayLibrary();
             _httpClient = httpClient;
         }
+        [BindProperty]
+        public TransactionViewModel CreateTransactionVM { get; set; }
         public async Task<IActionResult> OnGetAsync()
         {
             string hashSecret = _config["Vnpay:HashSecret"]; // Replace with actual VNPay hash secret
@@ -47,20 +49,22 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
                     transactionData.ClassName = ExtractValue(orderDetails, Constants.VNPAY_CLASS_NAME_LABEL);
                 }
 
-                var apiResponse = await _httpClient.PostAsJsonAsync("https://localhost:7143/api/Transaction/Create", transactionData);
+                CreateTransactionVM = transactionData;
+
+                /*var apiResponse = await _httpClient.PostAsJsonAsync("https://localhost:7143/api/Transaction/Create", transactionData);
 
                 if (!apiResponse.IsSuccessStatusCode)
                 {
                     TransactionResponse.Message = "Transaction processed, but failed to save.";
-                }
+                }*/
             }
             else
             {
                 TransactionResponse.Message = "Transaction Failed.";
             }
-
             return Page();
         }
+
         // Helper function for extracting values based on labels
         private string ExtractValue(string details, string label)
         {
