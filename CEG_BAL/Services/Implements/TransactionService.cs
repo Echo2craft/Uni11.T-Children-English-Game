@@ -31,7 +31,7 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public void Create(TransactionViewModel model, CreateTransaction newTran)
+        public Task<int> Create(TransactionViewModel model, CreateTransaction newTran)
         {
             var trans = _mapper.Map<Transaction>(model);
             if (newTran != null)
@@ -46,6 +46,9 @@ namespace CEG_BAL.Services.Implements
             }
             _unitOfWork.TransactionRepositories.Create(trans);
             _unitOfWork.Save();
+
+            model.TransactionId = trans.TransactionId;
+            return Task.FromResult(trans.TransactionId);
         }
 
         public async Task<List<TransactionViewModel>> GetTransactionList()

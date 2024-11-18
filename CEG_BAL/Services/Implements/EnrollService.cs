@@ -46,9 +46,9 @@ namespace CEG_BAL.Services.Implements
                 en.RegistrationDate = DateTime.Now;
                 en.EnrolledDate = DateTime.Now;
                 en.Status = "Enrolled";
-                en.Class = c;
-                en.Student = s;
-                en.Transaction = t;
+                //en.Class = c;
+                //en.Student = s;
+                //en.Transaction = t;
             }
             _unitOfWork.EnrollRepositories.Create(en);
             _unitOfWork.Save();

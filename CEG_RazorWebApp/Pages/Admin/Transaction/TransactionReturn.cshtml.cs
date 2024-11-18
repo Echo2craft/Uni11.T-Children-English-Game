@@ -44,7 +44,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
                 if(transactionData.TransactionType == "Enrollment")
                 {
                     transactionData.StudentFullname = ExtractValue(orderDetails, Constants.VNPAY_STUDENT_NAME_LABEL);
-                    transactionData.Classname = ExtractValue(orderDetails, Constants.VNPAY_CLASS_NAME_LABEL);
+                    transactionData.ClassName = ExtractValue(orderDetails, Constants.VNPAY_CLASS_NAME_LABEL);
                 }
 
                 var apiResponse = await _httpClient.PostAsJsonAsync("https://localhost:7143/api/Transaction/Create", transactionData);
