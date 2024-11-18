@@ -98,21 +98,21 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Classname")]
+        [HttpGet("All/Classname/Status/Open")]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetParentNameList()
+        public async Task<IActionResult> GetClassNameListByStatusOpen()
         {
             try
             {
-                var result = await _classService.GetClassNameList();
+                var result = await _classService.GetClassNameListByStatusOpen();
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class Name List Not Found!"
+                        ErrorMessage = "Class name list by status Open not found!"
                     });
                 }
                 return Ok(new

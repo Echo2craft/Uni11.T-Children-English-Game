@@ -390,11 +390,13 @@
                 TransactionAmount: $('#createTransaction_TransactionAmount').val(),
                 TransactionType: $('#createTransaction_TransactionType').val(),
             };
-            console.log(formData);
             // Send AJAX request
             $.ajax({
                 url: apiUrl + 'Transaction/GenerateUrl',
                 type: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token// Include the JWT token
+                },
                 contentType: 'application/json',
                 data: JSON.stringify(formData),
                 success: function (response) {
@@ -504,7 +506,7 @@
         function callApiGetClassNameList() {
             // Call API to get the list of teacher names
             $.ajax({
-                url: apiUrl + 'Class/All/Classname', // API endpoint
+                url: apiUrl + 'Class/All/Classname/Status/Open', // API endpoint
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true
