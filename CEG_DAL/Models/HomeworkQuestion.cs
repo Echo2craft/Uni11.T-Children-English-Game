@@ -9,7 +9,7 @@ public partial class HomeworkQuestion
 {
     public int HomeworkQuestionId { get; set; }
 
-    public int HomeworkId { get; set; }
+    public int? HomeworkId { get; set; }
 
     public string Question { get; set; }
 

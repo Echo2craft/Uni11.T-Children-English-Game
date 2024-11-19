@@ -10,7 +10,7 @@ namespace CEG_RazorWebApp.Models.Class.Create
     {
         [Required(ErrorMessage = "Class name is required")]
         [DisplayName("Class Name")]
-        public string ClassName { get; set; }
+        public string ClassName { get; set; } = null!;
         [Required(ErrorMessage = "Minimum students amount is required")]
         [Range(Constants.CLASS_MINIMUM_STUDENTS_REQ, int.MaxValue)]
         [DisplayName("Minimum students amount")]
@@ -21,10 +21,10 @@ namespace CEG_RazorWebApp.Models.Class.Create
         public int MaxStudents { get; set; } = Constants.CLASS_MAXIMUM_STUDENTS_REQ;
         [Required(ErrorMessage = "Assign teacher name is required")]
         [DisplayName("Assign teacher name")]
-        public string TeacherName { get; set; }
+        public string TeacherName { get; set; } = null!;
         [Required(ErrorMessage = "Assign course name is required")]
         [DisplayName("Assign course name")]
-        public string CourseName { get; set; }
+        public string CourseName { get; set; } = null!;
         [Required(ErrorMessage = "Class start date is required")]
         [DisplayName("Class start date")]
         [DataType(DataType.DateTime)]
@@ -35,13 +35,5 @@ namespace CEG_RazorWebApp.Models.Class.Create
         [DisplayName("Class end date")]
         [DataType(DataType.DateTime)]
         public DateTime EndDate { get; set; } = DateTime.Now.AddDays(40);
-        /*[Required(ErrorMessage = "Class weekly schedule is required")]
-        [DisplayName("Class weekly schedule")]
-        public string? WeeklySchedule { get; set; } = Constants.CLASS_SCHEDULE_MONDAY_THURSDAY;
-        public List<string>? WeeklySchedulePresets { get; set; } = new List<string>{
-            Constants.CLASS_SCHEDULE_MONDAY_THURSDAY,
-            Constants.CLASS_SCHEDULE_TUESDAY_FRIDAY,
-            Constants.CLASS_SCHEDULE_WEDNESDAY_SATURDAY
-        };*/
     }
 }

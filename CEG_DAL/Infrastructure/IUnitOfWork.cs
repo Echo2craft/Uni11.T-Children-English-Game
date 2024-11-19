@@ -26,6 +26,7 @@ namespace CEG_DAL.Infrastructure
         IStudentHomeworkRepositories StudentHomeworkRepositories { get; }
         IStudentProgressRepositories StudentProgressRepositories { get; }
         IStudentRepositories StudentRepositories { get; }
+        IScheduleRepositories ScheduleRepositories { get; }
         ITeacherRepositories TeacherRepositories { get; }
         ITransactionRepositories TransactionRepositories { get; }
         void Save();

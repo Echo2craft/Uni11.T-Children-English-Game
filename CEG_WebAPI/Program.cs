@@ -61,6 +61,8 @@ namespace CEG_WebAPI
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddHttpContextAccessor();
+
             // Register custom services
             RegisterServices(services);
         }
@@ -84,7 +86,9 @@ namespace CEG_WebAPI
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<IVnpayService, VnpayService>();
         }
 
         private static void AddSwaggerServices(IServiceCollection services)

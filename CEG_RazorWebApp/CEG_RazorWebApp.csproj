@@ -28,7 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Libraries\Attributes\" />
-    <Folder Include="Pages\Admin\Transaction\" />
+    <Folder Include="Models\Schedule\Update\" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="Pages\Teacher\Question\QuestionIndex.cshtml">

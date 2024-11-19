@@ -11,13 +11,19 @@ namespace CEG_BAL.ViewModels
     {
         public int TransactionId { get; set; }
 
+        public int ParentId { get; set; }
+
+        public string ParentFullname { get; set; } = null!;
+        public string? StudentFullname { get; set; }
+        public string? ClassName { get; set; }
+
         public string VnpayId { get; set; } = null!;
 
         public int TransactionAmount { get; set; }
 
         public DateTime TransactionDate { get; set; }
 
-        public bool TransactionStatus { get; set; }
+        public string TransactionStatus { get; set; } = null!;
 
         public string TransactionType { get; set; } = null!;
 
@@ -25,6 +31,6 @@ namespace CEG_BAL.ViewModels
 
         public virtual ICollection<EnrollViewModel> Enrolls { get; set; } = new List<EnrollViewModel>();
 
-        public virtual ParentViewModel Parents { get; set; } = null!;
+        public virtual ParentViewModel Parent { get; set; } = null!;
     }
 }

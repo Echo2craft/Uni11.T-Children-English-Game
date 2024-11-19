@@ -31,6 +31,7 @@ namespace CEG_DAL.Infrastructure
         private IStudentRepositories _studentRepositories;
         private ITeacherRepositories _teacherRepositories;
         private ITransactionRepositories _transactionRepositories;
+        private IScheduleRepositories _scheduleRepositories;
         public UnitOfWork(MyDBContext context)
         {
             _dbContext = context;
@@ -52,6 +53,7 @@ namespace CEG_DAL.Infrastructure
         public IStudentHomeworkRepositories StudentHomeworkRepositories => _studentHomeworkRepositories ??= new StudentHomeworkRepositories(_dbContext);
         public IStudentProgressRepositories StudentProgressRepositories => _studentProgressRepositories ??= new StudentProgressRepositories(_dbContext);
         public IStudentRepositories StudentRepositories => _studentRepositories ??= new StudentRepositories(_dbContext);
+        public IScheduleRepositories ScheduleRepositories => _scheduleRepositories ??= new ScheduleRepositories(_dbContext);
         public ITeacherRepositories TeacherRepositories => _teacherRepositories ??= new TeacherRepositories(_dbContext);
         public ITransactionRepositories TransactionRepositories => _transactionRepositories ??= new TransactionRepositories(_dbContext);
 

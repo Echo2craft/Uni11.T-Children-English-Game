@@ -13,6 +13,8 @@ namespace CEG_BAL.ViewModels
 
         public string ClassName { get; set; } = null!;
 
+        public string? TeacherName { get; set; }
+
         public int? MinimumStudents { get; set; }
 
         public int? MaximumStudents { get; set; }
@@ -25,8 +27,6 @@ namespace CEG_BAL.ViewModels
         public List<EnrollViewModel>? Enrolls { get; set; } = new List<EnrollViewModel>();
         public List<ScheduleViewModel>? Schedules { get; set; } = new List<ScheduleViewModel>();
         public List<StudentProgressViewModel>? StudentProgress { get; set; } = new List<StudentProgressViewModel>();
-
-        public List<ScheduleViewModel> Schedule { get; set; } = new List<ScheduleViewModel>();
 
         public TeacherViewModel? Teacher { get; set; }
 

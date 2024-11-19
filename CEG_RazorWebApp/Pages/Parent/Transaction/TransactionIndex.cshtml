@@ -2,74 +2,247 @@
 @model CEG_RazorWebApp.Pages.Parent.Transaction.TransactionIndexModel
 @{
     ViewData["Title"] = "Parent All Transactions Page";
-    Layout = Model.LayoutUrl;
+    string? search = string.Empty;
+
+    Layout = "~/Pages/Shared/_PLayout.cshtml";
 }
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@ViewData["Title"]</title>
-    </head>
-    <body>
-        <div class="main-content">
-            <div class="main">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="offset-sm-6 col-sm-6  d-flex justify-content-sm-end p-md-0 mt-2 mt-sm-0 ">
-                            <ol class="breadcrumb-item">
-                                <li class="breadcrumd-item">
-                                    <a href="#">Manage</a>
-                                </li>
-                                <li class="breadcrumd-item">
-                                    <span>/</span>
-                                </li>
-                                <li class="breadcrumd-item">
-                                    <a href="/Parent/Transaction/Index">Transaction</a>
-                                </li>
-                            </ol>
-                        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="main-content">
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-sm-6 col-sm-6  d-flex justify-content-sm-end p-md-0 mt-2 mt-sm-0 ">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumd-item">
+                                <a href="#">Manage</a>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <span>/</span>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <a href="/Parent/Transaction/Index">Transaction</a>
+                            </li>
+                        </ol>
                     </div>
-                    <section>
-                        <div class="card">
-                            <div class="card-body">
-                                <!-- Nav tabs -->
-                                <ul class="nav nav-tabs">
-                                    <!-- dung vong for o day -->
-                                    <li class="nav-item">
-                                        <a class="nav-link active" data-toggle="tab" href="#home1">
-                                            <i class='bx bx-home-alt-2'></i>
-                                            <span>All your Transactions</span>
-                                        </a>
-                                    </li>
-                                </ul>
+                </div>
+                <section>
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs">
+                                <!-- dung vong for o day -->
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#home1">
+                                        <i class='bx bx-home-alt-2'></i>
+                                        <span>All your Transactions</span>
+                                    </a>
+                                </li>
+                            </ul>
                             <div id="alertContainer"></div>
-                                <!-- Tab panes -->
-                                <div class="tab-content">
-                                    <!-- home1 -->
-                                    <div class="tab-pane active" id="home1" role="tabpanel">
-                                        <div id="history-table_wrapper" class="dataTables_wrapper no-footer">
-                                            <table id="history-table"
-                                                   class="table table-striped table-bordered dataTable no-footer"
-                                                   aria-describedby="history-table_info">
-                                                <thead>
-                                                    <tr>
-                                                        
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <!-- home1 -->
+                                <div class="tab-pane active" id="home1" role="tabpanel">
+                                    <div id="transaction-table_wrapper" class="dataTables_wrapper no-footer">
+                                        <table id="transaction-table"
+                                               class="table table-striped table-bordered dataTable no-footer"
+                                               aria-describedby="transaction-table_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="transaction-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Transaction ID: activate to sort column ascending">
+                                                        ID
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="transaction-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Class Name: activate to sort column ascending">
+                                                        VNPay Id
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="transaction-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Status: activate to sort column ascending">
+                                                        Amount
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="transaction-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Status: activate to sort column ascending">
+                                                        Type
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="transaction-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Status: activate to sort column ascending">
+                                                        Transaction Date
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="transaction-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Status: activate to sort column ascending">
+                                                        Confirm Date
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="transaction-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Status: activate to sort column ascending">
+                                                        Status
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
                                     </div>
+                                    <!-- end tapnet -->
                                 </div>
                             </div>
                         </div>
-                    </section>
-                </div>
+                    </div>
+                </section>
             </div>
         </div>
+    </div>
+    <script>
+        var token = sessionStorage.getItem('token');
+        var id = sessionStorage.getItem('usrId')
+        var apiUrl = sessionStorage.getItem('apiUrl');
+        var transactionList;
+        $(document).ready(function () {
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('searchIcon', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bx-search-alt question-search-icon',
+                    hideLabel: true // Hide search label
+                }, opts);
 
+                // Create a container for the icon
+                let container = document.createElement('div');
+                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
 
-    </body>
+                // Create the icon element
+                let icon = document.createElement('i');
+                icon.className = options.iconClass;
+
+                // Check if pagination is enabled
+                // if (settings.oFeatures.bFilter) {
+                //     console.log(settings.oFeatures.bFilter);
+                //     console.log('Pagination is enabled for this DataTable.');
+                // }
+
+                setTimeout(() => {
+                    // Find the .dt-search container inside the DataTable wrapper
+                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                    if (searchContainer.length) {
+                        searchContainer.append(icon);
+                    } else {
+                        // Append icon to container
+                        container.appendChild(icon);
+                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                        $(settings.nTableWrapper).prepend(container);
+                    }
+                    if (options.hideLabel) {
+                        // Find the .dt-search label container inside the DataTable wrapper
+                        let searchLabel = searchContainer.find('label');
+                        if (searchLabel.length) {
+                            searchLabel.text('');
+                        } else {
+                            console.log('Label of search div not found!');
+                        }
+                    }
+                }, 100);
+                return '';
+            });
+            sessionTable = new DataTable('#transaction-table', {
+                data: [],
+                deferRender: false,
+                responsive: true,
+                columns: [
+                    { data: 'transactionId' },
+                    { data: 'vnpayId' },
+                    { data: 'transactionAmount' },
+                    { data: 'transactionType' },
+                    {
+                        data: 'transactionDate',
+                        render: function (data, type, row, meta) {
+                            return '<span>' + formatDate(data, false, true, true, false) + '</span >';
+                        }
+                    },
+                    {
+                        data: 'confirmDate',
+                        render: function (data, type, row, meta) {
+                            return '<span>' + formatDate(data, false, true, true, false) + '</span >';
+                        }
+                    },
+                    { data: 'transactionStatus' }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'search info...'
+                        },
+                        searchIcon: {
+                        }
+                    }
+                },
+                select: {
+                    style: 'single'
+                }
+            })
+
+            callApiGetTransactionList();
+        });
+        function callApiGetTransactionList() {
+            $.ajax({
+                url: apiUrl + `Transaction/ByParent/${id}`, // API Endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token // Include the JWT token
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+
+                    // Check if the status is true
+                    if (response.status) {
+                        transactionList = response.data;
+                        console.log(transactionList);
+                        sessionTable.clear().rows.add(transactionList).draw();
+                        // setClassDisplay(classList);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+        }
+    </script>
+</body>
 </html>

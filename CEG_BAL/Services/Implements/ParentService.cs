@@ -78,9 +78,21 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map < List <ParentViewModel >>(await _unitOfWork.ParentRepositories.GetParentList());
         }
 
+        public async Task<List<string>> GetParentNameList()
+        {
+            return await _unitOfWork.ParentRepositories.GetParentNameList();
+        }
+
         public async Task<bool> IsParentExistByEmail(string email)
         {
             var acc = await _unitOfWork.ParentRepositories.GetByEmail(email);
+            if (acc != null) return true;
+            return false;
+        }
+
+        public async Task<bool> IsParentExistByFullname(string fullname)
+        {
+            var acc = await _unitOfWork.ParentRepositories.GetByFullname(fullname);
             if (acc != null) return true;
             return false;
         }

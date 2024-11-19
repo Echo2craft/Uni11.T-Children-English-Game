@@ -9,9 +9,10 @@ namespace CEG_RazorWebApp.Models.Course.Create
     {
         public CreateCourseVM()
         {
-            CEG_RAZOR_Library lib = new CEG_RAZOR_Library();
+            /* CEG_RAZOR_Library lib = new CEG_RAZOR_Library();
+
             DefaultCourseDifficultySelectList = lib.GetCourseDifficultySelectableList(Difficulty);
-            DefaultCourseCategorySelectList = lib.GetCourseCategorySelectableList(Category);
+            DefaultCourseCategorySelectList = lib.GetCourseCategorySelectableList(Category);*/
 
         }
         [Required(ErrorMessage = "Course Name is required")]
@@ -40,6 +41,6 @@ namespace CEG_RazorWebApp.Models.Course.Create
         [DisplayName("Description")]
         public string Description { get; set; } = null!;
         public List<SelectListItem> DefaultCourseDifficultySelectList { get; set; }
-        public List<SelectListItem> DefaultCourseCategorySelectList { get; set; }
+        // public List<SelectListItem> DefaultCourseCategorySelectList { get; set; }
     }
 }

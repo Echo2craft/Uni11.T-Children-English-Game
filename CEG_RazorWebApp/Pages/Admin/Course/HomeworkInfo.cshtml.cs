@@ -68,17 +68,5 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
             SessionID = sessionId;
             HomeworkID = homeworkId;
         }
-        public IActionResult OnGetLogout()
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-            HttpContext.Session.Clear();
-            TempData.Clear();
-            SignOut();
-
-            // If using ASP.NET Identity, you may want to sign out the user
-            // Example: await SignInManager.SignOutAsync();
-
-            return RedirectToPage(Constants.LOGOUT_REDIRECT_URL);
-        }
     }
 }
