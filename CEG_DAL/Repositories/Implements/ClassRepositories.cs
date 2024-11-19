@@ -143,6 +143,15 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
+        public async Task<List<string>> GetClassNameListByStatusOpen()
+        {
+            return await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Where(c => c.Status.Equals("Open"))
+                .Select(c => c.ClassName)
+                .ToListAsync();
+        }
+
         public async Task<List<Class>> GetClassListAdmin()
         {
             return await _dbContext.Classes
@@ -267,6 +276,11 @@ namespace CEG_DAL.Repositories.Implements
             var result = await (from c in _dbContext.Classes where c.ClassId == id select c).FirstOrDefaultAsync();
             if (result != null) return result.ClassId;
             return 0;
+        }
+
+        public async Task<Class?> GetByClassName(string className)
+        {
+            return await _dbContext.Classes.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(c => c.ClassName == className);
         }
     }
 }

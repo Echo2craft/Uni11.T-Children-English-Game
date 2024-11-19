@@ -1,6 +1,7 @@
 ﻿using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Admin.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,77 @@ namespace CEG_WebAPI.Controllers
                     {
                         Status = false,
                         ErrorMessage = "Student List Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("All/Fullname")]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetStudentNameList()
+        {
+            try
+            {
+                var result = await _studentService.GetStudentNameList();
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Student Name List Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("All/Fullname/ByParent/Name/{parentName}")]
+        [Authorize(Roles = "Admin,Teacher,Parent")]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetStudentNameListByParentName(
+            [Required][FromRoute] string parentName
+            )
+        {
+            try
+            {
+                var result = await _studentService.GetStudentNameListByParentName(parentName);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Student Name List by parent name Not Found!"
                     });
                 }
                 return Ok(new
@@ -178,6 +250,45 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Student List Not Found!"
                     });
                 }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+        [HttpPut("Account/{id}/Update")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update(
+            [FromRoute][Required] int id,
+            [FromBody][Required] UpdateStudent student
+            )
+        {
+            try
+            {
+                var result = await _studentService.GetStudentByAccountId(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Student Does Not Exist"
+                    });
+                }
+                _studentService.Update(result,student);
+                result = await _studentService.GetStudentByAccountId(id);
                 return Ok(new
                 {
                     Status = true,

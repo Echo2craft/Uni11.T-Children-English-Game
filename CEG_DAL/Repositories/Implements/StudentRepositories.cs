@@ -17,13 +17,39 @@ namespace CEG_DAL.Repositories.Implements
         {
             _dbContext = dbContext;
         }
+
         public async Task<List<Student>> GetStudentList()
         {
             return await _dbContext.Students.ToListAsync();
         }
+
+        public async Task<List<string>> GetStudentNameList()
+        {
+            return await _dbContext.Students
+                .AsNoTrackingWithIdentityResolution()
+                .Select(s => s.Account.Fullname)
+                .ToListAsync();
+        }
+
+        public async Task<List<string>> GetStudentNameListByParentName(string parentName)
+        {
+            return await _dbContext.Students
+                .AsNoTrackingWithIdentityResolution()
+                .Where(s => s.Parent.Account.Fullname.Trim().Equals(parentName))
+                .Select(s => s.Account.Fullname)
+                .ToListAsync();
+        }
+
         public async Task<Student?> GetByIdNoTracking(int id)
         {
             return await _dbContext.Students.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(stu => stu.StudentId == id);
+        }
+        public async Task<Student?> GetByFullname(string fullname)
+        {
+            return await _dbContext.Students
+                .Include(s => s.Account)
+                .AsNoTrackingWithIdentityResolution()
+                .SingleOrDefaultAsync(s => s.Account.Fullname == fullname);
         }
         public async Task<Student?> GetByAccountIdNoTracking(int id)
         {
@@ -120,6 +146,14 @@ namespace CEG_DAL.Repositories.Implements
                 .Where(stu => stu.ClassId == classId)
                 .Select(e => e.Student)
                 .ToListAsync();
+        }
+
+        public async Task<int?> GetIdByAccountIdNoTracking(int id)
+        {
+            return await _dbContext.Students
+                .Where(stu => stu.AccountId == id)
+                .Select(e => e.StudentId)
+                .FirstOrDefaultAsync();
         }
     }
 }

@@ -518,6 +518,22 @@
                 $(settings.nTableWrapper).prepend(container);
                 return container;
             });
+            DataTable.render.time = function (
+                { 
+                    includeId = "schedule-start-time" 
+                }
+            ) {
+                return function (data, type, row) {
+                    var str = moment(data, "HH:mm:ss");
+                    console.log(str);
+                    if (type === 'display') {
+                        return '<span id="' + includeId + '">' + str.format("hh:mm A") + '</span >';
+                    }
+
+                    // Search, order and type can use the original data
+                    return str;
+                };
+            };
             table = new DataTable('#enroll-table', {
                 data: [],
                 deferRender: false,
@@ -527,19 +543,15 @@
                     { data: 'student.account.fullname' },
                     // { data: 'status' },
                     { // Add a select box in the last column
-                        data: null, // No need to map it to a specific data field
+                        data: 'status',
                         render: function (data, type, row, meta) {
-                            getEnrollStatusOptions(row.status);
-                            // Customize the select box based on your needs
-                            //<option value="enrolled" ${row.status === 'enrolled' ? 'selected' : ''}>Enrolled</option>
-                            //<option value="pending" ${row.status === 'pending' ? 'selected' : ''}>Pending</option>
                             return `
-                                        <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
-                                        `
-                                + getEnrollStatusOptions(row.status) +
+                                <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
                                 `
-                                        </select>
-                                        `;
+                                + getEnrollStatusOptions(data) +
+                                `
+                                </select>
+                                `;
                         }
                     }
                 ],
@@ -619,22 +631,22 @@
                     },
                     {
                         data: 'scheduleDate',
-                        render: function (data, type, row, meta) {
-                            // '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
-                            return '<span id="schedule-start-date">' + formatDate(data, true, true) + '</span >';
-                        }
+                        // render: function (data, type, row, meta) {
+                        //     '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
+                        //     return '<span id="schedule-start-date">' + formatDate(data, { ignoreHour : true , addDayOfWeek : true }) + '</span >';
+                        // },
+                        render: DataTable.render.date("dddd, DD/MM/YYYY")
                     },
                     {
                         data: 'startTime',
-                        render: function (data, type, row, meta) {
-                            return '<span id="schedule-start-time">' + formatTime(data, false, true) + '</span >';
-                        }
+                        // render: function (data, type, row, meta) {
+                        //     return '<span id="schedule-start-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
+                        // },
+                        render: DataTable.render.time({ includeId: "schedule-start-time" })
                     },
                     {
                         data: 'endTime',
-                        render: function (data, type, row, meta) {
-                            return '<span id="schedule-end-time">' + formatTime(data, false, true) + '</span >';
-                        }
+                        render: DataTable.render.time({ includeId: "schedule-end-time" })
                     },
                     {
                         data: 'status'
@@ -1055,17 +1067,14 @@
             return html;
         }
         function getEnrollStatusOptions(selectedStatus) {
-            var options = ['Pending', 'Enrolled', 'Suspended']; // Example statuses
+            var options = ['Enrolled', 'Cancelled']; // Example statuses
             var html = '';
             switch (selectedStatus) {
-                case 'Pending':
-                    options = ['Pending', 'Enrolled']
-                    break;
                 case 'Enrolled':
-                    options = ['Enrolled', 'Suspended']
+                    options = ['Enrolled', 'Cancelled']
                     break;
-                case 'Suspended':
-                    options = ['Suspended']
+                case 'Cancelled':
+                    options = ['Cancelled']
                     break;
             }
             options.forEach(function (status) {
@@ -1136,7 +1145,7 @@
                     if (response.status) {
                         addTeacherOptions(response.data, data.teacher.account.fullname);
                     } else {
-                        console.error("API returned false status.");
+                        showAlert('error', "Error: \n" + response.errorMessage);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -1176,19 +1185,13 @@
                     break;
             }
             if (data.status != 'Draft' && data.status != 'Postponed') {
-                // scheduleTable.column(6).visible(false, false);
                 let dadiv = $('div.dt-modal-toggle').parent();
                 dadiv.find('div.dt-modal-toggle').remove();
             }
-            // var answerAddHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-            //     <div class="edit-info" id="question-add-answer">
-            //         <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createAnswer"></i>
-            //     </div>
-            //     ` : '';
+            // Display Class Info
             $('#class-title-status').find('#class-class-status').remove();
             $('#class-status').empty();
             $('select[id="updateClassStatus_Status"]').empty();
-            // $('#class-allow-add-').find('#class-add-answer').remove();
             $('#class-status').append(statusText);
             $('#class-id').text(data.classId);
             $('#class-class-title').text(data.className);
@@ -1197,23 +1200,21 @@
             $('#class-teacher').attr('href', `/Admin/Teacher/${data.teacher.accountId}/Info`);
             $('#class-course').text(data.course.courseName);
             $('#class-course').attr('href', `/Admin/Course/${data.course.courseId}/Info`);
-            $('#class-start-date').text(formatDate(data.startDate));
-            $('#class-end-date').text(formatDate(data.endDate));
+            $('#class-start-date').text(formatDate(data.startDate, { ignoreHour : true }));
+            $('#class-end-date').text(formatDate(data.endDate, { ignoreHour: true }));
             $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
             $('#class-minimum-students-amount').text(data.minimumStudents);
             $('#class-maximum-students-amount').text(data.maximumStudents);
             $('#class-title-status').append(titleStatusHtml);
-            // $('#question-allow-add-answer').append(answerAddHtml);
             $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
 
-            // $('#updateQuestion_Question').text(data.question);
-            // $('#createAnswer_Type').append(getTypeOptions());
+            // Update Class Info
             $('input[id="updateClass_ClassName"]').val(data.className);
             $('input[id="updateClass_MinStudents"]').val(data.minimumStudents);
             $('input[id="updateClass_MaxStudents"]').val(data.maximumStudents);
             $('input[id="updateClass_StartDate"]').val(data.startDate);
             $('input[id="updateClass_EndDate"]').val(data.endDate);
-
+            // Update Class Status
             $('select[id="updateClassStatus_Status"]').append(getStatusOptions(data.status));
         }
     </script>

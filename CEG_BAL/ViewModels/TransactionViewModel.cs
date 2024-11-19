@@ -11,6 +11,12 @@ namespace CEG_BAL.ViewModels
     {
         public int TransactionId { get; set; }
 
+        public int ParentId { get; set; }
+
+        public string ParentFullname { get; set; } = null!;
+        public string? StudentFullname { get; set; }
+        public string? ClassName { get; set; }
+
         public string VnpayId { get; set; } = null!;
 
         public int TransactionAmount { get; set; }

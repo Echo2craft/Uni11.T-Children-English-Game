@@ -10,7 +10,7 @@ namespace CEG_RazorWebApp.Models.Class.Create
     {
         [Required(ErrorMessage = "Class name is required")]
         [DisplayName("Class Name")]
-        public string ClassName { get; set; }
+        public string ClassName { get; set; } = null!;
         [Required(ErrorMessage = "Minimum students amount is required")]
         [Range(Constants.CLASS_MINIMUM_STUDENTS_REQ, int.MaxValue)]
         [DisplayName("Minimum students amount")]
@@ -21,10 +21,10 @@ namespace CEG_RazorWebApp.Models.Class.Create
         public int MaxStudents { get; set; } = Constants.CLASS_MAXIMUM_STUDENTS_REQ;
         [Required(ErrorMessage = "Assign teacher name is required")]
         [DisplayName("Assign teacher name")]
-        public string TeacherName { get; set; }
+        public string TeacherName { get; set; } = null!;
         [Required(ErrorMessage = "Assign course name is required")]
         [DisplayName("Assign course name")]
-        public string CourseName { get; set; }
+        public string CourseName { get; set; } = null!;
         [Required(ErrorMessage = "Class start date is required")]
         [DisplayName("Class start date")]
         [DataType(DataType.DateTime)]

@@ -375,185 +375,188 @@
 
             if (type === 'success') {
                 alertHtml = `
-                                            <div class="alert alert-success alert-dismissible fade show" id="notif">
-                                                <i class='bx bx-message-alt-x p-1'></i>
-                                                <strong class="mr-1">` + message + `</strong>
-                                                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                                    <span><i class='bx bx-x'></i></span>
-                                                </button>
-                                            </div>
-                                        `;
+                                                            <div class="alert alert-success alert-dismissible fade show" id="notif">
+                                                                <i class='bx bx-message-alt-x p-1'></i>
+                                                                <strong class="mr-1">` + message + `</strong>
+                                                                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                                                    <span><i class='bx bx-x'></i></span>
+                                                                </button>
+                                                            </div>
+                                                        `;
             } else if (type === 'error') {
                 alertHtml = `
-                                            <div class="alert alert-danger alert-dismissible fade show" id="notif">
-                                                <i class='bx bx-message-alt-x p-1'></i>
-                                                <strong class="mr-1">` + message + `</strong>
-                                                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                                    <span><i class='bx bx-x'></i></span>
-                                                </button>
-                                            </div>
-                                        `;
+                                                            <div class="alert alert-danger alert-dismissible fade show" id="notif">
+                                                                <i class='bx bx-message-alt-x p-1'></i>
+                                                                <strong class="mr-1">` + message + `</strong>
+                                                                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                                                    <span><i class='bx bx-x'></i></span>
+                                                                </button>
+                                                            </div>
+                                                        `;
             }
             // Inject the alert HTML into the alert container
             $('#alertContainer').html(alertHtml);
         }
-            function callApiPutUpdateCourse(formData) {
-                $.ajax({
-                    url: apiUrl + 'Course/'+ @Model.CourseID + '/Update', // Specify your Razor Page here
-                    type: 'PUT',
-                    data: JSON.stringify(formData),
-                    headers: {
-                        'Authorization': 'Bearer ' + token, // Token for authentication
-                    },
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (response) {
-                        // Handle success (display a success message or redirect, etc.)
-                        if (response.status) {
-                            showAlert('success', "Course update successfully");
-                        } else {
-                            showAlert('error', response.errorMessage);
+        function callApiPutUpdateCourse(formData) {
+            $.ajax({
+                url: apiUrl + 'Course/' + @Model.CourseID + '/Update', // Specify your Razor Page here
+                type: 'PUT',
+                data: JSON.stringify(formData),
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Course update successfully");
+                    } else {
+                        showAlert('error', response.errorMessage);
+                    }
+                    callApiGetCourseDetail();
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
                         }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiPutUpdateCourseStatus(formData) {
+            $.ajax({
+                url: apiUrl + 'Course/' + @Model.CourseID + '/Update/Status', // Specify your Razor Page here
+                type: 'PUT',
+                data: JSON.stringify(formData),
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Course Status update successfully");
                         callApiGetCourseDetail();
-                    },
-                    error: function (xhr, status, error) {
-                        // Extract the custom error message if it exists
-                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
-                        // Check if errorResponse.errors exists and is an object
-                        if (xhr.errors && typeof xhr.errors === 'object') {
-                            // Loop through each field in the errors object and append to the errorMessage
-                            for (var field in xhr.errors) {
-                                if (xhr.errors.hasOwnProperty(field)) {
-                                    // Add each error message for the field, joining multiple messages if they exist
-                                    var fieldErrors = xhr.errors[field].join(", ");
-                                    errorMessage += `\n${field}: ${fieldErrors}`;
-                                }
-                            }
-                        }
-
-                        // Display the error message using your custom showAlert function
-                        showAlert('error', "Error:" + errorMessage);
-                    }
-                });
-            }
-            function callApiPutUpdateCourseStatus(formData) {
-                $.ajax({
-                    url: apiUrl + 'Course/'+ @Model.CourseID + '/Update/Status', // Specify your Razor Page here
-                    type: 'PUT',
-                    data: JSON.stringify(formData),
-                    headers: {
-                        'Authorization': 'Bearer ' + token, // Token for authentication
-                    },
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (response) {
-                        // Handle success (display a success message or redirect, etc.)
-                        if (response.status) {
-                            showAlert('success', "Course Status update successfully");
-                            callApiGetCourseDetail();
-                        } else {
-                            showAlert('error', response.errorMessage);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        // Extract the custom error message if it exists
-                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
-                        // Check if errorResponse.errors exists and is an object
-                        if (xhr.errors && typeof xhr.errors === 'object') {
-                            // Loop through each field in the errors object and append to the errorMessage
-                            for (var field in xhr.errors) {
-                                if (xhr.errors.hasOwnProperty(field)) {
-                                    // Add each error message for the field, joining multiple messages if they exist
-                                    var fieldErrors = xhr.errors[field].join(", ");
-                                    errorMessage += `\n${field}: ${fieldErrors}`;
-                                }
-                            }
-                        }
-
-                        // Display the error message using your custom showAlert function
-                        showAlert('error', "Error:" + errorMessage);
-                    }
-                });
-            }
-            function callApiPostCreateSession(formData) {
-                $.ajax({
-                    url: apiUrl + 'Session/Create', // Specify your Razor Page here
-                    type: 'POST',
-                    data: JSON.stringify(formData),
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (response) {
-                        // Handle success (display a success message or redirect, etc.)
-                        if (response.status) {
-                            showAlert('success', "Session create successfully");
-                            callApiGetCourseDetail();
-                        } else {
-                            showAlert('error', response.errorMessage);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        // Extract the custom error message if it exists
-                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
-                        // Check if errorResponse.errors exists and is an object
-                        if (xhr.errors && typeof xhr.errors === 'object') {
-                            // Loop through each field in the errors object and append to the errorMessage
-                            for (var field in xhr.errors) {
-                                if (xhr.errors.hasOwnProperty(field)) {
-                                    // Add each error message for the field, joining multiple messages if they exist
-                                    var fieldErrors = xhr.errors[field].join(", ");
-                                    errorMessage += `\n${field}: ${fieldErrors}`;
-                                }
-                            }
-                        }
-
-                        // Display the error message using your custom showAlert function
-                        showAlert('error', "Error:" + errorMessage);
-                    }
-                });
-            }
-            function callApiPutUpdateSession(formData, sessionId) {
-                $.ajax({
-                    url: apiUrl + 'Session/' + sessionId + '/Update', // Specify your Razor Page here
-                    type: 'PUT',
-                    data: JSON.stringify(formData),
-                    headers: {
-                        'Authorization': 'Bearer ' + token, // Token for authentication
-                    },
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (response) {
-                        // Handle success (display a success message or redirect, etc.)
-                        if (response.status) {
-                            showAlert('success', "Session update successfully");
-                            $('.modal-backdrop').remove();
-                            // Remove specific class from body
-                            $('body').removeClass('modal-open');
-
-                            // Remove all inline styles from body
-                            $('body').removeAttr('style');
-                            callApiGetCourseDetail();
-                        } else {
-                            showAlert('error', response.errorMessage);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        // Extract the custom error message if it exists
-                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
-                        // Check if errorResponse.errors exists and is an object
-                        if (xhr.errors && typeof xhr.errors === 'object') {
-                            // Loop through each field in the errors object and append to the errorMessage
-                            for (var field in xhr.errors) {
-                                if (xhr.errors.hasOwnProperty(field)) {
-                                    // Add each error message for the field, joining multiple messages if they exist
-                                    var fieldErrors = xhr.errors[field].join(", ");
-                                    errorMessage += `\n${field}: ${fieldErrors}`;
-                                }
-                            }
-                        }
-
-                        // Display the error message using your custom showAlert function
-                        showAlert('error', "Error:" + errorMessage);
+                    } else {
+                        showAlert('error', response.errorMessage);
                     }
                 },
                 error: function (xhr, status, error) {
-                    // Handle error (display the validation message, etc.)
-                    showAlert('error', "Error in api call:" + error);
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiPostCreateSession(formData) {
+            $.ajax({
+                url: apiUrl + 'Session/Create', // Specify your Razor Page here
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Session create successfully");
+                        callApiGetCourseDetail();
+                    } else {
+                        showAlert('error', response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiPutUpdateSession(formData, sessionId) {
+            $.ajax({
+                url: apiUrl + 'Session/' + sessionId + '/Update', // Specify your Razor Page here
+                type: 'PUT',
+                data: JSON.stringify(formData),
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Session update successfully");
+                        $('.modal-backdrop').remove();
+                        // Remove specific class from body
+                        $('body').removeClass('modal-open');
+
+                        // Remove all inline styles from body
+                        $('body').removeAttr('style');
+                        callApiGetCourseDetail();
+                    } else {
+                        showAlert('error', response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
@@ -582,93 +585,90 @@
                             $('#session_list').html('<h5>No sessions found</h5>');
                         }
                     } else {
-                        console.error("API returned false status.");
-                    },
-                    error: function (xhr, status, error) {
-                        // Extract the custom error message if it exists
-                        var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
-                        // Check if errorResponse.errors exists and is an object
-                        if (xhr.errors && typeof xhr.errors === 'object') {
-                            // Loop through each field in the errors object and append to the errorMessage
-                            for (var field in xhr.errors) {
-                                if (xhr.errors.hasOwnProperty(field)) {
-                                    // Add each error message for the field, joining multiple messages if they exist
-                                    var fieldErrors = xhr.errors[field].join(", ");
-                                    errorMessage += `\n${field}: ${fieldErrors}`;
-                                }
-                            }
-                        }
-
-                        // Display the error message using your custom showAlert function
-                        showAlert('error', "Error:" + errorMessage);
+                        showAlert('error', "Error: \n" + "API returned false status.");
                     }
                 },
-                error: function (error) {
-                    alert("Error in api call:" + error);
-                    console.error("Error in api call:", error);
-                    //showAlert('success', 'Data fetched successfully.');
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
         function generateSessionHtml(sessionInfo, status) {
             var sessionUpdateToggleHtml = status === 'Draft' || status === 'Postponed' ? `
-                            <div class="edit-info">
-                                <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editsession_${sessionInfo.sessionId}"></i>
-                            </div>
-                        ` : '';
+                                            <div class="edit-info">
+                                                <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editsession_${sessionInfo.sessionId}"></i>
+                                            </div>
+                                        ` : '';
             var sessionUpdateHtml = status === 'Draft' || status === 'Postponed' ? `
-                            <div id="editsession_${sessionInfo.sessionId}" class="modal fade" role="dialog">
-                                <div class="modal-dialog modal-dialog-centered modal-lg" role="content">
-                                    <div class="modal-content modal-addRoom">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title truncate">Update Session ${sessionInfo.title}</h4>
-                                        </div>
-                                        <form method="post" id="editSessionForm_${sessionInfo.sessionId}" class="form-group">
-                                            <div class="modal-body">
-                                                <div class="col-12">
-                                                    <div class="form-group row">
-                                                        <label for="updateSession_${sessionInfo.sessionId}_Title" class="col-sm-4 col-form-label">Title</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="text" id="updateSession_${sessionInfo.sessionId}_Title" required class="form-control" value="${sessionInfo.title}">
-                                                            <span id="error_message"
-                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                            <div id="editsession_${sessionInfo.sessionId}" class="modal fade" role="dialog">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="content">
+                                                    <div class="modal-content modal-addRoom">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title truncate">Update Session ${sessionInfo.title}</h4>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="updateSession_${sessionInfo.sessionId}_Description" class="col-sm-4 col-form-label">Description</label>
-                                                        <div class="col-sm-8">
-                                                            <textarea id="updateSession_${sessionInfo.sessionId}_Description" required class="form-control">${sessionInfo.description}</textarea>
-                                                            <span id="error_message"
-                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="updateSession_${sessionInfo.sessionId}_Number" class="col-sm-4 col-form-label">Number</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="number" id="updateSession_${sessionInfo.sessionId}_Number" min="1" required class="form-control" value="${sessionInfo.number}">
-                                                            <span id="error_message"
-                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="updateSession_${sessionInfo.sessionId}_Hours" class="col-sm-4 col-form-label">Hours to learn</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="number" id="updateSession_${sessionInfo.sessionId}_Hours" min="1" required class="form-control" value="${sessionInfo.hours}">
-                                                            <span id="error_message"
-                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                                        </div>
+                                                        <form method="post" id="editSessionForm_${sessionInfo.sessionId}" class="form-group">
+                                                            <div class="modal-body">
+                                                                <div class="col-12">
+                                                                    <div class="form-group row">
+                                                                        <label for="updateSession_${sessionInfo.sessionId}_Title" class="col-sm-4 col-form-label">Title</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="text" id="updateSession_${sessionInfo.sessionId}_Title" required class="form-control" value="${sessionInfo.title}">
+                                                                            <span id="error_message"
+                                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="updateSession_${sessionInfo.sessionId}_Description" class="col-sm-4 col-form-label">Description</label>
+                                                                        <div class="col-sm-8">
+                                                                            <textarea id="updateSession_${sessionInfo.sessionId}_Description" required class="form-control">${sessionInfo.description}</textarea>
+                                                                            <span id="error_message"
+                                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="updateSession_${sessionInfo.sessionId}_Number" class="col-sm-4 col-form-label">Number</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="number" id="updateSession_${sessionInfo.sessionId}_Number" min="1" required class="form-control" value="${sessionInfo.number}">
+                                                                            <span id="error_message"
+                                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="updateSession_${sessionInfo.sessionId}_Hours" class="col-sm-4 col-form-label">Hours to learn</label>
+                                                                        <div class="col-sm-8">
+                                                                            <input type="number" id="updateSession_${sessionInfo.sessionId}_Hours" min="1" required class="form-control" value="${sessionInfo.hours}">
+                                                                            <span id="error_message"
+                                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button class="btn btn-success" type="submit">Save</button>
+                                                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer justify-content-center">
-                                                <button class="btn btn-success" type="submit">Save</button>
-                                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        ` : '';
+                                        ` : '';
             var statusText = '';
             switch (status) {
                 case 'Available':
@@ -692,57 +692,57 @@
             //     </div>
             // </div>
             return `
-                            <div class="card-header">
-                                <h5>Session ${sessionInfo.number} <label class="truncate">${sessionInfo.title}</label> Details</h5>
-                                ` + sessionUpdateToggleHtml + `
-                            </div>
-                            <div class="card-body">
-                                <div class="row mb-sm-2">
-                                    <div class="col-md-5 text-md-right">
-                                        <label class="col-form-label">Session ID:</label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <span>${sessionInfo.sessionId}</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-sm-2">
-                                    <div class="col-sm-5 text-sm-right">
-                                        <label for="meeting-name">Title:</label>
-                                    </div>
-                                    <div class="col-sm-7 text-sm-left">
-                                        <span>${sessionInfo.title}</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-sm-2">
-                                    <div class="col-sm-5 text-sm-right">
-                                        <label for="meeting-name">Description:</label>
-                                    </div>
-                                    <div class="col-sm-7 text-sm-left">
-                                        <span>${sessionInfo.description}</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-sm-2">
-                                    <div class="col-sm-5 text-sm-right">
-                                        <label for="meeting-name">Hours to learn:</label>
-                                    </div>
-                                    <div class="col-sm-7 text-sm-left">
-                                        <span>${sessionInfo.hours}</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-sm-2">
-                                    <div class="col-sm-5 text-sm-right">
-                                        <label for="meeting-name">Homeworks Amount:</label>
-                                    </div>
-                                    <div class="col-sm-7 text-sm-left">
-                                        <span>${sessionInfo.homeworks.length} Homework(s)</span>
-                                    </div>
-                                </div>
-                                <div class="card-body d-flex justify-content-center">
-                                    <a class="btn btn-success" href="/Admin/Course/` + @Model.CourseID + `/Session/${sessionInfo.sessionId}/Info">More Info</a>
-                                </div>
-                            </div>
-                            <hr class="container my-0">
-                            ` + sessionUpdateHtml;
+                                            <div class="card-header">
+                                                <h5>Session ${sessionInfo.number} <label class="truncate">${sessionInfo.title}</label> Details</h5>
+                                                ` + sessionUpdateToggleHtml + `
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row mb-sm-2">
+                                                    <div class="col-md-5 text-md-right">
+                                                        <label class="col-form-label">Session ID:</label>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <span>${sessionInfo.sessionId}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-sm-2">
+                                                    <div class="col-sm-5 text-sm-right">
+                                                        <label for="meeting-name">Title:</label>
+                                                    </div>
+                                                    <div class="col-sm-7 text-sm-left">
+                                                        <span>${sessionInfo.title}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-sm-2">
+                                                    <div class="col-sm-5 text-sm-right">
+                                                        <label for="meeting-name">Description:</label>
+                                                    </div>
+                                                    <div class="col-sm-7 text-sm-left">
+                                                        <span>${sessionInfo.description}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-sm-2">
+                                                    <div class="col-sm-5 text-sm-right">
+                                                        <label for="meeting-name">Hours to learn:</label>
+                                                    </div>
+                                                    <div class="col-sm-7 text-sm-left">
+                                                        <span>${sessionInfo.hours}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-sm-2">
+                                                    <div class="col-sm-5 text-sm-right">
+                                                        <label for="meeting-name">Homeworks Amount:</label>
+                                                    </div>
+                                                    <div class="col-sm-7 text-sm-left">
+                                                        <span>${sessionInfo.homeworks.length} Homework(s)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body d-flex justify-content-center">
+                                                    <a class="btn btn-success" href="/Admin/Course/` + @Model.CourseID + `/Session/${sessionInfo.sessionId}/Info">More Info</a>
+                                                </div>
+                                            </div>
+                                            <hr class="container my-0">
+                                            ` + sessionUpdateHtml;
         }
 
         function getDifficultyOptions(selectedDifficulty) {
@@ -793,16 +793,16 @@
         }
         function setCourseDisplay(data) {
             var titleStatusHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-                                        <div class="edit-info" id="course-course-status">
-                                            <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeCourseStatus"></i>
-                                            <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editCourse"></i>
-                                        </div>
-                                        ` : '';
+                                                        <div class="edit-info" id="course-course-status">
+                                                            <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeCourseStatus"></i>
+                                                            <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editCourse"></i>
+                                                        </div>
+                                                        ` : '';
             var sessionAddHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-                                        <div class="edit-info" id="course-add-session">
-                                            <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createSession"></i>
-                                        </div>
-                                        ` : '';
+                                                        <div class="edit-info" id="course-add-session">
+                                                            <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createSession"></i>
+                                                        </div>
+                                                        ` : '';
             var statusText = '';
             switch (data.status) {
                 case 'Available':

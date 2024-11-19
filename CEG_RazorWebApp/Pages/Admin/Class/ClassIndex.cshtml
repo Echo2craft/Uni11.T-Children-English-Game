@@ -91,24 +91,24 @@
                         <div class="row p-4">
                             <div class="col-12">
                                 <div class="row form-group">
-                                    <div class="row form-group justify-content-center">
-                                        <label asp-for="@createClass.ClassName" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-7">
+                                    <div class="row form-group">
+                                        <label asp-for="@createClass.ClassName" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-8">
                                         <span asp-validation-for="@createClass.ClassName" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.MinStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.MinStudents" value="@createClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <label asp-for="@createClass.MinStudents" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.MinStudents" value="@createClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-8">
                                         <span asp-validation-for="@createClass.MinStudents" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <label asp-for="@createClass.MaxStudents" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-8">
                                         <span asp-validation-for="@createClass.MaxStudents" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.TeacherName" class="col-md-3 col-form-label text-md-right">Select a Teacher</label>
-                                        <div class="col-md-7">
+                                        <label asp-for="@createClass.TeacherName" class="col-md-4 col-form-label text-md-right">Select a Teacher</label>
+                                        <div class="col-md-8 p-0">
                                             <!-- search bar with dropdown list-->
                                             <select id="searchableTeacherDropdown" class="form-control custom-select" style="width: 100%;">
                                             </select>
@@ -117,8 +117,8 @@
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
 
-                                        <label asp-for="@createClass.CourseName" class="col-md-3 col-form-label text-md-right">Select a available Course</label>
-                                        <div class="col-md-7">
+                                        <label asp-for="@createClass.CourseName" class="col-md-4 col-form-label text-md-right">Select a available Course</label>
+                                        <div class="col-md-8 p-0">
                                             <!-- search bar with dropdown list-->
                                             <select id="searchableCourseDropdown" class="form-control custom-select" style="width: 100%;">
                                             </select>
@@ -126,13 +126,13 @@
                                         <span asp-validation-for="@createClass.CourseName" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.StartDate" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.StartDate" type="datetime-local" value="@createClass.StartDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
+                                        <label asp-for="@createClass.StartDate" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.StartDate" type="datetime-local" value="@createClass.StartDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-8" required>
                                         <span asp-validation-for="@createClass.StartDate" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@createClass.EndDate" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@createClass.EndDate" type="datetime-local" value="@createClass.EndDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
+                                        <label asp-for="@createClass.EndDate" class="col-md-4 col-form-label text-md-right"></label>
+                                        <input asp-for="@createClass.EndDate" type="datetime-local" value="@createClass.EndDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-8" required>
                                         <span asp-validation-for="@createClass.EndDate" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                     </div>
@@ -389,7 +389,7 @@
                     {
                         data: 'endDate',
                         render: function (data, type, row, meta) {
-                            return '<span id="schedule-end-date">' + formatDate(data, false, false, true, true) + '</span >';
+                            return '<span id="schedule-end-date">' + formatDate(data, { includeAmPm : true, monthBeforeDate : true }) + '</span >';
                         }
                     }
                 ],
@@ -431,31 +431,31 @@
                 width: 'resolve',
                 theme: 'bootstrap4'
             })
-                .on('select2:close', function (e) {
-                    // console.log(e);
-                    var text = $('#searchableCourseDropdown').select2('data')[0].text;
-                    // Filter options based on the search input
-                    var results = courseList.filter(function (item) {
-                        return item.courseName && item.courseName === text;
-                    });
+            .on('select2:select', function (e) {
+                // console.log(e);
+                var text = $('#searchableCourseDropdown').select2('data')[0].text;
+                // Filter options based on the search input
+                var results = courseList.filter(function (item) {
+                    return item.courseName && item.courseName === text;
+                });
 
-                    if (results.length > 0 && results[0].sessions) {
-                        sessionTable.clear().rows.add(results[0].sessions).draw();
-                        scheduleTable.clear().draw();
-                    } else {
-                        console.error('Selected course or its sessions not found.');
-                        sessionTable.clear().draw();
-                        scheduleTable.clear().draw();
-                    }
-                })
-                ;
+                if (results.length > 0 && results[0].sessions) {
+                    sessionTable.clear().rows.add(results[0].sessions).draw();
+                    scheduleTable.clear().draw();
+                } else {
+                    console.error('Selected course or its sessions not found.');
+                    sessionTable.clear().draw();
+                    scheduleTable.clear().draw();
+                }
+            })
+            ;
 
             $('#searchableTeacherDropdown').select2({
                 placeholder: 'Select a teacher name',
                 allowClear: true,
                 width: 'resolve',
                 theme: 'bootstrap4'
-            })
+            });
 
             callApiGetClassList();
 
@@ -515,7 +515,6 @@
                     if (response.status) {
                         courseList = response.data;
                         addCourseOptions(courseList);
-                        renderDefaultCourse(courseList);
                     } else {
                         console.error("API returned false status.");
                     }
@@ -542,18 +541,6 @@
                 }
             });
         });
-        function renderDefaultCourse(data) {
-            // var text = $('#searchableCourseDropdown').select2('data')[0].text;
-            // Filter options based on the search input
-            var results = data[0]
-
-            if (results && results.sessions) {
-                sessionTable.clear().rows.add(results.sessions).draw();
-            } else {
-                console.error('Selected course or its sessions not found.');
-                sessionTable.clear().draw();
-            }
-        }
         function addTeacherOptions(data) {
             data.forEach(item => {
                 // Add each item as an option
@@ -571,6 +558,15 @@
             });
             // Refresh the Select2 dropdown to show new options
             $('#searchableCourseDropdown').trigger('change'); // Ensure Select2 is updated
+            // render default data using first data
+            var results = data[0]
+
+            if (results && results.sessions) {
+                sessionTable.clear().rows.add(results.sessions).draw();
+            } else {
+                console.error('Selected course or its sessions not found.');
+                sessionTable.clear().draw();
+            }
         }
         // Function to calculate today's date + 10 days
         function getDefaultDate() {
@@ -681,8 +677,8 @@
             classList.append(cardCreateClassHtml);
             // Loop through the data array and append each class div
             $.each(data, function (index, classObj) {
-                var formattedStartDate = formatDate(classObj.startDate, true);
-                var formattedEndDate = formatDate(classObj.endDate, true);
+                var formattedStartDate = formatDate(classObj.startDate, { ignoreHour : true });
+                var formattedEndDate = formatDate(classObj.endDate, { ignoreHour: true });
                 var statusText = '';
                 switch (classObj.status) {
                     case 'Open':

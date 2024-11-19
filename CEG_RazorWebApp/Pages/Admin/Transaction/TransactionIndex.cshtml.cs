@@ -1,6 +1,10 @@
 using AutoMapper;
 using CEG_RazorWebApp.Libraries;
+using CEG_RazorWebApp.Models.Transaction.Create;
+using CEG_RazorWebApp.Models.VnPay;
 using CEG_RazorWebApp.Pages.Admin.Course;
+using CEG_RazorWebApp.Services.Implements;
+using CEG_RazorWebApp.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net.Http.Headers;
@@ -11,40 +15,38 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
 {
     public class TransactionIndexModel : PageModel
     {
-        private readonly ILogger<TransactionIndexModel> _logger;
-        private readonly IMapper _mapper;
-        private readonly IConfiguration _config;
-        private readonly HttpClient _httpClient = null;
-        private string AdminAPI_URL = "";
-        private readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
-        {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            PropertyNameCaseInsensitive = true
-        };
-        private readonly CookieOptions cookieOptions = new CookieOptions
-        {
-            Expires = DateTime.Now.AddMinutes(10),
-            MaxAge = TimeSpan.FromMinutes(10),
-            Secure = true,
-            IsEssential = true,
-        };
-        private readonly CEG_RAZOR_Library methcall = new();
+        private IConfiguration _config;
+        private readonly IVnPayService _vnPayService;
+        public string? LayoutUrl { get; set; } = Constants.ADMIN_LAYOUT_URL;
+        public CreateTransactionVM CreateTransactionInfo { get; set; } = new CreateTransactionVM();
 
-        public TransactionIndexModel(ILogger<TransactionIndexModel> logger, IConfiguration config, IMapper mapper)
+        public TransactionIndexModel(IConfiguration config, IVnPayService vnPayService)
         {
-            _logger = logger;
             _config = config;
-            _mapper = mapper;
-            _httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri(config.GetSection(Constants.SYSTEM_DEFAULT_API_HTTPS_URL_CONFIG_PATH).Value)
-            };
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            AdminAPI_URL = config.GetSection(Constants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value;
+            _vnPayService = vnPayService;
         }
+
         public void OnGet()
         {
 
         }
+        /*public IActionResult OnPostGeneratePaymentUrl([FromBody] CreateTransactionVM createTransaction)
+        public IActionResult OnPostGeneratePaymentUrl(
+            [FromBody] CreateTransactionVM createTransaction
+            )
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState
+                    .Where(x => x.Value.Errors.Count > 0)
+                    .Select(x => new { x.Key, x.Value.Errors })
+                    .ToList();
+
+                return new JsonResult(new { status = false, message = "Model validation failed", errors });
+            }
+
+            var paymentUrl = _vnPayService.CreatePaymentUrl(createTransaction, HttpContext);
+            return new JsonResult(new { status = true, paymentUrl = paymentUrl });
+        }*/
     }
 }
