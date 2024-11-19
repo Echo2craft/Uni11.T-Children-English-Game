@@ -1067,17 +1067,14 @@
             return html;
         }
         function getEnrollStatusOptions(selectedStatus) {
-            var options = ['Pending', 'Enrolled', 'Suspended']; // Example statuses
+            var options = ['Enrolled', 'Cancelled']; // Example statuses
             var html = '';
             switch (selectedStatus) {
-                case 'Pending':
-                    options = ['Pending', 'Enrolled']
-                    break;
                 case 'Enrolled':
-                    options = ['Enrolled', 'Suspended']
+                    options = ['Enrolled', 'Cancelled']
                     break;
-                case 'Suspended':
-                    options = ['Suspended']
+                case 'Cancelled':
+                    options = ['Cancelled']
                     break;
             }
             options.forEach(function (status) {

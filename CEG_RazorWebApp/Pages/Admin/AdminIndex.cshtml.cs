@@ -49,16 +49,6 @@ namespace CEG_RazorWebApp.Pages.Admin
 
         public void OnGet()
         {
-            methcall.InitTempData(this);
-        }
-        public IActionResult OnGetLogout()
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-            HttpContext.Session.Clear();
-            TempData.Clear();
-            SignOut();
-
-            return RedirectToPage(Constants.LOGOUT_REDIRECT_URL);
         }
     }
 }

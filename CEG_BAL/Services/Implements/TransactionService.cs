@@ -31,12 +31,12 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public Task<int> Create(TransactionViewModel model, CreateTransaction newTran)
+        public async Task<int> Create(TransactionViewModel model, CreateTransaction newTran)
         {
             var trans = _mapper.Map<Transaction>(model);
             if (newTran != null)
             {
-                trans.ParentId = _unitOfWork.ParentRepositories.GetIdByFullname(newTran.ParentFullname).Result;
+                trans.ParentId = await _unitOfWork.ParentRepositories.GetIdByFullname(newTran.ParentFullname);
                 trans.VnpayId = newTran.VnpayId;
                 trans.TransactionAmount = newTran.TransactionAmount;
                 trans.TransactionDate = DateTime.Now;
@@ -48,7 +48,7 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
 
             model.TransactionId = trans.TransactionId;
-            return Task.FromResult(trans.TransactionId);
+            return trans.TransactionId;
         }
 
         public async Task<List<TransactionViewModel>> GetTransactionList()
