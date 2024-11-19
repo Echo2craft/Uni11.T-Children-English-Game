@@ -35,7 +35,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
                 var transactionData = new TransactionViewModel
                 {
                     ParentFullname = ExtractValue(orderDetails, Constants.VNPAY_PARENT_NAME_LABEL),
-                    TransactionAmount = (int)TransactionResponse.Value,
+                    TransactionAmount = (int)TransactionResponse.Value / 100,
                     TransactionDate = DateTime.Now,
                     TransactionStatus = "Completed",
                     ConfirmDate = DateTime.Now,
