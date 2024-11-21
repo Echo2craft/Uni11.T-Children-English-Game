@@ -65,22 +65,33 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<ClassViewModel?> GetClassById(int id)
         {
-            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id,true,true);
-            if(user != null)
+            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id, true, true);
+            if (clas != null)
             {
-                var usr = _mapper.Map<ClassViewModel>(user);
-                return usr;
+                var c = _mapper.Map<ClassViewModel>(clas);
+                return c;
             }
             return null;
         }
 
         public async Task<ClassViewModel?> GetByIdAdmin(int id)
         {
-            var user = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id,true,true,true,true);
-            if(user != null)
+            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id, true, true, true, true);
+            if (clas != null)
             {
-                var usr = _mapper.Map<ClassViewModel>(user);
-                return usr;
+                var c = _mapper.Map<ClassViewModel>(clas);
+                return c;
+            }
+            return null;
+        }
+
+        public async Task<ClassViewModel?> GetByIdParent(int id)
+        {
+            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id, true, true, true, true);
+            if (clas != null)
+            {
+                var c = _mapper.Map<ClassViewModel>(clas);
+                return c;
             }
             return null;
         }
@@ -118,7 +129,7 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.ClassRepositories.Update(clas);
             _unitOfWork.Save();
         }
-        public void Update(ClassViewModel classModel,UpdateClass classNewModel)
+        public void Update(ClassViewModel classModel, UpdateClass classNewModel)
         {
             var mainClass = _mapper.Map<Class>(classModel);
             if (classNewModel != null)
