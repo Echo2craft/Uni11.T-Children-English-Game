@@ -41,6 +41,7 @@ namespace CEG_BAL.Services.Implements
                 clas.EndDate = newClass.EndDate;
                 clas.MinimumStudents = newClass.MinStudents;
                 clas.MaximumStudents = newClass.MaxStudents;
+                clas.EnrollmentFee = newClass.EnrollmentFee;
                 clas.Status = "Draft";
                 clas.Schedules = _mapper.Map<List<Schedule>>(newClass.Schedules);
                 foreach(var schedule in clas.Schedules)
@@ -140,6 +141,7 @@ namespace CEG_BAL.Services.Implements
                 mainClass.MaximumStudents = classNewModel.MaximumStudents;
                 mainClass.StartDate = classNewModel.StartDate;
                 mainClass.EndDate = classNewModel.EndDate;
+                mainClass.EnrollmentFee = classNewModel.EnrollmentFee;
             }
             mainClass.CourseId = mainClass.Course.CourseId;
             mainClass.Schedules = null;

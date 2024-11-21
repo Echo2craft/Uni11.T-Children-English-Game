@@ -105,6 +105,15 @@
                                     </div>
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Enrollment Fee:</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span id="class-enroll-fee">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
                                             <label class="col-form-label">Current students amount:</label>
                                         </div>
                                         <div class="col-md-7">
@@ -231,12 +240,12 @@
                                                     aria-label="Student Name: activate to sort column ascending">
                                                     Student Name
                                                 </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
+                                                @* <th class="sorting sorting_asc" tabindex="0"
                                                     aria-controls="enroll-table" rowspan="1"
                                                     colspan="1" aria-sort="ascending"
                                                     aria-label="Status: activate to sort column ascending">
                                                     Status
-                                                </th>
+                                                </th> *@
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -247,33 +256,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div id="changeClassStatus" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-            <div class="modal-content modal-addRoom">
-                <div class="modal-header">
-                    <h4 class="modal-title">Update Class Status</h4>
-                </div>
-                <form method="post" id="updateClassStatusForm">
-                    <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label for="updateClassStatus_Status" class="col-md-3 col-form-label mt-3 text-md-right">New Status (this action cannot be undone!)</label>
-                                    <select class="form-control col-md-7 custom-select" id="updateClassStatus_Status"></select>
-                                    @* <span asp-validation-for="@updateClass.Status" id="error_message"
-                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <button class="btn btn-success" type="submit">Update</button>
-                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -332,7 +314,7 @@
             DataTable.render.time = function ( { includeId = "schedule-start-time" } ) {
                 return function (data, type, row) {
                     var str = moment(data, "HH:mm:ss");
-                    console.log(str);
+                    // console.log(str);
                     if (type === 'display') {
                         return '<span id="' + includeId + '">' + str.format("hh:mm A") + '</span >';
                     }
@@ -349,18 +331,18 @@
                     { data: 'enrollId' },
                     { data: 'student.account.fullname' },
                     // { data: 'status' },
-                    { // Add a select box in the last column
-                        data: 'status',
-                        render: function (data, type, row, meta) {
-                            return `
-                                        <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
-                                        `
-                                + getEnrollStatusOptions(data) +
-                                `
-                                        </select>
-                                        `;
-                        }
-                    }
+                    // { Add a select box in the last column
+                    //     data: 'status',
+                    //     render: function (data, type, row, meta) {
+                    //         return `
+                    //                     <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
+                    //                     `
+                    //             + getEnrollStatusOptions(data) +
+                    //             `
+                    //                     </select>
+                    //                     `;
+                    //     }
+                    // }
                 ],
                 layout: {
                     topEnd: {
@@ -437,19 +419,25 @@
             }).on('draw', function (e, settings) {
                 scheduleTable.column(6).visible(false, false);
                 scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                    var data = this.cell(rowIdx, 2).data();
-                    var status = $('div#class-status').text().trim();
-                    if (status == 'Draft' || status == 'Postponed') {
-                        var node = $(this.cell(rowIdx, 2).node());
+                    var startTime = this.cell(rowIdx, 3).data();
+                    var endTime = this.cell(rowIdx, 4).data();
+                    var currentStatus = this.cell(rowIdx, 5).data();
+                    var isTimeInBetween = moment().isBetween(moment(startTime, "HH:mm:ss"), moment(endTime, "HH:mm:ss"), "HH:mm:ss");
+                    if (isTimeInBetween && currentStatus != "Ended" && currentStatus != "Cancelled") {
+                        var scheduleId = this.cell(rowIdx, 0).data();
+                        var node = $(this.cell(rowIdx, 5).node());
                         // change display from span to input
-                        node.html('<input type="datetime-local" id="schedule-start-date-' + rowIdx + '" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>');
+                        node.html(`
+                            <select class="custom-select form-control schedule-status" id="schedule-status-` + rowIdx + `"
+                            >`
+                            + getScheduleStatusOptions(currentStatus) +
+                            `
+                            </select>
+                            `
+                        );
                         // Add change event listener for each input
                         node.children(0).on('change', function () {
-
-                            let formData = {
-                                scheduleDate: $('input#schedule-start-date-' + rowIdx).val()
-                            };
-                            callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 0).data());
+                            callApiUpdateScheduleStatus(scheduleId, $('select#schedule-status-' + rowIdx).val());
 
                             // const selectedStartDate = new Date(this.value);
                             // const endDate = new Date(selectedStartDate);
@@ -482,6 +470,29 @@
                 html += `<option value="${status}" ${selectedStatus === status ? 'selected' : ''} >${status}</option>`;
             });
 
+            return html;
+        }
+        function getScheduleStatusOptions(selectedStatus) {
+            var options = ['Upcoming', 'Ongoing', 'Ended', 'Cancelled']; // Example statuses
+            var html = '';
+            switch (selectedStatus) {
+                case 'Upcoming':
+                    options = ['Upcoming', 'Ongoing', 'Cancelled']
+                    break;
+                case 'Ongoing':
+                    options = ['Ongoing', 'Ended', 'Cancelled']
+                    break;
+                case 'Ended':
+                    options = ['Ended']
+                    break;
+                case 'Cancelled':
+                    options = ['Cancelled']
+                    break;
+            }
+            options.forEach(function (status) {
+                html += `<option value="${status}"${selectedStatus === status ? ' selected' : ''}>${status}</option>`;
+            });
+            console.log(html);
             return html;
         }
         function callApiGetClassDetail() {
@@ -572,6 +583,45 @@
                 }
             });
         }
+        function callApiUpdateScheduleStatus(scheduleId, newStatus) {
+            $.ajax({
+                url: apiUrl + `Schedule/${scheduleId}/Update/Status`, // API endpoint for updating status
+                type: 'PUT', // HTTP method PUT for updates
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(newStatus), // Data sent in the request body data: JSON.stringify({ status: newStatus.toString() }),
+                success: function (response) {
+                    if (response.status) {
+                        callApiGetClassDetail();
+                        showAlert('success', 'Schedule status updated');
+                    } else {
+                        showAlert('error', 'Failed to update status. Error: ' + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
         function setClassDisplay(data) {
             var filteredEnrollList = data.enrolls.filter(function (enroll) {
                 return enroll.status === 'Enrolled';
@@ -595,6 +645,10 @@
                 let dadiv = $('div.dt-modal-toggle').parent();
                 dadiv.find('div.dt-modal-toggle').remove();
             }
+            formatter = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+            });
             // Display Class Info
             $('#class-title-status').find('#class-class-status').remove();
             $('#class-status').empty();
@@ -610,6 +664,7 @@
             $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
             $('#class-minimum-students-amount').text(data.minimumStudents);
             $('#class-maximum-students-amount').text(data.maximumStudents);
+            $('#class-enroll-fee').text(formatter.format(data.enrollmentFee));
             $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
         }
     </script>

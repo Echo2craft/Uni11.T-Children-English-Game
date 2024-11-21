@@ -182,6 +182,8 @@ namespace CEG_RazorWebApp.Libraries
         public const int CLASS_MINIMUM_STUDENTS_REQ = 10;
         public const int CLASS_MAXIMUM_STUDENTS_REQ = 20;
         public const int CLASS_MINIMUM_DAYS_REQ = 30;
+        public const int CLASS_MINIMUM_ENROLLMENT_FEE = 0;
+        public const int CLASS_MAXIMUM_ENROLLMENT_FEE = 100000000;
         public const int COURSE_TOTAL_HOURS = 1;
         public const int HOMEWORK_HOURS = 1;
         public const int SESSION_HOURS = 1;

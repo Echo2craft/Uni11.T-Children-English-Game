@@ -29,6 +29,7 @@ namespace CEG_DAL.Repositories.Implements
                     EndDate = c.EndDate,
                     MinimumStudents = c.MinimumStudents,
                     MaximumStudents = c.MaximumStudents,
+                    EnrollmentFee = c.EnrollmentFee,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
                     Status = c.Status,
@@ -115,6 +116,7 @@ namespace CEG_DAL.Repositories.Implements
                     EndDate = c.EndDate,
                     MinimumStudents = c.MinimumStudents,
                     MaximumStudents = c.MaximumStudents,
+                    EnrollmentFee = c.EnrollmentFee,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
                     Status = c.Status,
@@ -163,6 +165,7 @@ namespace CEG_DAL.Repositories.Implements
                     EndDate = c.EndDate,
                     MinimumStudents = c.MinimumStudents,
                     MaximumStudents = c.MaximumStudents,
+                    EnrollmentFee = c.EnrollmentFee,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
                     Status = c.Status,
@@ -202,6 +205,7 @@ namespace CEG_DAL.Repositories.Implements
                     EndDate = c.EndDate,
                     MinimumStudents = c.MinimumStudents,
                     MaximumStudents = c.MaximumStudents,
+                    EnrollmentFee = c.EnrollmentFee,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
                     Status = c.Status,
@@ -234,7 +238,7 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
-                .Where(c => c.TeacherId == teacherId)
+                .Where(c => c.TeacherId == teacherId && c.Status != "Draft")
                 .Select(c => new Class
                 {
                     ClassId = c.ClassId,
@@ -243,6 +247,7 @@ namespace CEG_DAL.Repositories.Implements
                     EndDate = c.EndDate,
                     MinimumStudents = c.MinimumStudents,
                     MaximumStudents = c.MaximumStudents,
+                    EnrollmentFee = c.EnrollmentFee,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
                     Status = c.Status,
