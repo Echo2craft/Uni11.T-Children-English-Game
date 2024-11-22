@@ -368,17 +368,10 @@
                     },
                     {
                         data: 'scheduleDate',
-                        // render: function (data, type, row, meta) {
-                        //     '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
-                        //     return '<span id="schedule-start-date">' + formatDate(data, { ignoreHour : true , addDayOfWeek : true }) + '</span >';
-                        // },
                         render: DataTable.render.date("dddd, DD/MM/YYYY")
                     },
                     {
                         data: 'startTime',
-                        // render: function (data, type, row, meta) {
-                        //     return '<span id="schedule-start-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
-                        // },
                         render: DataTable.render.time({ includeId: "schedule-start-time" })
                     },
                     {
@@ -391,21 +384,6 @@
                     {
                         data: 'session.hours'
                     }
-                    // ,
-                    // {
-                    //     data: 'options',
-                    //     defaultContent: '<i>Placeholder</i>',
-                    //     render: function (data, type, row, meta) {
-                    //         return '';
-                    //         setTimeout(function () {
-                    //             let statusText = 'Draft'
-                    //             statusText = $('#class-status').text().trim(); Adjust the delay if needed
-                    //             if (statusText != 'Draft' && statusText != 'Postponed')
-                    //                 return '<button class="btn btn-success">Edit</button> <button class="btn btn-danger">Delete</button>';
-                    //             else return '';
-                    //         }, 500);
-                    //     }
-                    // }
                 ],
                 layout: {
                     topEnd: {
@@ -418,43 +396,49 @@
                 },
             }).on('draw', function (e, settings) {
                 scheduleTable.column(6).visible(false, false);
-                scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                    var startTime = this.cell(rowIdx, 3).data();
-                    var endTime = this.cell(rowIdx, 4).data();
-                    var currentStatus = this.cell(rowIdx, 5).data();
-                    var isTimeInBetween = moment().isBetween(moment(startTime, "HH:mm:ss"), moment(endTime, "HH:mm:ss"), "HH:mm:ss");
-                    if (isTimeInBetween && currentStatus != "Ended" && currentStatus != "Cancelled") {
-                        var scheduleId = this.cell(rowIdx, 0).data();
-                        var node = $(this.cell(rowIdx, 5).node());
-                        // change display from span to input
-                        node.html(`
-                            <select class="custom-select form-control schedule-status" id="schedule-status-` + rowIdx + `"
-                            >`
-                            + getScheduleStatusOptions(currentStatus) +
-                            `
-                            </select>
-                            `
-                        );
-                        // Add change event listener for each input
-                        node.children(0).on('change', function () {
-                            callApiUpdateScheduleStatus(scheduleId, $('select#schedule-status-' + rowIdx).val());
+                updateScheduleStatuses();
+            });
+            // Set up the timer to frequently check the current time
+            setInterval(() => {
+                updateScheduleStatuses(); // Function to update rows
+            }, 5000); // Check every 5 seconds (5000ms). Adjust interval as needed.
 
-                            // const selectedStartDate = new Date(this.value);
-                            // const endDate = new Date(selectedStartDate);
-                            // endDate.setHours(endDate.getHours() + scheduleTable.cell(rowIdx, 6).data());
-
-                            // let startTimeData = getTimeFromDate(selectedStartDate);
-                            // let endTimeData = getTimeFromDate(endDate);
-
-                            // scheduleTable.cell(rowIdx, 3).data(startTimeData);
-
-                            // scheduleTable.cell(rowIdx, 4).data(endTimeData);
-                        });
-                    }
-                });
-            })
-            ;
         });
+        function updateScheduleStatuses() {
+            scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                const currentStatus = this.cell(rowIdx, 5).data(); // Current status
+                if (currentStatus !== "Ended" && currentStatus !== "Cancelled"){
+                    const startTime = this.cell(rowIdx, 3).data(); // Start time
+                    const endTime = this.cell(rowIdx, 4).data();   // End time
+
+                    const isTimeInBetween = moment().isBetween(
+                        moment(startTime, "HH:mm:ss"),
+                        moment(endTime, "HH:mm:ss"),
+                        "HH:mm:ss"
+                    );
+
+                    if (isTimeInBetween) {
+                        const scheduleId = this.cell(rowIdx, 0).data();
+                        const node = $(this.cell(rowIdx, 5).node());
+
+                        // Change display to a select box if not already updated
+                        if (!node.children('select').length) {
+                            node.html(`
+                                        <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
+                                            ${getScheduleStatusOptions(currentStatus)}
+                                        </select>
+                                    `);
+
+                            // Add change event listener to the select element
+                            node.find('select').on('change', function () {
+                                const newStatus = $(this).val();
+                                callApiUpdateScheduleStatus(scheduleId, newStatus);
+                            });
+                        }
+                    }
+                }
+            });
+        }
         function getEnrollStatusOptions(selectedStatus) {
             var options = ['Enrolled', 'Cancelled']; // Example statuses
             var html = '';
@@ -492,7 +476,6 @@
             options.forEach(function (status) {
                 html += `<option value="${status}"${selectedStatus === status ? ' selected' : ''}>${status}</option>`;
             });
-            console.log(html);
             return html;
         }
         function callApiGetClassDetail() {
