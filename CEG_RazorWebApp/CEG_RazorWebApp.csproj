@@ -30,11 +30,5 @@
     <Folder Include="Libraries\Attributes\" />
     <Folder Include="Models\Schedule\Update\" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Update="Pages\Teacher\Question\QuestionIndex.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
    
 </Project>

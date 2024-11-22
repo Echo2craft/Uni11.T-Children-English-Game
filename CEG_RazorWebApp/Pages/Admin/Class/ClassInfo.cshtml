@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-7 customer-booking">
+                    <div class="col-xl-6 customer-booking">
                         <div class="row">
                             <div class="card profile col-12 mb-4">
                                 <div class="card-header" id="class-title-status">
@@ -219,7 +219,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-5 cardFB">
+                    <div class="col-xl-6 cardFB">
                         <div class="card profile">
                             <div class="card-header">
                                 <h4>Enroll requests</h4>
@@ -525,7 +525,7 @@
             ) {
                 return function (data, type, row) {
                     var str = moment(data, "HH:mm:ss");
-                    console.log(str);
+                    // console.log(str);
                     if (type === 'display') {
                         return '<span id="' + includeId + '">' + str.format("hh:mm A") + '</span >';
                     }
@@ -830,35 +830,6 @@
                     showAlert('error', "Error: \n" + errorMessage);
                 }
             });
-        }
-        // Function to display alerts
-        function showAlert(type, message) {
-            var alertHtml = '';
-
-            if (type === 'success') {
-                alertHtml = `
-                                <div class="alert alert-success alert-dismissible fade show" id="notif">
-                                    <i class='bx bx-message-alt-x p-1'></i>
-                                    <strong class="mr-1">` + message + `</strong>
-                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                        <span><i class='bx bx-x'></i></span>
-                                    </button>
-                                </div>
-                            `;
-            } else if (type === 'error') {
-                alertHtml = `
-                                <div class="alert alert-danger alert-dismissible fade show" id="notif">
-                                    <i class='bx bx-message-alt-x p-1'></i>
-                                    <strong class="mr-1">` + message + `</strong>
-                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                        <span><i class='bx bx-x'></i></span>
-                                    </button>
-                                </div>
-                            `;
-            }
-
-            // Inject the alert HTML into the alert container
-            $('#alertContainer').html(alertHtml);
         }
         function callApiPutUpdateClass(formData) {
             $.ajax({
