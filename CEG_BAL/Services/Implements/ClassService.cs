@@ -3,6 +3,7 @@ using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
@@ -102,9 +103,9 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassList());
         }
 
-        public async Task<List<string>> GetClassNameListByStatusOpen()
+        public async Task<List<GetClassForTransaction>> GetClassOptionListByStatusOpen()
         {
-            return await _unitOfWork.ClassRepositories.GetClassNameListByStatusOpen();
+            return _mapper.Map<List<GetClassForTransaction>>(await _unitOfWork.ClassRepositories.GetClassOptionListByStatusOpen());
         }
 
         public async Task<List<ClassViewModel>> GetListAdmin()

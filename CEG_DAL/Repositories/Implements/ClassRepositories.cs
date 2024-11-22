@@ -145,12 +145,16 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<string>> GetClassNameListByStatusOpen()
+        public async Task<List<Class>> GetClassOptionListByStatusOpen()
         {
             return await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
                 .Where(c => c.Status.Equals("Open"))
-                .Select(c => c.ClassName)
+                .Select(c => new Class
+                {
+                    ClassName = c.ClassName,
+                    EnrollmentFee = c.EnrollmentFee
+                })
                 .ToListAsync();
         }
 

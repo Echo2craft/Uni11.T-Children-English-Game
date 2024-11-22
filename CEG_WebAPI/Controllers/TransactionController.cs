@@ -171,8 +171,8 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Student not found."
                     });
                 }
-                var classObj = await _classService.GetClassNameListByStatusOpen();
-                if (!classObj.Contains(request.Classname))
+                var classObj = await _classService.GetClassOptionListByStatusOpen();
+                if (!classObj.Exists(clas => clas.ClassName.Equals(request.Classname)))
                 {
                     return NotFound(new
                     {
