@@ -3,6 +3,7 @@ using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
@@ -41,6 +42,7 @@ namespace CEG_BAL.Services.Implements
                 clas.EndDate = newClass.EndDate;
                 clas.MinimumStudents = newClass.MinStudents;
                 clas.MaximumStudents = newClass.MaxStudents;
+                clas.EnrollmentFee = newClass.EnrollmentFee;
                 clas.Status = "Draft";
                 clas.Schedules = _mapper.Map<List<Schedule>>(newClass.Schedules);
                 foreach(var schedule in clas.Schedules)
@@ -101,9 +103,9 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassList());
         }
 
-        public async Task<List<string>> GetClassNameListByStatusOpen()
+        public async Task<List<GetClassForTransaction>> GetClassOptionListByStatusOpen()
         {
-            return await _unitOfWork.ClassRepositories.GetClassNameListByStatusOpen();
+            return _mapper.Map<List<GetClassForTransaction>>(await _unitOfWork.ClassRepositories.GetClassOptionListByStatusOpen());
         }
 
         public async Task<List<ClassViewModel>> GetListAdmin()
@@ -140,6 +142,7 @@ namespace CEG_BAL.Services.Implements
                 mainClass.MaximumStudents = classNewModel.MaximumStudents;
                 mainClass.StartDate = classNewModel.StartDate;
                 mainClass.EndDate = classNewModel.EndDate;
+                mainClass.EnrollmentFee = classNewModel.EnrollmentFee;
             }
             mainClass.CourseId = mainClass.Course.CourseId;
             mainClass.Schedules = null;
