@@ -297,8 +297,17 @@
                 width: 'resolve',
                 theme: 'bootstrap4'
             })
+            .on('change', function () {
+                var data = $(this).select2('data');
+                // Manually trigger select2:select
+                $(this).trigger({
+                    type: 'select2:select',
+                    params: { data: data }
+                });
+            })
+            .off('select2:select') // Remove previous bindings
             .on('select2:select', function (e) {
-                var text = $('#select2-parent-fullname-enrollment-dropdown').select2('data')[0].text;
+                var text = $(this).select2('data')[0].text;
                 callApiGetStudentNameList(text);
             })
             ;
@@ -314,14 +323,32 @@
                 allowClear: true,
                 width: 'resolve',
                 theme: 'bootstrap4'
-            });
+            })
+            .on('change', function () {
+                var data = $(this).select2('data');
 
-            $('#select2-parent-fullname-donation-dropdown').select2({
-                placeholder: 'Select a parent',
-                allowClear: true,
-                width: 'resolve',
-                theme: 'bootstrap4'
-            });
+                // Manually trigger select2:select
+                $(this).trigger({
+                    type: 'select2:select',
+                    params: { data: data }
+                });
+            })
+            .off('select2:select') // Remove previous bindings
+            .on('select2:select', function (e) {
+                var selectedData = $(this).select2('data');
+                if (selectedData.length > 0) {
+                    var value = selectedData[0].value;
+                        console.log('Selected:', value);
+                }
+            })
+            ;
+
+            // $('#select2-parent-fullname-donation-dropdown').select2({
+            //     placeholder: 'Select a parent',
+            //     allowClear: true,
+            //     width: 'resolve',
+            //     theme: 'bootstrap4'
+            // });
 
             sessionTable = new DataTable('#transaction-table', {
                 data: [],
@@ -387,26 +414,11 @@
             minimumValue: "0",
             onInvalidPaste: "clamp",
             outputFormat: "number",
-            wheelStep: "10000"
+            wheelStep: "10000",
+            defaultValueOverride: "0"
         });
-        // const donationAmount = new AutoNumeric('#createDonationTransactionForm #createTransaction_TransactionAmount', {
-        //     currencySymbol: "₫",
-        //     currencySymbolPlacement: "s",
-        //     decimalCharacter: ",",
-        //     decimalPlaces: 0,
-        //     digitGroupSeparator: ".",
-        //     emptyInputBehavior: "min",
-        //     maximumValue: "1000000000",
-        //     minimumValue: "10000",
-        //     onInvalidPaste: "clamp",
-        //     outputFormat: "number",
-        //     wheelStep: "1000"
-        // });
         $('#createEnrollmentTransactionForm').submit(function (event) {
             event.preventDefault(); // Prevent the form from submitting normally
-            console.log(enrollAmount.getNumber());
-            // Make the AJAX request
-            // callApiPostCreateSchedule(formData);
             // $('#createScheduleForm').trigger("reset");
             // Serialize form data
             var formData = {
@@ -464,7 +476,7 @@
                     // Check if the status is true
                     if (response.status) {
                         addParentEnrollmentOptions(response.data);
-                        addParentDonationOptions(response.data);
+                        // addParentDonationOptions(response.data);
                     } else {
                         showAlert('error', "Error: \n" + response.errorMessage);
                     }
@@ -532,7 +544,7 @@
         function callApiGetClassNameList() {
             // Call API to get the list of teacher names
             $.ajax({
-                url: apiUrl + 'Class/All/Classname/Status/Open', // API endpoint
+                url: apiUrl + 'Class/All/Status/Open', // API endpoint
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true
@@ -577,17 +589,6 @@
             // Set up Student list based on the first data
             callApiGetStudentNameList(data[0]);
         }
-        function addParentDonationOptions(data) {
-            $('#select2-parent-fullname-donation-dropdown').empty();
-            data.forEach(item => {
-                // Add each item as an option
-
-                let newOption = new Option(item, item, false, false);
-                $('#select2-parent-fullname-donation-dropdown').append(newOption);
-            });
-            // Refresh the Select2 dropdown to show new options
-            $('#select2-parent-fullname-donation-dropdown').trigger('change'); // Ensure Select2 is updated
-        }
         function addStudentOptions(data) {
             $('#select2-student-fullname-dropdown').empty();
             data.forEach(item => {
@@ -604,11 +605,12 @@
             data.forEach(item => {
                 // Add each item as an option
 
-                let newOption = new Option(item, item, false, false);
+                let newOption = new Option(item.className, item.enrollmentFee, false, false);
                 $('#select2-class-name-dropdown').append(newOption);
             });
             // Refresh the Select2 dropdown to show new options
             $('#select2-class-name-dropdown').trigger('change'); // Ensure Select2 is updated
+            enrollAmount.set(data[0].enrollmentFee);
         }
         function getTransactionStatusOptions() {
             var options = ['Processing', 'Completed']; // Example statuses
