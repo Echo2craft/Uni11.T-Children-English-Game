@@ -261,7 +261,13 @@ namespace CEG_WebAPI.Controllers
                     Phone = newTeach.Phone,
                     Address = newTeach.Address,
                 };
-                _teacherService.Create(teach, newTeach);
+                // Upload image if provided
+                if (newTeach.ImageUpload != null)
+                {
+                    string imageUrl = await _teacherService.UploadToBlobAsync(newTeach.ImageUpload);
+                    teach.Certificate = imageUrl;
+                }
+                _teacherService.Create(teach, newTeach, newTeach.ImageUpload);
                 return Ok(new
                 {
                     Data = true,
