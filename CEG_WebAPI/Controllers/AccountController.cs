@@ -5,6 +5,7 @@ using CEG_BAL.ViewModels.Authenticates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -13,11 +14,18 @@ namespace CEG_WebAPI.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountService _accountService;
+        private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
         public AccountController(
-            IAccountService accountService)
+            IAccountService accountService, 
+            IConfiguration configuration, 
+            IEmailService emailService
+        )
         {
             _accountService = accountService;
+            _configuration = configuration;
+            _emailService = emailService;
         }
 
         [HttpPost("Login")]
