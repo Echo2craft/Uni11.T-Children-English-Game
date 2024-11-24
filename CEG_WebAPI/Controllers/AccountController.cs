@@ -127,6 +127,33 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/Count")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTotalAccountAmount()
+        {
+            try
+            {
+                var result = await _accountService.GetTotalAmount();
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
