@@ -3,6 +3,7 @@ using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -98,21 +99,21 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Classname/Status/Open")]
-        [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
+        [HttpGet("All/Status/Open")]
+        [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassNameListByStatusOpen()
+        public async Task<IActionResult> GetClassOptionListByStatusOpen()
         {
             try
             {
-                var result = await _classService.GetClassNameListByStatusOpen();
+                var result = await _classService.GetClassOptionListByStatusOpen();
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class name list by status Open not found!"
+                        ErrorMessage = "Class option list by status Open not found!"
                     });
                 }
                 return Ok(new

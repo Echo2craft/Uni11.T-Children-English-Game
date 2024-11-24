@@ -14,7 +14,9 @@ namespace CEG_BAL.ViewModels
         public int ParentId { get; set; }
 
         public string ParentFullname { get; set; } = null!;
+
         public string? StudentFullname { get; set; }
+
         public string? ClassName { get; set; }
 
         public string VnpayId { get; set; } = null!;
@@ -29,8 +31,8 @@ namespace CEG_BAL.ViewModels
 
         public DateTime ConfirmDate { get; set; }
 
-        public virtual ICollection<EnrollViewModel> Enrolls { get; set; } = new List<EnrollViewModel>();
+        public List<EnrollViewModel> Enrolls { get; set; } = new List<EnrollViewModel>();
 
-        public virtual ParentViewModel Parent { get; set; } = null!;
+        public ParentViewModel Parent { get; set; } = null!;
     }
 }

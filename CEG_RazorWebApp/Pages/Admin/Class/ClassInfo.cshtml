@@ -117,6 +117,15 @@
                                     </div>
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
+                                            <label class="col-form-label">Enrollment Fee:</label>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <span id="class-enroll-fee">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-sm-2">
+                                        <div class="col-md-5 text-md-right">
                                             <label class="col-form-label">Current students amount:</label>
                                         </div>
                                         <div class="col-md-7">
@@ -307,12 +316,12 @@
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@updateClass.MinStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.MinStudents" value="@updateClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <input asp-for="@updateClass.MinStudents" value="@updateClass.MinStudents" type="number" min="@CEG_BAL.Configurations.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
                                         <span asp-validation-for="@updateClass.MinStudents" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@updateClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.MaxStudents" value="@updateClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <input asp-for="@updateClass.MaxStudents" value="@updateClass.MaxStudents" type="number" max="@CEG_BAL.Configurations.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
                                         <span asp-validation-for="@updateClass.MaxStudents" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -333,6 +342,11 @@
                                         <label asp-for="@updateClass.EndDate" class="col-md-3 col-form-label text-md-right"></label>
                                         <input asp-for="@updateClass.EndDate" type="datetime-local" value="@updateClass.EndDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
                                         <span asp-validation-for="@updateClass.EndDate" id="error_message"
+                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+
+                                        <label asp-for="@updateClass.EnrollmentFee" class="col-md-3 col-form-label text-md-right"></label>
+                                        <input asp-for="@updateClass.EnrollmentFee" value="@updateClass.EnrollmentFee" type="number" required class="form-control col-md-7">
+                                        <span asp-validation-for="@updateClass.EnrollmentFee" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                     </div>
                                 </div>
@@ -441,8 +455,7 @@
     <script>
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
-        var enrollList;
-        var table;
+        var enrollTable;
         var scheduleTable;
         var sessionTable;
         var selectedSessionIds = new Set();
@@ -1102,7 +1115,6 @@
                                 <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editClass"></i>
                             </div>
                             ` : '';
-            // classStatus = data.status;
             var filteredEnrollList = data.enrolls.filter(function (enroll) {
                 return enroll.status === 'Enrolled';
             });
@@ -1159,6 +1171,10 @@
                 let dadiv = $('div.dt-modal-toggle').parent();
                 dadiv.find('div.dt-modal-toggle').remove();
             }
+            formatter = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+            });
             // Display Class Info
             $('#class-title-status').find('#class-class-status').remove();
             $('#class-status').empty();
@@ -1176,6 +1192,7 @@
             $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
             $('#class-minimum-students-amount').text(data.minimumStudents);
             $('#class-maximum-students-amount').text(data.maximumStudents);
+            $('#class-enroll-fee').text(formatter.format(data.enrollmentFee));
             $('#class-title-status').append(titleStatusHtml);
             $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
 
