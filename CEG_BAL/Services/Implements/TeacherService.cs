@@ -81,6 +81,10 @@ namespace CEG_BAL.Services.Implements
                 string imageUrl = await UploadToBlobAsync(certImage);
                 acc.Certificate = imageUrl;
             }
+            else
+            {
+                acc.Certificate = "";
+            }
 
             _unitOfWork.TeacherRepositories.Create(acc);
             _unitOfWork.Save();
@@ -124,7 +128,7 @@ namespace CEG_BAL.Services.Implements
             await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
 
             // Generate a unique file name
-            string fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+            string fileName = Guid.NewGuid() + "-" + Path.GetExtension(file.FileName);
             var blobClient = blobContainerClient.GetBlobClient(fileName);
 
             // Upload the file to Blob Storage
