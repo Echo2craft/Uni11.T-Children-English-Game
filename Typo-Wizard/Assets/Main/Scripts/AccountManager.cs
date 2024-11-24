@@ -35,7 +35,7 @@ public class AccountManager : MonoBehaviour
 
     [Header("UserData")]
     public UserObject _user;
-    public string userRole; // Store role as "admin" or "student"
+    public UserObject userRole; // Store role as "admin" or "student"
 
     [Header("Scoreboard")]
     public static List<UserObject> _scoreboard;
@@ -69,7 +69,6 @@ public class AccountManager : MonoBehaviour
         // Check if a user is already logged in and load the appropriate UI
         if (PlayerPrefs.HasKey("IsLoggedIn") && PlayerPrefs.GetInt("IsLoggedIn") == 1)
         {
-            userRole = PlayerPrefs.GetString("UserRole");
             SetUIForRole();
         }
         else
@@ -77,7 +76,22 @@ public class AccountManager : MonoBehaviour
             checkActive();
         }
     }
+private void SetUIForRole()
+    {
+        LoginScreen.SetActive(false);
+        canvasToActivate.SetActive(true);
 
+        var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
+        if (usernameTextObj != null)
+        {
+            var usernameText = usernameTextObj.GetComponent<TMP_Text>();
+            if (usernameText != null)
+            {
+                welcomeName = $"Welcome {_user.Username}";
+                usernameText.text = welcomeName;
+            }
+        }
+    }
     private void checkActive()
     {
         // Check login status from PlayerPrefs
@@ -166,10 +180,8 @@ public class AccountManager : MonoBehaviour
 
             var response = request.downloadHandler.text;
             _user = JsonUtility.FromJson<UserObject>(response);
-            userRole = _user.Role; // Assume the role is in the response as "role"
 
             PlayerPrefs.SetInt("IsLoggedIn", 1);
-            PlayerPrefs.SetString("UserRole", userRole);
             PlayerPrefs.Save();
 
             SetUIForRole();
@@ -204,33 +216,7 @@ public class AccountManager : MonoBehaviour
             
         }
     }
-    private void SetUIForRole()
-    {
-        LoginScreen.SetActive(false);
-        canvasToActivate.SetActive(true);
-
-        var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
-        if (usernameTextObj != null)
-        {
-            var usernameText = usernameTextObj.GetComponent<TMP_Text>();
-            if (usernameText != null)
-            {
-                welcomeName = $"Welcome {_user.Username} ({userRole})";
-                usernameText.text = welcomeName;
-            }
-        }
-
-        if (userRole == "admin")
-        {
-            // Load Admin-specific UI elements or enable admin privileges
-            Debug.Log("User is an admin");
-        }
-        else if (userRole == "student")
-        {
-            // Load Student-specific UI elements
-            Debug.Log("User is a student");
-        }
-    }
+    
     private UserObject LoadUserData(List<UserObject> scoreboard)
     {
         try
@@ -263,7 +249,7 @@ public class AccountManager : MonoBehaviour
 
     private IEnumerator InitialUserInfoToDatabase()
     {
-        string url = $"https://your-api-url.com/users/{_user.UserId}/initialize"; // API endpoint for user initialization
+        string url = $"https://localhost:7143/api/users/{_user.UserId}/initialize"; // API endpoint for user initialization
 
         // Form data dictionary
         var formData = new Dictionary<string, object>
@@ -293,7 +279,7 @@ public class AccountManager : MonoBehaviour
 
     public IEnumerator SendScore(string cate, string level, string score)
     {
-        string url = $"https://your-api-url.com/users/{_user.UserId}/scores"; // API endpoint for sending score
+        string url = $"https://localhost:7143/api/{_user.UserId}/scores"; // API endpoint for sending score
 
         // Form data dictionary
         var formData = new Dictionary<string, string>
@@ -326,7 +312,7 @@ public class AccountManager : MonoBehaviour
 
     public IEnumerator LoadScoreBoard()
     {
-        string url = "https://your-api-url.com/scoreboard"; // API endpoint for scoreboard data
+        string url = "https://localhost:7143/api/scoreboard"; // API endpoint for scoreboard data
 
         UnityWebRequest request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
@@ -345,7 +331,7 @@ public class AccountManager : MonoBehaviour
 
     public IEnumerator LoadGameData()
     {
-        string url = "https://your-api-url.com/game-data"; // API endpoint for game data
+        string url = "https://localhost:7143/api/game-data"; // API endpoint for game data
 
         UnityWebRequest request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
@@ -371,4 +357,5 @@ public class AccountManager : MonoBehaviour
         PlayerPrefs.Save();
         Debug.Log("User logged out successfully");
     }
+
 }

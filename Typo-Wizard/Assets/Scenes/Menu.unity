@@ -784,9 +784,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1671748037}
-        m_TargetAssemblyTypeName: GameUtility, Assembly-CSharp
-        m_MethodName: ExitApplication
+      - m_Target: {fileID: 258710250}
+        m_TargetAssemblyTypeName: AccountManager, Assembly-CSharp
+        m_MethodName: Logout
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1609,7 +1609,6 @@ MonoBehaviour:
   nameLoginField: {fileID: 42362584}
   passwordLoginField: {fileID: 635374168}
   warningLoginText: {fileID: 983582138}
-  userRole: 
   canvasToActivate: {fileID: 1268401883}
   LoginScreen: {fileID: 1817975767}
 --- !u!1 &260222742
@@ -7255,7 +7254,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectCategory
+          m_StringArgument: Game
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1128669937
