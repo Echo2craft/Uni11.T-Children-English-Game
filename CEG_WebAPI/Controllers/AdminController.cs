@@ -269,7 +269,13 @@ namespace CEG_WebAPI.Controllers
                     Phone = newTeach.Phone,
                     Address = newTeach.Address,
                 };
-                _teacherService.Create(teach, newTeach);
+                // Upload image if provided
+                if (newTeach.ImageUpload != null)
+                {
+                    string imageUrl = await _teacherService.UploadToBlobAsync(newTeach.ImageUpload);
+                    teach.Certificate = imageUrl;
+                }
+                _teacherService.Create(teach, newTeach, newTeach.ImageUpload);
 
                 await _emailService.SendEmailAsync(
                     _config.GetSection("Gmail:SenderName").Value,
@@ -287,7 +293,6 @@ namespace CEG_WebAPI.Controllers
                     _config.GetSection("Gmail:Username").Value,
                     _config.GetSection("Gmail:Password").Value
                 );
-
                 return Ok(new
                 {
                     Data = true,
