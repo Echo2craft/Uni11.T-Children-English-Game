@@ -95,7 +95,10 @@ namespace CEG_WebAPI
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<ITeacherService, TeacherService>();
+
             services.AddScoped<IVnpayService, VnpayService>();
+
+            services.AddTransient<IEmailService, EmailService>();
         }
 
         private static void AddSwaggerServices(IServiceCollection services)
