@@ -208,7 +208,7 @@
         var courseList;
         var sessionTable;
         var scheduleTable;
-        var selectedSessionIds = new Set();
+        var selectedSessionIds = new Map();
         $(document).ready(function () {
             // Registering the custom feature with DataTables
             DataTable.feature.register('searchIcon', function (settings, opts) {
@@ -332,9 +332,8 @@
                         var data = dt.row(rowIdx).data();
                         var dateCell = $(dt.cell(rowIdx, 4).node()).find('input');
 
-                        var sessionId = data.sessionId;
                         // If not selected, add to selected set
-                        selectedSessionIds.add(sessionId);
+                        selectedSessionIds.set(rowIdx, data.sessionId);
 
                         // Enable input in the date cell
                         dateCell.prop('disabled', false);
@@ -350,12 +349,11 @@
             }).on('deselect', function (e, dt, type, indexes) {
                 if (type === 'row') {
                     indexes.forEach(function (rowIdx) {
-                        var data = dt.row(rowIdx).data();
+                        // var data = dt.row(rowIdx).data();
                         var dateCell = $(dt.cell(rowIdx, 4).node()).find('input');
 
-                        var sessionId = data.sessionId;
                         // If already selected, unselect and remove from scheduleTable
-                        selectedSessionIds.delete(sessionId);
+                        selectedSessionIds.delete(rowIdx);
 
                         // Disable input in the date cell
                         dateCell.prop('disabled', true);
@@ -664,17 +662,6 @@
                 classList.append(cardHtml);
             });
         }
-        // function getScheduleOptions(selectedType) {
-        //     var options = @Html.Raw(Model.SchedulePresets); Example types
-        //     console.log(options);
-        //     var html = '';
-
-        //     options.forEach(function (type) {
-        //         html += `<option value="${type}" ${selectedType === type ? 'selected' : ''}>${type}</option>`;
-        //     });
-
-        //     return html;
-        // }
         $("#createClassForm").submit(function (event) {
             event.preventDefault(); // Prevent the form from submitting
 
@@ -687,20 +674,16 @@
                 CourseName: $('#searchableCourseDropdown').select2('data')[0].text,
                 StartDate: $("#createClass_StartDate").val(), // $("#createClass_StartDate").val(),
                 EndDate: $("#createClass_EndDate").val(),
+                EnrollmentFee: classAmount.getNumber(),
                 Schedules: []
                 // WeeklySchedule: $('#createClass_WeeklySchedule').val()
             };
             // Gather schedule data dynamically (example assuming each schedule is in a row in a table)
-            $('#schedule-table tbody tr').each(function () {
+            selectedSessionIds.forEach((value, key) => {
                 var schedule = {
-                    ScheduleDate: $(this).find('#schedule-start-date').val(), // Example date input
-                    SessionId: $(this).find('#schedule-session-id').text()
-                    // Hours: parseInt($(this).find('.schedule-hours').text(), 10) || 0, // Example hours input
-                    // Add additional fields as needed
+                    ScheduleDate: $(sessionTable.row(key).node()).find('#schedule-start-date').val(), // Example date input
+                    SessionId: value
                 };
-                // console.log(schedule);
-
-                // Push each schedule object to the Schedules array
                 classData.Schedules.push(schedule);
             });
 
