@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -19,17 +22,21 @@ namespace CEG_BAL.Services.Implements
         private readonly IMapper _mapper;
         private readonly IJWTService _jwtService;
         private readonly IConfiguration _configuration;
+        private readonly IAzureStorageService _storageService;
+        private readonly string _containerName;
 
         public TeacherService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IJWTService jwtServices,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IAzureStorageService storageService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _jwtService = jwtServices;
             _configuration = configuration;
+            _storageService = storageService;
         }
 
         public async Task<List<TeacherViewModel>> GetTeacherList()
@@ -55,7 +62,7 @@ namespace CEG_BAL.Services.Implements
             return false;
         }
 
-        public void Create(TeacherViewModel teacher, CreateNewTeacher newTeach)
+        public async void Create(TeacherViewModel teacher, CreateNewTeacher newTeach, IFormFile certImage)
         {
             var acc = _mapper.Map<Teacher>(teacher);
             acc.Account.CreatedDate = DateTime.Now;
@@ -71,6 +78,13 @@ namespace CEG_BAL.Services.Implements
                 acc.Phone = newTeach.Phone;
                 acc.Address = newTeach.Address;
             }
+
+            if (certImage != null && certImage.Length > 0)
+            {
+                string imageUrl = await _storageService.UploadToBlobAsync(certImage, "certificate/");
+                acc.Certificate = imageUrl;
+            }
+
             _unitOfWork.TeacherRepositories.Create(acc);
             _unitOfWork.Save();
         }
