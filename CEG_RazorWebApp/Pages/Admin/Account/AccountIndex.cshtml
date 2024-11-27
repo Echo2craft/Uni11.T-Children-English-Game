@@ -309,10 +309,16 @@
                                             <span asp-validation-for="@createTeacher.Account.ConfirmPassword" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label class="col-md-4 col-form-label text-md-right" asp-for="@createTeacher.ImageUpload">Upload Certificate Image:</label>
+                                            @* <label class="col-md-4 col-form-label text-md-right" asp-for="@createTeacher.ImageUpload">Upload Certificate Image:</label>
                                             <input class="form-control col-md-8" type="file" asp-for="@createTeacher.ImageUpload" accept="image/*" />
                                             <span asp-validation-for="@createTeacher.ImageUpload" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                            <label class="col-md-4 col-form-label text-md-right" asp-for="@createTeacher.ImageUpload">Upload Certificate Image:</label>
+                                            <div class="col-md-8 custom-file">
+                                                <input type="file" class="col-md-8 custom-file-input" asp-for="@createTeacher.ImageUpload" required accept="image/*">
+                                                <label class="col-md-8 custom-file-label" asp-for="@createTeacher.ImageUpload">Choose image to upload</label>
+                                                <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                            </div>
                                         </div>
                                         <div class="row form-group justify-content-center">
                                             <div id="preview-container">
