@@ -84,10 +84,16 @@ namespace CEG_BAL.Services.Implements
                 string imageUrl = await _storageService.UploadToBlobAsync(certImage, "certificate/");
                 acc.Certificate = imageUrl;
             }
+            else
+            {
+                acc.Certificate = "";
+            }
 
             _unitOfWork.TeacherRepositories.Create(acc);
             _unitOfWork.Save();
         }
+
+
 
         public void Update(TeacherViewModel teacher)
         {
@@ -117,6 +123,25 @@ namespace CEG_BAL.Services.Implements
                 return teach;
             }
             return null;
+        }
+        public async Task<string> UploadToBlobAsync(IFormFile file)
+        {
+            // Injected BlobServiceClient
+            var blobContainerClient = _blobServiceClient.GetBlobContainerClient("certificate");
+            await blobContainerClient.CreateIfNotExistsAsync();
+            await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+
+            // Generate a unique file name
+            string fileName = Guid.NewGuid() + "-" + Path.GetExtension(file.FileName);
+            var blobClient = blobContainerClient.GetBlobClient(fileName);
+
+            // Upload the file to Blob Storage
+            using (var stream = file.OpenReadStream())
+            {
+                await blobClient.UploadAsync(stream, true);
+            }
+
+            return blobClient.Uri.ToString(); // Return the file URL
         }
     }
 }

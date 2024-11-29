@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace CEG_BAL.ViewModels.Admin
 {
-    public class CreateNewGameConfig
+    public class CreateNewGameLevel
     {
-        public string? Title { get; set; }
-        public int Point { get; set; }
-        public string? CorrectAnswer { get; set; }
+        public string Title { get; set; } = null!;
+
         public string? Status { get; set; }
+
+        public int? GameId { get; set; }
     }
 }

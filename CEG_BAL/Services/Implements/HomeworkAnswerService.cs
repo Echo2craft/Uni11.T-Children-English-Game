@@ -38,7 +38,7 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
         }
 
-        public async Task<HomeworkAnswerViewModel?> GetAnswerById(int id)
+        public async Task<HomeworkAnswerViewModel?> GetById(int id)
         {
             var answ = await _unitOfWork.HomeworkAnswerRepositories.GetByIdNoTracking(id);
             if (answ != null)
@@ -49,9 +49,24 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
-        public async Task<List<HomeworkAnswerViewModel>> GetAnswerList()
+        public async Task<List<HomeworkAnswerViewModel>> GetList()
         {
-            return _mapper.Map<List<HomeworkAnswerViewModel>>(await _unitOfWork.HomeworkAnswerRepositories.GetAnswersList());
+            return _mapper.Map<List<HomeworkAnswerViewModel>>(await _unitOfWork.HomeworkAnswerRepositories.GetList());
+        }
+
+        public async Task<List<HomeworkAnswerViewModel>?> GetListByCourseId(int courseId)
+        {
+            return _mapper.Map<List<HomeworkAnswerViewModel>>(await _unitOfWork.HomeworkAnswerRepositories.GetListByCourseId(courseId));
+        }
+
+        public async Task<List<HomeworkAnswerViewModel>?> GetListByQuestionId(int questionId)
+        {
+            return _mapper.Map<List<HomeworkAnswerViewModel>>(await _unitOfWork.HomeworkAnswerRepositories.GetListByQuestionId(questionId));
+        }
+
+        public async Task<List<HomeworkAnswerViewModel>?> GetListBySessionId(int sessionId)
+        {
+            return _mapper.Map<List<HomeworkAnswerViewModel>>(await _unitOfWork.HomeworkAnswerRepositories.GetListBySessionId(sessionId));
         }
 
         public void Update(HomeworkAnswerViewModel model)
