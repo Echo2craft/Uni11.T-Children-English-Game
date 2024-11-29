@@ -270,11 +270,11 @@ namespace CEG_WebAPI.Controllers
                     Address = newTeach.Address,
                 };
                 // Upload image if provided
-                if (newTeach.ImageUpload != null)
-                {
-                    string imageUrl = await _teacherService.UploadToBlobAsync(newTeach.ImageUpload);
-                    teach.Certificate = imageUrl;
-                }
+                //if (newTeach.ImageUpload != null)
+                //{
+                //    string imageUrl = await _teacherService.UploadToBlobAsync(newTeach.ImageUpload);
+                //    teach.Certificate = imageUrl;
+                //}
                 _teacherService.Create(teach, newTeach, newTeach.ImageUpload);
 
                 await _emailService.SendEmailAsync(

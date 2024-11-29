@@ -1,4 +1,5 @@
 using CEG_BAL.AutoMapperProfile;
+using CEG_BAL.Configurations;
 using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_DAL.Infrastructure;
@@ -18,8 +19,10 @@ namespace CEG_WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Configure services for web app.
+            // Load secrets.json for local development
+            builder.Configuration.AddUserSecrets<Program>();
 
+            // Configure services for web app.
             ConfigureServices(builder.Services, builder.Configuration);
 
             var app = builder.Build();
@@ -62,6 +65,10 @@ namespace CEG_WebAPI
             });
 
             services.AddHttpContextAccessor();
+
+            // Add Azure Storage configuration
+            services.Configure<AzureStorageConfig>(config.GetSection("AzureStorage"));
+            services.AddSingleton<IAzureStorageService, AzureStorageService>();
 
             // Register custom services
             RegisterServices(services);

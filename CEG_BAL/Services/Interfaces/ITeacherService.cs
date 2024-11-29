@@ -19,6 +19,5 @@ namespace CEG_BAL.Services.Interfaces
         Task<bool> IsTeacherExistByFullname(string fullname);
         void Create(TeacherViewModel teacher, CreateNewTeacher newTeach, IFormFile certImage);
         void Update(TeacherViewModel teacher);
-        Task<string> UploadToBlobAsync(IFormFile file);
     }
 }

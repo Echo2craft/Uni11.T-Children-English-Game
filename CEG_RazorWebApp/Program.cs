@@ -1,3 +1,4 @@
+using CEG_BAL.Configurations;
 using CEG_RazorWebApp.Libraries;
 using CEG_RazorWebApp.Libraries.Authorizations;
 using CEG_RazorWebApp.Services.Implements;
@@ -13,6 +14,9 @@ namespace CEG_RazorWebApp
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Load secrets.json for local development
+            //builder.Configuration.AddUserSecrets<Program>();
 
             // Add services to the container.
             ConfigureServices(builder.Services, builder.Configuration);
@@ -46,6 +50,9 @@ namespace CEG_RazorWebApp
                 options.SaveTokens = true;
             })*/
             ;
+
+            // Add Azure Storage configuration
+            //services.Configure<AzureStorageConfig>(configuration.GetSection("AzureStorage"));
 
             // Add HttpClient
             services.AddHttpClient();
@@ -96,8 +103,6 @@ namespace CEG_RazorWebApp
 
             // Add Hosted services
             /*services.AddHostedService<MembershipExpiryService>();*/
-
-            //services.AddSingleton
         }
 
         private static void ConfigureMiddleware(WebApplication app)
@@ -138,5 +143,22 @@ namespace CEG_RazorWebApp
             });
             app.MapRazorPages();
         }
+
+        /*public static void LoadConfiguration(WebApplicationBuilder builder)
+        {
+            // Optionally load secrets from Azure Key Vault or secrets.json
+            var configuration = builder.Configuration;
+
+            // Load user secrets for local development
+            builder.Configuration.AddUserSecrets<Program>();
+
+            // Optional: Load Azure Key Vault
+            string keyVaultName = configuration["KeyVaultName"];
+            if (!string.IsNullOrEmpty(keyVaultName))
+            {
+                var keyVaultUri = new Uri($"https://{keyVaultName}.vault.azure.net/");
+                builder.Configuration.AddAzureKeyVault(keyVaultUri, new Azure.Identity.DefaultAzureCredential());
+            }
+        }*/
     }
 }
