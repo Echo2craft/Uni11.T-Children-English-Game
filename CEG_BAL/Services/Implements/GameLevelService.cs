@@ -44,7 +44,7 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
         }
 
-        public async Task<List<GameLevelViewModel>> GetAllGameLevel()
+        public async Task<List<GameLevelViewModel>> GetList()
         {
             return _mapper.Map<List<GameLevelViewModel>>(await _unitOfWork.GameLevelRepositories.GetList());
         }

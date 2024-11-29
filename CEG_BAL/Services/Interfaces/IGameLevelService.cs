@@ -12,7 +12,7 @@ namespace CEG_BAL.Services.Interfaces
     {
         void Create(CreateNewGameLevel model);
         void Update(GameLevelViewModel model);
-        Task<List<GameLevelViewModel>> GetAllGameLevel();
+        Task<List<GameLevelViewModel>> GetList();
         Task<GameLevelViewModel> GetGameLevelById(int id);
     }
 }

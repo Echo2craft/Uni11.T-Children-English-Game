@@ -141,9 +141,12 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Game config does not exist"
                     });
                 }
-                gameconfig.GameConfigId = id;
-                _gameConfigService.Update(gameconfig);
-                result = await _gameConfigService.GetGameConfigById(gameconfig.GameConfigId.Value);
+                result.Point = gameconfig.Point;
+                result.Status = gameconfig.Status;
+                result.Title = gameconfig.Title;
+                result.GameConfigId = id;
+                _gameConfigService.Update(result);
+                result = await _gameConfigService.GetGameConfigById(id);
                 return Ok(new
                 {
                     Status = true,
