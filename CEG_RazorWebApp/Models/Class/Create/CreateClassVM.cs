@@ -28,6 +28,7 @@ namespace CEG_RazorWebApp.Models.Class.Create
         [Required(ErrorMessage = "Class start date is required")]
         [DisplayName("Class start date")]
         [DataType(DataType.DateTime)]
+        // [Range(typeof(DateTime), minimum: DateTime.Now.ToString(), "2025-12-31", ErrorMessage = "Start date must be between {1} and {2}.")]
         //startDate (30/9), endDate(30/10), daysInWeek(T2, T5) Phải sync ngày và thứ tạo (30/9 là T2)
         public DateTime StartDate { get; set; } = DateTime.Now.AddDays(10);
         [Required(ErrorMessage = "Class end date is required")]

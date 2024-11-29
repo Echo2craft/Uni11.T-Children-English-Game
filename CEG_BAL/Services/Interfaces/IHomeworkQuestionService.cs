@@ -14,8 +14,10 @@ namespace CEG_BAL.Services.Interfaces
         void CreateWithHomeworkId(HomeworkQuestionViewModel model, CreateNewQuestion newQues, int homeworkId);
         void Update(HomeworkQuestionViewModel model);
         void UpdateWithHomeworkId(int questionId, int homeworkId);
-        Task<List<HomeworkQuestionViewModel>> GetQuestionList();
-        Task<List<HomeworkQuestionViewModel>?> GetOrderedQuestionList();
-        Task<HomeworkQuestionViewModel?> GetQuestionById(int id);
+        Task<List<HomeworkQuestionViewModel>> GetList();
+        Task<List<HomeworkQuestionViewModel>> GetListByCourseId(int courseId);
+        Task<List<HomeworkQuestionViewModel>> GetListBySessionId(int sessionId);
+        Task<List<HomeworkQuestionViewModel>?> GetOrderedList();
+        Task<HomeworkQuestionViewModel?> GetById(int id);
     }
 }

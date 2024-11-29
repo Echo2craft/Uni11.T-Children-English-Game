@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Admin;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -30,14 +31,21 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public void Create(GameConfigViewModel model)
+        public void Create(CreateNewGameConfig newGameConfig)
         {
-            var game = _mapper.Map<GameConfig>(model);
+            var game = new GameConfig();
+            if(newGameConfig != null)
+            {
+                game.Title = newGameConfig.Title;
+                game.CorrectAnswer = newGameConfig.CorrectAnswer;
+                game.Point = newGameConfig.Point;
+                game.Status = newGameConfig.Status;
+            }
             _unitOfWork.GameConfigRepositories.Create(game);
             _unitOfWork.Save();
         }
 
-        public async Task<GameConfigViewModel> GetGameConfigById(int id)
+        public async Task<GameConfigViewModel?> GetGameConfigById(int id)
         {
             var user = await _unitOfWork.GameConfigRepositories.GetByIdNoTracking(id);
             if (user != null)
