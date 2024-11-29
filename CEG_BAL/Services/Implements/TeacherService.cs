@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
@@ -21,19 +22,21 @@ namespace CEG_BAL.Services.Implements
         private readonly IMapper _mapper;
         private readonly IJWTService _jwtService;
         private readonly IConfiguration _configuration;
-        private readonly BlobServiceClient _blobServiceClient;
+        private readonly IAzureStorageService _storageService;
         private readonly string _containerName;
 
         public TeacherService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IJWTService jwtServices,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IAzureStorageService storageService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _jwtService = jwtServices;
             _configuration = configuration;
+            _storageService = storageService;
         }
 
         public async Task<List<TeacherViewModel>> GetTeacherList()
@@ -78,7 +81,7 @@ namespace CEG_BAL.Services.Implements
 
             if (certImage != null && certImage.Length > 0)
             {
-                string imageUrl = await UploadToBlobAsync(certImage);
+                string imageUrl = await _storageService.UploadToBlobAsync(certImage, "certificate/");
                 acc.Certificate = imageUrl;
             }
             else
@@ -121,7 +124,6 @@ namespace CEG_BAL.Services.Implements
             }
             return null;
         }
-
         public async Task<string> UploadToBlobAsync(IFormFile file)
         {
             // Injected BlobServiceClient
