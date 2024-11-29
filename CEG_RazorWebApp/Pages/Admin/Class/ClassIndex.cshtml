@@ -125,12 +125,12 @@
                                       class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                 <label asp-for="@createClass.StartDate" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.StartDate" type="date" value="@createClass.StartDate.ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
+                                <input asp-for="@createClass.StartDate" type="date" value="@createClass.StartDate.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
                                 <span asp-validation-for="@createClass.StartDate" id="error_message"
                                       class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                 <label asp-for="@createClass.EndDate" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.EndDate" type="date" value="@createClass.EndDate.ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
+                                <input asp-for="@createClass.EndDate" type="date" value="@createClass.EndDate.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
                                 <span asp-validation-for="@createClass.EndDate" id="error_message"
                                       class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -296,7 +296,7 @@
                         data: null, // No need to map it to a specific data field 'startDate'
                         render: function (data, type, row, meta) {
                             // return data ? $.fn.dataTable.render.datetime(data, 'YYYY-MM-DD HH:mm').display(data) : '';
-                            return '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + getDefaultDate() + '" asp-format="{0:yyyy-MM-ddTHH:mm}" disabled/>';
+                            return '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + getDefaultDate() + '" min="' + getDefaultDate() + '" asp-format="{0:yyyy-MM-ddTHH:mm}" disabled/>';
                         }
                     },
                     {
@@ -627,7 +627,7 @@
                     <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
                         <div class="card1 card-child">
                             <div class="club-name">
-                                Class ID: ${classObj.classId}
+                                Class Code: ${classObj.className}
                                 <div class="status">
                                     ${statusText}
                                 </div>
@@ -635,7 +635,6 @@
                             <div class="card-body">
                                 <div class="club-title">
                                     <ul>
-                                        <li><h6>Class name:</h6><span>${classObj.className}</span></li>
                                         <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
                                         <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
                                         <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
