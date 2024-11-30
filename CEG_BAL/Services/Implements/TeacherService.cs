@@ -127,7 +127,7 @@ namespace CEG_BAL.Services.Implements
         public async Task<string> UploadToBlobAsync(IFormFile file)
         {
             // Injected BlobServiceClient
-            var blobContainerClient = _blobServiceClient.GetBlobContainerClient("certificate");
+            var blobContainerClient = _storageService.GetBlobContainerClient();
             await blobContainerClient.CreateIfNotExistsAsync();
             await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
 
