@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour {
 
     private             IEnumerator         IE_WaitTillNextRound    = null;
     private             IEnumerator         IE_StartTimer           = null;
-
+    private int                             rawScore                = 0;
     private             bool                IsFinished
     {
         get
@@ -289,9 +289,9 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// Function that is called to quit the application.
     /// </summary>
-    public void QuitGame()
+    public void QuitGame(string sceneName)
     {
-        Application.Quit();
+        SceneManager.LoadScene(sceneName); ;
     }
 
     /// <summary>
@@ -310,8 +310,10 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     private void UpdateScore(int add)
     {
-        events.CurrentFinalScore += add;
+        // Update the score but prevent it from going below 0
+        events.CurrentFinalScore = Mathf.Max(0, events.CurrentFinalScore + add);
 
+        // Trigger the ScoreUpdated event if it is not null
         if (events.ScoreUpdated != null)
         {
             events.ScoreUpdated();

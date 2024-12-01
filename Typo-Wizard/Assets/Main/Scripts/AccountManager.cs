@@ -26,7 +26,24 @@ public class AccountManager : MonoBehaviour
         public string username;
         public string password;
     }
+    [System.Serializable]
+    public class ApiResponse
+    {
+        public bool status;
+        public string successMessage;
+        public UserData data;
+    }
 
+    [System.Serializable]
+    public class UserData
+    {
+        public string accountId;
+        public string userName;
+        public string roleName;
+        public string accessToken;
+        public string imagePath;
+        public string status;
+    }
     [Header("Login")]
     public TMP_InputField nameLoginField;
     public TMP_InputField passwordLoginField;
@@ -35,7 +52,7 @@ public class AccountManager : MonoBehaviour
 
     [Header("UserData")]
     public UserObject _user;
-    public UserObject userRole; // Store role as "admin" or "student"
+    public UserObject userRole;
 
     [Header("Scoreboard")]
     public static List<UserObject> _scoreboard;
@@ -80,17 +97,6 @@ private void SetUIForRole()
     {
         LoginScreen.SetActive(false);
         canvasToActivate.SetActive(true);
-
-        var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
-        if (usernameTextObj != null)
-        {
-            var usernameText = usernameTextObj.GetComponent<TMP_Text>();
-            if (usernameText != null)
-            {
-                welcomeName = $"Welcome {_user.Username}";
-                usernameText.text = welcomeName;
-            }
-        }
     }
     private void checkActive()
     {
@@ -179,44 +185,66 @@ private void SetUIForRole()
             warningLoginText.text = "Logged In";
 
             var response = request.downloadHandler.text;
-            _user = JsonUtility.FromJson<UserObject>(response);
+            Debug.Log($"API Response: {response}");
+            // Deserialize the response to retrieve user data including the role
+            var apiResponse = JsonUtility.FromJson<ApiResponse>(response);
 
-            PlayerPrefs.SetInt("IsLoggedIn", 1);
-            PlayerPrefs.Save();
-
-            SetUIForRole();
-
-
-            var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
-            if (usernameTextObj != null)
+            if (apiResponse.status)
             {
-                Debug.Log("UsernameText found.");
-
-                // Get the text component and set the welcome message
-                var usernameText = usernameTextObj.GetComponent<TMP_Text>();
-                if (usernameText != null)
+                // Extract and validate the user role
+                string roleName = apiResponse.data.roleName.Trim().ToLower();
+                if (roleName != "student")
                 {
-                    welcomeName = $"Welcome {_name}";
-                    usernameText.text = welcomeName;
-                    Debug.Log("UsernameText updated: " + welcomeName);
+                    Debug.LogWarning("Access denied. Only students can log in.");
+                    warningLoginText.text = "Access Denied: Only students can log in.";
+                    yield break;
+                }
+
+                // Store user details
+                _user = new UserObject
+                {
+                    UserId = apiResponse.data.accountId,
+                    Username = apiResponse.data.userName,
+                    RoleName = apiResponse.data.roleName
+                };
+
+                // Save login state
+                PlayerPrefs.SetInt("IsLoggedIn", 1);
+                PlayerPrefs.SetString(usernameKey, _user.Username);
+                PlayerPrefs.Save();
+
+                // Set up the UI for the logged-in user
+                SetUIForRole();
+                var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
+                if (usernameTextObj != null)
+                {
+                    Debug.Log("UsernameText found.");
+
+                    // Get the text component and set the welcome message
+                    var usernameText = usernameTextObj.GetComponent<TMP_Text>();
+                    if (usernameText != null)
+                    {
+                        welcomeName = $"Welcome {_name}";
+                        usernameText.text = welcomeName;
+                        Debug.Log("UsernameText updated: " + welcomeName);
+                    }
+                    else
+                    {
+                        Debug.LogError("UsernameText component not found on UsernameText object.");
+                    }
                 }
                 else
                 {
-                    Debug.LogError("UsernameText component not found on UsernameText object.");
+                    Debug.LogError("UsernameText not found in canvasToActivate.");
                 }
-            }
-            else
-            {
-                Debug.LogError("UsernameText not found in canvasToActivate.");
-            }
 
-            // Further actions like loading game data and scoreboard
-            //StartCoroutine(LoadGameData());
-            //StartCoroutine(LoadScoreBoard());
-            
+                // Further actions like loading game data and scoreboard
+                //StartCoroutine(LoadGameData());
+                //StartCoroutine(LoadScoreBoard());
+
+            }
         }
     }
-    
     private UserObject LoadUserData(List<UserObject> scoreboard)
     {
         try

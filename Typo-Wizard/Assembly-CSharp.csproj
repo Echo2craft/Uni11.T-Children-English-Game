@@ -139,8 +139,8 @@
     <Compile Include="Assets\GoogleSignIn\GoogleSignInStatusCode.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\GameData.cs" />
     <Compile Include="Assets\Intro\Scripts\BackgroundAnimation.cs" />
-    <Compile Include="Assets\Menu\UI SlideShow\Scripts\UISlideShow.cs" />
     <Compile Include="Assets\Scripts\Mono\UIManager2.cs" />
+    <Compile Include="Assets\Menu\UI SlideShow\Scripts\UISlideShow.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInUser.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInConfiguration.cs" />
     <Compile Include="Assets\Scripts\ScriptableObject\Question.cs" />

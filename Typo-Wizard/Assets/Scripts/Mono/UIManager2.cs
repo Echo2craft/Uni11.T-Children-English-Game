@@ -172,6 +172,7 @@ public class UIManager2 : MonoBehaviour {
 
                 StartCoroutine(CalculateScore());
                 uIElements.FinishUIElements.gameObject.SetActive(true);
+                uIElements.MainCanvasGroup.gameObject.SetActive(false);
                 uIElements.HighScoreText.gameObject.SetActive(true);
                 uIElements.HighScoreText.text = ((highscore > events.StartupHighscore) ? "<color=yellow>new </color>" : string.Empty) + "Highscore: " + highscore;
                 break;
