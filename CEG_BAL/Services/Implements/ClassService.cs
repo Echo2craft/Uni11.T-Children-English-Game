@@ -98,6 +98,17 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
+        public async Task<ClassViewModel?> GetByClassName(string className)
+        {
+            var clas = await _unitOfWork.ClassRepositories.GetByClassName(className);
+            if (clas != null)
+            {
+                var c = _mapper.Map<ClassViewModel>(clas);
+                return c;
+            }
+            return null;
+        }
+
         public async Task<List<ClassViewModel>> GetClassList()
         {
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassList());
