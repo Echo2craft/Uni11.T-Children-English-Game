@@ -123,7 +123,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
         [HttpGet("Account/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Parent")]
         [ProducesResponseType(typeof(ParentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
