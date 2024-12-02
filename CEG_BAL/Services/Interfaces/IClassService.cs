@@ -24,6 +24,7 @@ namespace CEG_BAL.Services.Interfaces
         Task<ClassViewModel?> GetClassById(int id);
         Task<ClassViewModel?> GetByIdAdmin(int id);
         Task<ClassViewModel?> GetByIdParent(int id);
+        Task<ClassViewModel?> GetByClassName(string className);
         Task<bool> IsClassEditableById(int id);
     }
 }
