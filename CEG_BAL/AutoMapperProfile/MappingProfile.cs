@@ -237,7 +237,13 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<StudentProgress, StudentProgressViewModel>()
                 .ReverseMap();
+            CreateMap<Game, GameViewModel>()
+                .ReverseMap();
             CreateMap<GameConfig, GameConfigViewModel>()
+                .ReverseMap();
+            CreateMap<GameLevel, GameLevelViewModel>()
+                .ReverseMap();
+            CreateMap<StudentAnswer, StudentAnswerViewModel>()
                 .ReverseMap();
         }
     }
