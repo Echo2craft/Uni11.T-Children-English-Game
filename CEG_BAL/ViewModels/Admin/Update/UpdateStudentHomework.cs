@@ -8,7 +8,6 @@ namespace CEG_BAL.ViewModels.Admin.Update
 {
     public class UpdateStudentHomework
     {
-        public int StudentHomeworkId { get; set; }
         public int HomeworkId { get; set; }
 
         public int StudentProgressId { get; set; }

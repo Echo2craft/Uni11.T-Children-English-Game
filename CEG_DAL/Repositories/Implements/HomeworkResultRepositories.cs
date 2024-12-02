@@ -23,7 +23,7 @@ namespace CEG_DAL.Repositories.Implements
             return _dbContext.HomeworkResults.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(homere => homere.HomeworkResultId == id);
         }
 
-        public async Task<List<HomeworkResult>> GetHomeworkResultsList()
+        public async Task<List<HomeworkResult>> GetList()
         {
             return await _dbContext.HomeworkResults.ToListAsync();
         }

@@ -5,6 +5,7 @@ using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace CEG_BAL.Services.Implements
@@ -22,18 +23,29 @@ namespace CEG_BAL.Services.Implements
             _configuration = configuration;
         }
 
-        public void Create(CreateNewStudentAnswer newStuAns)
+        public async Task Create(CreateNewStudentAnswer newStuAns)
         {
-            var answ = new StudentAnswer();
-            if (newStuAns != null)
+            if (newStuAns == null)
+                throw new ArgumentNullException(nameof(newStuAns), "The new homework result cannot be null.");
+
+            // Validate required fields (optional)
+            if ((await _unitOfWork.StudentHomeworkRepositories.GetByIdNoTracking(newStuAns.StudentHomeworkId)) == null)
+                throw new ArgumentException("StudentHomeworkId not found.", nameof(newStuAns.StudentHomeworkId));
+
+            var stuAns = new StudentAnswer();
+            _mapper.Map(newStuAns, stuAns);
+
+            // Save to the database
+            try
             {
-                answ.Answer = newStuAns.Answer;
-                answ.Type = newStuAns.Type;
-                answ.StudentHomeworkId = newStuAns.StudentHomeworkId.Value;
-                answ.GameId = newStuAns.GameId.Value;
+                _unitOfWork.StudentAnswerRepositories.Create(stuAns);
+                _unitOfWork.Save();
             }
-            _unitOfWork.StudentAnswerRepositories.Create(answ);
-            _unitOfWork.Save();
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating the homework result.", ex);
+            }
         }
 
         public async Task<StudentAnswerViewModel?> GetById(int id)
@@ -52,17 +64,36 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<StudentAnswerViewModel>>(await _unitOfWork.StudentAnswerRepositories.GetList());
         }
 
-        public void Update(UpdateStudentAnswer upStuAns)
+        public async Task Update(int stuAnsId, UpdateStudentAnswer upStuAns)
         {
-            var answ = _unitOfWork.StudentAnswerRepositories.GetByIdNoTracking(upStuAns.StudentAnswerId.Value).Result;
-            if (answ == null) throw new Exception("Student answer not found.");
-            if (upStuAns == null) throw new Exception("New student answer is null.");
-            answ.Answer = upStuAns.Answer;
-            answ.Type = upStuAns.Type;
-            answ.GameId = upStuAns.GameId.Value;
-            answ.StudentHomeworkId = upStuAns.StudentHomeworkId.Value;
-            _unitOfWork.StudentAnswerRepositories.Update(answ);
-            _unitOfWork.Save();
+            if (upStuAns == null)
+                throw new ArgumentNullException(nameof(upStuAns), "New student answer cannot be null.");
+
+            // Fetch the existing record
+            var stuAns = await _unitOfWork.StudentAnswerRepositories.GetByIdNoTracking(stuAnsId)
+                ?? throw new KeyNotFoundException("Student answer not found.");
+
+            // Map changes from the update model to the entity
+            _mapper.Map(upStuAns, stuAns);
+
+            // Reattach entity and mark it as modified
+            _unitOfWork.StudentAnswerRepositories.Update(stuAns);
+
+            // Save changes
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating the student answer.", ex);
+            }
         }
     }
 }

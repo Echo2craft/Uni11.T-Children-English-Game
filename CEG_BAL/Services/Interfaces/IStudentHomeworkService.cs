@@ -11,8 +11,8 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface IStudentHomeworkService
     {
-        void Create(CreateNewStudentHomework newStuHom);
-        void Update(UpdateStudentHomework upStuHom);
+        Task Create(CreateNewStudentHomework newStuHom);
+        Task Update(int stuHomId, UpdateStudentHomework upStuHom);
         Task<List<StudentHomeworkViewModel>> GetList();
         Task<StudentHomeworkViewModel?> GetById(int id);
     }
