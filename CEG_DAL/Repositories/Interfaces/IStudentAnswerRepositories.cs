@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace CEG_DAL.Repositories.Interfaces
 {
-    public interface IGameLevelRepositories : IRepositoryBase<GameLevel>
+    public interface IStudentAnswerRepositories : IRepositoryBase<StudentAnswer>
     {
-        Task<List<GameLevel>> GetList();
-        Task<GameLevel?> GetByIdNoTracking(int id);
+        Task<List<StudentAnswer>> GetList();
+        Task<StudentAnswer?> GetByIdNoTracking(int id);
     }
 }
