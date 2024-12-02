@@ -124,7 +124,7 @@ namespace CEG_BAL.Services.Implements
             }
             return null;
         }
-        public async Task<string> UploadToBlobAsync(IFormFile file)
+        /*public async Task<string> UploadToBlobAsync(IFormFile file)
         {
             // Injected BlobServiceClient
             var blobContainerClient = _storageService.GetBlobContainerClient();
@@ -142,6 +142,6 @@ namespace CEG_BAL.Services.Implements
             }
 
             return blobClient.Uri.ToString(); // Return the file URL
-        }
+        }*/
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CEG_BAL.ViewModels.Admin
+namespace CEG_BAL.ViewModels.Admin.Update
 {
-    public class CreateNewGameConfig
+    public class UpdateGameConfig
     {
         public string Title { get; set; } = null!;
         public int? Point { get; set; }

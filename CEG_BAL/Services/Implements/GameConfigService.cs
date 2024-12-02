@@ -2,8 +2,10 @@
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -17,35 +19,36 @@ namespace CEG_BAL.Services.Implements
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IJWTService _jwtService;
-        private readonly IConfiguration _configuration;
 
         public GameConfigService(
             IUnitOfWork unitOfWork,
-            IMapper mapper,
-            IJWTService jwtServices,
-            IConfiguration configuration)
+            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _jwtService = jwtServices;
-            _configuration = configuration;
         }
-        public void Create(CreateNewGameConfig newGameConfig)
+        public async Task Create(CreateNewGameConfig newGamCon)
         {
-            var game = new GameConfig();
-            if(newGameConfig != null)
+            if (newGamCon == null)
+                throw new ArgumentNullException(nameof(newGamCon), "The new game config cannot be null.");
+
+            var gamCon = new GameConfig();
+            _mapper.Map(newGamCon, gamCon);
+
+            // Save to the database
+            try
             {
-                game.Title = newGameConfig.Title;
-                game.CorrectAnswer = newGameConfig.CorrectAnswer;
-                game.Point = newGameConfig.Point;
-                game.Status = newGameConfig.Status;
+                _unitOfWork.GameConfigRepositories.Create(gamCon);
+                _unitOfWork.Save();
             }
-            _unitOfWork.GameConfigRepositories.Create(game);
-            _unitOfWork.Save();
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating the game config.", ex);
+            }
         }
 
-        public async Task<GameConfigViewModel?> GetGameConfigById(int id)
+        public async Task<GameConfigViewModel?> GetById(int id)
         {
             var user = await _unitOfWork.GameConfigRepositories.GetByIdNoTracking(id);
             if (user != null)
@@ -56,16 +59,41 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
-        public async Task<List<GameConfigViewModel>> GetGameConfigsList()
+        public async Task<List<GameConfigViewModel>> GetList()
         {
             return _mapper.Map<List<GameConfigViewModel>>(await _unitOfWork.GameConfigRepositories.GetGameConfigsList());
         }
 
-        public void Update(GameConfigViewModel model)
+        public async Task Update(int gamConId, UpdateGameConfig upGamCon)
         {
-            var game = _mapper.Map<GameConfig>(model);
-            _unitOfWork.GameConfigRepositories.Update(game);
-            _unitOfWork.Save();
+            if (upGamCon == null)
+                throw new ArgumentNullException(nameof(upGamCon), "New game config cannot be null.");
+
+            // Fetch the existing record
+            var stuPro = await _unitOfWork.GameConfigRepositories.GetByIdNoTracking(gamConId)
+                ?? throw new KeyNotFoundException("Game config not found.");
+
+            // Map changes from the update model to the entity
+            _mapper.Map(upGamCon, stuPro);
+
+            // Reattach entity and mark it as modified
+            _unitOfWork.GameConfigRepositories.Update(stuPro);
+
+            // Save changes
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating the game config.", ex);
+            }
         }
     }
 }

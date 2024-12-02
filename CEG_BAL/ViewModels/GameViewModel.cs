@@ -9,7 +9,6 @@ namespace CEG_BAL.ViewModels
 {
     public class GameViewModel
     {
-        public int? GameId { get; set; }
 
         public int? GameConfigId { get; set; }
 

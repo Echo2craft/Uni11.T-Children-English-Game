@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using CEG_BAL.ViewModels.Admin.Update;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -30,7 +31,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _gameConfigService.GetGameConfigsList();
+                var result = await _gameConfigService.GetList();
                 if (result == null || result.Count == 0)
                 {
                     return NotFound(new
@@ -66,7 +67,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _gameConfigService.GetGameConfigById(id);
+                var result = await _gameConfigService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -102,7 +103,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                _gameConfigService.Create(newHw);
+                await _gameConfigService.Create(newHw);
                 return Ok(new
                 {
                     Data = true,
@@ -127,12 +128,12 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] GameConfigViewModel gameconfig
+            [FromBody][Required] UpdateGameConfig gameconfig
             )
         {
             try
             {
-                var result = await _gameConfigService.GetGameConfigById(id);
+                var result = await _gameConfigService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -141,12 +142,8 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Game config does not exist"
                     });
                 }
-                result.Point = gameconfig.Point;
-                result.Status = gameconfig.Status;
-                result.Title = gameconfig.Title;
-                result.GameConfigId = id;
-                _gameConfigService.Update(result);
-                result = await _gameConfigService.GetGameConfigById(id);
+                await _gameConfigService.Update(id, gameconfig);
+                result = await _gameConfigService.GetById(id);
                 return Ok(new
                 {
                     Status = true,

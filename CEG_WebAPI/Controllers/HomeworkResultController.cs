@@ -1,44 +1,42 @@
 ﻿using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
-using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Create;
+using CEG_BAL.ViewModels.Admin.Update;
 using CEG_BAL.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using CEG_BAL.ViewModels.Admin.Create;
-using CEG_BAL.ViewModels.Admin.Update;
 
 namespace CEG_WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentAnswerController : ControllerBase
+    public class HomeworkResultController : ControllerBase
     {
-        private readonly IStudentAnswerService _studentAnswerService;
+        private readonly IHomeworkResultService _homeworkResultService;
         private readonly IConfiguration _config;
 
-        public StudentAnswerController(IStudentAnswerService studentAnswerService, IConfiguration config)
+        public HomeworkResultController(IHomeworkResultService homeworkResultService, IConfiguration config)
         {
-            _studentAnswerService = studentAnswerService;
+            _homeworkResultService = homeworkResultService;
             _config = config;
         }
 
         [HttpGet("All")]
-        [ProducesResponseType(typeof(List<StudentAnswerViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<HomeworkResultViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetStudentAnswerList()
         {
             try
             {
-                var result = await _studentAnswerService.GetList();
+                var result = await _homeworkResultService.GetList();
                 if (result == null || result.Count == 0)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Student answer list not found or empty!"
+                        ErrorMessage = "Homework result list not found or empty!"
                     });
                 }
                 return Ok(new
@@ -59,7 +57,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(StudentAnswerViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HomeworkResultViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetStudentAnswerById(
@@ -68,13 +66,13 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _studentAnswerService.GetById(id);
+                var result = await _homeworkResultService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Student answer not found!"
+                        ErrorMessage = "Homework result not found!"
                     });
                 }
                 return Ok(new
@@ -99,17 +97,17 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateStudentAnswer(
-            [FromBody][Required] CreateNewStudentAnswer newStuAns
+            [FromBody][Required] CreateNewHomeworkResult newHomRes
             )
         {
             try
             {
-                await _studentAnswerService.Create(newStuAns);
+                await _homeworkResultService.Create(newHomRes);
                 return Ok(new
                 {
                     Data = true,
                     Status = true,
-                    SuccessMessage = "Student answer create successfully."
+                    SuccessMessage = "Homework result create successfully."
                 });
             }
             catch (Exception ex)
@@ -123,27 +121,27 @@ namespace CEG_WebAPI.Controllers
             }
         }
         [HttpPut("{id}/Update")]
-        [ProducesResponseType(typeof(StudentAnswerViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HomeworkResultViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
-            [FromRoute][Required] int id,
-            [FromBody][Required] UpdateStudentAnswer upStuAns
+        [FromRoute][Required] int id,
+            [FromBody][Required] UpdateHomeworkResult upHomRes
             )
         {
             try
             {
-                var result = await _studentAnswerService.GetById(id);
+                var result = await _homeworkResultService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Student answer does not exist."
+                        ErrorMessage = "Homework result does not exist."
                     });
                 }
-                await _studentAnswerService.Update(id,upStuAns);
-                result = await _studentAnswerService.GetById(id);
+                await _homeworkResultService.Update(id, upHomRes);
+                result = await _homeworkResultService.GetById(id);
                 return Ok(new
                 {
                     Status = true,

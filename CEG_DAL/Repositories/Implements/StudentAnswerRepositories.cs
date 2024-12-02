@@ -10,24 +10,25 @@ using System.Threading.Tasks;
 
 namespace CEG_DAL.Repositories.Implements
 {
-    public class StudentHomeworkRepositories : RepositoryBase<StudentHomework>,IStudentHomeworkRepositories
+    public class StudentAnswerRepositories : RepositoryBase<StudentAnswer>, IStudentAnswerRepositories
     {
         private readonly MyDBContext _dbContext;
-        public StudentHomeworkRepositories(MyDBContext dbContext) : base(dbContext)
+
+        public StudentAnswerRepositories(MyDBContext context) : base(context)
         {
-            _dbContext = dbContext;
+            _dbContext = context;
         }
 
-        public async Task<StudentHomework?> GetByIdNoTracking(int id)
+        public async Task<StudentAnswer?> GetByIdNoTracking(int id)
         {
-            return await _dbContext.StudentHomeworks
+            return await _dbContext.StudentAnswers
                 .AsNoTrackingWithIdentityResolution()
-                .SingleOrDefaultAsync(home => home.StudentHomeworkId == id);
+                .SingleOrDefaultAsync(home => home.StudentAnswerId == id);
         }
 
-        public async Task<List<StudentHomework>> GetList()
+        public async Task<List<StudentAnswer>> GetList()
         {
-            return await _dbContext.StudentHomeworks
+            return await _dbContext.StudentAnswers
                 .AsNoTrackingWithIdentityResolution()
                 .ToListAsync();
         }
