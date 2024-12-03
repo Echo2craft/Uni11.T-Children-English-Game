@@ -25,7 +25,7 @@ namespace CEG_DAL.Repositories.Implements
                 .SingleOrDefaultAsync(home => home.StudentHomeworkId == id);
         }
 
-        public async Task<List<StudentHomework>> GetStudentHomeworksList()
+        public async Task<List<StudentHomework>> GetList()
         {
             return await _dbContext.StudentHomeworks
                 .AsNoTrackingWithIdentityResolution()

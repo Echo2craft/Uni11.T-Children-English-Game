@@ -12,8 +12,8 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface IStudentAnswerService
     {
-        void Create(CreateNewStudentAnswer newStuAns);
-        void Update(UpdateStudentAnswer upStuAns);
+        Task Create(CreateNewStudentAnswer newStuAns);
+        Task Update(int stuAnsId, UpdateStudentAnswer upStuAns);
         Task<List<StudentAnswerViewModel>> GetList();
         Task<StudentAnswerViewModel?> GetById(int id);
     }

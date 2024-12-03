@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Models;
@@ -235,10 +236,37 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Schedule, CreateNewSchedule>()
                 .ReverseMap();
-            CreateMap<StudentProgress, StudentProgressViewModel>()
+            CreateMap<Game, GameViewModel>()
                 .ReverseMap();
-            CreateMap<GameConfig, GameConfigViewModel>()
+            CreateMap<GameLevel, GameLevelViewModel>()
                 .ReverseMap();
+            CreateMapforDefaultViewCreateUpdateModel<GameConfig, GameConfigViewModel, CreateNewGameConfig, UpdateGameConfig>();
+            CreateMapforDefaultViewCreateUpdateModel<StudentAnswer, StudentAnswerViewModel, CreateNewStudentAnswer, UpdateStudentAnswer>();
+            CreateMapforDefaultViewCreateUpdateModel<StudentProgress, StudentProgressViewModel, CreateNewStudentProgress, UpdateStudentProgress>();
+            CreateMapforDefaultViewCreateUpdateModel<StudentHomework, StudentHomeworkViewModel, CreateNewStudentHomework, UpdateStudentHomework>();
+            CreateMapforDefaultViewCreateUpdateModel<HomeworkResult, HomeworkResultViewModel, CreateNewHomeworkResult, UpdateHomeworkResult>();
+        }
+        /// <summary>
+        /// Configures mappings between four types for creating and updating models.
+        /// The function sets up the following mappings:
+        /// 1. **T1 to T2**: Maps the default model to the view model.
+        /// 2. **T3 to T1**: Maps the create model to the default model (used for creating new records).
+        /// 3. **T4 to T1**: Maps the update model to the default model (used for updating existing records).
+        /// </summary>
+        /// <typeparam name="T1">The default model type (used for CRUD operations).</typeparam>
+        /// <typeparam name="T2">The view model type (used for displaying data).</typeparam>
+        /// <typeparam name="T3">The create model type (used for creating new records).</typeparam>
+        /// <typeparam name="T4">The update model type (used for updating existing records).</typeparam>
+        private void CreateMapforDefaultViewCreateUpdateModel<T1, T2, T3, T4>()
+        {
+            // DefaultModel to ViewModel: Maps the default model (T1) to the view model (T2)
+            CreateMap<T1, T2>();
+
+            // CreateModel to DefaultModel: Maps the create model (T3) to the default model (T1)
+            CreateMap<T3, T1>();
+
+            // UpdateModel to DefaultModel: Maps the update model (T4) to the default model (T1)
+            CreateMap<T4, T1>();
         }
     }
 }

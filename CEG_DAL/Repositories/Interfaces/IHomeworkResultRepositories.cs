@@ -10,7 +10,7 @@ namespace CEG_DAL.Repositories.Interfaces
 {
     public interface IHomeworkResultRepositories : IRepositoryBase<HomeworkResult>
     {
-        Task<List<HomeworkResult>> GetHomeworkResultsList();
+        Task<List<HomeworkResult>> GetList();
         Task<HomeworkResult> GetByIdNoTracking(int id);
     }
 }
