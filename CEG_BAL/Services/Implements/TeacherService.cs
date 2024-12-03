@@ -4,6 +4,7 @@ using Azure.Storage.Blobs.Models;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
+using CEG_BAL.ViewModels.Admin.Get;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.AspNetCore.Http;
@@ -55,7 +56,7 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
-        public async Task<bool> IsTeacherExistByEmail(string email)
+        public async Task<bool> IsExistByEmail(string email)
         {
             var acc = await _unitOfWork.TeacherRepositories.GetByEmail(email);
             if (acc != null) return true;
@@ -102,16 +103,21 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
         }
 
-        public async Task<List<string>> GetTeacherNameList()
+        public async Task<List<GetTeacherNameOption>?> GetTeacherNameOptionList()
         {
-            return await _unitOfWork.TeacherRepositories.GetTeacherNameList();
+            return _mapper.Map<List<GetTeacherNameOption>>(await _unitOfWork.TeacherRepositories.GetTeacherNameOptionList());
         }
 
-        public async Task<bool> IsTeacherExistByFullname(string fullname)
+        public async Task<bool> IsExistByFullname(string fullname)
         {
             var acc = await _unitOfWork.TeacherRepositories.GetByFullname(fullname);
-            if (acc != null) return true;
-            return false;
+            return acc != null;
+        }
+
+        public async Task<bool> IsExistById(int id)
+        {
+            var acc = await _unitOfWork.TeacherRepositories.GetByIdNoTracking(id);
+            return acc != null;
         }
 
         public async Task<TeacherViewModel?> GetTeacherByAccountId(int id)
@@ -125,23 +131,23 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
         /*public async Task<string> UploadToBlobAsync(IFormFile file)
-        {
-            // Injected BlobServiceClient
-            var blobContainerClient = _storageService.GetBlobContainerClient();
-            await blobContainerClient.CreateIfNotExistsAsync();
-            await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+{
+   // Injected BlobServiceClient
+   var blobContainerClient = _storageService.GetBlobContainerClient();
+   await blobContainerClient.CreateIfNotExistsAsync();
+   await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
 
-            // Generate a unique file name
-            string fileName = Guid.NewGuid() + "-" + Path.GetExtension(file.FileName);
-            var blobClient = blobContainerClient.GetBlobClient(fileName);
+   // Generate a unique file name
+   string fileName = Guid.NewGuid() + "-" + Path.GetExtension(file.FileName);
+   var blobClient = blobContainerClient.GetBlobClient(fileName);
 
-            // Upload the file to Blob Storage
-            using (var stream = file.OpenReadStream())
-            {
-                await blobClient.UploadAsync(stream, true);
-            }
+   // Upload the file to Blob Storage
+   using (var stream = file.OpenReadStream())
+   {
+       await blobClient.UploadAsync(stream, true);
+   }
 
-            return blobClient.Uri.ToString(); // Return the file URL
-        }*/
+   return blobClient.Uri.ToString(); // Return the file URL
+}*/
     }
 }

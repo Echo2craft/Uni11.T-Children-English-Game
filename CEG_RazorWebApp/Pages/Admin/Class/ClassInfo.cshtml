@@ -54,15 +54,6 @@
                                 </div>
                                 <div id="alertContainer"></div>
                                 <div class="card-body">
-                                    @* <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Class ID:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="class-id">
-                                            </span>
-                                        </div>
-                                    </div> *@
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
                                             <label class="col-form-label">Status:</label>
@@ -72,7 +63,7 @@
                                     </div>
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Class Name:</label>
+                                            <label class="col-form-label">Class Code:</label>
                                         </div>
                                         <div class="col-md-7">
                                             <span id="class-name">
@@ -345,7 +336,7 @@
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@updateClass.EnrollmentFee" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.EnrollmentFee" value="@updateClass.EnrollmentFee" type="number" required class="form-control col-md-7">
+                                        <input asp-for="@updateClass.EnrollmentFee" value="@updateClass.EnrollmentFee" type="text" required class="form-control col-md-7">
                                         <span asp-validation-for="@updateClass.EnrollmentFee" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                     </div>
@@ -379,12 +370,6 @@
                                         <thead>
                                             <tr>
                                                 <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="session-for-schedule-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Session ID: activate to sort column ascending">
-                                                    Session ID
-                                                </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
                                                     aria-controls="session-table" rowspan="1"
                                                     colspan="1" aria-sort="ascending"
                                                     aria-label="Session Number: activate to sort column ascending">
@@ -416,9 +401,7 @@
                                 </div>
                                 <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                 <div class="row form-group justify-content-center">
-                                    <label for="createSchedule_SessionId" class="col-md-2 col-form-label text-md-right">Session Id</label>
-                                    <input id="createSchedule_SessionId" type="number" class="form-control col-md-5" value="0" readonly required>
-                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                    <input id="createSchedule_SessionId" type="number" class="form-control col-md-5" value="0" hidden required>
 
                                     <label for="createSchedule_SessionNumber" class="col-md-2 col-form-label text-md-right">Session Number</label>
                                     <input id="createSchedule_SessionNumber" type="number" class="form-control col-md-5" value="0" readonly required>
@@ -585,7 +568,6 @@
                 deferRender: false,
                 responsive: true,
                 columns: [
-                    { data: 'sessionId' },
                     { data: 'sessionNumber' },
                     { data: 'title' },
                     { data: 'hours' },
@@ -732,12 +714,13 @@
 
                 //Get the form data
                 var formData = {
-                    className: $('input[id="updateClass_ClassName"]').val(),
-                    minimumStudents: $('input[id="updateClass_MinStudents"]').val(),
+                    ClassName: $('input[id="updateClass_ClassName"]').val(),
+                    MinimumStudents: $('input[id="updateClass_MinStudents"]').val(),
                     maximumStudents: $('input[id="updateClass_MaxStudents"]').val(),
-                    teacherName: $('#searchableTeacherDropdown').select2('data')[0].text,
+                    teacherId: $('#searchableTeacherDropdown').val(),
                     startDate: $('input[id="updateClass_StartDate"]').val(),
                     endDate: $('input[id="updateClass_EndDate"]').val(),
+                    enrollmentFee: classAmount.getNumber(),
                 };
 
                 //Make the AJAX request
@@ -766,6 +749,21 @@
                 $('#updateClassStatusForm').trigger("reset");
             });
         });
+        const classAmount = new AutoNumeric('#editClassForm #updateClass_EnrollmentFee', {
+            currencySymbol: "₫",
+            currencySymbolPlacement: "s",
+            decimalCharacter: ",",
+            decimalPlaces: 0,
+            digitGroupSeparator: ".",
+            emptyInputBehavior: "min",
+            leadingZero: "allow",
+            maximumValue: "1000000000",
+            minimumValue: "0",
+            onInvalidPaste: "clamp",
+            outputFormat: "number",
+            wheelStep: "10000",
+            defaultValueOverride: "0"
+        });
         function updateScheduleTable() {
             scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 const currentStatus = $('div#class-status').text().trim(); // Current status
@@ -790,16 +788,15 @@
             });
         }
         function addTeacherOptions(data, baseTeacher) {
+            const dropdown = $('#searchableTeacherDropdown');
             data.forEach(item => {
+                const isSelected = item.teacherName === baseTeacher;
                 // Add each item as an option=
-                let newOption = new Option(item, item, false, false);
-                if (item === baseTeacher) {
-                    newOption = new Option(item, item, true, true);
-                }
-                $('#searchableTeacherDropdown').append(newOption);
+                const newOption = new Option(item.teacherName, item.teacherId, isSelected, isSelected);
+                dropdown.append(newOption);
             });
             // Refresh the Select2 dropdown to show new options
-            $('#searchableTeacherDropdown').trigger('change'); // Ensure Select2 is updated
+            dropdown.trigger('change'); // Ensure Select2 is updated
         }
         // Function to calculate today's date + 10 days
         function getDefaultDate() {
@@ -1006,6 +1003,7 @@
                             // });
 
                         }
+                        console.log(response.data.course.sessions);
                         sessionTable.clear().rows.add(response.data.course.sessions).draw();
                         // console.log(response.data);
                     } else {
@@ -1130,8 +1128,11 @@
             });
             // Call API to get the list of teacher names
             $.ajax({
-                url: apiUrl + 'Teacher/All/Fullname', // API endpoint
+                url: apiUrl + 'Teacher/All/FullnameOption', // API endpoint
                 type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
                 success: function (response) {
                     $('#searchableTeacherDropdown').empty()
                     // Check if the status is true
@@ -1212,6 +1213,8 @@
             $('input[id="updateClass_MaxStudents"]').val(data.maximumStudents);
             $('input[id="updateClass_StartDate"]').val(data.startDate);
             $('input[id="updateClass_EndDate"]').val(data.endDate);
+            $('input[id="updateClass_EnrollmentFee"]').val(data.enrollmentFee);
+            classAmount.set(data.enrollmentFee);
             // Update Class Status
             $('select[id="updateClassStatus_Status"]').append(getStatusOptions(data.status));
         }

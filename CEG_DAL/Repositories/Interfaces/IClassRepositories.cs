@@ -10,12 +10,20 @@ namespace CEG_DAL.Repositories.Interfaces
 {
     public interface IClassRepositories : IRepositoryBase<Class>
     {
-        Task<List<Class>> GetClassList();
-        Task<List<Class>> GetClassOptionListByStatusOpen();
+        Task<List<Class>> GetList();
+        Task<List<Class>> GetOptionListByStatusOpen();
         Task<List<Class>> GetClassListAdmin();
         Task<List<Class>> GetClassListParent();
+        /// <summary>
+        /// Get Class Info by Class id
+        /// </summary>
+        /// <param name="id">Class id</param>
+        /// <param name="includeTeacher">Default: false, determine whether if the query should include teacher info</param>
+        /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
+        /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
+        /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
         Task<Class?> GetByIdNoTracking(int id, bool includeTeacher = false, bool includeCourse = false, bool includeSession = false, bool filterSession = false);
-        Task<List<Class>> GetClassListByTeacherId(int teacherId);
+        Task<List<Class>> GetListByTeacherId(int teacherId);
         Task<Class?> GetByClassName(string className);
         Task<int> GetIdByClassId(int id);
     }

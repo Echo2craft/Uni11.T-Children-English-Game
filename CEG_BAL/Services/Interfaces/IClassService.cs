@@ -12,19 +12,30 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface IClassService
     {
-        void Create(ClassViewModel classModel, CreateNewClass newClass);
-        void Update(ClassViewModel classModel);
-        void Update(ClassViewModel classModel, UpdateClass classNewModel);
+        Task Create(CreateNewClass newCla);
+        Task Update(int claId, UpdateClass upCla);
         void UpdateStatus(int classId, string classStatus);
         Task<List<ClassViewModel>> GetClassList();
-        Task<List<GetClassForTransaction>> GetClassOptionListByStatusOpen();
+        Task<List<GetClassForTransaction>> GetOptionListByStatusOpen();
         Task<List<ClassViewModel>> GetClassListParent();
         Task<List<ClassViewModel>> GetListAdmin();
-        Task<List<ClassViewModel>> GetClassListByTeacherAccountId(int id);
-        Task<ClassViewModel?> GetClassById(int id);
-        Task<ClassViewModel?> GetByIdAdmin(int id);
+        Task<List<ClassViewModel>> GetListByTeacherAccountId(int id);
+        /// <summary>
+        /// Get Class Info by Class id. 
+        /// int id, class id to be use to query. 
+        /// bool includeTeacher = true, determine whether if the query should include teacher info. 
+        /// bool includeCourse = true, determine whether if the query should include course info. 
+        /// bool includeSession = false, determine whether if the query should include course's sessions info. 
+        /// bool filterSession = false, determine whether if the query should include filter session infos to only contain unscheduled session. 
+        /// </summary>
+        /// <param name="id">Class id</param>
+        /// <param name="includeTeacher">Default: false, determine whether if the query should include teacher info</param>
+        /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
+        /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
+        /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
+        Task<ClassViewModel?> GetById(int id, bool includeTeacher = false, bool includeCourse = false, bool includeSession = false, bool filterSession = false);
         Task<ClassViewModel?> GetByIdParent(int id);
         Task<ClassViewModel?> GetByClassName(string className);
-        Task<bool> IsClassEditableById(int id);
+        Task<bool> IsEditableById(int id);
     }
 }
