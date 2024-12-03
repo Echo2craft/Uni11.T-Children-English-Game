@@ -262,7 +262,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var resultClassName = await _classService.IsClassEditableById(newSchedule.ClassId);
+                var resultClassName = await _classService.IsEditableById(newSchedule.ClassId);
                 if (!resultClassName)
                 {
                     return BadRequest(new

@@ -237,7 +237,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Password is Empty!"
                     });
                 }
-                var resultEmail = await _teacherService.IsTeacherExistByEmail(newTeach.Email);
+                var resultEmail = await _teacherService.IsExistByEmail(newTeach.Email);
                 if (resultEmail)
                 {
                     return BadRequest(new

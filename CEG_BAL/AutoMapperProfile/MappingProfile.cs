@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CEG_BAL.Configurations;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Create;
@@ -208,13 +209,7 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Course, CourseViewModel>()
                 .ReverseMap();
-            CreateMap<Class, ClassViewModel>()
-                .ReverseMap();
-            CreateMap<UpdateClass, Class>();
-            CreateMap<Class, GetClassForTransaction>();
             CreateMap<Enroll, EnrollViewModel>()
-                .ReverseMap();
-            CreateMap<Schedule, ScheduleViewModel>()
                 .ReverseMap();
             CreateMap<Session, SessionViewModel>()
                 .ReverseMap();
@@ -234,16 +229,44 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Transaction, TransactionViewModel>()
                 .ReverseMap();
-            CreateMap<Schedule, CreateNewSchedule>()
-                .ReverseMap();
             CreateMap<Game, GameViewModel>()
                 .ReverseMap();
             CreateMap<GameLevel, GameLevelViewModel>()
                 .ReverseMap();
+
+            // Teacher
+            CreateMap<Teacher, GetTeacherNameOption>()
+                .AfterMap((src,dest) =>
+                {
+                    dest.TeacherName = src.Account.Fullname;
+                });
+
+            // Class
+            CreateMapforDefaultViewCreateUpdateModel<Class, ClassViewModel, CreateNewClass, UpdateClass>();
+            CreateMap<Class, GetClassForTransaction>();
+
+            // Schedule
+            CreateMap<Schedule, ScheduleViewModel>();
+            CreateMap<CreateNewSchedule, Schedule>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.Status = Constants.SCHEDULE_STATUS_DRAFT;
+                    dest.StartTime = src.ScheduleDate.HasValue ? TimeOnly.FromDateTime(src.ScheduleDate.Value) : default;
+                });
+
+            // Game Config
             CreateMapforDefaultViewCreateUpdateModel<GameConfig, GameConfigViewModel, CreateNewGameConfig, UpdateGameConfig>();
+
+            // Student Answer
             CreateMapforDefaultViewCreateUpdateModel<StudentAnswer, StudentAnswerViewModel, CreateNewStudentAnswer, UpdateStudentAnswer>();
+
+            // Student Progress
             CreateMapforDefaultViewCreateUpdateModel<StudentProgress, StudentProgressViewModel, CreateNewStudentProgress, UpdateStudentProgress>();
+
+            // Student Homework
             CreateMapforDefaultViewCreateUpdateModel<StudentHomework, StudentHomeworkViewModel, CreateNewStudentHomework, UpdateStudentHomework>();
+
+            // Homework Result
             CreateMapforDefaultViewCreateUpdateModel<HomeworkResult, HomeworkResultViewModel, CreateNewHomeworkResult, UpdateHomeworkResult>();
         }
         /// <summary>

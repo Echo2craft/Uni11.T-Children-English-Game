@@ -90,19 +90,19 @@
                     <div class="modal-body">
                         <div class="container-fluid p-5">
                             <div class="row form-group">
-                                <label asp-for="@createClass.ClassName" class="col-md-4 col-form-label text-md-right"></label>
+                                <label asp-for="@createClass.ClassName" class="col-md-4 col-form-label text-md-right">Class code</label>
                                 <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-8">
                                 <span asp-validation-for="@createClass.ClassName" id="error_message"
                                       class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                <label asp-for="@createClass.MinStudents" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.MinStudents" value="@createClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-8">
-                                <span asp-validation-for="@createClass.MinStudents" id="error_message"
+                                <label asp-for="@createClass.MinimumStudents" class="col-md-4 col-form-label text-md-right"></label>
+                                <input asp-for="@createClass.MinimumStudents" value="@createClass.MinimumStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-8">
+                                <span asp-validation-for="@createClass.MinimumStudents" id="error_message"
                                       class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                <label asp-for="@createClass.MaxStudents" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.MaxStudents" value="@createClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-8">
-                                <span asp-validation-for="@createClass.MaxStudents" id="error_message"
+                                <label asp-for="@createClass.MaximumStudents" class="col-md-4 col-form-label text-md-right"></label>
+                                <input asp-for="@createClass.MaximumStudents" value="@createClass.MaximumStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-8">
+                                <span asp-validation-for="@createClass.MaximumStudents" id="error_message"
                                       class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                 <label asp-for="@createClass.TeacherName" class="col-md-4 col-form-label text-md-right">Select a Teacher</label>
@@ -369,10 +369,11 @@
             })
             .on('select2:select', function (e) {
                 // console.log(e);
-                var text = $('#searchableCourseDropdown').select2('data')[0].text;
+                var selectedCourseId = $('#searchableCourseDropdown').val();
                 // Filter options based on the search input
+                console.log(courseList);
                 var results = courseList.filter(function (item) {
-                    return item.courseName && item.courseName === text;
+                    return item && item.courseId == selectedCourseId;
                 });
 
                 if (results.length > 0 && results[0].sessions) {
@@ -409,8 +410,11 @@
             });
             // Call API to get the list of teacher names
             $.ajax({
-                url: apiUrl + 'Teacher/All/Fullname', // API endpoint
+                url: apiUrl + 'Teacher/All/FullnameOption', // API endpoint
                 type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
                 success: function (response) {
 
                     // Check if the status is true
@@ -493,22 +497,24 @@
             defaultValueOverride: "0"
         });
         function addTeacherOptions(data) {
+            const dropdown = $('#searchableTeacherDropdown');
             data.forEach(item => {
                 // Add each item as an option
-                let newOption = new Option(item, item, false, false);
-                $('#searchableTeacherDropdown').append(newOption);
+                let newOption = new Option(item.teacherName, item.teacherId, false, false);
+                dropdown.append(newOption);
             });
             // Refresh the Select2 dropdown to show new options
-            $('#searchableTeacherDropdown').trigger('change'); // Ensure Select2 is updated
+            dropdown.trigger('change'); // Ensure Select2 is updated
         }
         function addCourseOptions(data) {
+            const dropdown = $('#searchableCourseDropdown');
             data.forEach(item => {
                 // Add each item as an option
-                let newOption = new Option(item.courseName, item.courseName, false, false);
-                $('#searchableCourseDropdown').append(newOption);
+                let newOption = new Option(item.courseName, item.courseId, false, false);
+                dropdown.append(newOption);
             });
             // Refresh the Select2 dropdown to show new options
-            $('#searchableCourseDropdown').trigger('change'); // Ensure Select2 is updated
+            dropdown.trigger('change'); // Ensure Select2 is updated
             // render default data using first data
             var results = data[0]
 
@@ -541,11 +547,8 @@
         }
         function callApiGetClassList() {
             $.ajax({
-                url: apiUrl + 'Class/Admin/All', // API endpoint
+                url: apiUrl + 'Class/All', // API endpoint
                 type: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + token// Include the JWT token
-                },
                 success: function (response) {
                     // Log the entire response to the console for debugging
 
@@ -664,18 +667,23 @@
         $("#createClassForm").submit(function (event) {
             event.preventDefault(); // Prevent the form from submitting
 
+            // Get the teacherId (value of the selected option)
+            // var teacherId = $('#searchableTeacherDropdown').val();
+
+            // Get the TeacherName (text of the selected option)
+            // var teacherName = $('#searchableTeacherDropdown').select2('data')[0].text;
+
             // Gather form data
             var classData = {
                 ClassName: $("#createClass_ClassName").val(),
                 MinStudents: $("#createClass_MinStudents").val(),
                 MaxStudents: $("#createClass_MaxStudents").val(),
-                TeacherName: $('#searchableTeacherDropdown').select2('data')[0].text,
-                CourseName: $('#searchableCourseDropdown').select2('data')[0].text,
-                StartDate: $("#createClass_StartDate").val(), // $("#createClass_StartDate").val(),
+                TeacherId: $('#searchableTeacherDropdown').val(),
+                CourseId: $('#searchableCourseDropdown').val(),
+                StartDate: $("#createClass_StartDate").val(),
                 EndDate: $("#createClass_EndDate").val(),
                 EnrollmentFee: classAmount.getNumber(),
                 Schedules: []
-                // WeeklySchedule: $('#createClass_WeeklySchedule').val()
             };
             // Gather schedule data dynamically (example assuming each schedule is in a row in a table)
             selectedSessionIds.forEach((value, key) => {
