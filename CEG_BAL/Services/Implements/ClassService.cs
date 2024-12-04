@@ -55,7 +55,7 @@ namespace CEG_BAL.Services.Implements
             catch (Exception ex)
             {
                 // Log exception (if logging is configured)
-                throw new Exception("An error occurred while creating the student progress.", ex);
+                throw new Exception("An error occurred while creating the class info.", ex);
             }
         }
         /// <summary>
@@ -131,9 +131,6 @@ namespace CEG_BAL.Services.Implements
 
             // Map changes from the update model to the entity
             _mapper.Map(upCla, cla);
-            /*cla.Schedules = null;
-            cla.Course = null;
-            cla.Teacher = null;*/
 
             // Reattach entity and mark it as modified
             _unitOfWork.ClassRepositories.Update(cla);
