@@ -61,7 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scenes\wordfinder\Scripts\BoardDataLoaded.cs" />
+    <Compile Include="Assets\Scripts\Mono\AudioManager.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\AddCategory.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObject\GameEvents2.cs" />
     <Compile Include="Assets\Intro\Scripts\EnemyAnimation.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\SoundToggleButton.cs" />
     <Compile Include="Assets\Main\Scripts\PauseMenu.cs" />
@@ -69,13 +71,13 @@
     <Compile Include="Assets\Scenes\wordfinder\Scripts\WordItem.cs" />
     <Compile Include="Assets\Main\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\GameOverPopup.cs" />
-    <Compile Include="Assets\Main\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scenes\SoundScripts\Audio.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\BoardDataEditorUI.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\SoundManager.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\AlphabetData.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\ObjectInGame\UserObject.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\GameLevelData.cs" />
+    <Compile Include="Assets\Scripts\Utility\GameUtility2.cs" />
     <Compile Include="Assets\Main\Scripts\Fall.cs" />
     <Compile Include="Assets\GoogleSignIn\Future.cs" />
     <Compile Include="Assets\Intro\Scripts\StartFlicker.cs" />
@@ -83,7 +85,6 @@
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\ObjectInGame\LevelObject.cs" />
     <Compile Include="Assets\Main\Scripts\GameObjectScript.cs" />
     <Compile Include="Assets\Main\Scripts\Spawner.cs" />
-    <Compile Include="Assets\Main\Scripts\Sound.cs" />
     <Compile Include="Assets\GoogleSignIn\Impl\BaseObject.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\ObjectInGame\UserScoreObject.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\CountDownTimer.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\ObjectInGame\WordObject.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\SettingsScene.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\WinPopupTest.cs" />
+    <Compile Include="Assets\Scripts\Mono\GameManager.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\GridCell.cs" />
     <Compile Include="Assets\Main\Scripts\Shake.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\WordsGrid.cs" />
@@ -105,6 +107,7 @@
     <Compile Include="Assets\Main\Scripts\Jouster.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\UnlockLevelPopup.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\GameDataSelector.cs" />
+    <Compile Include="Assets\Scripts\Mono\AnswerData.cs" />
     <Compile Include="Assets\Main\Scripts\SettingMenu.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\PuzzleSaveManager.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignIn.cs" />
@@ -123,7 +126,9 @@
     <Compile Include="Assets\Menu\UI SlideShow\Scripts\SelectImage.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\GameUtility.cs" />
     <Compile Include="Assets\Main\Scripts\MainMenu.cs" />
+    <Compile Include="Assets\Main\Scripts\AudioManager1.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\WordChecker.cs" />
+    <Compile Include="Assets\Main\Scripts\Sound2.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\FindPuzzle.cs" />
     <Compile Include="Assets\Menu\UI SlideShow\Scenes\RuntimeImageLoader\Scripts\ImageLoader.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\Auth\AuthManager.cs" />
@@ -134,41 +139,40 @@
     <Compile Include="Assets\GoogleSignIn\GoogleSignInStatusCode.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\GameData.cs" />
     <Compile Include="Assets\Intro\Scripts\BackgroundAnimation.cs" />
+    <Compile Include="Assets\Scripts\Mono\UIManager2.cs" />
     <Compile Include="Assets\Menu\UI SlideShow\Scripts\UISlideShow.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInUser.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInConfiguration.cs" />
+    <Compile Include="Assets\Scripts\ScriptableObject\Question.cs" />
     <Compile Include="Assets\Intro\Scripts\WizardAnimation.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\WinPopup.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\Auth\UIManager.cs" />
     <Compile Include="Assets\GoogleSignIn\Impl\NativeFuture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMPro.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\Menu\UI SlideShow\ReadMe\UI SlideShow_User Document.txt" />
     <None Include="Assets\Comics\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
@@ -176,16 +180,16 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_SDF.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Comics\TextMesh Pro\Shaders\TMP_Sprite.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -517,7 +521,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.8.0\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.5\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
