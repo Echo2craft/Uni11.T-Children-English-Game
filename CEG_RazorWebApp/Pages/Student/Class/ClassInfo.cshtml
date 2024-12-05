@@ -20,357 +20,142 @@
                     <div class="offset-sm-6 col-sm-6  d-flex justify-content-sm-end p-md-0 mt-2 mt-sm-0 ">
                         <ol class="breadcrumb">
                             <li class="breadcrumd-item">
-                                <a href="#">Manage</a>
-                            </li>
-                            <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Student/Class/@Model.ClassID/Info">@Model.ClassID</a>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <span>/</span>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <a href="/Student/Class/@Model.ClassID/Info">Info</a>
+                                <a href="/Student/Class/Info">Class</a>
                             </li>
                         </ol>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xl-6 customer-booking">
-                        <div class="row">
-                            <div class="card profile col-12 mb-4">
-                                <div class="card-header" id="class-title-status">
-                                    <h4>Class <label id="class-class-title" class="truncate"></label> Information</h4>
-                                </div>
-                                <div id="alertContainer"></div>
-                                <div class="card-body">
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Status:</label>
-                                        </div>
-                                        <div class="col-sm-7" id="class-status">
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Class Code:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="class-name">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Course information:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <a id="class-course">
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Start Date:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="class-start-date">
-                                            </span>
+                <section>
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs">
+                                <!-- dung vong for o day -->
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#home1">
+                                        <i class='bx bx-home-alt-2'></i>
+                                        <span>All Classes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="alertContainer"></div>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <!-- home1 -->
+                                <div class="tab-pane active" id="home1" role="tabpanel">
+                                    <div class="row search">
+                                        <div class="col-sm-12 d-flex">
+                                            <div class="col-sm-6 d-flex address-home">
+                                            </div>
+                                            <div class="col-sm-6 d-flex justify-content-end">
+                                                <form method="get" asp-route-search="@search">
+                                                    <div>
+                                                        <label>
+                                                            <input asp-for="@search" class="form-control" type="text" name="search" placeholder="Search..." value="@search">
+                                                            <i class='bx bx-search-alt'></i>
+                                                        </label>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">End Date:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="class-end-date">
-                                            </span>
-                                        </div>
+                                    <div class="row card-content" id="classList">
+                                        <!-- dung vong for o day -->
                                     </div>
-                                        
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Scheduled sessions amount:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="class-schedules-amount">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="card profile col-12 mb-4">
-                                <div class="card-header" id="class-allow-add-schedule">
-                                    <h4>Scheduled Session List</h4>
-                                </div>
-                                <div class="card-body" id="schedule_list">
-                                    @* <h5>No scheduled session found</h5> *@
-                                    <div id="schedule-table_wrapper" class="dataTables_wrapper no-footer">
-                                        <table id="schedule-table"
-                                               class="table table-striped table-bordered dataTable no-footer"
-                                               aria-describedby="schedule-table_info">
-                                            <thead>
-                                                <tr>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="schedule-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="ID: activate to sort column ascending">
-                                                        ID
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="schedule-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Session Title: activate to sort column ascending">
-                                                        Session Title
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="schedule-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Date: activate to sort column ascending">
-                                                        Date
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="schedule-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Start Time: activate to sort column ascending">
-                                                        Start Time
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="schedule-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="End Time: activate to sort column ascending">
-                                                        End Time
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="schedule-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Status: activate to sort column ascending">
-                                                        Status
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="session-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Hours: activate to sort column ascending">
-                                                        Session Hours
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <!-- end tapnet -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     </div>
+    
     <script>
         var id = sessionStorage.getItem('usrId');
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
-        var enrollTable;
-        var scheduleTable;
-        $(document).ready(function () {
-            // Registering the custom feature with DataTables
-            DataTable.feature.register('searchIcon', function (settings, opts) {
-                // Set default options
-                let options = Object.assign({
-                    iconClass: 'bx bx-search-alt question-search-icon',
-                    hideLabel: true // Hide search label
-                }, opts);
-
-                // Create a container for the icon
-                let container = document.createElement('div');
-                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
-
-                // Create the icon element
-                let icon = document.createElement('i');
-                icon.className = options.iconClass;
-
-                // Check if pagination is enabled
-                // if (settings.oFeatures.bFilter) {
-                //     console.log(settings.oFeatures.bFilter);
-                //     console.log('Pagination is enabled for this DataTable.');
-                // }
-
-                setTimeout(() => {
-                    // Find the .dt-search container inside the DataTable wrapper
-                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
-                    if (searchContainer.length) {
-                        searchContainer.append(icon);
-                    } else {
-                        // Append icon to container
-                        container.appendChild(icon);
-                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
-                        $(settings.nTableWrapper).prepend(container);
-                    }
-                    if (options.hideLabel) {
-                        // Find the .dt-search label container inside the DataTable wrapper
-                        let searchLabel = searchContainer.find('label');
-                        if (searchLabel.length) {
-                            searchLabel.text('');
-                        } else {
-                            console.log('Label of search div not found!');
-                        }
-                    }
-                }, 100);
-                return '';
-            });
-            DataTable.render.time = function ({ includeId = "schedule-start-time" }) {
-                return function (data, type, row) {
-                    var str = moment(data, "HH:mm:ss");
-                    // console.log(str);
-                    if (type === 'display') {
-                        return '<span id="' + includeId + '">' + str.format("hh:mm A") + '</span >';
-                    }
-
-                    // Search, order and type can use the original data
-                    return str;
-                };
-            };
-            enrollTable = new DataTable('#enroll-table', {
-                data: [],
-                deferRender: false,
-                responsive: true,
-                columns: [
-                    { data: 'enrollId' },
-                    { data: 'student.account.fullname' },
-                    // { data: 'status' },
-                    // { Add a select box in the last column
-                    //     data: 'status',
-                    //     render: function (data, type, row, meta) {
-                    //         return `
-                    //                     <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
-                    //                     `
-                    //             + getEnrollStatusOptions(data) +
-                    //             `
-                    //                     </select>
-                    //                     `;
-                    //     }
-                    // }
-                ],
-                layout: {
-                    topEnd: {
-                        search: {
-                            placeholder: 'Search enroll...'
-                        },
-                        searchIcon: {
-                        }
-                    }
-                }
-            });
-            callApiGetClassDetail();
-            scheduleTable = new DataTable('#schedule-table', {
-                data: [],
-                deferRender: false,
-                responsive: true,
-                columns: [
-                    {
-                        data: 'scheduleId'
-                    },
-                    {
-                        data: 'session.title'
-                    },
-                    {
-                        data: 'scheduleDate',
-                        render: DataTable.render.date("dddd, DD/MM/YYYY")
-                    },
-                    {
-                        data: 'startTime',
-                        render: DataTable.render.time({ includeId: "schedule-start-time" })
-                    },
-                    {
-                        data: 'endTime',
-                        render: DataTable.render.time({ includeId: "schedule-end-time" })
-                    },
-                    {
-                        data: 'status'
-                    },
-                    {
-                        data: 'session.hours'
-                    }
-                ],
-                layout: {
-                    topEnd: {
-                        search: {
-                            placeholder: 'search info...'
-                        },
-                        searchIcon: {
-                        }
-                    }
-                },
-            }).on('draw', function (e, settings) {
-                scheduleTable.column(6).visible(false, false);
-                updateScheduleStatuses();
-            });
-            // Set up the timer to frequently check the current time
-            setInterval(() => {
-                updateScheduleStatuses(); // Function to update rows
-            }, 5000); // Check every 5 seconds (5000ms). Adjust interval as needed.
-
-        });
-        function callApiGetClassDetail() {
+        function callApiGetClassList() {
             $.ajax({
-                url: apiUrl + 'Class/Student/@Model.ClassID', // API endpoint
+                url: apiUrl + `Class/${id}/Info`, 
                 type: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + token, // Token for authentication
+                    'Authorization': 'Bearer ' + token
                 },
                 success: function (response) {
-                    // Log the entire response to the console for debugging
-                    // Check if the status is true
                     if (response.status) {
-                        // console.log(response.data);
-                        setClassDisplay(response.data);
-                        // Check if homeworkAnswers is empty
-                        if (response.data.enrolls && response.data.enrolls.length > 0) {
-                            enrollTable.clear().rows.add(response.data.enrolls).draw();
-                        }
-                        if (response.data.schedules && response.data.schedules.length > 0) {
-                            // Clear any existing answers
-                            // $('#schedule_list').empty();
-                            // console.log(response.data.schedules);
-                            scheduleTable.clear().rows.add(response.data.schedules).draw();
-                            // Loop through each answer and generate the HTML
-                            // response.data.homeworkAnswers.forEach(function (answer) {
-                            //     let answerHtml = generateAnswerHtml(answer,response.data.courseStatus); Assuming both answerInfo and updateAnswer are the same structure
-                            //     $('#schedule_list').append(answerHtml);
-                            // });
-
-                        }
-                        // console.log(response.data);
+                        classList = response.data;
+                        setClassDisplay(classList);
                     } else {
                         console.error("API returned false status.");
                     }
                 },
-                error: function (xhr, status, error) {
-                    // Attempt to parse the response text if it is available
-                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
-                    // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
-                    // Check if errorResponse.errors exists and is an object
-                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
-                        // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in errorResponse.errors) {
-                            if (errorResponse.errors.hasOwnProperty(field)) {
-                                // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = errorResponse.errors[field].join(", ");
-                                errorMessage += `\n${field}: ${fieldErrors}`;
-                            }
-                        }
-                    }
-                    // Display the error message using your custom showAlert function
-                    showAlert('error', "Error: \n" + errorMessage);
+                error: function (error) {
+                    alert("Error in api call: " + error);
+                    console.error("Error in api call:", error);
                 }
             });
+        }
+
+        // Function to display class list
+        function setClassDisplay(data) {
+            var classList = $('#classList');
+            classList.empty();
+            $.each(data, function (index, classObj) {
+                var formattedStartDate = formatDate(classObj.startDate);
+                var formattedEndDate = formatDate(classObj.endDate);
+                var cardHtml = `
+                                    <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                                        <div class="card1 card-child">
+                                            <div class="club-name">Class ID: ${classObj.classId}</div>
+                                            <div class="card-body">
+                                                <div class="club-title">
+                                                    <ul>
+                                                        <li><h6>Class name:</h6><span>${classObj.className}</span></li>
+                                                        <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
+                                                        <li><h6>Student:</h6><span>${classObj.student.account.fullname}</span></li>
+                                                        <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
+                                                        <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
+                                                        <li><h6>Minimum amount of students:</h6><span>${classObj.minimumStudents}</span></li>
+                                                        <li><h6>Maximum amount of students:</h6><span>${classObj.maximumStudents}</span></li>
+                                                        <li><h6>Current amount of students:</h6><span>${classObj.studentProgress.length}</span></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mx-auto">
+                                                <a class="btn btn-primary clickable-row" href="/Teacher/Class/${classObj.classId}/Info" role="button">Details</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                        `;
+                classList.append(cardHtml);
+            });
+        }
+        function formatDate(date) {
+            let d = new Date(date);
+
+            // Get day, month, year
+            let day = String(d.getDate()).padStart(2, '0');
+            let month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            let year = d.getFullYear();
+
+            // Get hours, minutes
+            let hours = String(d.getHours()).padStart(2, '0');
+            let minutes = String(d.getMinutes()).padStart(2, '0');
+
+            // Optionally, get seconds
+            let seconds = String(d.getSeconds()).padStart(2, '0');
+
+            // Return the formatted date and time as `dd/mm/yyyy hh:mm`
+            return `${day}/${month}/${year} ${hours}:${minutes}`;
+
+            // If you want to include seconds as well, use this return:
+            // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         }
     </script>
 </body>
