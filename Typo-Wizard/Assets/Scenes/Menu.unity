@@ -784,9 +784,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1671748037}
-        m_TargetAssemblyTypeName: GameUtility, Assembly-CSharp
-        m_MethodName: ExitApplication
+      - m_Target: {fileID: 258710250}
+        m_TargetAssemblyTypeName: AccountManager, Assembly-CSharp
+        m_MethodName: Logout
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1609,7 +1609,6 @@ MonoBehaviour:
   nameLoginField: {fileID: 42362584}
   passwordLoginField: {fileID: 635374168}
   warningLoginText: {fileID: 983582138}
-  userRole: 
   canvasToActivate: {fileID: 1268401883}
   LoginScreen: {fileID: 1817975767}
 --- !u!1 &260222742
@@ -6228,8 +6227,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.6754, y: 304.2432}
-  m_SizeDelta: {x: 507.6206, y: 70.9317}
+  m_AnchoredPosition: {x: 6.2348, y: 304.2432}
+  m_SizeDelta: {x: 616.4362, y: 70.9317}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &983582138
 MonoBehaviour:
@@ -6278,8 +6277,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7255,7 +7254,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: SelectCategory
+          m_StringArgument: Game
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1128669937
@@ -10187,9 +10186,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b73a1d6bd6a89ed49badc570b25bf608, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5c2d1fcea55170649a5e1b77c5181d67, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.462
   m_Pitch: 1
   Loop: 1
   Mute: 0
