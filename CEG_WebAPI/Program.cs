@@ -28,10 +28,10 @@ namespace CEG_WebAPI
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                ConfigureDevelopmentPipeline(app);
-            }
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    ConfigureDevelopmentPipeline(app);
+            //}
 
             ConfigurePipeline(app);
 
@@ -167,7 +167,7 @@ namespace CEG_WebAPI
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("https://localhost:7236", "https://localhost:5150")
+                    policy.AllowAnyOrigin()
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
@@ -191,17 +191,26 @@ namespace CEG_WebAPI
             });
         }
 
-        private static void ConfigureDevelopmentPipeline(WebApplication app)
+        //private static void ConfigureDevelopmentPipeline(WebApplication app)
+        //{
+        //    if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+        //    {
+        //        app.UseSwagger();
+        //        app.UseSwaggerUI(c =>
+        //        {
+        //            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Children English Game Web API");
+        //        });
+        //    }
+        //}
+
+        private static void ConfigurePipeline(WebApplication app)
         {
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Children English Game Web API");
             });
-        }
 
-        private static void ConfigurePipeline(WebApplication app)
-        {
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors();
