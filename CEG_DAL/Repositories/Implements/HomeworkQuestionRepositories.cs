@@ -39,7 +39,7 @@ namespace CEG_DAL.Repositories.Implements
             return 0;
         }
 
-        public async Task<List<HomeworkQuestion>?> GetQuestionListByHomeworkId(int homeworkId)
+        public async Task<List<HomeworkQuestion>?> GetListByHomeworkId(int homeworkId)
         {
             return await _dbContext.HomeworkQuestions
                 .AsNoTrackingWithIdentityResolution()
@@ -47,7 +47,23 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<HomeworkQuestion>> GetQuestionList()
+        public async Task<List<HomeworkQuestion>?> GetListBySessionId(int sessionId)
+        {
+            return await _dbContext.HomeworkQuestions
+                .AsNoTrackingWithIdentityResolution()
+                .Where(ques => ques.Homework.SessionId == sessionId)
+                .ToListAsync();
+        }
+
+        public async Task<List<HomeworkQuestion>?> GetListByCourseId(int courseId)
+        {
+            return await _dbContext.HomeworkQuestions
+                .AsNoTrackingWithIdentityResolution()
+                .Where(ques => ques.Homework.Session.CourseId == courseId)
+                .ToListAsync();
+        }
+
+        public async Task<List<HomeworkQuestion>> GetList()
         {
             return await _dbContext.HomeworkQuestions.ToListAsync();
         }

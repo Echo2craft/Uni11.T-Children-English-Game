@@ -29,6 +29,7 @@ namespace CEG_DAL.Infrastructure
         IScheduleRepositories ScheduleRepositories { get; }
         ITeacherRepositories TeacherRepositories { get; }
         ITransactionRepositories TransactionRepositories { get; }
+        IStudentAnswerRepositories StudentAnswerRepositories { get; }
         void Save();
     }
 }

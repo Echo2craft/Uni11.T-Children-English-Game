@@ -252,7 +252,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[HomeworkQuestion](
 	[homework_question_id] [int] IDENTITY(1,1) NOT NULL,
-	[homework_id] [int] NOT NULL,
+	[homework_id] [int] NULL,
 	[question] [nvarchar](max) NULL,
  CONSTRAINT [PK_HomeworkData] PRIMARY KEY CLUSTERED 
 (
@@ -444,7 +444,7 @@ GO
 CREATE TABLE [dbo].[Transaction](
 	[transaction_id] [int] IDENTITY(1,1) NOT NULL,
 	[parent_id] [int] NOT NULL,
-	[vnpay_id] [nvarchar](max) NOT NULL,
+	[vnpay_id] [nvarchar](max) NULL,
 	[transaction_amount] [int] NOT NULL,
 	[transaction_date] [datetime] NOT NULL,
 	[transaction_status] [nvarchar](max) NOT NULL,
@@ -596,47 +596,47 @@ SET IDENTITY_INSERT [dbo].[Accounts] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Class] ON 
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (1, 1, 1, N'Starter Class', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Ongoing')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (1, 1, 1, N'GRAM101', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Ongoing')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (2, 1, 1, N'3 Weeks Course', 5, 20, 0, CAST(N'2024-10-01T00:00:00.000' AS DateTime), CAST(N'2024-10-22T00:00:00.000' AS DateTime), 1000000, N'Ended')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (2, 1, 2, N'GRAM102', 5, 20, 0, CAST(N'2024-10-01T00:00:00.000' AS DateTime), CAST(N'2024-10-22T00:00:00.000' AS DateTime), 1000000, N'Ended')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (3, 1, 1, N'Winter Class', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (3, 1, 3, N'VOC101', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (4, 1, 1, N'Spring Class', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (4, 1, 4, N'VOC102', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (5, 1, 1, N'New Year Class', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (5, 1, 5, N'PRO101', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (6, 1, 1, N'New Semester Class', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Ongoing')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (6, 1, 6, N'PRO102', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Ongoing')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (7, 1, 1, N'Preparation Class', 5, 20, 0, CAST(N'2024-10-01T00:00:00.000' AS DateTime), CAST(N'2024-10-28T00:00:00.000' AS DateTime), 1000000, N'Ended')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (7, 1, 7, N'GRAM103', 5, 20, 0, CAST(N'2024-10-01T00:00:00.000' AS DateTime), CAST(N'2024-10-28T00:00:00.000' AS DateTime), 1000000, N'Ended')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (8, 1, 1, N'Advanced Class', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (8, 1, 8, N'PRO103', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (9, 1, 1, N'Fall Class', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (9, 1, 9, N'VOC102', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (10, 1, 1, N'Fresh Class', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (10, 1, 1, N'GRAM201', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
 SET IDENTITY_INSERT [dbo].[Class] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Course] ON 
 GO
-INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (1, N'Vocabulary for Beginners', N'A1', N'Middle School Course', N'Available', 56, NULL, 11, N'Beginner', N'Vocabulary')
+INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (1, N'Grammar Foundations: Building Strong Sentences', N'A1', N'Middle School Course', N'Available', 56, NULL, 11, N'Beginner', N'Grammar')
 GO
-INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (2, N'Intermediate Grammar Course', N'B1', N'Middle School Course', N'Draft', 56, NULL, 12, N'Intermediate', N'Grammar')
+INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (2, N'Mastering Tenses: A Grammar Guide', N'B1', N'Middle School Course', N'Draft', 56, NULL, 12, N'Intermediate', N'Grammar')
 GO
-INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (3, N'Intermediate Vocabulary Course', N'B1', N'Middle School Course', N'Available', 56, NULL, 12, N'Intermediate', N'Vocabulary')
+INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (3, N'Word Wizardry: Advanced Vocabulary Skills', N'B1', N'Middle School Course', N'Available', 56, NULL, 12, N'Intermediate', N'Vocabulary')
 GO
-INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (4, N'Grammar for Beginners', N'A2', N'Middle School Course', N'Available', 56, NULL, 11, N'Beginner', N'Grammar')
+INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (4, N'Vocabulary Boosters: Everyday Words', N'A2', N'Middle School Course', N'Available', 56, NULL, 11, N'Beginner', N'Vocabulary')
 GO
-INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (5, N'Practice Pronunciation Course', N'A1', N'Middle School Course', N'Draft', 56, NULL, 12, N'Intermediate', N'Pronunciation')
+INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (5, N'Perfect Pronunciation Basics', N'A1', N'Middle School Course', N'Draft', 56, NULL, 12, N'Intermediate', N'Pronunciation')
 GO
-INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (6, N'Pronunciation for Beginners', N'A2', N'Middle School Course', N'Available', 56, NULL, 11, N'Beginner', N'Pronunciation')
+INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (6, N'Speak Clearly: English Sounds Made Easy', N'A2', N'Middle School Course', N'Available', 56, NULL, 11, N'Beginner', N'Pronunciation')
 GO
-INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (7, N'English for High Intermediate', N'B2', N'Middle School Course', N'Draft', 56, NULL, 12, N'Intermediate', N'Pronunciation')
+INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (7, N'Grammar in Action: Fixing Common Mistakes', N'B2', N'Middle School Course', N'Draft', 56, NULL, 12, N'Intermediate', N'Grammar')
 GO
-INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (8, N'Vocabulary for Beginners', N'A2', N'Middle School Course', N'Draft', 56, NULL, 11, N'Beginner', N'Vocabulary')
+INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (8, N'Pronounce It Right: English Challenges', N'A2', N'Middle School Course', N'Draft', 56, NULL, 11, N'Beginner', N'Pronunciation')
 GO
-INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (9, N'English for High Intermediate', N'B2', N'Middle School Course', N'Draft', 56, NULL, 12, N'Intermediate', N'Pronunciation')
+INSERT [dbo].[Course] ([course_id], [course_name], [course_type], [description], [status], [total_hours], [image], [required_age], [difficulty], [category]) VALUES (9, N'Speak and Spell: Fun Vocabulary Practice', N'B2', N'Middle School Course', N'Draft', 56, NULL, 12, N'Intermediate', N'Vocabulary')
 GO
 SET IDENTITY_INSERT [dbo].[Course] OFF
 GO
@@ -652,27 +652,27 @@ INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], 
 GO
 INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (5, 5, 1, 5, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (6, 5, 1, 6, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (6, 6, 1, 6, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (7, 6, 1, 7, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (7, 7, 1, 7, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (8, 7, 1, 8, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (8, 8, 1, 8, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (9, 8, 1, 9, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (9, 9, 1, 9, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (10, 9, 1, 10, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (10, 10, 1, 10, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (11, 10, 1, 11, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (11, 11, 1, 11, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (12, 11, 1, 12, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (12, 12, 1, 12, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (13, 12, 1, 13, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (13, 13, 1, 13, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (14, 13, 1, 14, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (14, 14, 1, 14, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (15, 14, 1, 15, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (15, 15, 1, 15, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
-INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (16, 15, 1, 16, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
+INSERT [dbo].[Enroll] ([enroll_id], [student_id], [class_id], [transaction_id], [registration_date], [enrolled_date], [status]) VALUES (16, 16, 1, 16, CAST(N'2024-09-24T00:00:00.000' AS DateTime), CAST(N'2024-09-25T00:00:00.000' AS DateTime), N'Enrolled')
 GO
 SET IDENTITY_INSERT [dbo].[Enroll] OFF
 GO
@@ -968,125 +968,185 @@ SET IDENTITY_INSERT [dbo].[Schedule] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Session] ON 
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (1, 1, N'Basic', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (1, 1, N'The Basics of Sentence Structure', N'First Session', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (2, 1, N'Basic', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (2, 1, N'Understanding Parts of Speech', N'Second Session', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (3, 1, N'Basic', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (3, 1, N'Subject-Verb Agreement', N'Third Session', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (4, 1, N'Basic', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (4, 1, N'Creating Compound Sentences', N'Fourth Session', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (5, 1, N'Basic', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (5, 1, N'Using Modifiers Effectively', N'Fifth Session', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (6, 1, N'Basic', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (6, 1, N'Punctuating Sentences Correctly', N'Sixth Session', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (7, 1, N'Basic', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (7, 1, N'Introducing Clauses and Phrases', N'Seventh Session', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (8, 1, N'Basic', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (8, 1, N'Writing Clear and Concise Sentences', N'Eighth Session', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (9, 1, N'Basic', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (9, 1, N'Avoiding Common Grammar Errors', N'Ninth Session', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (10, 1, N'Basic', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (10, 1, N'Grammar Wrap-up: Practice Quiz', N'Tenth Session', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (11, 2, N'Basic', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (11, 2, N'Present Tenses in Everyday Use', N'First Session', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (12, 2, N'Basic', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (12, 2, N'Exploring Past Simple and Continuous', N'Second Session', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (13, 2, N'Basic', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (13, 2, N'Future Tenses: Planning Ahead', N'Third Session', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (14, 2, N'Basic', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (14, 2, N'Perfect Tenses Simplified', N'Fourth Session', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (15, 2, N'Basic', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (15, 2, N'When to Use Continuous Forms', N'Fifth Session', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (16, 2, N'Basic', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (16, 2, N'Common Tense Mistakes', N'Sixth Session', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (17, 2, N'Basic', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (17, 2, N'Conditional Sentences Explained', N'Seventh Session', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (18, 2, N'Basic', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (18, 2, N'Tenses in Storytelling', N'Eighth Session', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (19, 2, N'Basic', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (19, 2, N'Practicing with Real-life Scenarios', N'Ninth Session', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (20, 2, N'Basic', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (20, 2, N'Tense Review and Final Practice', N'Tenth Session', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (21, 3, N'Basic', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (21, 3, N'Expanding Descriptive Vocabulary', N'First Session', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (22, 3, N'Basic', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (22, 3, N'The Power of Adjectives and Adverbs', N'Second Session', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (23, 3, N'Basic', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (23, 3, N'Talking About Emotions', N'Third Session', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (24, 3, N'Basic', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (24, 3, N'Formal vs. Informal Words', N'Fourth Session', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (25, 3, N'Basic', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (25, 3, N'Learning Prefixes and Suffixes', N'Fifth Session', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (26, 3, N'Basic', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (26, 3, N'Advanced Synonyms and Antonyms', N'Sixth Session', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (27, 3, N'Basic', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (27, 3, N'Vocabulary for Work and Study', N'Seventh Session', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (28, 3, N'Basic', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (28, 3, N'Building Better Contextual Understanding', N'Eighth Session', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (29, 3, N'Basic', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (29, 3, N'Idiomatic Expressions for Fluency', N'Ninth Session', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (30, 3, N'Basic', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (30, 3, N'Final Vocabulary Test', N'Tenth Session', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (31, 4, N'Basic', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (31, 4, N'Essential Words for Daily Life', N'First Session', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (32, 4, N'Basic', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (32, 4, N'Common Expressions and Idioms', N'Second Session', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (33, 4, N'Basic', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (33, 4, N'Building Words from Root Forms', N'Third Session', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (34, 4, N'Basic', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (34, 4, N'Words for Talking About Family', N'Fourth Session', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (35, 4, N'Basic', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (35, 4, N'Describing Places and Activities', N'Fifth Session', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (36, 4, N'Basic', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (36, 4, N'Vocabulary for Shopping and Food', N'Sixth Session', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (37, 4, N'Basic', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (37, 4, N'Talking About Weather and Seasons', N'Seventh Session', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (38, 4, N'Basic', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (38, 4, N'Words for Hobbies and Sports', N'Eighth Session', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (39, 4, N'Basic', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (39, 4, N'Expanding Your Vocabulary with Synonyms', N'Ninth Session', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (40, 4, N'Basic', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (40, 4, N'Vocabulary Game Challenge', N'Tenth Session', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (41, 5, N'Basic', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (41, 5, N'Introduction to English Sounds', N'First Session', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (42, 5, N'Basic', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (42, 5, N'Mastering Vowels', N'Second Session', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (43, 5, N'Basic', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (43, 5, N'Understanding Consonant Clusters', N'Third Session', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (44, 5, N'Basic', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (44, 5, N'The Art of Syllable Stress', N'Fourth Session', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (45, 5, N'Basic', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (45, 5, N'Common Mispronunciations to Avoid', N'Fifth Session', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (46, 5, N'Basic', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (46, 5, N'The Magic of Intonation', N'Sixth Session', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (47, 5, N'Basic', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (47, 5, N'Linking Words for Fluency', N'Seventh Session', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (48, 5, N'Basic', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (48, 5, N'Practice: Everyday Phrases', N'Eighth Session', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (49, 5, N'Basic', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (49, 5, N'Real-life Conversations', N'Ninth Session', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (50, 5, N'Basic', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (50, 5, N'Final Pronunciation Challenge', N'Tenth Session', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (51, 6, N'Basic', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (51, 6, N'Breaking Down the IPA Chart', N'First Session', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (52, 6, N'Basic', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (52, 6, N'Voiced vs. Voiceless Sounds', N'Second Session', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (53, 6, N'Basic', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (53, 6, N'Perfecting Diphthongs', N'Third Session', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (54, 6, N'Basic', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (54, 6, N'Silent Letters and Their Tricks', N'Fourth Session', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (55, 6, N'Basic', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (55, 6, N'Regional Accents vs. Standard English', N'Fifth Session', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (56, 6, N'Basic', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (56, 6, N'Sounding Natural with Connected Speech', N'Sixth Session', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (57, 6, N'Basic', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (57, 6, N'Practicing Minimal Pairs', N'Seventh Session', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (58, 6, N'Basic', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (58, 6, N'Word Stress: Changing Meanings', N'Eighth Session', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (59, 6, N'Basic', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (59, 6, N'Listening and Imitation Exercises', N'Ninth Session', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (60, 6, N'Basic', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (60, 6, N'Pronunciation Mastery Test', N'Tenth Session', 2, 10)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (61, 7, N'Overview of Grammar Pitfalls', N'Tenth Session', 2, 1)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (62, 7, N'Avoiding Run-on Sentences', N'Tenth Session', 2, 2)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (63, 7, N'Tackling Comma Splices', N'Tenth Session', 2, 3)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (64, 7, N'Using Articles Correctly', N'Tenth Session', 2, 4)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (65, 7, N'Pronoun Agreement and Reference', N'Tenth Session', 2, 5)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (66, 7, N'Active vs. Passive Voice', N'Tenth Session', 2, 6)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (67, 7, N'Prepositions Made Easy', N'Tenth Session', 2, 7)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (68, 7, N'Fixing Dangling Modifiers', N'Tenth Session', 2, 8)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (69, 7, N'Grammar Error Correction Practice', N'Tenth Session', 2, 9)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (70, 8, N'Real-world Grammar Application', N'Tenth Session', 2, 10)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (71, 8, N'Hard-to-Pronounce Words', N'Tenth Session', 2, 1)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (72, 8, N'Mastering ‘Th’ Sounds', N'Tenth Session', 2, 2)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (73, 8, N'Pronouncing Long Words with Ease', N'Tenth Session', 2, 3)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (74, 8, N'Common Homophones Explained', N'Tenth Session', 2, 4)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (75, 8, N'Practicing Stress in Phrases', N'Tenth Session', 2, 5)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (76, 8, N'Tongue Twisters for Fun Learning', N'Tenth Session', 2, 6)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (77, 8, N'Tricky Consonant Combinations', N'Tenth Session', 2, 7)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (78, 8, N'Accent Reduction Tips', N'Tenth Session', 2, 8)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (79, 8, N'Listening Practice with Native Speakers', N'Tenth Session', 2, 9)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (80, 9, N'Confidence in Pronunciation', N'Tenth Session', 2, 10)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (81, 9, N'Learning Words with Games', N'Tenth Session', 2, 1)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (82, 9, N'Vocabulary for Everyday Actions', N'Tenth Session', 2, 2)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (83, 9, N'Spelling Tips and Tricks', N'Tenth Session', 2, 3)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (84, 9, N'Words That Sound Alike', N'Tenth Session', 2, 4)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (85, 9, N'Building Vocabulary with Crossword Puzzles', N'Tenth Session', 2, 5)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (86, 9, N'Fun with Word Associations', N'Tenth Session', 2, 6)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (87, 9, N'Practicing Vocabulary in Sentences', N'Tenth Session', 2, 7)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (88, 9, N'Group Activities: Word Charades', N'Tenth Session', 2, 8)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (89, 9, N'Listening and Spelling Exercises', N'Tenth Session', 2, 9)
+GO
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (90, 9, N'Final Vocabulary Bee', N'Tenth Session', 2, 10)
 GO
 SET IDENTITY_INSERT [dbo].[Session] OFF
 GO
