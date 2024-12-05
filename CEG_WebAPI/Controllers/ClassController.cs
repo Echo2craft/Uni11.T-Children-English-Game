@@ -209,7 +209,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetById(id,true,true,true,true);
+                var result = await _classService.GetById(id,true,true,true,true,true);
                 if (result == null)
                 {
                     return NotFound(new
@@ -244,7 +244,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetById(id,true,true,true,true);
+                var result = await _classService.GetById(id,true,true,true,true,true);
                 if (result == null)
                 {
                     return NotFound(new
@@ -339,19 +339,19 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/Update/Status")]
+        [HttpPut("{claId}/Update/Status")]
         [Authorize(Roles = "Teacher,Admin")]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateStatus(
-            [FromRoute][Required] int id,
+            [FromRoute][Required] int claId,
             [FromBody][Required] string status
             )
         {
             try
             {
-                var result = await _classService.GetById(id);
+                var result = await _classService.GetById(claId);
                 if (result == null)
                 {
                     return NotFound(new
@@ -363,8 +363,8 @@ namespace CEG_WebAPI.Controllers
                 bool isValid = CEG_BAL_Library.IsClassNewStatusValid(result.Status, status);
                 if (isValid)
                 {
-                    _classService.UpdateStatus(id, status);
-                    result = await _classService.GetById(id);
+                    await _classService.UpdateStatus(claId, status);
+                    result = await _classService.GetById(claId);
                     return Ok(new
                     {
                         Status = true,

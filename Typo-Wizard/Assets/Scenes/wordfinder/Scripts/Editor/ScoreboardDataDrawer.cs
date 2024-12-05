@@ -11,10 +11,10 @@ using UnityEngine;
 public class ScoreboardDataDrawer : Editor
 {
     private ScoreboardData ScoreboardDataInstance => target as ScoreboardData;
-    //public async override void OnInspectorGUI()
-    //{
-    //    await DrawScoreBoardFieldAsync();
-    //}
+    public async override void OnInspectorGUI()
+    {
+        //await DrawScoreBoardFieldAsync();
+    }
 
     //private async Task DrawScoreBoardFieldAsync()
     //{

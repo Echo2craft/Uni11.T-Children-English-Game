@@ -26,7 +26,24 @@ public class AccountManager : MonoBehaviour
         public string username;
         public string password;
     }
+    [System.Serializable]
+    public class ApiResponse
+    {
+        public bool status;
+        public string successMessage;
+        public UserData data;
+    }
 
+    [System.Serializable]
+    public class UserData
+    {
+        public string accountId;
+        public string userName;
+        public string roleName;
+        public string accessToken;
+        public string imagePath;
+        public string status;
+    }
     [Header("Login")]
     public TMP_InputField nameLoginField;
     public TMP_InputField passwordLoginField;
@@ -35,7 +52,7 @@ public class AccountManager : MonoBehaviour
 
     [Header("UserData")]
     public UserObject _user;
-    public string userRole; // Store role as "admin" or "student"
+    public UserObject userRole;
 
     [Header("Scoreboard")]
     public static List<UserObject> _scoreboard;
@@ -69,7 +86,6 @@ public class AccountManager : MonoBehaviour
         // Check if a user is already logged in and load the appropriate UI
         if (PlayerPrefs.HasKey("IsLoggedIn") && PlayerPrefs.GetInt("IsLoggedIn") == 1)
         {
-            userRole = PlayerPrefs.GetString("UserRole");
             SetUIForRole();
         }
         else
@@ -77,7 +93,11 @@ public class AccountManager : MonoBehaviour
             checkActive();
         }
     }
-
+private void SetUIForRole()
+    {
+        LoginScreen.SetActive(false);
+        canvasToActivate.SetActive(true);
+    }
     private void checkActive()
     {
         // Check login status from PlayerPrefs
@@ -165,70 +185,64 @@ public class AccountManager : MonoBehaviour
             warningLoginText.text = "Logged In";
 
             var response = request.downloadHandler.text;
-            _user = JsonUtility.FromJson<UserObject>(response);
-            userRole = _user.Role; // Assume the role is in the response as "role"
+            Debug.Log($"API Response: {response}");
+            // Deserialize the response to retrieve user data including the role
+            var apiResponse = JsonUtility.FromJson<ApiResponse>(response);
 
-            PlayerPrefs.SetInt("IsLoggedIn", 1);
-            PlayerPrefs.SetString("UserRole", userRole);
-            PlayerPrefs.Save();
-
-            SetUIForRole();
-
-
-            var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
-            if (usernameTextObj != null)
+            if (apiResponse.status)
             {
-                Debug.Log("UsernameText found.");
-
-                // Get the text component and set the welcome message
-                var usernameText = usernameTextObj.GetComponent<TMP_Text>();
-                if (usernameText != null)
+                // Extract and validate the user role
+                string roleName = apiResponse.data.roleName.Trim().ToLower();
+                if (roleName != "student")
                 {
-                    welcomeName = $"Welcome {_name}";
-                    usernameText.text = welcomeName;
-                    Debug.Log("UsernameText updated: " + welcomeName);
+                    Debug.LogWarning("Access denied. Only students can log in.");
+                    warningLoginText.text = "Access Denied: Only students can log in.";
+                    yield break;
+                }
+
+                // Store user details
+                _user = new UserObject
+                {
+                    UserId = apiResponse.data.accountId,
+                    Username = apiResponse.data.userName,
+                    RoleName = apiResponse.data.roleName
+                };
+
+                // Save login state
+                PlayerPrefs.SetInt("IsLoggedIn", 1);
+                PlayerPrefs.SetString(usernameKey, _user.Username);
+                PlayerPrefs.Save();
+
+                // Set up the UI for the logged-in user
+                SetUIForRole();
+                var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
+                if (usernameTextObj != null)
+                {
+                    Debug.Log("UsernameText found.");
+
+                    // Get the text component and set the welcome message
+                    var usernameText = usernameTextObj.GetComponent<TMP_Text>();
+                    if (usernameText != null)
+                    {
+                        welcomeName = $"Welcome {_name}";
+                        usernameText.text = welcomeName;
+                        Debug.Log("UsernameText updated: " + welcomeName);
+                    }
+                    else
+                    {
+                        Debug.LogError("UsernameText component not found on UsernameText object.");
+                    }
                 }
                 else
                 {
-                    Debug.LogError("UsernameText component not found on UsernameText object.");
+                    Debug.LogError("UsernameText not found in canvasToActivate.");
                 }
-            }
-            else
-            {
-                Debug.LogError("UsernameText not found in canvasToActivate.");
-            }
 
-            // Further actions like loading game data and scoreboard
-            //StartCoroutine(LoadGameData());
-            //StartCoroutine(LoadScoreBoard());
-            
-        }
-    }
-    private void SetUIForRole()
-    {
-        LoginScreen.SetActive(false);
-        canvasToActivate.SetActive(true);
+                // Further actions like loading game data and scoreboard
+                //StartCoroutine(LoadGameData());
+                //StartCoroutine(LoadScoreBoard());
 
-        var usernameTextObj = canvasToActivate.transform.Find("UsernameText");
-        if (usernameTextObj != null)
-        {
-            var usernameText = usernameTextObj.GetComponent<TMP_Text>();
-            if (usernameText != null)
-            {
-                welcomeName = $"Welcome {_user.Username} ({userRole})";
-                usernameText.text = welcomeName;
             }
-        }
-
-        if (userRole == "admin")
-        {
-            // Load Admin-specific UI elements or enable admin privileges
-            Debug.Log("User is an admin");
-        }
-        else if (userRole == "student")
-        {
-            // Load Student-specific UI elements
-            Debug.Log("User is a student");
         }
     }
     private UserObject LoadUserData(List<UserObject> scoreboard)
@@ -263,7 +277,7 @@ public class AccountManager : MonoBehaviour
 
     private IEnumerator InitialUserInfoToDatabase()
     {
-        string url = $"https://your-api-url.com/users/{_user.UserId}/initialize"; // API endpoint for user initialization
+        string url = $"https://localhost:7143/api/users/{_user.UserId}/initialize"; // API endpoint for user initialization
 
         // Form data dictionary
         var formData = new Dictionary<string, object>
@@ -293,7 +307,7 @@ public class AccountManager : MonoBehaviour
 
     public IEnumerator SendScore(string cate, string level, string score)
     {
-        string url = $"https://your-api-url.com/users/{_user.UserId}/scores"; // API endpoint for sending score
+        string url = $"https://localhost:7143/api/{_user.UserId}/scores"; // API endpoint for sending score
 
         // Form data dictionary
         var formData = new Dictionary<string, string>
@@ -326,7 +340,7 @@ public class AccountManager : MonoBehaviour
 
     public IEnumerator LoadScoreBoard()
     {
-        string url = "https://your-api-url.com/scoreboard"; // API endpoint for scoreboard data
+        string url = "https://localhost:7143/api/scoreboard"; // API endpoint for scoreboard data
 
         UnityWebRequest request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
@@ -345,7 +359,7 @@ public class AccountManager : MonoBehaviour
 
     public IEnumerator LoadGameData()
     {
-        string url = "https://your-api-url.com/game-data"; // API endpoint for game data
+        string url = "https://localhost:7143/api/game-data"; // API endpoint for game data
 
         UnityWebRequest request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
@@ -371,4 +385,5 @@ public class AccountManager : MonoBehaviour
         PlayerPrefs.Save();
         Debug.Log("User logged out successfully");
     }
+
 }

@@ -16,6 +16,7 @@
 </head>
 <body>
     <div class="main-content">
+        <div id="alertContainer"></div>
         <div class="main">
             <div class="container-fluid">
                 <div class="row">
@@ -52,7 +53,6 @@
                                 <div class="card-header" id="class-title-status">
                                     <h4>Class <label id="class-class-title" class="truncate"></label> Information</h4>
                                 </div>
-                                <div id="alertContainer"></div>
                                 <div class="card-body">
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
@@ -170,8 +170,8 @@
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="schedule-table" rowspan="1"
                                                         colspan="1" aria-sort="ascending"
-                                                        aria-label="ID: activate to sort column ascending">
-                                                        ID
+                                                        aria-label="Number: activate to sort column ascending">
+                                                        Number
                                                     </th>
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="schedule-table" rowspan="1"
@@ -208,6 +208,12 @@
                                                         colspan="1" aria-sort="ascending"
                                                         aria-label="Hours: activate to sort column ascending">
                                                         Session Hours
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="session-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="ID: activate to sort column ascending">
+                                                        ID
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -326,12 +332,12 @@
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@updateClass.StartDate" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.StartDate" type="datetime-local" value="@updateClass.StartDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
+                                        <input asp-for="@updateClass.StartDate" type="datetime-local" class="form-control col-md-7" required>
                                         <span asp-validation-for="@updateClass.StartDate" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@updateClass.EndDate" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.EndDate" type="datetime-local" value="@updateClass.EndDate.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-7" required>
+                                        <input asp-for="@updateClass.EndDate" type="datetime-local" class="form-control col-md-7" required>
                                         <span asp-validation-for="@updateClass.EndDate" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -430,7 +436,7 @@
                             <div class="row col-xl-4">
                                 <div class="form-group col-xl-12">
                                     <label class="col-form-label" asp-for="@createSchedule.ScheduleDate" ></label>
-                                    <input asp-for="@createSchedule.ScheduleDate" type="datetime-local" value="@createSchedule.ScheduleDate.Value.ToString("yyyy-MM-ddTHH:mm")" class="form-control" required>
+                                    <input asp-for="@createSchedule.ScheduleDate" type="datetime-local" value="@createSchedule.ScheduleDate.Value.ToString("yyyy-MM-ddTHH:mm")" min="" class="form-control" required>
                                     <span asp-validation-for="@createSchedule.ScheduleDate" id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-8 mt-2 field-validation-valid"></span>
                                 </div>
                             </div>
@@ -628,7 +634,7 @@
                 responsive: true,
                 columns: [
                     {
-                        data: 'scheduleId'
+                        data: 'scheduleNumber'
                     },
                     {
                         data: 'session.title'
@@ -657,6 +663,9 @@
                     },
                     {
                         data: 'session.hours'
+                    },
+                    {
+                        data: 'scheduleId'
                     }
                     // ,
                     // {
@@ -687,6 +696,7 @@
                 },
             }).on('draw', function (e, settings) {
                 scheduleTable.column(6).visible(false, false);
+                scheduleTable.column(7).visible(false, false);
                 updateScheduleTable();
                 // scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 //     var data = this.cell(rowIdx, 2).data();
@@ -782,15 +792,16 @@
 
                     // Change display to a select box if not already updated
                     if (!node.children('input[type=datetime-local]').length) {
-                        node.html(`<input type="datetime-local" id="schedule-start-date-${rowIdx}" class="form-control" value=${dateValue} asp-format="{0:yyyy-MM-ddTHH:mm}"/>`);
+                        node.html(`
+                        <input type="datetime-local" id="schedule-start-date-${rowIdx}" class="form-control" value=${dateValue} asp-format="{0:yyyy-MM-ddTHH:mm}"/>`);
 
                         // Add change event listener to the select element
                         node.find('input[type=datetime-local]').on('change', function () {
-                            const newStatus = $(this).val();
+                            // const newStatus = $(this).val();
                             let formData = {
                                 scheduleDate: $('input#schedule-start-date-' + rowIdx).val()
                             };
-                            callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 0).data());
+                            callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 7).data());
                         });
                     }
                 }
@@ -1012,7 +1023,7 @@
                             // });
 
                         }
-                        console.log(response.data.course.sessions);
+                        // console.log(response.data.course.sessions);
                         sessionTable.clear().rows.add(response.data.course.sessions).draw();
                         // console.log(response.data);
                     } else {
@@ -1198,7 +1209,7 @@
             // Display Class Info
             $('#class-title-status').find('#class-class-status').remove();
             $('#class-status').empty();
-            $('select[id="updateClassStatus_Status"]').empty();
+            $('select#updateClassStatus_Status').empty();
             $('#class-status').append(statusText);
             $('#class-class-title').text(data.className);
             $('#class-name').text(data.className);
@@ -1216,18 +1227,22 @@
             $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
 
             // Update Class Info
-            $('input[id="updateClass_ClassName"]').val(data.className);
-            $('input[id="updateClass_MinStudents"]').val(data.minimumStudents);
-            $('input[id="updateClass_MaxStudents"]').val(data.maximumStudents);
-            $('input[id="updateClass_StartDate"]').val(data.startDate);
-            $('input[id="updateClass_EndDate"]').val(data.endDate);
-            $('input[id="updateClass_EnrollmentFee"]').val(data.enrollmentFee);
+            $('input#updateClass_ClassName').val(data.className);
+            $('input#updateClass_MinStudents').val(data.minimumStudents);
+            $('input#updateClass_MaxStudents').val(data.maximumStudents);
+            $('input#updateClass_StartDate').val(data.startDate);
+            $('input#updateClass_StartDate').attr('min', data.startDate);
+            $('input#updateClass_EndDate').val(data.endDate);
+            $('input#updateClass_EndDate').attr('min', data.endDate);
+            $('input#updateClass_EnrollmentFee').val(data.enrollmentFee);
             classAmount.set(data.enrollmentFee);
             // Update Class Status
-            $('select[id="updateClassStatus_Status"]').append(getStatusOptions(data.status));
+            $('select#updateClassStatus_Status').append(getStatusOptions(data.status));
 
             // Create Schedule
             $('#createSchedule_ClassId').val(data.classId);
+            $('#createSchedule_ScheduleDate').attr('min', data.startDate);
+            $('#createSchedule_ScheduleDate').attr('max', data.endDate);
         }
     </script>
 </body>

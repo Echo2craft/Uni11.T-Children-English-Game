@@ -5,6 +5,8 @@ namespace CEG_BAL.ViewModels
     {
         public int? ScheduleId { get; set; }
 
+        public int ScheduleNumber { get; set; }
+
         public int? SessionId { get; set; }
 
         public int? ClassId { get; set; }

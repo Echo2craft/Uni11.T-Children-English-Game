@@ -174,13 +174,19 @@ html body {
 }
 
 #notif {
-    position: absolute;
-    display: flex;
-    right: 0;
-    top: 150px;
-    align-items: center;
-    width: 30%;
+    left: 30%;
+    right: auto;
+    top: auto;
+    width: 50%;
     animation: notif 200 3s ease-in-out none;
+}
+#alertContainer .admin-alert#notif {
+    white-space: pre-wrap;
+    left: 30%;
+    right: auto;
+    top: auto;
+    width: 50%;
+    animation: notif 1 3s ease-in-out none;
 }
 
 @keyframes notif {
