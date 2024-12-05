@@ -40,7 +40,7 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<string>> GetStudentNameListByParentName(string parentName)
+        public async Task<List<string>?> GetFullnameListByParentName(string parentName)
         {
             return await _dbContext.Students
                 .AsNoTrackingWithIdentityResolution()

@@ -20,7 +20,9 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<Transaction?> GetByIdNoTracking(int id)
         {
-            return await _dbContext.Transactions.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(tran => tran.TransactionId == id);
+            return await _dbContext.Transactions
+                .AsNoTrackingWithIdentityResolution()
+                .SingleOrDefaultAsync(tran => tran.TransactionId == id);
         }
 
         public async Task<List<Transaction>> GetListNoTracking()

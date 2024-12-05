@@ -39,7 +39,7 @@ namespace CEG_BAL.Services.Implements
 
             var cla = new Class
             {
-                Status = Constants.CLASS_STATUS_DRAFT
+                Status = CEGConstants.CLASS_STATUS_DRAFT
             };
             _mapper.Map(newCla, cla);
             foreach(var schedule in cla.Schedules)
@@ -192,7 +192,7 @@ namespace CEG_BAL.Services.Implements
 
             foreach(var sche in cla.Schedules){
                 // var schedule = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(sche.ScheduleId);
-                sche.Status = Constants.SCHEDULE_STATUS_UPCOMING;
+                sche.Status = CEGConstants.SCHEDULE_STATUS_UPCOMING;
                 _unitOfWork.ScheduleRepositories.Update(sche);
             }
 
@@ -220,7 +220,7 @@ namespace CEG_BAL.Services.Implements
         public async Task<bool> IsEditableById(int id)
         {
             var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id);
-            return clas != null && (clas.Status.Equals(Constants.CLASS_STATUS_DRAFT) || clas.Status.Equals(Constants.CLASS_STATUS_POSTPONED));
+            return clas != null && (clas.Status.Equals(CEGConstants.CLASS_STATUS_DRAFT) || clas.Status.Equals(CEGConstants.CLASS_STATUS_POSTPONED));
         }
     }
 }

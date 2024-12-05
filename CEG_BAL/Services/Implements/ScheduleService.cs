@@ -31,10 +31,9 @@ namespace CEG_BAL.Services.Implements
 
             var sch = new Schedule
             {
-                Status = Constants.SCHEDULE_STATUS_DRAFT
+                Status = CEGConstants.SCHEDULE_STATUS_DRAFT
             };
             _mapper.Map(newSch, sch);
-            sch.StartTime = newSch.ScheduleDate.HasValue ? TimeOnly.FromDateTime(newSch.ScheduleDate.Value) : default;
             sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(newSch.SessionId)).Hours.Value);
 
             // Save to the database
@@ -97,7 +96,6 @@ namespace CEG_BAL.Services.Implements
 
             // Map changes from the update model to the entity
             _mapper.Map(upSch, sch);
-            sch.StartTime = upSch.ScheduleDate.HasValue ? TimeOnly.FromDateTime(upSch.ScheduleDate.Value) : default;
             sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(sch.SessionId)).Hours.Value);
 
             // Reattach entity and mark it as modified

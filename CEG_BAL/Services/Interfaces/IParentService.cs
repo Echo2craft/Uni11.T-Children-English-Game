@@ -15,7 +15,7 @@ namespace CEG_BAL.Services.Interfaces
         Task<ParentViewModel?> GetParentById(int id);
         Task<ParentViewModel?> GetParentByAccountId(int id);
         Task<bool> IsParentExistByEmail(string email);
-        Task<bool> IsParentExistByFullname(string fullname);
+        Task<bool> IsExistByFullname(string fullname);
         void Create(ParentViewModel parent, CreateNewParent newPar);
         void Update(ParentViewModel parent);
     }

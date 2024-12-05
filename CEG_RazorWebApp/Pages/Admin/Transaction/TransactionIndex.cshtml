@@ -14,6 +14,7 @@
 </head>
 <body>
     <div class="main-content">
+        <div id="alertContainer"></div>
         <div class="main">
             <div class="container-fluid">
                 <div class="row">
@@ -44,7 +45,6 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div id="alertContainer"></div>
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <!-- home1 -->
@@ -337,8 +337,8 @@
             .on('select2:select', function (e) {
                 var selectedData = $(this).select2('data');
                 if (selectedData.length > 0) {
-                    var value = selectedData[0].value;
-                        console.log('Selected:', value);
+                    var value = selectedData[0].id;
+                    enrollAmount.set(value);
                 }
             })
             ;
@@ -439,7 +439,7 @@
                 data: JSON.stringify(formData),
                 success: function (response) {
                     if (response.status) {
-                        window.location.href = response.data; // Redirect to VNPay
+                        showAlert('success', "New transaction recorded.");
                     } else {
                         showAlert('error', "Error: \n" + (response.errorMessage || "Failed to create transaction."));
                         // alert(response.message || "Failed to create transaction.");

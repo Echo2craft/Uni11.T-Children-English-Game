@@ -57,7 +57,6 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<Parent?> GetByFullname(string fullname)
         {
             return await _dbContext.Parents
-                .Include(t => t.Account)
                 .AsNoTrackingWithIdentityResolution()
                 .SingleOrDefaultAsync(t => t.Account.Fullname == fullname);
         }
