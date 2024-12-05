@@ -7,7 +7,7 @@ public class UserObject
 {
     public string UserId {  get; set; }
     public string Username { get; set; }
-    public string Role { get; set; }
+    public string RoleName { get; set; }
     public Dictionary<string, UserScoreObject> CategoryScore { get; set; } = new Dictionary<string, UserScoreObject>();
     private double _score;
 
