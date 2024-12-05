@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
-using CEG_BAL.ViewModels.Admin.Create;
-using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -33,68 +30,34 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public async Task Create(CreateNewHomeworkResult newHomRes)
+        public void Create(HomeworkResultViewModel model)
         {
-            if (newHomRes == null)
-                throw new ArgumentNullException(nameof(newHomRes), "The new homework result cannot be null.");
-
-            var stuHom = new HomeworkResult();
-            _mapper.Map(newHomRes, stuHom);
-
-            // Save to the database
-            try
-            {
-                _unitOfWork.HomeworkResultRepositories.Create(stuHom);
-                _unitOfWork.Save();
-            }
-            catch (Exception ex)
-            {
-                // Log exception (if logging is configured)
-                throw new Exception("An error occurred while creating the homework result.", ex);
-            }
+            var home = _mapper.Map<HomeworkResult>(model);
+            _unitOfWork.HomeworkResultRepositories.Create(home);
+            _unitOfWork.Save();
         }
 
-        public async Task<List<HomeworkResultViewModel>> GetList()
+        public async Task<List<HomeworkResultViewModel>> GetAllHomeworkResult()
         {
-            return _mapper.Map<List<HomeworkResultViewModel>>(await _unitOfWork.HomeworkResultRepositories.GetList());
+            return _mapper.Map<List<HomeworkResultViewModel>>(await _unitOfWork.HomeworkResultRepositories.GetHomeworkResultsList());
         }
 
-        public async Task<HomeworkResultViewModel?> GetById(int id)
+        public async Task<HomeworkResultViewModel> GetHomeworkResultById(int id)
         {
-            var viewHomRes = await _unitOfWork.HomeworkResultRepositories.GetByIdNoTracking(id);
-            return viewHomRes != null ? _mapper.Map<HomeworkResultViewModel>(viewHomRes) : null;
+            var user = await _unitOfWork.HomeworkResultRepositories.GetByIdNoTracking(id);
+            if (user != null)
+            {
+                var urs = _mapper.Map<HomeworkResultViewModel>(user);
+                return urs;
+            }
+            return null;
         }
 
-        public async Task Update(int homeResId, UpdateHomeworkResult upHomRes)
+        public void Update(HomeworkResultViewModel model)
         {
-            if (upHomRes == null)
-                throw new ArgumentNullException(nameof(upHomRes), "New homework result cannot be null.");
-
-            // Fetch the existing record
-            var homRes = await _unitOfWork.HomeworkResultRepositories.GetByIdNoTracking(homeResId)
-                ?? throw new KeyNotFoundException("Homework result not found.");
-
-            // Map changes from the update model to the entity
-            _mapper.Map(upHomRes, homRes);
-
-            // Reattach entity and mark it as modified
-            _unitOfWork.HomeworkResultRepositories.Update(homRes);
-
-            // Save changes
-            try
-            {
-                _unitOfWork.Save();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                // Handle concurrency issues (e.g., row modified by another user)
-                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
-            }
-            catch (Exception ex)
-            {
-                // Log and rethrow unexpected exceptions
-                throw new Exception("An unexpected error occurred while updating the homework result.", ex);
-            }
+            var home = _mapper.Map<HomeworkResult>(model);
+            _unitOfWork.HomeworkResultRepositories.Update(home);
+            _unitOfWork.Save();
         }
     }
 }

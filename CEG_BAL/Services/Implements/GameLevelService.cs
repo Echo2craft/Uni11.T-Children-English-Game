@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
-using CEG_BAL.ViewModels.Admin;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -31,22 +30,16 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public void Create(CreateNewGameLevel model)
+        public void Create(GameLevelViewModel model)
         {
-            var gameLevel = new GameLevel();
-            if(model != null)
-            {
-                gameLevel.Title = model.Title;
-                gameLevel.Status = model.Status;
-                gameLevel.GameId = model.GameId.Value;
-            }
-            _unitOfWork.GameLevelRepositories.Create(gameLevel);
+            var game = _mapper.Map<GameLevel>(model);
+            _unitOfWork.GameLevelRepositories.Create(game);
             _unitOfWork.Save();
         }
 
-        public async Task<List<GameLevelViewModel>> GetList()
+        public async Task<List<GameLevelViewModel>> GetAllGameLevel()
         {
-            return _mapper.Map<List<GameLevelViewModel>>(await _unitOfWork.GameLevelRepositories.GetList());
+            return _mapper.Map<List<GameLevelViewModel>>(await _unitOfWork.GameLevelRepositories.GetGameLevelsList());
         }
 
         public async Task<GameLevelViewModel> GetGameLevelById(int id)

@@ -13,12 +13,12 @@ namespace CEG_BAL.ViewModels.Transaction
     {
         [Required(ErrorMessage = "Parent's Fullname is required")]
         [DisplayName("Parent's Fullname")]
-        public string ParentFullname { get; set; } = null!;
+        public string? ParentFullname { get; set; }
         [Required(ErrorMessage = "Student's Fullname is required")]
         [DisplayName("Student's Fullname")]
         public string? StudentFullname { get; set; }
-        [Required(ErrorMessage = "Class code is required")]
-        [DisplayName("Class code")]
+        [Required(ErrorMessage = "Student's Fullname is required")]
+        [DisplayName("Student's Fullname")]
         public string? Classname { get; set; }
         [Required(ErrorMessage = "Transaction Amount is required")]
         [Range(Constants.TRANSACTION_MINIMUM_AMOUNT, int.MaxValue)]

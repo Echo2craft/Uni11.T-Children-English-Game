@@ -22,17 +22,10 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Teachers.ToListAsync();
         }
-        public async Task<List<Teacher>?> GetTeacherNameOptionList()
+        public async Task<List<string>> GetTeacherNameList()
         {
             return await _dbContext.Teachers
-                .Select(t => new Teacher
-                {
-                    TeacherId = t.TeacherId,
-                    Account = new Account
-                    {
-                        Fullname = t.Account.Fullname,
-                    }
-                })
+                .Select(t => t.Account.Fullname)
                 .ToListAsync();
         }
 

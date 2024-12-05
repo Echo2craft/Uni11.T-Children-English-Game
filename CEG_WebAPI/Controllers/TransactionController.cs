@@ -143,7 +143,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpPost("GenerateUrl")]
-        [Authorize(Roles = "Parent")]
+        [Authorize(Roles = "Admin,Parent")]
         [ProducesResponseType(typeof(TransactionRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -171,7 +171,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Student not found."
                     });
                 }
-                var classObj = await _classService.GetOptionListByStatusOpen();
+                var classObj = await _classService.GetClassOptionListByStatusOpen();
                 if (!classObj.Exists(clas => clas.ClassName.Equals(request.Classname)))
                 {
                     return NotFound(new

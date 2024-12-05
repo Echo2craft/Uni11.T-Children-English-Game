@@ -23,30 +23,20 @@ namespace CEG_BAL.Services.Implements
             _configuration = configuration;
         }
 
-        public async Task Create(CreateNewSchedule newSchedule)
+        public void Create(ScheduleViewModel scheduleModel, CreateNewSchedule newSchedule)
         {
-            if (newSchedule == null)
-                throw new ArgumentNullException(nameof(newSchedule), "The new schedule info cannot be null.");
-
-            var sch = new Schedule
+            var sche = _mapper.Map<Schedule>(scheduleModel);
+            if (newSchedule != null)
             {
-                Status = Constants.SCHEDULE_STATUS_DRAFT
-            };
-            _mapper.Map(newSchedule, sch);
-            sch.StartTime = newSchedule.ScheduleDate.HasValue ? TimeOnly.FromDateTime(newSchedule.ScheduleDate.Value) : default;
-            sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(newSchedule.SessionId)).Hours.Value);
-
-            // Save to the database
-            try
-            {
-                _unitOfWork.ScheduleRepositories.Create(sch);
-                _unitOfWork.Save();
+                sche.SessionId = newSchedule.SessionId;
+                sche.ClassId = newSchedule.ClassId;
+                sche.ScheduleDate = newSchedule.ScheduleDate;
+                sche.StartTime = newSchedule.ScheduleDate.HasValue ? TimeOnly.FromDateTime(newSchedule.ScheduleDate.Value) : default;
+                sche.EndTime = sche.StartTime.Value.AddHours(_unitOfWork.SessionRepositories.GetByIdNoTracking(newSchedule.SessionId).Result.Hours.Value);
+                sche.Status = Constants.SCHEDULE_STATUS_DRAFT;
             }
-            catch (Exception ex)
-            {
-                // Log exception (if logging is configured)
-                throw new Exception("An error occurred while creating the schedule.", ex);
-            }
+            _unitOfWork.ScheduleRepositories.Create(sche);
+            _unitOfWork.Save();
         }
 
         public async Task<ScheduleViewModel?> GetById(int id)
@@ -75,7 +65,7 @@ namespace CEG_BAL.Services.Implements
             throw new NotImplementedException();
         }
 
-        public async Task<List<ScheduleViewModel>> GetListByClassId(int id)
+        public Task<List<ScheduleViewModel>> GetListByClassId(int id)
         {
             throw new NotImplementedException();
         }

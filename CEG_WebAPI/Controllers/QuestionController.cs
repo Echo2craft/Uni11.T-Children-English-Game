@@ -29,85 +29,13 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _questionService.GetList();
+                var result = await _questionService.GetQuestionList();
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
                         ErrorMessage = "Question List Not Found!"
-                    });
-                }
-                return Ok(new
-                {
-                    Status = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Status = false,
-                    ErrorMessage = ex.Message,
-                    InnerExceptionMessage = ex.InnerException?.Message
-                });
-            }
-        }
-
-        [HttpGet("All/ByCourse/{courseId}")]
-        [ProducesResponseType(typeof(List<HomeworkQuestionViewModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetQuestionListByCourseId(
-            [FromRoute][Required] int courseId
-            )
-        {
-            try
-            {
-                var result = await _questionService.GetListByCourseId(courseId);
-                if (result == null)
-                {
-                    return NotFound(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Question List based on course Id not found!"
-                    });
-                }
-                return Ok(new
-                {
-                    Status = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Status = false,
-                    ErrorMessage = ex.Message,
-                    InnerExceptionMessage = ex.InnerException?.Message
-                });
-            }
-        }
-
-        [HttpGet("All/BySession/{sessionId}")]
-        [ProducesResponseType(typeof(List<HomeworkQuestionViewModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetQuestionListBySessionId(
-            [FromRoute][Required] int sessionId
-            )
-        {
-            try
-            {
-                var result = await _questionService.GetListBySessionId(sessionId);
-                if (result == null)
-                {
-                    return NotFound(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Question List based on session Id not found!"
                     });
                 }
                 return Ok(new
@@ -136,7 +64,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _questionService.GetOrderedList();
+                var result = await _questionService.GetOrderedQuestionList();
                 if (result == null)
                 {
                     return NotFound(new
@@ -170,7 +98,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _questionService.GetOrderedList();
+                var result = await _questionService.GetOrderedQuestionList();
                 if (result == null)
                 {
                     return NotFound(new
@@ -203,7 +131,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _questionService.GetById(id);
+                var result = await _questionService.GetQuestionById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -262,8 +190,6 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }*/
-
-
 
         [HttpPost("Create")]
         [ProducesResponseType(typeof(HomeworkQuestionViewModel), StatusCodes.Status200OK)]
@@ -356,7 +282,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _questionService.GetById(id);
+                var result = await _questionService.GetQuestionById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -367,7 +293,7 @@ namespace CEG_WebAPI.Controllers
                 }
                 question.HomeworkQuestionId = id;
                 _questionService.Update(question);
-                result = await _questionService.GetById(question.HomeworkQuestionId.Value);
+                result = await _questionService.GetQuestionById(question.HomeworkQuestionId.Value);
                 return Ok(new
                 {
                     Status = true,
@@ -396,7 +322,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _questionService.GetById(questionId);
+                var result = await _questionService.GetQuestionById(questionId);
                 if (result == null)
                 {
                     return NotFound(new
@@ -406,7 +332,7 @@ namespace CEG_WebAPI.Controllers
                     });
                 }
                 _questionService.UpdateWithHomeworkId(questionId, homeworkId);
-                result = await _questionService.GetById(questionId);
+                result = await _questionService.GetQuestionById(questionId);
                 return Ok(new
                 {
                     Status = true,

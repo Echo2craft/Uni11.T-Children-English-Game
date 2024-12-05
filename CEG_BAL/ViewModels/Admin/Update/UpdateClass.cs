@@ -12,6 +12,7 @@ namespace CEG_BAL.ViewModels.Admin.Update
 {
     public class UpdateClass
     {
+        public int? ClassId { get; set; }
         [Required(ErrorMessage = "Class name is required")]
         [DisplayName("Class Name")]
         public string ClassName { get; set; } = null!;
@@ -37,10 +38,9 @@ namespace CEG_BAL.ViewModels.Admin.Update
         [Range(Constants.CLASS_MINIMUM_ENROLLMENT_FEE, Constants.CLASS_MAXIMUM_ENROLLMENT_FEE)]
         [DisplayName("Enrollment Fee")]
         public int EnrollmentFee { get; set; } = 1000000;
-        [Required(ErrorMessage = "Assign teacher is required")]
-        [Range(1, int.MaxValue)]
-        [DisplayName("Assign teacher")]
-        public int TeacherId { get; set; }
+        [Required(ErrorMessage = "Assign teacher name is required")]
+        [DisplayName("Assign teacher name")]
+        public string TeacherName { get; set; } = null!;
 
     }
 }

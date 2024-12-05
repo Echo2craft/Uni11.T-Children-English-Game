@@ -17,19 +17,10 @@ namespace CEG_DAL.Repositories.Implements
         {
             _dbContext = dbContext;
         }
-        /// <summary>
-        /// Get Class Info by Class id
-        /// </summary>
-        /// <param name="id">Class id</param>
-        /// <param name="includeTeacher">Default: false, determine whether if the query should include teacher info</param>
-        /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
-        /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
-        /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
+
         public async Task<Class?> GetByIdNoTracking(int id, bool includeTeacher = false, bool includeCourse = false, bool includeSession = false, bool filterSession = false)
         {
             return await _dbContext.Classes
-                .AsNoTrackingWithIdentityResolution()
-                .Where(cla => cla.ClassId == id)
                 .Select(c => new Class
                 {
                     ClassId = c.ClassId,
@@ -110,13 +101,13 @@ namespace CEG_DAL.Repositories.Implements
                         Status = s.Status
                     }).ToList(),
                 })
-                .SingleOrDefaultAsync();
+                .AsNoTrackingWithIdentityResolution()
+                .SingleOrDefaultAsync(cla => cla.ClassId == id);
         }
 
-        public async Task<List<Class>> GetList()
+        public async Task<List<Class>> GetClassList()
         {
             return await _dbContext.Classes
-                .AsNoTrackingWithIdentityResolution()
                 .Select(c => new Class
                 {
                     ClassId = c.ClassId,
@@ -154,7 +145,7 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<Class>> GetOptionListByStatusOpen()
+        public async Task<List<Class>> GetClassOptionListByStatusOpen()
         {
             return await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
@@ -247,7 +238,7 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<Class>> GetListByTeacherId(int teacherId)
+        public async Task<List<Class>> GetClassListByTeacherId(int teacherId)
         {
             return await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()

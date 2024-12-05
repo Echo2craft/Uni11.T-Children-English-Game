@@ -1,6 +1,4 @@
 ﻿using CEG_BAL.ViewModels;
-using CEG_BAL.ViewModels.Admin;
-using CEG_BAL.ViewModels.Admin.Update;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +9,9 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface IGameConfigService
     {
-        Task Create(CreateNewGameConfig newGamCon);
-        Task Update(int gamConId, UpdateGameConfig upGamCon);
-        Task<List<GameConfigViewModel>> GetList();
-        Task<GameConfigViewModel?> GetById(int id);
+        void Create(GameConfigViewModel model);
+        void Update(GameConfigViewModel model);
+        Task<List<GameConfigViewModel>> GetGameConfigsList();
+        Task<GameConfigViewModel> GetGameConfigById(int id);
     }
 }

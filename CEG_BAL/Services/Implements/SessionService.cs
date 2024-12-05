@@ -17,15 +17,18 @@ namespace CEG_BAL.Services.Implements
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IJWTService _jwtService;
         private readonly IConfiguration _configuration;
 
         public SessionService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
+            IJWTService jwtServices,
             IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _jwtService = jwtServices;
             _configuration = configuration;
         }
         public void Create(SessionViewModel model, CreateNewSession newSes)

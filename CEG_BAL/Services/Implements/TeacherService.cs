@@ -4,7 +4,6 @@ using Azure.Storage.Blobs.Models;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
-using CEG_BAL.ViewModels.Admin.Get;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.AspNetCore.Http;
@@ -56,7 +55,7 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
-        public async Task<bool> IsExistByEmail(string email)
+        public async Task<bool> IsTeacherExistByEmail(string email)
         {
             var acc = await _unitOfWork.TeacherRepositories.GetByEmail(email);
             if (acc != null) return true;
@@ -85,16 +84,10 @@ namespace CEG_BAL.Services.Implements
                 string imageUrl = await _storageService.UploadToBlobAsync(certImage, "certificate/");
                 acc.Certificate = imageUrl;
             }
-            else
-            {
-                acc.Certificate = "";
-            }
 
             _unitOfWork.TeacherRepositories.Create(acc);
             _unitOfWork.Save();
         }
-
-
 
         public void Update(TeacherViewModel teacher)
         {
@@ -103,21 +96,16 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
         }
 
-        public async Task<List<GetTeacherNameOption>?> GetTeacherNameOptionList()
+        public async Task<List<string>> GetTeacherNameList()
         {
-            return _mapper.Map<List<GetTeacherNameOption>>(await _unitOfWork.TeacherRepositories.GetTeacherNameOptionList());
+            return await _unitOfWork.TeacherRepositories.GetTeacherNameList();
         }
 
-        public async Task<bool> IsExistByFullname(string fullname)
+        public async Task<bool> IsTeacherExistByFullname(string fullname)
         {
             var acc = await _unitOfWork.TeacherRepositories.GetByFullname(fullname);
-            return acc != null;
-        }
-
-        public async Task<bool> IsExistById(int id)
-        {
-            var acc = await _unitOfWork.TeacherRepositories.GetByIdNoTracking(id);
-            return acc != null;
+            if (acc != null) return true;
+            return false;
         }
 
         public async Task<TeacherViewModel?> GetTeacherByAccountId(int id)
@@ -130,24 +118,5 @@ namespace CEG_BAL.Services.Implements
             }
             return null;
         }
-        /*public async Task<string> UploadToBlobAsync(IFormFile file)
-{
-   // Injected BlobServiceClient
-   var blobContainerClient = _storageService.GetBlobContainerClient();
-   await blobContainerClient.CreateIfNotExistsAsync();
-   await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
-
-   // Generate a unique file name
-   string fileName = Guid.NewGuid() + "-" + Path.GetExtension(file.FileName);
-   var blobClient = blobContainerClient.GetBlobClient(fileName);
-
-   // Upload the file to Blob Storage
-   using (var stream = file.OpenReadStream())
-   {
-       await blobClient.UploadAsync(stream, true);
-   }
-
-   return blobClient.Uri.ToString(); // Return the file URL
-}*/
     }
 }

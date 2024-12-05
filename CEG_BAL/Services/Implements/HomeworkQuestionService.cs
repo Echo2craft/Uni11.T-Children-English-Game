@@ -59,12 +59,12 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
         }
 
-        public async Task<List<HomeworkQuestionViewModel>?> GetOrderedList()
+        public async Task<List<HomeworkQuestionViewModel>?> GetOrderedQuestionList()
         {
             return _mapper.Map<List<HomeworkQuestionViewModel>?>(await _unitOfWork.HomeworkQuestionRepositories.GetOrderedQuestionList());
         }
 
-        public async Task<HomeworkQuestionViewModel?> GetById(int id)
+        public async Task<HomeworkQuestionViewModel?> GetQuestionById(int id)
         {
             var ques = await _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(id);
             if (ques != null)
@@ -72,7 +72,7 @@ namespace CEG_BAL.Services.Implements
                 var quesvm = _mapper.Map<HomeworkQuestionViewModel>(ques);
                 if (ques.HomeworkId != null)
                 {
-                    var home = await _unitOfWork.HomeworkRepositories.GetByIdNoTracking(ques.HomeworkId.Value);
+                    var home = await _unitOfWork.HomeworkRepositories.GetByIdNoTracking(ques.HomeworkId);
                     //quesvm.HomeworkStatus = home?.Status;
                 }
                 quesvm.CourseStatus = await _unitOfWork.CourseRepositories.GetStatusByQuestionIdNoTracking(id);
@@ -81,19 +81,9 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
-        public async Task<List<HomeworkQuestionViewModel>> GetList()
+        public async Task<List<HomeworkQuestionViewModel>> GetQuestionList()
         {
-            return _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetList());
-        }
-
-        public async Task<List<HomeworkQuestionViewModel>> GetListByCourseId(int courseId)
-        {
-            return _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetListByCourseId(courseId));
-        }
-
-        public async Task<List<HomeworkQuestionViewModel>> GetListBySessionId(int sessionId)
-        {
-            return _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetListBySessionId(sessionId));
+            return _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetQuestionList());
         }
 
         public void Update(HomeworkQuestionViewModel model)

@@ -99,28 +99,18 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
         }
 
-        public async Task<bool> IsExistByName(string name)
+        public async Task<bool> IsCourseExistByName(string name)
         {
             var cou = await _unitOfWork.CourseRepositories.GetByName(name);
-            return cou != null;
+            if (cou != null) return true;
+            return false;
         }
 
-        public async Task<bool> IsAvailableByName(string name)
+        public async Task<bool> IsCourseAvailableByName(string name)
         {
             var cou = await _unitOfWork.CourseRepositories.GetByName(name);
-            return cou != null && cou.Status.Equals(Constants.COURSE_STATUS_AVAILABLE);
-        }
-
-        public async Task<bool> IsExistById(int id)
-        {
-            var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(id);
-            return cou != null;
-        }
-
-        public async Task<bool> IsAvailableById(int id)
-        {
-            var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(id);
-            return cou != null && cou.Status.Equals(Constants.COURSE_STATUS_AVAILABLE);
+            if (cou != null && cou.Status.Equals(Constants.COURSE_STATUS_AVAILABLE)) return true;
+            return false;
         }
 
         public async Task<int> GetTotalAmount()
