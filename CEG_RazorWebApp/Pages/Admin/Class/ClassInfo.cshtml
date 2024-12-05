@@ -360,69 +360,78 @@
                 </div>
                 <form method="post" id="createScheduleForm">
                     <div class="modal-body">
-                        <div class="row col-12">
-                            <div class="row form-group justify-content-center course-content-view">
-                                <label class="col-form-label">Course's Remaining Unscheduled Sessions</label>
-                                <div id="session-for-schedule-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
-                                    <table id="session-for-schedule-table"
-                                           class="table table-striped table-bordered dataTable no-footer"
-                                           aria-describedby="session-for-schedule-table_info">
-                                        <thead>
-                                            <tr>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="session-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Session Number: activate to sort column ascending">
-                                                    Session Number
-                                                </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="session-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Title: activate to sort column ascending">
-                                                    Session Title
-                                                </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="session-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Hours: activate to sort column ascending">
-                                                    Session Hours
-                                                </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="session-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Description: activate to sort column ascending">
-                                                    Session Description
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
+                        <div class="row justify-content-center course-content-view">
+                            <label class="col-form-label">Course's Remaining Unscheduled Sessions</label>
+                            <div id="session-for-schedule-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
+                                <table id="session-for-schedule-table"
+                                       class="table table-striped table-bordered dataTable no-footer"
+                                       aria-describedby="session-for-schedule-table_info">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="session-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Session Number: activate to sort column ascending">
+                                                Session Number
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="session-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Title: activate to sort column ascending">
+                                                Session Title
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="session-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Hours: activate to sort column ascending">
+                                                Session Hours
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="session-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Description: activate to sort column ascending">
+                                                Session Description
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                        </div>
+                        <div class="justify-content-center row">
+                            <input id="createSchedule_SessionId" type="number" hidden required >
+                            <input id="createSchedule_ClassId" type="number" hidden required >
+                            <div class="row col-xl-6">
+                                <div class="form-group col-xl-4">
+                                    <label for="createSchedule_SessionNumber" class="col-form-label">Session Number</label>
+                                    <input id="createSchedule_SessionNumber" type="number" class="form-control" value="0" readonly="" required="">
+                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
-                                <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                <div class="row form-group justify-content-center">
-                                    <input id="createSchedule_SessionId" type="number" class="form-control col-md-5" value="0" hidden required>
-
-                                    <label for="createSchedule_SessionNumber" class="col-md-2 col-form-label text-md-right">Session Number</label>
-                                    <input id="createSchedule_SessionNumber" type="number" class="form-control col-md-5" value="0" readonly required>
+                                <div class="form-group col-xl-8">
+                                    <label for="createSchedule_SessionTitle" class="col-form-label">Title</label>
+                                    <input id="createSchedule_SessionTitle" type="text" class="form-control" readonly="" required="">
+                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="row col-xl-6">
+                                <div class="form-group col-xl-9" style="background-color: transparent;">
+                                    <label for="createSchedule_SessionDescription" class="col-form-label">Description</label>
+                                    <textarea id="createSchedule_SessionDescription" readonly="" required="" class="form-control"></textarea>
+                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-8 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-3">
+                                    <label for="createSchedule_SessionHours" class="col-form-label">Hours</label>
+                                    <input id="createSchedule_SessionHours" type="number" class="form-control" value="0" readonly="" required="">
                                     <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label for="createSchedule_SessionTitle" class="col-md-2 col-form-label text-md-right">Title</label>
-                                    <input id="createSchedule_SessionTitle" type="text" class="form-control col-md-5" readonly required>
-                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label for="createSchedule_SessionDescription" class="col-md-2 col-form-label text-md-right">Description</label>
-                                    <textarea id="createSchedule_SessionDescription" readonly required class="form-control col-md-5"></textarea>
-                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label for="createSchedule_SessionHours" class="col-md-2 col-form-label text-md-right">Hours</label>
-                                    <input id="createSchedule_SessionHours" type="number" class="form-control col-md-5" value="0" readonly required>
-                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createSchedule.ScheduleDate" class="col-md-2 col-form-label text-md-right"></label>
-                                    <input asp-for="@createSchedule.ScheduleDate" type="datetime-local" value="@createSchedule.ScheduleDate.Value.ToString("yyyy-MM-ddTHH:mm")" class="form-control col-md-5" required>
-                                    <span asp-validation-for="@createSchedule.ScheduleDate" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="row col-xl-4">
+                                <div class="form-group col-xl-12">
+                                    <label class="col-form-label" asp-for="@createSchedule.ScheduleDate" ></label>
+                                    <input asp-for="@createSchedule.ScheduleDate" type="datetime-local" value="@createSchedule.ScheduleDate.Value.ToString("yyyy-MM-ddTHH:mm")" class="form-control" required>
+                                    <span asp-validation-for="@createSchedule.ScheduleDate" id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-8 mt-2 field-validation-valid"></span>
                                 </div>
                             </div>
                         </div>
@@ -593,7 +602,7 @@
                     $('input#createSchedule_SessionId').val(data.sessionId);
                     $('input#createSchedule_SessionNumber').val(data.sessionNumber);
                     $('input#createSchedule_SessionTitle').val(data.title);
-                    $('textarea#createSchedule_SessionDescription').text(data.sessionId);
+                    $('textarea#createSchedule_SessionDescription').text(data.description);
                     $('input#createSchedule_SessionHours').val(data.hours);
                 }
             }).on('deselect', function (e, dt, type, indexes) {
@@ -733,7 +742,7 @@
                 // Get the form data
                 var formData = {
                     sessionId: $('input#createSchedule_SessionId').val(),
-                    classId: $('span#class-id').text(),
+                    classId: $('input#createSchedule_ClassId').val(),
                     scheduleDate: $('input#createSchedule_ScheduleDate').val(),
                 };
 
@@ -1191,7 +1200,6 @@
             $('#class-status').empty();
             $('select[id="updateClassStatus_Status"]').empty();
             $('#class-status').append(statusText);
-            $('#class-id').text(data.classId);
             $('#class-class-title').text(data.className);
             $('#class-name').text(data.className);
             $('#class-teacher').text(data.teacher.account.fullname);
@@ -1217,6 +1225,9 @@
             classAmount.set(data.enrollmentFee);
             // Update Class Status
             $('select[id="updateClassStatus_Status"]').append(getStatusOptions(data.status));
+
+            // Create Schedule
+            $('#createSchedule_ClassId').val(data.classId);
         }
     </script>
 </body>

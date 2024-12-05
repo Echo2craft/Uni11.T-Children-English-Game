@@ -143,7 +143,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpPost("GenerateUrl")]
-        [Authorize(Roles = "Admin,Parent")]
+        [Authorize(Roles = "Parent")]
         [ProducesResponseType(typeof(TransactionRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
