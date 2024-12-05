@@ -9,14 +9,14 @@ namespace CEG_BAL.ViewModels.Account.Create
 {
     public class CreateNewTeacher
     {
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         public IFormFile? ImageUpload { get; set; }
 
-        public virtual CreateNewAccount Account { get; set; }
+        public CreateNewAccount Account { get; set; }
     }
 }

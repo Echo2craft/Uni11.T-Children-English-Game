@@ -260,6 +260,16 @@
                 return container;
             });
         });
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop(); // Get the file name
+            // Check if the filename is empty or null
+            if (!fileName) {
+                fileName = "Choose image to upload" // Default text if no file selected
+            }
+            // Update the custom file label
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
         function formatTime(timeString, { 
             includeSeconds = false,
             includeAmPm = false 
