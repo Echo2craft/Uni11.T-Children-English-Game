@@ -2,7 +2,7 @@
 
 namespace CEG_BAL.Configurations
 {
-    public static class Constants
+    public static class CEGConstants
     {
         public readonly static string ADMIN_URL = "/Admin/Index";
         public readonly static string STUDENT_URL = "/Student/Index";
@@ -84,22 +84,6 @@ namespace CEG_BAL.Configurations
         public readonly static string UPDATE_HOMEWORK_QUESTION_DETAILS_VALID = "UHomeworkQuestionDetailsValid";
         public readonly static string UPDATE_HOMEWORK_ANSWER_DETAILS_VALID = "UHomeworkAnswerDetailsValid";
 
-        /*public readonly static string EVENT_STATUS_ON_HOLD = "OnHold";
-        public readonly static string EVENT_STATUS_NAME_ON_HOLD = "On Hold";
-        public readonly static string EVENT_STATUS_POSTPONED = "Postponed";
-        public readonly static string EVENT_STATUS_NAME_POSTPONED = "Postponed";
-        public readonly static string EVENT_STATUS_CANCELLED = "Cancelled";
-        public readonly static string EVENT_STATUS_NAME_CANCELLED = "Cancelled";
-        public readonly static string EVENT_STATUS_ENDED = "Ended";
-        public readonly static string EVENT_STATUS_NAME_ENDED = "Ended";
-        public readonly static string EVENT_STATUS_OPEN_REGISTRATION = "OpenRegistration";
-        public readonly static string EVENT_STATUS_NAME_OPEN_REGISTRATION = "Open Registration";
-        public readonly static string EVENT_STATUS_CLOSED_REGISTRATION = "ClosedRegistration";
-        public readonly static string EVENT_STATUS_NAME_CLOSED_REGISTRATION = "Closed Registration";
-        public readonly static string EVENT_STATUS_CHECKING_IN = "CheckingIn";
-        public readonly static string EVENT_STATUS_NAME_CHECKING_IN = "Checking In";
-        public readonly static string EVENT_STATUS_ONGOING = "Ongoing";
-        public readonly static string EVENT_STATUS_NAME_ONGOING = "Ongoing";*/
         public readonly static string HOMEWORK_STATUS_NOT_FOUND = "NotFound";
 
         public readonly static string COURSE_STATUS_DRAFT = "Draft";
@@ -181,17 +165,6 @@ namespace CEG_BAL.Configurations
         public readonly static string ENROLL_STATUS_SUSPENDED = "Suspended";
         public readonly static string ENROLL_STATUS_NAME_SUSPENDED = "Suspended";
 
-        /*public readonly static string COURSE_STATUS_ENDED = "Ended";
-        public readonly static string COURSE_STATUS_NAME_ENDED = "Ended";
-        public readonly static string COURSE_STATUS_OPEN_REGISTRATION = "OpenRegistration";
-        public readonly static string COURSE_STATUS_NAME_OPEN_REGISTRATION = "Open Registration";
-        public readonly static string COURSE_STATUS_CLOSED_REGISTRATION = "ClosedRegistration";
-        public readonly static string COURSE_STATUS_NAME_CLOSED_REGISTRATION = "Closed Registration";
-        public readonly static string COURSE_STATUS_CHECKING_IN = "CheckingIn";
-        public readonly static string COURSE_STATUS_NAME_CHECKING_IN = "Checking In";
-        public readonly static string COURSE_STATUS_ONGOING = "Ongoing";
-        public readonly static string COURSE_STATUS_NAME_ONGOING = "Ongoing";*/
-
         public readonly static string COURSE_MEDIA_TYPE_SPOTLIGHT = "Spotlight";
         public readonly static string EVENT_MEDIA_TYPE_LOCATION_MAP = "LocationMap";
         public readonly static string EVENT_MEDIA_TYPE_ADDITIONAL = "Additional";
@@ -213,6 +186,9 @@ namespace CEG_BAL.Configurations
         public readonly static string VNPAY_AMOUNT_LABEL = "Amount: ";
         public readonly static string VNPAY_STUDENT_NAME_LABEL = "Student for Enrollment: ";
         public readonly static string VNPAY_CLASS_NAME_LABEL = "Enrolling Class: ";
+        public readonly static string TRANSACTION_STATUS_COMPLETED = "Completed";
+        public readonly static string TRANSACTION_TYPE_ENROLLMENT = "Enrollment";
+        public readonly static string ENROLLMENT_STATUS_ENROLLED = "Enrolled";
 
         /* public readonly static string BIRD_STATUS_ACTIVE = "Active";
          public readonly static string BIRD_STATUS_INJURED = "Injured";

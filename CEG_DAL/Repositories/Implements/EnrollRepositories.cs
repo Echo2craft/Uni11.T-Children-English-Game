@@ -18,14 +18,14 @@ namespace CEG_DAL.Repositories.Implements
             _dbContext = dbContext;
         }
 
-        public async Task<Enroll>? GetByIdNoTracking(int id)
+        public async Task<Enroll?> GetByIdNoTracking(int id)
         {
             return await _dbContext.Enrolls
                 .AsNoTrackingWithIdentityResolution()
                 .SingleOrDefaultAsync(en => en.EnrollId == id);
         }
 
-        public async Task<List<Enroll>> GetEnrollsList()
+        public async Task<List<Enroll>> GetList()
         {
             return await _dbContext.Enrolls.ToListAsync();
         }

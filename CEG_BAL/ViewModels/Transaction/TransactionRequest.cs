@@ -21,7 +21,7 @@ namespace CEG_BAL.ViewModels.Transaction
         [DisplayName("Class code")]
         public string? Classname { get; set; }
         [Required(ErrorMessage = "Transaction Amount is required")]
-        [Range(Constants.TRANSACTION_MINIMUM_AMOUNT, int.MaxValue)]
+        [Range(CEGConstants.TRANSACTION_MINIMUM_AMOUNT, int.MaxValue)]
         [DisplayName("Amount")]
         public int TransactionAmount { get; set; }
         [Required(ErrorMessage = "Transaction Type is required")]

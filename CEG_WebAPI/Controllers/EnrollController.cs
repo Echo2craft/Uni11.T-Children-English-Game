@@ -30,7 +30,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _enrollService.GetEnrollsList();
+                var result = await _enrollService.GetList();
                 if (result == null)
                 {
                     return NotFound(new
@@ -64,7 +64,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _enrollService.GetEnrollById(id);
+                var result = await _enrollService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -130,7 +130,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(EnrollViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateHomework(
+        public async Task<IActionResult> CreateEnroll(
             [FromBody][Required] CreateNewEnroll newEn
             )
         {
@@ -145,8 +145,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Session Not Found!"
                     });
                 }*/
-                EnrollViewModel en = new();
-                _enrollService.Create(en, newEn);
+                await _enrollService.Create(newEn);
                 return Ok(new
                 {
                     Data = true,
@@ -176,7 +175,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _enrollService.GetEnrollById(id);
+                var result = await _enrollService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -187,7 +186,7 @@ namespace CEG_WebAPI.Controllers
                 }
                 enroll.EnrollId = id;
                 _enrollService.Update(enroll);
-                result = await _enrollService.GetEnrollById(enroll.EnrollId.Value);
+                result = await _enrollService.GetById(enroll.EnrollId.Value);
                 return Ok(new
                 {
                     Status = true,
@@ -216,7 +215,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _enrollService.GetEnrollById(id);
+                var result = await _enrollService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -229,7 +228,7 @@ namespace CEG_WebAPI.Controllers
                 if (isValid)
                 {
                     _enrollService.UpdateStatus(id, status);
-                    result = await _enrollService.GetEnrollById(id);
+                    result = await _enrollService.GetById(id);
                     return Ok(new
                     {
                         Status = true,

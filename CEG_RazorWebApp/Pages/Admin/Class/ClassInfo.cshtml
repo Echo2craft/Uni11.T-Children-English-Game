@@ -313,12 +313,12 @@
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@updateClass.MinStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.MinStudents" value="@updateClass.MinStudents" type="number" min="@CEG_BAL.Configurations.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <input asp-for="@updateClass.MinStudents" value="@updateClass.MinStudents" type="number" min="@CEG_BAL.Configurations.CEGConstants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
                                         <span asp-validation-for="@updateClass.MinStudents" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                         <label asp-for="@updateClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.MaxStudents" value="@updateClass.MaxStudents" type="number" max="@CEG_BAL.Configurations.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                        <input asp-for="@updateClass.MaxStudents" value="@updateClass.MaxStudents" type="number" max="@CEG_BAL.Configurations.CEGConstants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
                                         <span asp-validation-for="@updateClass.MaxStudents" id="error_message"
                                               class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -436,7 +436,7 @@
                             <div class="row col-xl-4">
                                 <div class="form-group col-xl-12">
                                     <label class="col-form-label" asp-for="@createSchedule.ScheduleDate" ></label>
-                                    <input asp-for="@createSchedule.ScheduleDate" type="datetime-local" value="@createSchedule.ScheduleDate.Value.ToString("yyyy-MM-ddTHH:mm")" min="" class="form-control" required>
+                                    <input asp-for="@createSchedule.ScheduleDate" type="datetime-local" value="@createSchedule.ScheduleDate.Value.ToString("yyyy-MM-ddTHH:mm")" class="form-control" required>
                                     <span asp-validation-for="@createSchedule.ScheduleDate" id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-8 mt-2 field-validation-valid"></span>
                                 </div>
                             </div>

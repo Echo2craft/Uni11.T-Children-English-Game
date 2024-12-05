@@ -40,11 +40,11 @@ namespace CEG_BAL.Services.Implements
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", HttpContext.Connection.RemoteIpAddress.ToString());
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
-            pay.AddRequestData("vnp_OrderInfo", Constants.VNPAY_PARENT_NAME_LABEL + $"{request.ParentFullname}," +
-                Constants.VNPAY_AMOUNT_LABEL + $"{request.TransactionAmount}," +
+            pay.AddRequestData("vnp_OrderInfo", CEGConstants.VNPAY_PARENT_NAME_LABEL + $"{request.ParentFullname}," +
+                CEGConstants.VNPAY_AMOUNT_LABEL + $"{request.TransactionAmount}," +
                 $"{request.TransactionType}," +
-                Constants.VNPAY_STUDENT_NAME_LABEL + $"{request.StudentFullname}," +
-                Constants.VNPAY_CLASS_NAME_LABEL + $"{request.Classname}"
+                CEGConstants.VNPAY_STUDENT_NAME_LABEL + $"{request.StudentFullname}," +
+                CEGConstants.VNPAY_CLASS_NAME_LABEL + $"{request.Classname}"
             );
             pay.AddRequestData("vnp_OrderType", request.TransactionType);
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);

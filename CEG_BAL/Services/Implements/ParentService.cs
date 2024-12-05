@@ -90,11 +90,9 @@ namespace CEG_BAL.Services.Implements
             return false;
         }
 
-        public async Task<bool> IsParentExistByFullname(string fullname)
+        public async Task<bool> IsExistByFullname(string fullname)
         {
-            var acc = await _unitOfWork.ParentRepositories.GetByFullname(fullname);
-            if (acc != null) return true;
-            return false;
+            return await _unitOfWork.ParentRepositories.GetByFullname(fullname) != null;
         }
 
         public void Update(ParentViewModel parent)

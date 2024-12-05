@@ -117,9 +117,9 @@ namespace CEG_BAL.Services.Implements
             return await _unitOfWork.StudentRepositories.GetStudentNameListByParent(parentId);
         }
 
-        public async Task<List<string>> GetStudentNameListByParentName(string parentName)
+        public async Task<List<string>?> GetFullnameListByParentName(string parentName)
         {
-            return await _unitOfWork.StudentRepositories.GetStudentNameListByParentName(parentName);
+            return await _unitOfWork.StudentRepositories.GetFullnameListByParentName(parentName);
         }
 
         public async Task<List<StudentViewModel>> GetStudentByParentAccountId(int id)
