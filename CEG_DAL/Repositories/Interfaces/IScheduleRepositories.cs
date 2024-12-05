@@ -11,7 +11,9 @@ namespace CEG_DAL.Repositories.Interfaces
     public interface IScheduleRepositories : IRepositoryBase<Schedule>
     {
         Task<List<Schedule>?> GetListByClassId(int classId);
-        void CreateBySessionId(int sessionId);
+        Task CreateBySessionId(int sessionId);
         Task<Schedule?> GetByIdNoTracking(int id);
+        Task<bool> IsListScheduleDateValidByClassId(int claId);
+        Task<List<string>> IsListScheduleDateHasValidSequenceByClassId(int claId);
     }
 }

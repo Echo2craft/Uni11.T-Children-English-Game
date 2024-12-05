@@ -9,6 +9,7 @@ using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CEG_BAL.Services.Implements
 {
@@ -71,10 +72,33 @@ namespace CEG_BAL.Services.Implements
         /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
         /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
         /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
-        public async Task<ClassViewModel?> GetById(int id, bool includeTeacher = true, bool includeCourse = true, bool includeSession = false, bool filterSession = false)
+        public async Task<ClassViewModel?> GetById(
+            int id, 
+            bool includeTeacher = true, 
+            bool includeCourse = true,
+            bool includeSession = false, 
+            bool filterSession = false,
+            bool includeSchedule = true
+        )
         {
-            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id, includeTeacher: includeTeacher, includeCourse: includeCourse, includeSession: includeSession, filterSession: filterSession);
-            return clas != null ? _mapper.Map<ClassViewModel>(clas) : null;
+            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(
+                id, 
+                includeTeacher: includeTeacher, 
+                includeCourse: includeCourse, 
+                includeSession: includeSession, 
+                filterSession: filterSession,
+                includeSchedule: includeSchedule
+            );
+            if (clas == null) return null;
+            var viewCla = _mapper.Map<ClassViewModel>(clas);
+            if(viewCla.Schedules != null && viewCla.Schedules.Count > 0)
+            {
+                for (int i = 0; i < viewCla.Schedules.Count; i++)
+                {
+                    viewCla.Schedules[i].ScheduleNumber = i + 1;
+                }
+            }
+            return viewCla;
         }
 
         public async Task<ClassViewModel?> GetByIdParent(int id)
@@ -152,19 +176,45 @@ namespace CEG_BAL.Services.Implements
             }
         }
 
-        public void UpdateStatus(int classId, string classStatus)
+        public async Task UpdateStatus(int claId, string upClaStatus)
         {
-            var clas = _unitOfWork.ClassRepositories.GetByIdNoTracking(classId).Result;
-            if (clas == null) return;
-            foreach(var sche in clas.Schedules){
-                var schedule = _unitOfWork.ScheduleRepositories.GetByIdNoTracking(sche.ScheduleId).Result;
-                schedule.Status = Constants.SCHEDULE_STATUS_UPCOMING;
-                _unitOfWork.ScheduleRepositories.Update(schedule);
+            // Fetch the existing record
+            var cla = await _unitOfWork.ClassRepositories.GetByIdNoTracking(claId, includeSchedule: true)
+                ?? throw new KeyNotFoundException("Class not found.");
+            // check is schedule date valid
+            var errorList = await _unitOfWork.ScheduleRepositories.IsListScheduleDateHasValidSequenceByClassId(claId);
+            if (errorList.Count > 0)
+            {
+                var errorMessage = "Class contain invalid schedule date: \n";
+                foreach (var error in errorList) errorMessage += error;
+                throw new ArgumentException(errorMessage);
             }
-            clas.Schedules = null;
-            clas.Status = classStatus;
-            _unitOfWork.ClassRepositories.Update(clas);
-            _unitOfWork.Save();
+
+            foreach(var sche in cla.Schedules){
+                // var schedule = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(sche.ScheduleId);
+                sche.Status = Constants.SCHEDULE_STATUS_UPCOMING;
+                _unitOfWork.ScheduleRepositories.Update(sche);
+            }
+
+            cla.Status = upClaStatus;
+            // Reattach entity and mark it as modified
+            _unitOfWork.ClassRepositories.Update(cla);
+
+            // Save changes
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating the class.", ex);
+            }
         }
 
         public async Task<bool> IsEditableById(int id)

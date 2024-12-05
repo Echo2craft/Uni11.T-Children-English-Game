@@ -17,9 +17,9 @@ public partial class Session
 
     public int? SessionNumber { get; set; }
 
-    public virtual Course Course { get; set; } = null!;
+    public virtual Course? Course { get; set; }
 
-    public virtual ICollection<Homework> Homeworks { get; set; } = new List<Homework>();
+    public virtual ICollection<Homework>? Homeworks { get; set; } = new List<Homework>();
 
-    public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+    public virtual ICollection<Schedule>? Schedules { get; set; } = new List<Schedule>();
 }

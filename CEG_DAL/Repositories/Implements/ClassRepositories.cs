@@ -25,7 +25,14 @@ namespace CEG_DAL.Repositories.Implements
         /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
         /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
         /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
-        public async Task<Class?> GetByIdNoTracking(int id, bool includeTeacher = false, bool includeCourse = false, bool includeSession = false, bool filterSession = false)
+        public async Task<Class?> GetByIdNoTracking(
+            int id, 
+            bool includeTeacher = false, 
+            bool includeCourse = false, 
+            bool includeSession = false, 
+            bool filterSession = false,
+            bool includeSchedule = false
+            )
         {
             return await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
@@ -81,7 +88,7 @@ namespace CEG_DAL.Repositories.Implements
                         : null,
                         // Add other necessary properties here, but do NOT include Classes
                     } : null,
-                    Schedules = c.Schedules.Select(sch => new Schedule()
+                    Schedules = includeSchedule ? c.Schedules.Select(sch => new Schedule()
                     {
                         ScheduleId = sch.ScheduleId,
                         ScheduleDate = sch.ScheduleDate,
@@ -91,12 +98,13 @@ namespace CEG_DAL.Repositories.Implements
                         Session = new Session()
                         {
                             SessionId = sch.SessionId,
+                            CourseId = sch.Session.CourseId,
                             SessionNumber = sch.Session.SessionNumber,
                             Title = sch.Session.Title,
                             Description = sch.Session.Description,
                             Hours = sch.Session.Hours
                         }
-                    }).ToList(),
+                    }).OrderBy(sch => sch.ScheduleDate).ToList() : null,
                     Enrolls = c.Enrolls.Select(s => new Enroll()
                     {
                         EnrollId = s.EnrollId,

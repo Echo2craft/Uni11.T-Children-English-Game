@@ -22,7 +22,14 @@ namespace CEG_DAL.Repositories.Interfaces
         /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
         /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
         /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
-        Task<Class?> GetByIdNoTracking(int id, bool includeTeacher = false, bool includeCourse = false, bool includeSession = false, bool filterSession = false);
+        Task<Class?> GetByIdNoTracking(
+            int id, 
+            bool includeTeacher = false, 
+            bool includeCourse = false, 
+            bool includeSession = false, 
+            bool filterSession = false,
+            bool includeSchedule = false
+        );
         Task<List<Class>> GetListByTeacherId(int teacherId);
         Task<Class?> GetByClassName(string className);
         Task<int> GetIdByClassId(int id);

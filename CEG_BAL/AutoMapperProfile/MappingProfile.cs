@@ -253,7 +253,7 @@ namespace CEG_BAL.AutoMapperProfile
                     dest.Status = Constants.SCHEDULE_STATUS_DRAFT;
                     dest.StartTime = src.ScheduleDate.HasValue ? TimeOnly.FromDateTime(src.ScheduleDate.Value) : default;
                 });
-
+            CreateMap<UpdateSchedule, Schedule>();
             // Game Config
             CreateMapforDefaultViewCreateUpdateModel<GameConfig, GameConfigViewModel, CreateNewGameConfig, UpdateGameConfig>();
 

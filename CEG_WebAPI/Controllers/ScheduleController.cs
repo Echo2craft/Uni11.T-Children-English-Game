@@ -219,7 +219,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] UpdateSchedule scheduleVM
+            [FromBody][Required] UpdateSchedule upSch
             )
         {
             try
@@ -233,7 +233,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Schedule Does Not Exist!"
                     });
                 }
-                _scheduleService.Update(result, scheduleVM);
+                await _scheduleService.Update(id,upSch);
                 result = await _scheduleService.GetById(id);
                 return Ok(new
                 {
