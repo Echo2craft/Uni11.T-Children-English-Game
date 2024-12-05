@@ -9,10 +9,12 @@ namespace CEG_DAL.Repositories.Interfaces
 {
     public interface IHomeworkAnswerRepositories : IRepositoryBase<HomeworkAnswer>
     {
-        Task<List<HomeworkAnswer>> GetAnswersList();
+        Task<List<HomeworkAnswer>> GetList();
         Task<HomeworkAnswer?> GetByIdNoTracking(int id);
         Task<HomeworkAnswer?> GetByAnswer(string answer);
         Task<int> GetIdByAnswer(string answer);
-        Task<List<HomeworkAnswer>?> GetAnswerListByQuestionId(int questionId);
+        Task<List<HomeworkAnswer>?> GetListByQuestionId(int questionId);
+        Task<List<HomeworkAnswer>?> GetListBySessionId(int sessionId);
+        Task<List<HomeworkAnswer>?> GetListByCourseId(int courseId);
     }
 }
