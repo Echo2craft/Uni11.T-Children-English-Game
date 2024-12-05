@@ -18,18 +18,17 @@ namespace CEG_BAL.ViewModels.Admin
         [Required(ErrorMessage = "Minimum students amount is required")]
         [Range(Constants.CLASS_MINIMUM_STUDENTS_REQ, Constants.CLASS_MAXIMUM_STUDENTS_REQ)]
         [DisplayName("Minimum students amount")]
-        public int MinimumStudents { get; set; }
+        public int MinStudents { get; set; }
         [Required(ErrorMessage = "Maximum students amount is required")]
         [Range(Constants.CLASS_MINIMUM_STUDENTS_REQ, Constants.CLASS_MAXIMUM_STUDENTS_REQ)]
         [DisplayName("Maximum students amount")]
-        public int MaximumStudents { get; set; }
-        [Required(ErrorMessage = "Assign teacher id is required")]
-        [DisplayName("Assign teacher id")]
-        public int TeacherId { get; set; }
-        [Required(ErrorMessage = "Assign course id is required")]
-        [Range(1, int.MaxValue)]
-        [DisplayName("Assign course id")]
-        public int CourseId { get; set; }
+        public int MaxStudents { get; set; }
+        [Required(ErrorMessage = "Assign teacher name is required")]
+        [DisplayName("Assign teacher name")]
+        public string TeacherName { get; set; } = null!;
+        [Required(ErrorMessage = "Assign course name is required")]
+        [DisplayName("Assign course name")]
+        public string CourseName { get; set; } = null!;
         [Required(ErrorMessage = "Class start date is required")]
         [DisplayName("Class start date")]
         [DataType(DataType.DateTime)]

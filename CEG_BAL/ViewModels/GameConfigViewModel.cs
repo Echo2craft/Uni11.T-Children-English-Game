@@ -9,7 +9,6 @@ namespace CEG_BAL.ViewModels
 {
     public class GameConfigViewModel
     {
-        public int? GameConfigId { get; set; }
         public string Title { get; set; } = null!;
 
         public int? Point { get; set; }

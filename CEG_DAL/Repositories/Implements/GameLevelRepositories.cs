@@ -18,14 +18,12 @@ namespace CEG_DAL.Repositories.Implements
             _dbContext = dbContext;
         }
 
-        public async Task<GameLevel?> GetByIdNoTracking(int id)
+        public async Task<GameLevel> GetByIdNoTracking(int id)
         {
-            return await _dbContext.GameLevels
-                .AsNoTrackingWithIdentityResolution()
-                .SingleOrDefaultAsync(level => level.GameLevelId == id);
+            return await _dbContext.GameLevels.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(level => level.GameLevelId == id);
         }
 
-        public async Task<List<GameLevel>> GetList()
+        public async Task<List<GameLevel>> GetGameLevelsList()
         {
             return await _dbContext.GameLevels.ToListAsync();
         }

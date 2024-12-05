@@ -11,15 +11,15 @@ namespace CEG_BAL.ViewModels
     {
         public int? TotalPoint { get; set; }
 
-        public int StudentId { get; set; }
+        public int? StudentId { get; set; }
 
         public TimeOnly? Playtime { get; set; }
 
-        public ClassViewModel? Class { get; set; }
+        public ClassViewModel Class { get; set; } = null!;
 
         public List<HomeworkResultViewModel> HomeworkResults { get; set; } = new List<HomeworkResultViewModel>();
 
-        public StudentViewModel? Student { get; set; }
+        public StudentViewModel Student { get; set; } = null!;
 
         public List<StudentHomeworkViewModel> StudentHomeworks { get; set; } = new List<StudentHomeworkViewModel>();
     }

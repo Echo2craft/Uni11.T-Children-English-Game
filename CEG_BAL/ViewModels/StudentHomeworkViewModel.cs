@@ -9,12 +9,6 @@ namespace CEG_BAL.ViewModels
 {
     public class StudentHomeworkViewModel
     {
-        public int HomeworkId { get; set; }
-
-        public int StudentProgressId { get; set; }
-
-        public int HomeworkResultId { get; set; }
-
         public int Point { get; set; }
 
         public TimeOnly? Playtime { get; set; }

@@ -257,13 +257,13 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateSchedule(
-            [FromBody][Required] CreateNewSchedule newSch
+            [FromBody][Required] CreateNewSchedule newSchedule
             )
         {
             try
             {
-                var isClassExistOrEditable = await _classService.IsEditableById(newSch.ClassId);
-                if (!isClassExistOrEditable)
+                var resultClassName = await _classService.IsClassEditableById(newSchedule.ClassId);
+                if (!resultClassName)
                 {
                     return BadRequest(new
                     {
@@ -271,8 +271,8 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Class not found or not in Editable state."
                     });
                 }
-                var getSession = await _sessionService.GetSessionById(newSch.SessionId);
-                if (getSession == null)
+                var resultSessionName = await _sessionService.GetSessionById(newSchedule.SessionId);
+                if (resultSessionName == null)
                 {
                     return BadRequest(new
                     {
@@ -280,7 +280,8 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Session not found."
                     });
                 }
-                await _scheduleService.Create(newSch);
+                ScheduleViewModel clas = new ScheduleViewModel();
+                _scheduleService.Create(clas, newSchedule);
                 return Ok(new
                 {
                     Data = true,

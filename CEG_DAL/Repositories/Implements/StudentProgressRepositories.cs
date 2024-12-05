@@ -23,9 +23,9 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.StudentProgresses.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(pro => pro.StudentProgressId == id);
         }
 
-        public async Task<List<StudentProgress>> GetList()
+        public async Task<List<StudentProgress>> GetStudentProgressList()
         {
-            return await _dbContext.StudentProgresses.AsNoTrackingWithIdentityResolution().ToListAsync();
+            return await _dbContext.StudentProgresses.ToListAsync();
         }
     }
 }

@@ -10,8 +10,6 @@ namespace CEG_BAL.ViewModels
     public class GameViewModel
     {
 
-        public int? GameConfigId { get; set; }
-
         public string? DownloadLink { get; set; }
 
         public string Title { get; set; } = null!;
@@ -22,7 +20,7 @@ namespace CEG_BAL.ViewModels
 
         public string? Type { get; set; }
 
-        public GameConfigViewModel? GameConfig { get; set; }
+        public GameConfigViewModel GameConfig { get; set; } = null!;
 
         public List<GameLevelViewModel> GameLevels { get; set; } = new List<GameLevelViewModel>();
     }

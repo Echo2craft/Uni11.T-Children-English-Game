@@ -11,7 +11,7 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface IScheduleService
     {
-        Task Create(CreateNewSchedule newSch);
+        void Create(ScheduleViewModel scheduleModel, CreateNewSchedule newSchedule);
         void Update(ScheduleViewModel scheduleModel, UpdateSchedule newSchedule);
         void UpdateStatus(int id, string status);
         Task<List<ScheduleViewModel>> GetList();

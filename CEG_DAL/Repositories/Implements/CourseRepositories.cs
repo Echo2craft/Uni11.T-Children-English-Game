@@ -83,7 +83,6 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<List<Course>?> GetListByStatus(string status)
         {
             return await _dbContext.Courses
-                .AsNoTrackingWithIdentityResolution()
                 .Where(c => c.Status == status)
                 .Select(c => new Course()
                 {
@@ -123,8 +122,9 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<int> GetIdByName(string name)
         {
-            var result = await _dbContext.Courses.Where(c => c.CourseName == name).Select(c => c.CourseId).FirstOrDefaultAsync();
-            return result;
+            var result = await (from c in _dbContext.Courses where c.CourseName == name select c).FirstOrDefaultAsync();
+            if (result != null) return result.CourseId;
+            return 0;
         }
 
         public async Task<string?> GetStatusByHomeworkIdNoTracking(int homeworkId)

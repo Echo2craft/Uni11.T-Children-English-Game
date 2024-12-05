@@ -7,7 +7,6 @@ using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace CEG_BAL.Services.Implements
@@ -31,50 +30,61 @@ namespace CEG_BAL.Services.Implements
             _configuration = configuration;
         }
 
-        public async Task Create(CreateNewClass newCla)
+        public void Create(ClassViewModel classModel, CreateNewClass newClass)
         {
-            if (newCla == null)
-                throw new ArgumentNullException(nameof(newCla), "The new class info cannot be null.");
-
-            var cla = new Class
+            var clas = _mapper.Map<Class>(classModel);
+            if (newClass != null)
             {
-                Status = Constants.CLASS_STATUS_DRAFT
-            };
-            _mapper.Map(newCla, cla);
-            foreach(var schedule in cla.Schedules)
-            {
-                schedule.EndTime = schedule.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(schedule.SessionId)).Hours.Value);
+                clas.ClassName = newClass.ClassName;
+                clas.TeacherId = _unitOfWork.TeacherRepositories.GetByFullname(newClass.TeacherName).Result.TeacherId;
+                clas.CourseId = _unitOfWork.CourseRepositories.GetIdByName(newClass.CourseName).Result;
+                clas.StartDate = newClass.StartDate;
+                clas.EndDate = newClass.EndDate;
+                clas.MinimumStudents = newClass.MinStudents;
+                clas.MaximumStudents = newClass.MaxStudents;
+                clas.EnrollmentFee = newClass.EnrollmentFee;
+                clas.Status = "Draft";
+                clas.Schedules = _mapper.Map<List<Schedule>>(newClass.Schedules);
+                foreach(var schedule in clas.Schedules)
+                {
+                    schedule.Status = "Draft";
+                    schedule.StartTime = schedule.ScheduleDate.HasValue ? TimeOnly.FromDateTime(schedule.ScheduleDate.Value) : default;
+                    schedule.EndTime = schedule.StartTime.Value.AddHours(_unitOfWork.SessionRepositories.GetByIdNoTracking(schedule.SessionId).Result.Hours.Value);
+                }
+                /*if (newClass.WeeklySchedule != null)
+                {
+                    var sessionList = _unitOfWork.SessionRepositories.GetSessionListByCourseId(clas.CourseId).Result;
+                    if (sessionList.Count > 0 && clas.StartDate.HasValue)
+                    {
+                        // Extract logic to handle different schedules into a helper function
+                        // AssignSchedulesBasedOnDays(newClass.WeeklySchedule, clas.StartDate.Value.DayOfWeek, clas, sessionList, newClass.StartDate, sessionList.Select(s => s.Hours).ToList());
+                    }
+                }*/
             }
-
-            // Save to the database
-            try
-            {
-                _unitOfWork.ClassRepositories.Create(cla);
-                _unitOfWork.Save();
-            }
-            catch (Exception ex)
-            {
-                // Log exception (if logging is configured)
-                throw new Exception("An error occurred while creating the class info.", ex);
-            }
+            _unitOfWork.ClassRepositories.Create(clas);
+            _unitOfWork.Save();
         }
-        /// <summary>
-        /// Get Class Info by Class id. 
-        /// int id, class id to be use to query. 
-        /// bool includeTeacher = true, determine whether if the query should include teacher info. 
-        /// bool includeCourse = true, determine whether if the query should include course info. 
-        /// bool includeSession = false, determine whether if the query should include course's sessions info. 
-        /// bool filterSession = false, determine whether if the query should include filter session infos to only contain unscheduled session. 
-        /// </summary>
-        /// <param name="id">Class id</param>
-        /// <param name="includeTeacher">Default: false, determine whether if the query should include teacher info</param>
-        /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
-        /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
-        /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
-        public async Task<ClassViewModel?> GetById(int id, bool includeTeacher = true, bool includeCourse = true, bool includeSession = false, bool filterSession = false)
+
+        public async Task<ClassViewModel?> GetClassById(int id)
         {
-            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id, includeTeacher: includeTeacher, includeCourse: includeCourse, includeSession: includeSession, filterSession: filterSession);
-            return clas != null ? _mapper.Map<ClassViewModel>(clas) : null;
+            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id, true, true);
+            if (clas != null)
+            {
+                var c = _mapper.Map<ClassViewModel>(clas);
+                return c;
+            }
+            return null;
+        }
+
+        public async Task<ClassViewModel?> GetByIdAdmin(int id)
+        {
+            var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id, true, true, true, true);
+            if (clas != null)
+            {
+                var c = _mapper.Map<ClassViewModel>(clas);
+                return c;
+            }
+            return null;
         }
 
         public async Task<ClassViewModel?> GetByIdParent(int id)
@@ -88,20 +98,14 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
-        public async Task<ClassViewModel?> GetByClassName(string className)
-        {
-            var clas = await _unitOfWork.ClassRepositories.GetByClassName(className);
-            return clas != null ? _mapper.Map<ClassViewModel>(clas) : null;
-        }
-
         public async Task<List<ClassViewModel>> GetClassList()
         {
-            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetList());
+            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassList());
         }
 
-        public async Task<List<GetClassForTransaction>> GetOptionListByStatusOpen()
+        public async Task<List<GetClassForTransaction>> GetClassOptionListByStatusOpen()
         {
-            return _mapper.Map<List<GetClassForTransaction>>(await _unitOfWork.ClassRepositories.GetOptionListByStatusOpen());
+            return _mapper.Map<List<GetClassForTransaction>>(await _unitOfWork.ClassRepositories.GetClassOptionListByStatusOpen());
         }
 
         public async Task<List<ClassViewModel>> GetListAdmin()
@@ -114,42 +118,38 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassListParent());
         }
 
-        public async Task<List<ClassViewModel>> GetListByTeacherAccountId(int id)
+        public async Task<List<ClassViewModel>> GetClassListByTeacherAccountId(int id)
         {
             var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
-            if (teacherId == 0) return new List<ClassViewModel>();
-            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByTeacherId(teacherId));
+            if (teacherId == 0) return null;
+            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetClassListByTeacherId(teacherId));
         }
-        public async Task Update(int claId, UpdateClass upCla)
+
+        public void Update(ClassViewModel classModel)
         {
-            if (upCla == null)
-                throw new ArgumentNullException(nameof(upCla), "update class info cannot be null.");
-
-            // Fetch the existing record
-            var cla = await _unitOfWork.ClassRepositories.GetByIdNoTracking(claId)
-                ?? throw new KeyNotFoundException("Class not found.");
-
-            // Map changes from the update model to the entity
-            _mapper.Map(upCla, cla);
-
-            // Reattach entity and mark it as modified
-            _unitOfWork.ClassRepositories.Update(cla);
-
-            // Save changes
-            try
+            var clas = _mapper.Map<Class>(classModel);
+            _unitOfWork.ClassRepositories.Update(clas);
+            _unitOfWork.Save();
+        }
+        public void Update(ClassViewModel classModel, UpdateClass classNewModel)
+        {
+            var mainClass = _mapper.Map<Class>(classModel);
+            if (classNewModel != null)
             {
-                _unitOfWork.Save();
+                mainClass.TeacherId = _unitOfWork.TeacherRepositories.GetByFullname(classNewModel.TeacherName).Result.TeacherId;
+                mainClass.ClassName = classNewModel.ClassName;
+                mainClass.MinimumStudents = classNewModel.MinimumStudents;
+                mainClass.MaximumStudents = classNewModel.MaximumStudents;
+                mainClass.StartDate = classNewModel.StartDate;
+                mainClass.EndDate = classNewModel.EndDate;
+                mainClass.EnrollmentFee = classNewModel.EnrollmentFee;
             }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                // Handle concurrency issues (e.g., row modified by another user)
-                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
-            }
-            catch (Exception ex)
-            {
-                // Log and rethrow unexpected exceptions
-                throw new Exception("An unexpected error occurred while updating the class.", ex);
-            }
+            mainClass.CourseId = mainClass.Course.CourseId;
+            mainClass.Schedules = null;
+            mainClass.Course = null;
+            mainClass.Teacher = null;
+            _unitOfWork.ClassRepositories.Update(mainClass);
+            _unitOfWork.Save();
         }
 
         public void UpdateStatus(int classId, string classStatus)
@@ -167,10 +167,50 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
         }
 
-        public async Task<bool> IsEditableById(int id)
+        public async Task<bool> IsClassEditableById(int id)
         {
             var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id);
-            return clas != null && (clas.Status.Equals(Constants.CLASS_STATUS_DRAFT) || clas.Status.Equals(Constants.CLASS_STATUS_POSTPONED));
+            if (clas != null && (clas.Status.Equals(Constants.CLASS_STATUS_DRAFT) || clas.Status.Equals(Constants.CLASS_STATUS_POSTPONED))) return true;
+            return false;
         }
+
+        // Helper Function to handle schedule assignment
+        /*private void AssignSchedulesBasedOnDays(string scheduleType, DayOfWeek startDay, Class clas, List<Session> sessionList, DateTime startDate, List<int?> sessionHours)
+        {
+            // Define possible day pairs for each schedule type
+            var dayPairs = new Dictionary<string, (DayOfWeek, DayOfWeek)>
+            {
+                { Configurations.Constants.CLASS_SCHEDULE_MONDAY_THURSDAY, (DayOfWeek.Monday, DayOfWeek.Thursday) },
+                { Configurations.Constants.CLASS_SCHEDULE_TUESDAY_FRIDAY, (DayOfWeek.Tuesday, DayOfWeek.Friday) },
+                { Configurations.Constants.CLASS_SCHEDULE_WEDNESDAY_SATURDAY, (DayOfWeek.Wednesday, DayOfWeek.Saturday) }
+            };
+
+            if (!dayPairs.TryGetValue(scheduleType, out (DayOfWeek, DayOfWeek) value))
+                return; // Invalid schedule type
+
+            var (firstDay, secondDay) = value;
+
+            // Only proceed if the start day matches one of the schedule days
+            if (startDay == firstDay || startDay == secondDay)
+            {
+                TimeOnly startTime = TimeOnly.FromDateTime(startDate);
+
+                for (int i = 0; i < sessionList.Count; i++)
+                {
+                    int? sessionDuration = sessionHours[i];
+                    if (sessionDuration.HasValue)
+                    {
+                        clas.Schedules.Add(new Schedule()
+                        {
+                            SessionId = sessionList[i].SessionId,
+                            DayOfWeek = i % 2 == 0 ? firstDay.ToString() : secondDay.ToString(),
+                            StartTime = startTime,
+                            EndTime = startTime.AddHours(sessionDuration.Value),
+                            Status = "Draft"
+                        });
+                    }
+                }
+            }
+        }*/
     }
 }

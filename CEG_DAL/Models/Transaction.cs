@@ -9,7 +9,7 @@ public partial class Transaction
 
     public int ParentId { get; set; }
 
-    public string? VnpayId { get; set; }
+    public string VnpayId { get; set; } = null!;
 
     public int TransactionAmount { get; set; }
 

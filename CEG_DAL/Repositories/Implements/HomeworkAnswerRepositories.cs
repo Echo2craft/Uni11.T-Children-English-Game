@@ -19,39 +19,14 @@ namespace CEG_DAL.Repositories.Implements
             _dbContext = context;
         }
 
-        public async Task<List<HomeworkAnswer>?> GetListByQuestionId(int questionId)
+        public async Task<List<HomeworkAnswer>?> GetAnswerListByQuestionId(int questionId)
         {
-            return await _dbContext.HomeworkAnswers
-                .AsNoTrackingWithIdentityResolution()
-                .Where(answ => answ.HomeworkQuestionId == questionId)
-                .ToListAsync();
-        }
-        public async Task<List<HomeworkAnswer>?> GetListBySessionId(int sessionId)
-        {
-            return await _dbContext.HomeworkAnswers
-                .AsNoTrackingWithIdentityResolution()
-                .Where(
-                    answ => answ.HomeworkQuestion.Homework != null && 
-                            answ.HomeworkQuestion.Homework.SessionId == sessionId
-                )
-                .ToListAsync();
+            return await _dbContext.HomeworkAnswers.AsNoTrackingWithIdentityResolution().Where(answ => answ.HomeworkQuestionId == questionId).ToListAsync();
         }
 
-        public async Task<List<HomeworkAnswer>?> GetListByCourseId(int courseId)
+        public async Task<List<HomeworkAnswer>> GetAnswersList()
         {
-            return await _dbContext.HomeworkAnswers
-                .AsNoTrackingWithIdentityResolution()
-                .Where(
-                    answ => answ.HomeworkQuestion.Homework != null && 
-                            answ.HomeworkQuestion.Homework.Session != null &&
-                            answ.HomeworkQuestion.Homework.Session.CourseId == courseId
-                )
-                .ToListAsync();
-        }
-
-        public async Task<List<HomeworkAnswer>> GetList()
-        {
-            return await _dbContext.HomeworkAnswers.AsNoTrackingWithIdentityResolution().ToListAsync();
+            return await _dbContext.HomeworkAnswers.ToListAsync();
         }
 
         public async Task<HomeworkAnswer?> GetByAnswer(string answer)

@@ -1,7 +1,6 @@
 ﻿using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
-using CEG_BAL.ViewModels.Admin.Get;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -56,22 +55,21 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpGet("All/FullnameOption")]
-        [Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(List<GetTeacherNameOption>), StatusCodes.Status200OK)]
+        [HttpGet("All/Fullname")]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTeacherNameOptionList()
+        public async Task<IActionResult> GetTeacherNameList()
         {
             try
             {
-                var result = await _teacherService.GetTeacherNameOptionList();
+                var result = await _teacherService.GetTeacherNameList();
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Teacher name option list not found."
+                        ErrorMessage = "Teacher Name List Not Found!"
                     });
                 }
                 return Ok(new

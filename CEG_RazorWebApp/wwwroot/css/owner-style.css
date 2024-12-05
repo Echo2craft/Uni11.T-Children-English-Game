@@ -1114,7 +1114,7 @@ html body {
     }
 
     .custom-file label {
-        /*display: block;
+        display: block;
         background-color: #2980b9;
         color: #fff;
         font-size: 18px;
@@ -1122,7 +1122,7 @@ html body {
         width: 250px;
         padding: 10px 0;
         margin: auto;
-        border-radius: 5px;*/
+        border-radius: 5px;
         cursor: pointer;
     }
 

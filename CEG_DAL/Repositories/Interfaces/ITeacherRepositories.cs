@@ -11,7 +11,7 @@ namespace CEG_DAL.Repositories.Interfaces
     public interface ITeacherRepositories : IRepositoryBase<Teacher>
     {
         Task<List<Teacher>> GetTeacherList();
-        Task<List<Teacher>?> GetTeacherNameOptionList();
+        Task<List<string>> GetTeacherNameList();
         Task<Teacher?> GetByIdNoTracking(int id);
         Task<Teacher?> GetByAccountIdNoTracking(int id);
         Task<Teacher?> GetByEmail(string email);
