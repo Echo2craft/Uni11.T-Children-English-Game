@@ -6,6 +6,7 @@ using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace CEG_BAL.Services.Implements
@@ -23,20 +24,29 @@ namespace CEG_BAL.Services.Implements
             _configuration = configuration;
         }
 
-        public void Create(ScheduleViewModel scheduleModel, CreateNewSchedule newSchedule)
+        public async Task Create(CreateNewSchedule newSch)
         {
-            var sche = _mapper.Map<Schedule>(scheduleModel);
-            if (newSchedule != null)
+            if (newSch == null)
+                throw new ArgumentNullException(nameof(newSch), "The new schedule info cannot be null.");
+
+            var sch = new Schedule
             {
-                sche.SessionId = newSchedule.SessionId;
-                sche.ClassId = newSchedule.ClassId;
-                sche.ScheduleDate = newSchedule.ScheduleDate;
-                sche.StartTime = newSchedule.ScheduleDate.HasValue ? TimeOnly.FromDateTime(newSchedule.ScheduleDate.Value) : default;
-                sche.EndTime = sche.StartTime.Value.AddHours(_unitOfWork.SessionRepositories.GetByIdNoTracking(newSchedule.SessionId).Result.Hours.Value);
-                sche.Status = Constants.SCHEDULE_STATUS_DRAFT;
+                Status = CEGConstants.SCHEDULE_STATUS_DRAFT
+            };
+            _mapper.Map(newSch, sch);
+            sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(newSch.SessionId)).Hours.Value);
+
+            // Save to the database
+            try
+            {
+                _unitOfWork.ScheduleRepositories.Create(sch);
+                _unitOfWork.Save();
             }
-            _unitOfWork.ScheduleRepositories.Create(sche);
-            _unitOfWork.Save();
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating the schedule.", ex);
+            }
         }
 
         public async Task<ScheduleViewModel?> GetById(int id)
@@ -65,25 +75,47 @@ namespace CEG_BAL.Services.Implements
             throw new NotImplementedException();
         }
 
-        public Task<List<ScheduleViewModel>> GetListByClassId(int id)
+        public async Task<List<ScheduleViewModel>> GetListByClassId(int claId)
         {
-            throw new NotImplementedException();
+            var schLis = _mapper.Map<List<ScheduleViewModel>>(await _unitOfWork.ScheduleRepositories.GetListByClassId(claId));
+            for (int i = 0; i < schLis.Count; i++)
+            {
+                schLis[i].ScheduleNumber = i + 1;
+            }
+            return schLis;
         }
 
-        public void Update(ScheduleViewModel scheduleModel, UpdateSchedule newSchedule)
+        public async Task Update(int schId, UpdateSchedule upSch)
         {
-            var mainSchedule = _mapper.Map<Schedule>(scheduleModel);
-            if (newSchedule != null)
+            if (upSch == null)
+                throw new ArgumentNullException(nameof(upSch), "New schedule cannot be null.");
+
+            // Fetch the existing record
+            var sch = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(schId)
+                ?? throw new KeyNotFoundException("Schedule not found.");
+
+            // Map changes from the update model to the entity
+            _mapper.Map(upSch, sch);
+            sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(sch.SessionId)).Hours.Value);
+
+            // Reattach entity and mark it as modified
+            _unitOfWork.ScheduleRepositories.Update(sch);
+
+            // Save changes
+            try
             {
-                // mainSchedule.TeacherId = _unitOfWork.TeacherRepositories.GetByFullname(classNewModel.TeacherName).Result.TeacherId;
-                mainSchedule.ScheduleDate = newSchedule.ScheduleDate;
-                mainSchedule.StartTime = newSchedule.ScheduleDate.HasValue ? TimeOnly.FromDateTime(newSchedule.ScheduleDate.Value) : default;
-                mainSchedule.EndTime = mainSchedule.StartTime.Value.AddHours(_unitOfWork.SessionRepositories.GetByIdNoTracking(mainSchedule.SessionId).Result.Hours.Value);
+                _unitOfWork.Save();
             }
-            mainSchedule.Class = null;
-            mainSchedule.Session = null;
-            _unitOfWork.ScheduleRepositories.Update(mainSchedule);
-            _unitOfWork.Save();
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating the student progress.", ex);
+            }
         }
 
         public void UpdateStatus(int id, string status)

@@ -14,6 +14,7 @@
 </head>
 <body>
     <div class="main-content">
+        <div id="alertContainer"></div>
         <div class="main">
             <div class="container-fluid">
                 <div class="row">
@@ -44,7 +45,6 @@
                                     </a>
                                 </li>
                             </ul>
-                            <div id="alertContainer"></div>
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <!-- home1 -->
@@ -316,7 +316,21 @@
                 allowClear: true,
                 width: 'resolve',
                 theme: 'bootstrap4'
-            });
+            })
+            .on('change', function () {
+                var data = $(this).select2('data');
+                // Manually trigger select2:select
+                $(this).trigger({
+                    type: 'select2:select',
+                    params: { data: data }
+                });
+            })
+            .off('select2:select') // Remove previous bindings
+            .on('select2:select', function (e) {
+                var text = $(this).select2('data')[0].text;
+                callApiGetClassNameList(text);
+            })
+            ;
 
             $('#select2-class-name-dropdown').select2({
                 placeholder: 'Select a class for enrollment',
@@ -336,9 +350,9 @@
             .off('select2:select') // Remove previous bindings
             .on('select2:select', function (e) {
                 var selectedData = $(this).select2('data');
-                if (selectedData.length > 0) {
-                    var value = selectedData[0].value;
-                        console.log('Selected:', value);
+                if (selectedData.length > 0 && selectedData[0].text != "No classes available") {
+                    var value = selectedData[0].id;
+                    enrollAmount.set(value);
                 }
             })
             ;
@@ -419,53 +433,57 @@
         });
         $('#createEnrollmentTransactionForm').submit(function (event) {
             event.preventDefault(); // Prevent the form from submitting normally
-            // $('#createScheduleForm').trigger("reset");
-            // Serialize form data
-            var formData = {
-                ParentFullname: $('#select2-parent-fullname-enrollment-dropdown').select2('data')[0].text,
-                StudentFullname: $('#select2-student-fullname-dropdown').select2('data')[0].text,
-                Classname: $('#select2-class-name-dropdown').select2('data')[0].text,
-                TransactionAmount: enrollAmount.getNumber(),
-                TransactionType: $('#createTransaction_TransactionType').val(),
-            };
-            // Send AJAX request
-            $.ajax({
-                url: apiUrl + 'Transaction/GenerateUrl',
-                type: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token// Include the JWT token
-                },
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function (response) {
-                    if (response.status) {
-                        window.location.href = response.data; // Redirect to VNPay
-                    } else {
-                        showAlert('error', "Error: \n" + (response.errorMessage || "Failed to create transaction."));
-                        // alert(response.message || "Failed to create transaction.");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    // Attempt to parse the response text if it is available
-                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
 
-                    // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
-                    // Check if errorResponse.errors exists and is an object
-                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
-                        // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in errorResponse.errors) {
-                            if (errorResponse.errors.hasOwnProperty(field)) {
-                                // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = errorResponse.errors[field].join(", ");
-                                errorMessage += `\n${field}: ${fieldErrors}`;
+            if ($('#select2-class-name-dropdown').select2('data')[0].text != "No classes available"){
+                // Serialize form data
+                var formData = {
+                    ParentFullname: $('#select2-parent-fullname-enrollment-dropdown').select2('data')[0].text,
+                    StudentFullname: $('#select2-student-fullname-dropdown').select2('data')[0].text,
+                    Classname: $('#select2-class-name-dropdown').select2('data')[0].text,
+                    TransactionAmount: enrollAmount.getNumber(),
+                    TransactionType: $('#createTransaction_TransactionType').val(),
+                };
+                // Send AJAX request
+                $.ajax({
+                    url: apiUrl + 'Transaction/Create',
+                    type: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token// Include the JWT token
+                    },
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        if (response.status) {
+                            callApiGetTransactionList();
+                            showAlert('success', "New transaction recorded.");
+                        } else {
+                            showAlert('error', "Error: \n" + (response.errorMessage || "Failed to create transaction."));
+                            // alert(response.message || "Failed to create transaction.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Attempt to parse the response text if it is available
+                        var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                        // Extract the custom error message if it exists
+                        var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                        // Check if errorResponse.errors exists and is an object
+                        if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                            // Loop through each field in the errors object and append to the errorMessage
+                            for (var field in errorResponse.errors) {
+                                if (errorResponse.errors.hasOwnProperty(field)) {
+                                    // Add each error message for the field, joining multiple messages if they exist
+                                    var fieldErrors = errorResponse.errors[field].join(", ");
+                                    errorMessage += `\n${field}: ${fieldErrors}`;
+                                }
                             }
                         }
+                        // Display the error message using your custom showAlert function
+                        showAlert('error', "Error: \n" + errorMessage);
                     }
-                    // Display the error message using your custom showAlert function
-                    showAlert('error', "Error: \n" + errorMessage);
-                }
-            });
+                });
+            }
+            showAlert('error', "Error: \n" + "No class available for registration.");
         });
         function callApiGetParentNameList(){
             // Call API to get the list of parent names
@@ -515,6 +533,7 @@
                     // Check if the status is true
                     if (response.status) {
                         addStudentOptions(response.data);
+
                     } else {
                         showAlert('error', "Error: \n" + response.errorMessage);
                     }
@@ -541,10 +560,10 @@
                 }
             });
         }
-        function callApiGetClassNameList() {
+        function callApiGetClassNameList(studentName) {
             // Call API to get the list of teacher names
             $.ajax({
-                url: apiUrl + 'Class/All/Status/Open', // API endpoint
+                url: apiUrl + 'Class/All/Status/Open?stuFullname=' + studentName, // API endpoint
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true
@@ -599,18 +618,28 @@
             });
             // Refresh the Select2 dropdown to show new options
             $('#select2-student-fullname-dropdown').trigger('change'); // Ensure Select2 is updated
+            callApiGetClassNameList(data[0]);
         }
         function addClassOptions(data) {
-            $('#select2-class-name-dropdown').empty();
-            data.forEach(item => {
-                // Add each item as an option
+            const dropdown = $('#select2-class-name-dropdown');
+            dropdown.empty(); // Clear any existing options
+            if (!data || data.length == 0) {
+                // Add a placeholder option indicating no classes are available
+                let emptyOption = new Option("No classes available", 10000, true, true);
+                dropdown.append(emptyOption);
+            } else {
+                data.forEach(item => {
+                    // Add each item as an option
+                    let newOption = new Option(item.className, item.enrollmentFee, false, false);
+                    dropdown.append(newOption);
+                });
 
-                let newOption = new Option(item.className, item.enrollmentFee, false, false);
-                $('#select2-class-name-dropdown').append(newOption);
-            });
+                // Set the initial value of `enrollAmount` to the first item's enrollment fee
+                enrollAmount.set(data[0].enrollmentFee);
+            }
+
             // Refresh the Select2 dropdown to show new options
-            $('#select2-class-name-dropdown').trigger('change'); // Ensure Select2 is updated
-            enrollAmount.set(data[0].enrollmentFee);
+            dropdown.trigger('change'); // Ensure Select2 is updated
         }
         function getTransactionStatusOptions() {
             var options = ['Processing', 'Completed']; // Example statuses
@@ -636,7 +665,6 @@
                         transactionList = response.data;
                         sessionTable.clear().rows.add(transactionList).draw();
                         callApiGetParentNameList();
-                        callApiGetClassNameList();
                         // $('#createTransaction_TransactionStatus').empty();
                         // $('#createTransaction_TransactionStatus').append(getTransactionStatusOptions());
                     } else {

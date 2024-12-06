@@ -10,11 +10,12 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface ITransactionService
     {
-        Task<int> Create(TransactionViewModel model, CreateTransaction newTran);
+        Task<int> Create(CreateTransaction newTran);
         void Update(TransactionViewModel model);
         Task<List<TransactionViewModel>> GetTransactionList();
         Task<TransactionViewModel?> GetTransactionById(int id);
         Task<List<TransactionViewModel>> GetTransactionByParentAccountId(int id);
         Task<TransactionViewModel?> GetTransactionByVnpayId(string? vnpayId);
+        Task<int> GetTotalAmount();
     }
 }

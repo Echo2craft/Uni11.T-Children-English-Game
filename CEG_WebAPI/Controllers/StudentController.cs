@@ -137,7 +137,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _studentService.GetStudentNameListByParentName(parentName);
+                var result = await _studentService.GetFullnameListByParentName(parentName);
                 if (result == null)
                 {
                     return NotFound(new
@@ -196,6 +196,35 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
+
+        [HttpGet("All/Count/ByParent/{id}")]
+        [Authorize(Roles = "Parent")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetStudentAmountByParent(
+            [FromRoute] int id)
+        {
+            try
+            {
+                var result = await _studentService.GetTotalAmountByParent(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("Account/{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]

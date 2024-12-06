@@ -65,24 +65,16 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("Admin/All")]
+        [HttpGet("All/Count")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassListAdmin()
+        public async Task<IActionResult> GetTotalClassAmount()
         {
             try
             {
-                var result = await _classService.GetListAdmin();
-                if (result == null)
-                {
-                    return NotFound(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Class List Not Found!"
-                    });
-                }
+                var result = await _classService.GetTotalAmount();
                 return Ok(new
                 {
                     Status = true,
@@ -100,7 +92,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Status/Open")]
+        /*[HttpGet("All/Status/Open")]
         [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -108,7 +100,42 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetClassOptionListByStatusOpen();
+                var result = await _classService.GetOptionListByStatusOpen();
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class option list by status Open not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }*/
+
+        [HttpGet("All/Status/Open")]
+        [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassOptionListByStatusOpen(
+            [FromQuery] string stuFullname)
+        {
+            try
+            {
+                var result = await _classService.GetOptionListByStatusOpen(stuFullname);
                 if (result == null)
                 {
                     return NotFound(new
@@ -177,7 +204,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetClassListByTeacherAccountId(id);
+                var result = await _classService.GetListByTeacherAccountId(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -210,7 +237,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetClassById(id);
+                var result = await _classService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -244,7 +271,42 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetByIdAdmin(id);
+                var result = await _classService.GetById(id,true,true,true,true,true);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("Teacher/{id}")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassByIdTeacher([FromRoute] int id)
+        {
+            try
+            {
+                var result = await _classService.GetById(id,true,true,true,true,true);
                 if (result == null)
                 {
                     return NotFound(new
@@ -339,19 +401,19 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/Update/Status")]
+        [HttpPut("{claId}/Update/Status")]
         [Authorize(Roles = "Teacher,Admin")]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateStatus(
-            [FromRoute][Required] int id,
+            [FromRoute][Required] int claId,
             [FromBody][Required] string status
             )
         {
             try
             {
-                var result = await _classService.GetClassById(id);
+                var result = await _classService.GetById(claId);
                 if (result == null)
                 {
                     return NotFound(new
@@ -363,8 +425,8 @@ namespace CEG_WebAPI.Controllers
                 bool isValid = CEG_BAL_Library.IsClassNewStatusValid(result.Status, status);
                 if (isValid)
                 {
-                    _classService.UpdateStatus(id, status);
-                    result = await _classService.GetClassById(id);
+                    await _classService.UpdateStatus(claId, status);
+                    result = await _classService.GetById(claId);
                     return Ok(new
                     {
                         Status = true,
@@ -397,12 +459,12 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] UpdateClass classVM
+            [FromBody][Required] UpdateClass upCla
             )
         {
             try
             {
-                var result = await _classService.GetClassById(id);
+                var result = await _classService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -411,8 +473,17 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Class Does Not Exist!"
                     });
                 }
-                _classService.Update(result,classVM);
-                result = await _classService.GetClassById(id);
+                var resultTeacherName = await _teacherService.IsExistById(upCla.TeacherId);
+                if (!resultTeacherName)
+                {
+                    return BadRequest(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Teacher not found."
+                    });
+                }
+                await _classService.Update(id,upCla);
+                result = await _classService.GetById(id);
                 return Ok(new
                 {
                     Status = true,
@@ -435,12 +506,12 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateClass(
-            [FromBody][Required] CreateNewClass newClass
+            [FromBody][Required] CreateNewClass newCla
             )
         {
             try
             {
-                var resultCourseName = await _courseService.IsCourseAvailableByName(newClass.CourseName);
+                var resultCourseName = await _courseService.IsAvailableById(newCla.CourseId);
                 if (!resultCourseName)
                 {
                     return BadRequest(new
@@ -449,7 +520,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Course not found or course not Available."
                     });
                 }
-                var resultTeacherName = await _teacherService.IsTeacherExistByFullname(newClass.TeacherName);
+                var resultTeacherName = await _teacherService.IsExistById(newCla.TeacherId);
                 if (!resultTeacherName)
                 {
                     return BadRequest(new
@@ -458,16 +529,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Teacher not found."
                     });
                 }
-                /*if (newClass.WeeklySchedule == null || !CEG_BAL_Library.IsClassNewWeeklyScheduleValid(newClass.WeeklySchedule))
-                {
-                    return BadRequest(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Weekly schedule invalid."
-                    });
-                }*/
-                ClassViewModel clas = new ClassViewModel();
-                _classService.Create(clas, newClass);
+                await _classService.Create(newCla);
                 return Ok(new
                 {
                     Data = true,

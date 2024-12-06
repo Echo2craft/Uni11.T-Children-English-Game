@@ -1,15 +1,19 @@
 ﻿using AutoMapper;
+using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Parent;
 using CEG_BAL.ViewModels.Transaction;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Org.BouncyCastle.Asn1.Cmp.Challenge;
 
 namespace CEG_BAL.Services.Implements
 {
@@ -31,24 +35,26 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public async Task<int> Create(TransactionViewModel model, CreateTransaction newTran)
+        public async Task<int> Create(CreateTransaction newTra)
         {
-            var trans = _mapper.Map<Transaction>(model);
-            if (newTran != null)
-            {
-                trans.ParentId = await _unitOfWork.ParentRepositories.GetIdByFullname(newTran.ParentFullname);
-                trans.VnpayId = newTran.VnpayId;
-                trans.TransactionAmount = newTran.TransactionAmount;
-                trans.TransactionDate = DateTime.Now;
-                trans.TransactionStatus = "Completed";
-                trans.TransactionType = newTran.TransactionType;
-                trans.ConfirmDate = DateTime.Now;
-            }
-            _unitOfWork.TransactionRepositories.Create(trans);
-            _unitOfWork.Save();
+            if (newTra == null)
+                throw new ArgumentNullException(nameof(newTra), "The new transaction info cannot be null.");
 
-            model.TransactionId = trans.TransactionId;
-            return trans.TransactionId;
+            var tra = new Transaction();
+            _mapper.Map(newTra, tra);
+            tra.ParentId = await _unitOfWork.ParentRepositories.GetIdByFullname(newTra.ParentFullname);
+            // Save to the database
+            try
+            {
+                _unitOfWork.TransactionRepositories.Create(tra);
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating transaction.", ex);
+            }
+            return tra.TransactionId;
         }
 
         public async Task<List<TransactionViewModel>> GetTransactionList()
@@ -85,6 +91,11 @@ namespace CEG_BAL.Services.Implements
             var pay = _mapper.Map<Transaction>(model);
             _unitOfWork.TransactionRepositories.Update(pay);
             _unitOfWork.Save();
+        }
+
+        public async Task<int> GetTotalAmount()
+        {
+            return await _unitOfWork.TransactionRepositories.GetTotalAmount();
         }
     }
 }

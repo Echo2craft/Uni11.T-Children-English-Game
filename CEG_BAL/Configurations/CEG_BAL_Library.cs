@@ -18,53 +18,53 @@ namespace CEG_BAL.Configurations
             if (currentStatus == null) return false;
             switch (currentStatus)
             {
-                case var value when value.Equals(Constants.COURSE_STATUS_DRAFT):
+                case var value when value.Equals(CEGConstants.COURSE_STATUS_DRAFT):
                     {
                         validStatuses =
                         [
-                            Constants.COURSE_STATUS_AVAILABLE,
-                            Constants.COURSE_STATUS_DRAFT
+                            CEGConstants.COURSE_STATUS_AVAILABLE,
+                            CEGConstants.COURSE_STATUS_DRAFT
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.COURSE_STATUS_AVAILABLE):
+                case var value when value.Equals(CEGConstants.COURSE_STATUS_AVAILABLE):
                     {
                         validStatuses =
                         [
-                            Constants.COURSE_STATUS_AVAILABLE,
-                            Constants.COURSE_STATUS_POSTPONED,
-                            Constants.COURSE_STATUS_CANCELLED,
-                            Constants.COURSE_STATUS_END_OF_SERVICE
+                            CEGConstants.COURSE_STATUS_AVAILABLE,
+                            CEGConstants.COURSE_STATUS_POSTPONED,
+                            CEGConstants.COURSE_STATUS_CANCELLED,
+                            CEGConstants.COURSE_STATUS_END_OF_SERVICE
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.COURSE_STATUS_POSTPONED):
+                case var value when value.Equals(CEGConstants.COURSE_STATUS_POSTPONED):
                     {
                         validStatuses =
                         [
-                            Constants.COURSE_STATUS_POSTPONED,
-                            Constants.COURSE_STATUS_AVAILABLE,
-                            Constants.COURSE_STATUS_CANCELLED,
-                            Constants.COURSE_STATUS_END_OF_SERVICE
+                            CEGConstants.COURSE_STATUS_POSTPONED,
+                            CEGConstants.COURSE_STATUS_AVAILABLE,
+                            CEGConstants.COURSE_STATUS_CANCELLED,
+                            CEGConstants.COURSE_STATUS_END_OF_SERVICE
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.COURSE_STATUS_CANCELLED):
+                case var value when value.Equals(CEGConstants.COURSE_STATUS_CANCELLED):
                     {
                         validStatuses =
                         [
-                            Constants.COURSE_STATUS_CANCELLED,
+                            CEGConstants.COURSE_STATUS_CANCELLED,
                             /*Constants.COURSE_STATUS_AVAILABLE,
                             Constants.COURSE_STATUS_END_OF_SERVICE*/
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.COURSE_STATUS_END_OF_SERVICE):
+                case var value when value.Equals(CEGConstants.COURSE_STATUS_END_OF_SERVICE):
                     {
                         validStatuses =
                         [
-                            Constants.COURSE_STATUS_AVAILABLE,
-                            Constants.COURSE_STATUS_END_OF_SERVICE
+                            CEGConstants.COURSE_STATUS_AVAILABLE,
+                            CEGConstants.COURSE_STATUS_END_OF_SERVICE
                         ];
                         return validStatuses.Contains(newStatus);
                     }
@@ -81,64 +81,64 @@ namespace CEG_BAL.Configurations
             if (currentStatus == null) return false;
             switch (currentStatus)
             {
-                case var value when value.Equals(Constants.CLASS_STATUS_DRAFT):
+                case var value when value.Equals(CEGConstants.CLASS_STATUS_DRAFT):
                     {
                         validStatuses =
                         [
-                            Constants.CLASS_STATUS_OPEN,
-                            Constants.CLASS_STATUS_DRAFT
+                            CEGConstants.CLASS_STATUS_OPEN,
+                            CEGConstants.CLASS_STATUS_DRAFT
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.CLASS_STATUS_OPEN):
+                case var value when value.Equals(CEGConstants.CLASS_STATUS_OPEN):
                     {
                         validStatuses =
                         [
-                            Constants.CLASS_STATUS_OPEN,
-                            Constants.CLASS_STATUS_POSTPONED,
-                            Constants.CLASS_STATUS_CANCELLED,
-                            Constants.CLASS_STATUS_ENDED
+                            CEGConstants.CLASS_STATUS_OPEN,
+                            CEGConstants.CLASS_STATUS_POSTPONED,
+                            CEGConstants.CLASS_STATUS_CANCELLED,
+                            CEGConstants.CLASS_STATUS_ENDED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.CLASS_STATUS_ONGOING):
+                case var value when value.Equals(CEGConstants.CLASS_STATUS_ONGOING):
                     {
                         validStatuses =
                         [
-                            Constants.CLASS_STATUS_ONGOING,
-                            Constants.CLASS_STATUS_POSTPONED,
-                            Constants.CLASS_STATUS_CANCELLED,
-                            Constants.CLASS_STATUS_ENDED
+                            CEGConstants.CLASS_STATUS_ONGOING,
+                            CEGConstants.CLASS_STATUS_POSTPONED,
+                            CEGConstants.CLASS_STATUS_CANCELLED,
+                            CEGConstants.CLASS_STATUS_ENDED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.CLASS_STATUS_POSTPONED):
+                case var value when value.Equals(CEGConstants.CLASS_STATUS_POSTPONED):
                     {
                         validStatuses =
                         [
-                            Constants.CLASS_STATUS_POSTPONED,
-                            Constants.CLASS_STATUS_OPEN,
-                            Constants.CLASS_STATUS_CANCELLED,
-                            Constants.CLASS_STATUS_ENDED
+                            CEGConstants.CLASS_STATUS_POSTPONED,
+                            CEGConstants.CLASS_STATUS_OPEN,
+                            CEGConstants.CLASS_STATUS_CANCELLED,
+                            CEGConstants.CLASS_STATUS_ENDED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.CLASS_STATUS_CANCELLED):
+                case var value when value.Equals(CEGConstants.CLASS_STATUS_CANCELLED):
                     {
                         validStatuses =
                         [
-                            Constants.CLASS_STATUS_CANCELLED,
-                            Constants.CLASS_STATUS_OPEN,
-                            Constants.CLASS_STATUS_ENDED
+                            CEGConstants.CLASS_STATUS_CANCELLED,
+                            CEGConstants.CLASS_STATUS_OPEN,
+                            CEGConstants.CLASS_STATUS_ENDED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.CLASS_STATUS_ENDED):
+                case var value when value.Equals(CEGConstants.CLASS_STATUS_ENDED):
                     {
                         validStatuses =
                         [
-                            Constants.CLASS_STATUS_ENDED,
-                            Constants.CLASS_STATUS_OPEN          
+                            CEGConstants.CLASS_STATUS_ENDED,
+                            CEGConstants.CLASS_STATUS_OPEN          
                         ];
                         return validStatuses.Contains(newStatus);
                     }
@@ -155,48 +155,48 @@ namespace CEG_BAL.Configurations
             if (currentStatus == null) return false;
             switch (currentStatus)
             {
-                case var value when value.Equals(Constants.SCHEDULE_STATUS_DRAFT):
+                case var value when value.Equals(CEGConstants.SCHEDULE_STATUS_DRAFT):
                     {
                         validStatuses =
                         [
-                            Constants.SCHEDULE_STATUS_DRAFT,
-                            Constants.SCHEDULE_STATUS_UPCOMING
+                            CEGConstants.SCHEDULE_STATUS_DRAFT,
+                            CEGConstants.SCHEDULE_STATUS_UPCOMING
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.SCHEDULE_STATUS_UPCOMING):
+                case var value when value.Equals(CEGConstants.SCHEDULE_STATUS_UPCOMING):
                     {
                         validStatuses =
                         [
-                            Constants.SCHEDULE_STATUS_UPCOMING,
-                            Constants.SCHEDULE_STATUS_ONGOING,
-                            Constants.SCHEDULE_STATUS_NAME_CANCELLED
+                            CEGConstants.SCHEDULE_STATUS_UPCOMING,
+                            CEGConstants.SCHEDULE_STATUS_ONGOING,
+                            CEGConstants.SCHEDULE_STATUS_NAME_CANCELLED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.SCHEDULE_STATUS_ONGOING):
+                case var value when value.Equals(CEGConstants.SCHEDULE_STATUS_ONGOING):
                     {
                         validStatuses =
                         [
-                            Constants.SCHEDULE_STATUS_ONGOING,
-                            Constants.SCHEDULE_STATUS_CANCELLED,
-                            Constants.SCHEDULE_STATUS_ENDED
+                            CEGConstants.SCHEDULE_STATUS_ONGOING,
+                            CEGConstants.SCHEDULE_STATUS_CANCELLED,
+                            CEGConstants.SCHEDULE_STATUS_ENDED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.SCHEDULE_STATUS_CANCELLED):
+                case var value when value.Equals(CEGConstants.SCHEDULE_STATUS_CANCELLED):
                     {
                         validStatuses =
                         [
-                            Constants.CLASS_STATUS_CANCELLED
+                            CEGConstants.CLASS_STATUS_CANCELLED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.SCHEDULE_STATUS_ENDED):
+                case var value when value.Equals(CEGConstants.SCHEDULE_STATUS_ENDED):
                     {
                         validStatuses =
                         [
-                            Constants.CLASS_STATUS_ENDED
+                            CEGConstants.CLASS_STATUS_ENDED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
@@ -225,29 +225,29 @@ namespace CEG_BAL.Configurations
             if (currentStatus == null) return false;
             switch (currentStatus)
             {
-                case var value when value.Equals(Constants.ENROLL_STATUS_ENROLLED):
+                case var value when value.Equals(CEGConstants.ENROLL_STATUS_ENROLLED):
                     {
                         validStatuses =
                         [
-                            Constants.ENROLL_STATUS_ENROLLED,
-                            Constants.ENROLL_STATUS_SUSPENDED
+                            CEGConstants.ENROLL_STATUS_ENROLLED,
+                            CEGConstants.ENROLL_STATUS_SUSPENDED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.ENROLL_STATUS_PENDING):
+                case var value when value.Equals(CEGConstants.ENROLL_STATUS_PENDING):
                     {
                         validStatuses =
                         [
-                            Constants.ENROLL_STATUS_PENDING,
-                            Constants.ENROLL_STATUS_ENROLLED
+                            CEGConstants.ENROLL_STATUS_PENDING,
+                            CEGConstants.ENROLL_STATUS_ENROLLED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
-                case var value when value.Equals(Constants.ENROLL_STATUS_SUSPENDED):
+                case var value when value.Equals(CEGConstants.ENROLL_STATUS_SUSPENDED):
                     {
                         validStatuses =
                         [
-                            Constants.ENROLL_STATUS_SUSPENDED
+                            CEGConstants.ENROLL_STATUS_SUSPENDED
                         ];
                         return validStatuses.Contains(newStatus);
                     }

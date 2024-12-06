@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using CEG_BAL.Configurations;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Parent;
+using CEG_BAL.ViewModels.Transaction;
 using CEG_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -208,14 +211,6 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Course, CourseViewModel>()
                 .ReverseMap();
-            CreateMap<Class, ClassViewModel>()
-                .ReverseMap();
-            CreateMap<UpdateClass, Class>();
-            CreateMap<Class, GetClassForTransaction>();
-            CreateMap<Enroll, EnrollViewModel>()
-                .ReverseMap();
-            CreateMap<Schedule, ScheduleViewModel>()
-                .ReverseMap();
             CreateMap<Session, SessionViewModel>()
                 .ReverseMap();
             CreateMap<Homework, HomeworkViewModel>()
@@ -232,18 +227,71 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<HomeworkAnswer, HomeworkAnswerViewModel>()
                 .ReverseMap();
-            CreateMap<Transaction, TransactionViewModel>()
-                .ReverseMap();
-            CreateMap<Schedule, CreateNewSchedule>()
-                .ReverseMap();
             CreateMap<Game, GameViewModel>()
                 .ReverseMap();
             CreateMap<GameLevel, GameLevelViewModel>()
                 .ReverseMap();
+
+            // Teacher
+            CreateMap<Teacher, GetTeacherNameOption>()
+                .AfterMap((src,dest) =>
+                {
+                    dest.TeacherName = src.Account.Fullname;
+                });
+
+            // Class
+            CreateMapforDefaultViewCreateUpdateModel<Class, ClassViewModel, CreateNewClass, UpdateClass>();
+            CreateMap<Class, GetClassForTransaction>();
+
+            // Schedule
+            CreateMap<Schedule, ScheduleViewModel>();
+            CreateMap<CreateNewSchedule, Schedule>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.Status = CEGConstants.SCHEDULE_STATUS_DRAFT;
+                    dest.StartTime = src.ScheduleDate.HasValue ? TimeOnly.FromDateTime(src.ScheduleDate.Value) : default;
+                });
+            CreateMap<UpdateSchedule, Schedule>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.StartTime = src.ScheduleDate.HasValue ? TimeOnly.FromDateTime(src.ScheduleDate.Value) : default;
+                });
+
+            // Enroll
+            CreateMap<Enroll, EnrollViewModel>()
+                .ReverseMap();
+            CreateMap<CreateNewEnroll, Enroll>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.RegistrationDate = DateTime.Now;
+                    dest.EnrolledDate = DateTime.Now;
+                    dest.Status = CEGConstants.ENROLLMENT_STATUS_ENROLLED;
+                });
+
+            // Transaction
+            CreateMap<Transaction, TransactionViewModel>()
+                .ReverseMap();
+            CreateMap<CreateTransaction, Transaction>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.TransactionDate = DateTime.Now;
+                    dest.ConfirmDate = DateTime.Now;
+                    dest.TransactionStatus = CEGConstants.TRANSACTION_STATUS_COMPLETED;
+                });
+
+            // Game Config
             CreateMapforDefaultViewCreateUpdateModel<GameConfig, GameConfigViewModel, CreateNewGameConfig, UpdateGameConfig>();
+
+            // Student Answer
             CreateMapforDefaultViewCreateUpdateModel<StudentAnswer, StudentAnswerViewModel, CreateNewStudentAnswer, UpdateStudentAnswer>();
+
+            // Student Progress
             CreateMapforDefaultViewCreateUpdateModel<StudentProgress, StudentProgressViewModel, CreateNewStudentProgress, UpdateStudentProgress>();
+
+            // Student Homework
             CreateMapforDefaultViewCreateUpdateModel<StudentHomework, StudentHomeworkViewModel, CreateNewStudentHomework, UpdateStudentHomework>();
+
+            // Homework Result
             CreateMapforDefaultViewCreateUpdateModel<HomeworkResult, HomeworkResultViewModel, CreateNewHomeworkResult, UpdateHomeworkResult>();
         }
         /// <summary>

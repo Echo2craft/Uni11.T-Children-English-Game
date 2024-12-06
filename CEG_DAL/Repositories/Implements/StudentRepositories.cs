@@ -40,7 +40,7 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<string>> GetStudentNameListByParentName(string parentName)
+        public async Task<List<string>?> GetFullnameListByParentName(string parentName)
         {
             return await _dbContext.Students
                 .AsNoTrackingWithIdentityResolution()
@@ -163,6 +163,11 @@ namespace CEG_DAL.Repositories.Implements
                 .Where(stu => stu.AccountId == id)
                 .Select(e => e.StudentId)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<int> GetTotalAmountByParent(int id)
+        {
+            return await _dbContext.Students.Where(s => s.ParentId == id).CountAsync();
         }
     }
 }

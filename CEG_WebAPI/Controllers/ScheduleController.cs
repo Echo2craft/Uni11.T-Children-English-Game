@@ -219,7 +219,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] UpdateSchedule scheduleVM
+            [FromBody][Required] UpdateSchedule upSch
             )
         {
             try
@@ -233,7 +233,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Schedule Does Not Exist!"
                     });
                 }
-                _scheduleService.Update(result, scheduleVM);
+                await _scheduleService.Update(id,upSch);
                 result = await _scheduleService.GetById(id);
                 return Ok(new
                 {
@@ -257,13 +257,13 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateSchedule(
-            [FromBody][Required] CreateNewSchedule newSchedule
+            [FromBody][Required] CreateNewSchedule newSch
             )
         {
             try
             {
-                var resultClassName = await _classService.IsClassEditableById(newSchedule.ClassId);
-                if (!resultClassName)
+                var isClassExistOrEditable = await _classService.IsEditableById(newSch.ClassId);
+                if (!isClassExistOrEditable)
                 {
                     return BadRequest(new
                     {
@@ -271,8 +271,8 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Class not found or not in Editable state."
                     });
                 }
-                var resultSessionName = await _sessionService.GetSessionById(newSchedule.SessionId);
-                if (resultSessionName == null)
+                var getSession = await _sessionService.GetSessionById(newSch.SessionId);
+                if (getSession == null)
                 {
                     return BadRequest(new
                     {
@@ -280,8 +280,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Session not found."
                     });
                 }
-                ScheduleViewModel clas = new ScheduleViewModel();
-                _scheduleService.Create(clas, newSchedule);
+                await _scheduleService.Create(newSch);
                 return Ok(new
                 {
                     Data = true,

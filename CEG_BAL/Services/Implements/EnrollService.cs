@@ -31,50 +31,52 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public void Create(EnrollViewModel model, CreateNewEnroll newEn)
+        public async Task Create(CreateNewEnroll newEn)
         {
-            var c = _unitOfWork.ClassRepositories.GetByClassName(newEn.ClassName).Result;
-            var s = _unitOfWork.StudentRepositories.GetByFullname(newEn.StudentName).Result;
-            var t = _unitOfWork.TransactionRepositories.GetById(newEn.TransactionId);
+            if (newEn == null)
+                throw new ArgumentNullException(nameof(newEn), "The new enrollment info cannot be null.");
 
-            var en = _mapper.Map<Enroll>(model);
-            if (newEn != null)
+            var cla = 
+                await _unitOfWork.ClassRepositories.GetByClassName(newEn.ClassName) ?? 
+                throw new ArgumentNullException(newEn.ClassName, "Class info not found.");
+            var stu = await _unitOfWork.StudentRepositories.GetByFullname(newEn.StudentName) ??
+                throw new ArgumentNullException(newEn.StudentName, "Student info not found.");
+            var tra = await _unitOfWork.TransactionRepositories.GetByIdNoTracking(newEn.TransactionId) ??
+                throw new ArgumentNullException(newEn.TransactionId.ToString(), "Transaction info not found.");
+
+            var enr = new Enroll();
+            _mapper.Map(newEn, enr);
+            enr.ClassId = cla.ClassId;
+            enr.StudentId = stu.StudentId;
+
+            // Save to the database
+            try
             {
-                en.ClassId = c.ClassId;
-                en.StudentId = s.StudentId;
-                en.TransactionId = t.TransactionId;
-                en.RegistrationDate = DateTime.Now;
-                en.EnrolledDate = DateTime.Now;
-                en.Status = "Enrolled";
-                //en.Class = c;
-                //en.Student = s;
-                //en.Transaction = t;
+                _unitOfWork.EnrollRepositories.Create(enr);
+                _unitOfWork.Save();
             }
-            _unitOfWork.EnrollRepositories.Create(en);
-            _unitOfWork.Save();
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating enrollment.", ex);
+            }
         }
 
-        public async Task<EnrollViewModel> GetEnrollById(int id)
+        public async Task<EnrollViewModel?> GetById(int id)
         {
             var user = await _unitOfWork.EnrollRepositories.GetByIdNoTracking(id);
-            if (user != null)
-            {
-                var urs = _mapper.Map<EnrollViewModel>(user);
-                return urs;
-            }
-            return null;
+            return user == null ? null : _mapper.Map<EnrollViewModel>(user);
         }
 
-        public async Task<List<EnrollViewModel>> GetEnrollsList()
+        public async Task<List<EnrollViewModel>> GetList()
         {
-            return _mapper.Map<List<EnrollViewModel>>(await _unitOfWork.EnrollRepositories.GetEnrollsList());
+            return _mapper.Map<List<EnrollViewModel>>(await _unitOfWork.EnrollRepositories.GetList());
         }
 
-        public async Task<List<EnrollViewModel>> GetEnrollByParentAccountId(int id)
+        public async Task<List<EnrollViewModel>?> GetEnrollByParentAccountId(int id)
         {
             var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
-            if (parentId == 0) return null;
-            return _mapper.Map<List<EnrollViewModel>>(await _unitOfWork.EnrollRepositories.GetEnrollByParentId(parentId));
+            return parentId == 0 ? null : _mapper.Map<List<EnrollViewModel>>(await _unitOfWork.EnrollRepositories.GetEnrollByParentId(parentId));
         }
 
         public void Update(EnrollViewModel model)
@@ -90,6 +92,12 @@ namespace CEG_BAL.Services.Implements
             enr.Status = enrollStatus;
             _unitOfWork.EnrollRepositories.Update(enr);
             _unitOfWork.Save();
+        }
+
+        public async Task<EnrollViewModel?> GetByStudentFullnameAndClassName(string stuFullname, string claName)
+        {
+            var existEnr = await _unitOfWork.EnrollRepositories.GetByStudentFullnameAndClassName(stuFullname,claName);
+            return existEnr != null ? _mapper.Map<EnrollViewModel>(existEnr) : null;
         }
     }
 }
