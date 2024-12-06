@@ -22,7 +22,7 @@
                 </div>
                 <div>
                     <div id="account-amount">0</div>
-                    <div class="cardName ">Accounts</div>
+                    <div class="cardName">Accounts</div>
                 </div>
             </div>
             <div class="card feedback">
@@ -60,10 +60,12 @@
     var token = sessionStorage.getItem('token');
     var apiUrl = sessionStorage.getItem('apiUrl');
     $(document).ready(function () {
-        callApiGetClassDetail();
-        callApiGetCourseDetail();
+        callApiGetAccountCount();
+        callApiGetCourseCount();
+        callApiGetClassCount();
+        callApiGetTransactionCount();
     });
-    function callApiGetClassDetail() {
+    function callApiGetAccountCount() {
         $.ajax({
             url: apiUrl + 'Account/All/Count', // API endpoint
             type: 'GET',
@@ -119,7 +121,7 @@
             }
         });
     }
-    function callApiGetCourseDetail() {
+    function callApiGetCourseCount() {
         $.ajax({
             url: apiUrl + 'Course/All/Count', // API endpoint
             type: 'GET',
@@ -131,6 +133,82 @@
                 if (response.status) {
                     $('#course-amount').empty();
                     $('#course-amount').text(response.data);
+                } else {
+                    showAlert('error', "Error: \n" + response.errorMessage);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Attempt to parse the response text if it is available
+                var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                // Extract the custom error message if it exists
+                var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                // Check if errorResponse.errors exists and is an object
+                if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                    // Loop through each field in the errors object and append to the errorMessage
+                    for (var field in errorResponse.errors) {
+                        if (errorResponse.errors.hasOwnProperty(field)) {
+                            // Add each error message for the field, joining multiple messages if they exist
+                            var fieldErrors = errorResponse.errors[field].join(", ");
+                            errorMessage += `\n${field}: ${fieldErrors}`;
+                        }
+                    }
+                }
+                // Display the error message using your custom showAlert function
+                showAlert('error', "Error: \n" + errorMessage);
+            }
+        });
+    }
+    function callApiGetClassCount() {
+        $.ajax({
+            url: apiUrl + 'Class/All/Count', // API endpoint
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token, // Token for authentication
+            },
+            success: function (response) {
+                // Check if the status is true
+                if (response.status) {
+                    $('#class-amount').empty();
+                    $('#class-amount').text(response.data);
+                } else {
+                    showAlert('error', "Error: \n" + response.errorMessage);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Attempt to parse the response text if it is available
+                var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                // Extract the custom error message if it exists
+                var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                // Check if errorResponse.errors exists and is an object
+                if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                    // Loop through each field in the errors object and append to the errorMessage
+                    for (var field in errorResponse.errors) {
+                        if (errorResponse.errors.hasOwnProperty(field)) {
+                            // Add each error message for the field, joining multiple messages if they exist
+                            var fieldErrors = errorResponse.errors[field].join(", ");
+                            errorMessage += `\n${field}: ${fieldErrors}`;
+                        }
+                    }
+                }
+                // Display the error message using your custom showAlert function
+                showAlert('error', "Error: \n" + errorMessage);
+            }
+        });
+    }
+    function callApiGetTransactionCount() {
+        $.ajax({
+            url: apiUrl + 'Transaction/All/Count', // API endpoint
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token, // Token for authentication
+            },
+            success: function (response) {
+                // Check if the status is true
+                if (response.status) {
+                    $('#transaction-amount').empty();
+                    $('#transaction-amount').text(response.data);
                 } else {
                     showAlert('error', "Error: \n" + response.errorMessage);
                 }

@@ -164,5 +164,10 @@ namespace CEG_DAL.Repositories.Implements
                 .Select(e => e.StudentId)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<int> GetTotalAmountByParent(int id)
+        {
+            return await _dbContext.Students.Where(s => s.ParentId == id).CountAsync();
+        }
     }
 }

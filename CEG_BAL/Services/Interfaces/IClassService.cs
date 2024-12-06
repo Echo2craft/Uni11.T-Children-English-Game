@@ -43,5 +43,6 @@ namespace CEG_BAL.Services.Interfaces
         Task<ClassViewModel?> GetByIdParent(int id);
         Task<ClassViewModel?> GetByClassName(string className);
         Task<bool> IsEditableById(int id);
+        Task<int> GetTotalAmount();
     }
 }

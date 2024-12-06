@@ -167,5 +167,12 @@ namespace CEG_BAL.Services.Implements
 
             return age;
         }
+
+        public async Task<int> GetTotalAmountByParent(int id)
+        {
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            if (parentId == 0) throw new Exception("Parent not found.");
+            return await _unitOfWork.StudentRepositories.GetTotalAmountByParent(parentId);
+        }
     }
 }
