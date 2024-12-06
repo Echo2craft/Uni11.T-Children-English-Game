@@ -27,12 +27,16 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Enroll>> GetList()
         {
-            return await _dbContext.Enrolls.ToListAsync();
+            return await _dbContext.Enrolls
+                .AsNoTrackingWithIdentityResolution()
+                .ToListAsync();
         }
 
         public async Task<List<Enroll>> GetEnrollByParentId(int parentId)
         {
-            return await _dbContext.Enrolls.Where(e => e.Student.ParentId == parentId)
+            return await _dbContext.Enrolls
+                .AsNoTrackingWithIdentityResolution()
+                .Where(e => e.Student.ParentId == parentId)
                 .Select(e => new Enroll
                 {
                     EnrollId = e.EnrollId,
@@ -89,6 +93,14 @@ namespace CEG_DAL.Repositories.Implements
                     Transaction = e.Transaction
                 })
                 .ToListAsync();
+        }
+
+        public async Task<Enroll?> GetByStudentFullnameAndClassName(string stuFullName, string claName)
+        {
+            return await _dbContext.Enrolls
+                .AsNoTrackingWithIdentityResolution()
+                .Where(enr => enr.Class.ClassName == claName && enr.Student.Account.Fullname == stuFullName).
+                SingleOrDefaultAsync();
         }
     }
 }

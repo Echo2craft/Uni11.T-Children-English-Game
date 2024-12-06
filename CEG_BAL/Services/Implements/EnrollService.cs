@@ -93,5 +93,11 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.EnrollRepositories.Update(enr);
             _unitOfWork.Save();
         }
+
+        public async Task<EnrollViewModel?> GetByStudentFullnameAndClassName(string stuFullname, string claName)
+        {
+            var existEnr = await _unitOfWork.EnrollRepositories.GetByStudentFullnameAndClassName(stuFullname,claName);
+            return existEnr != null ? _mapper.Map<EnrollViewModel>(existEnr) : null;
+        }
     }
 }

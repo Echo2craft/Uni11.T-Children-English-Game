@@ -246,12 +246,13 @@ namespace CEG_WebAPI.Controllers
                 }
                 if (newTra.TransactionType.Equals(CEGConstants.TRANSACTION_TYPE_ENROLLMENT))
                 {
-                    if (!classObj.Exists(clas => clas.ClassName.Equals(newTra.ClassName)))
+                    var existEnr = await _enrollService.GetByStudentFullnameAndClassName(newTra.StudentFullname, newTra.ClassName);
+                    if (existEnr != null)
                     {
-                        return NotFound(new
+                        return BadRequest(new
                         {
                             Status = false,
-                            ErrorMessage = "Class not found or not Open for Enrollment."
+                            ErrorMessage = "Student has already enrolled to this class."
                         });
                     }
                 }
