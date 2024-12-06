@@ -1,4 +1,5 @@
-﻿using CEG_BAL.Services.Implements;
+﻿using CEG_BAL.Configurations;
+using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Parent;
@@ -175,12 +176,12 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GeneratePaymentUrl(
-            [FromBody][Required] TransactionRequest request
+            [FromBody][Required] TransactionRequest newTraReq
             )
         {
             try
             {
-                var parentObj = await _parentService.IsParentExistByFullname(request.ParentFullname);
+                var parentObj = await _parentService.IsExistByFullname(newTraReq.ParentFullname);
                 if(!parentObj)
                 {
                     return NotFound(new
@@ -189,8 +190,8 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Parent not found."
                     });
                 }
-                var studentObj = await _studentService.GetStudentNameListByParentName(request.ParentFullname);
-                if (!studentObj.Contains(request.StudentFullname))
+                var studentObj = await _studentService.GetFullnameListByParentName(newTraReq.ParentFullname);
+                if (!studentObj.Contains(newTraReq.StudentFullname))
                 {
                     return NotFound(new
                     {
@@ -199,7 +200,7 @@ namespace CEG_WebAPI.Controllers
                     });
                 }
                 var classObj = await _classService.GetOptionListByStatusOpen();
-                if (!classObj.Exists(clas => clas.ClassName.Equals(request.Classname)))
+                if (!classObj.Exists(clas => clas.ClassName.Equals(newTraReq.Classname)))
                 {
                     return NotFound(new
                     {
@@ -207,7 +208,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Class not found or not Open for Enrollment."
                     });
                 }
-                var result = _vnpayService.CreatePaymentUrl(request);
+                var result = _vnpayService.CreatePaymentUrl(newTraReq);
                 if (result == null)
                 {
                     return BadRequest(new
@@ -239,11 +240,11 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateTransaction(
-            [Required][FromBody] CreateTransaction newTran)
+            [Required][FromBody] CreateTransaction newTra)
         {
             try
             {
-                var resultParentName = await _parentService.IsParentExistByFullname(newTran.ParentFullname);
+                var resultParentName = await _parentService.IsExistByFullname(newTra.ParentFullname);
                 if (!resultParentName)
                 {
                     return BadRequest(new
@@ -252,18 +253,46 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Parent not found."
                     });
                 }
-                TransactionViewModel tran = new TransactionViewModel();
-                var tranId = await _transactionService.Create(tran, newTran);
-                if (newTran.TransactionType.Equals("Enrollment"))
+                var studentObj = await _studentService.GetFullnameListByParentName(newTra.ParentFullname);
+                if (!studentObj.Contains(newTra.StudentFullname))
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Student not found."
+                    });
+                }
+                var classObj = await _classService.GetOptionListByStatusOpen();
+                if (!classObj.Exists(clas => clas.ClassName.Equals(newTra.ClassName)))
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class not found or not Open for Enrollment."
+                    });
+                }
+                if (newTra.TransactionType.Equals(CEGConstants.TRANSACTION_TYPE_ENROLLMENT))
+                {
+                    var existEnr = await _enrollService.GetByStudentFullnameAndClassName(newTra.StudentFullname, newTra.ClassName);
+                    if (existEnr != null)
+                    {
+                        return BadRequest(new
+                        {
+                            Status = false,
+                            ErrorMessage = "Student has already enrolled to this class."
+                        });
+                    }
+                }
+                var tranId = await _transactionService.Create(newTra);
+                if (newTra.TransactionType.Equals(CEGConstants.TRANSACTION_TYPE_ENROLLMENT))
                 {
                     var newEn = new CreateNewEnroll()
                     {
-                        StudentName = newTran.StudentFullname,
-                        ClassName = newTran.ClassName,
+                        StudentName = newTra.StudentFullname,
+                        ClassName = newTra.ClassName,
                         TransactionId = tranId,
                     };
-                    EnrollViewModel newEnroll = new EnrollViewModel();
-                    _enrollService.Create(newEnroll, newEn);
+                    await _enrollService.Create(newEn);
                 }
                 return Ok(new
                 {

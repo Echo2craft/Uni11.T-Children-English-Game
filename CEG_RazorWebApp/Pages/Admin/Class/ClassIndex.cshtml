@@ -17,6 +17,7 @@
 </head>
 <body>
     <div class="main-content">
+        <div id="alertContainer"></div>
         <div class="main">
             <div class="container-fluid">
                 <div class="row">
@@ -35,7 +36,6 @@
                     </div>
                 </div>
                 <section>
-                    <div id="alertContainer"></div>
                     <div class="card">
                         <div class="card-body">
                             <!-- Nav tabs -->
@@ -125,12 +125,12 @@
                                       class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                 <label asp-for="@createClass.StartDate" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.StartDate" type="date" value="@createClass.StartDate.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
+                                <input asp-for="@createClass.StartDate" type="date" value="@createClass.StartDate.ToString("yyyy-MM-dd")" min="@createClass.StartDate.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
                                 <span asp-validation-for="@createClass.StartDate" id="error_message"
                                       class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                 <label asp-for="@createClass.EndDate" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.EndDate" type="date" value="@createClass.EndDate.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
+                                <input asp-for="@createClass.EndDate" type="date" value="@createClass.EndDate.ToString("yyyy-MM-dd")" min="@createClass.EndDate.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
                                 <span asp-validation-for="@createClass.EndDate" id="error_message"
                                       class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 

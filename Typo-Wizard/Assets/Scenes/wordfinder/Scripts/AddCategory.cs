@@ -34,7 +34,7 @@ public class AddCategory : MonoBehaviour
     }
     public GameLevelData ConfigurePrefab()
     {
-        var dataFromFireBase = AccountManager._gameData;
+        var dataFromDataBase = AccountManager._gameData;
         var testCategory = SelectPuzzleButton.cloneLevelData.data;
         var listBoardData = new List<BoardData>();
         //Stack<string> testArray = new Stack<string>();
@@ -53,7 +53,7 @@ public class AddCategory : MonoBehaviour
         //}
         //char[,] matrix = GenerateWordMatrix(testArray, numberOfRows);
 
-        foreach (var pair in dataFromFireBase["cate1"])
+        foreach (var pair in dataFromDataBase["cate1"])
         {
             Stack<string> testArray = new Stack<string>();
             var listSearchWord = new List<BoardData.SearchingWord>();
@@ -95,7 +95,7 @@ public class AddCategory : MonoBehaviour
             }
 
 
-            BoardData firebaseBoardData = new BoardData()
+            BoardData databaseBoardData = new BoardData()
             {
                 name = "cate1",
                 Columns = pair.Column,
@@ -108,7 +108,7 @@ public class AddCategory : MonoBehaviour
 
            
 
-            listBoardData.Add(firebaseBoardData);
+            listBoardData.Add(databaseBoardData);
         }
 
 

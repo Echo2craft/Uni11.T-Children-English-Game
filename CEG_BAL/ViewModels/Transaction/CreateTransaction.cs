@@ -14,9 +14,9 @@ namespace CEG_BAL.ViewModels.Transaction
         [Required(ErrorMessage = "Parent's Fullname is required")]
         [DisplayName("Parent's Fullname")]
         public string ParentFullname { get; set; } = null!;
-        public string? VnpayId { get; set; }
+        public string VnpayId { get; set; } = "Paid in cashes";
         [Required(ErrorMessage = "Transaction Amount is required")]
-        [Range(Constants.TRANSACTION_MINIMUM_AMOUNT, int.MaxValue)]
+        [Range(CEGConstants.TRANSACTION_MINIMUM_AMOUNT, int.MaxValue)]
         [DisplayName("Amount")]
         public int TransactionAmount { get; set; }
         [Required(ErrorMessage = "Transaction Type is required")]
@@ -24,9 +24,9 @@ namespace CEG_BAL.ViewModels.Transaction
         public string TransactionType { get; set; } = null!;
         [Required(ErrorMessage = "Student's Fullname is required")]
         [DisplayName("Student's Fullname")]
-        public string? StudentFullname { get; set; }
+        public string StudentFullname { get; set; } = null!;
         [Required(ErrorMessage = "Class code is required")]
         [DisplayName("Class code")]
-        public string? ClassName { get; set; }
+        public string ClassName { get; set; } = null!;
     }
 }

@@ -108,7 +108,7 @@ namespace CEG_BAL.Services.Implements
         public async Task<bool> IsAvailableByName(string name)
         {
             var cou = await _unitOfWork.CourseRepositories.GetByName(name);
-            return cou != null && cou.Status.Equals(Constants.COURSE_STATUS_AVAILABLE);
+            return cou != null && cou.Status.Equals(CEGConstants.COURSE_STATUS_AVAILABLE);
         }
 
         public async Task<bool> IsExistById(int id)
@@ -120,7 +120,7 @@ namespace CEG_BAL.Services.Implements
         public async Task<bool> IsAvailableById(int id)
         {
             var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(id);
-            return cou != null && cou.Status.Equals(Constants.COURSE_STATUS_AVAILABLE);
+            return cou != null && cou.Status.Equals(CEGConstants.COURSE_STATUS_AVAILABLE);
         }
 
         public async Task<int> GetTotalAmount()

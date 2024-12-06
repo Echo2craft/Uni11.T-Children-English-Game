@@ -137,7 +137,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _studentService.GetStudentNameListByParentName(parentName);
+                var result = await _studentService.GetFullnameListByParentName(parentName);
                 if (result == null)
                 {
                     return NotFound(new

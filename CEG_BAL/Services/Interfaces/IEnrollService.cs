@@ -10,11 +10,12 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface IEnrollService
     {
-        void Create (EnrollViewModel model, CreateNewEnroll newEn);
+        Task Create (CreateNewEnroll newEn);
         void Update (EnrollViewModel model);
         void UpdateStatus(int enrollId, string enrollStatus);
-        Task<List<EnrollViewModel>> GetEnrollsList();
-        Task<EnrollViewModel> GetEnrollById (int id);
-        Task<List<EnrollViewModel>> GetEnrollByParentAccountId(int id);
+        Task<List<EnrollViewModel>> GetList();
+        Task<EnrollViewModel?> GetById (int id);
+        Task<List<EnrollViewModel>?> GetEnrollByParentAccountId(int id);
+        Task<EnrollViewModel?> GetByStudentFullnameAndClassName(string stuFullname, string claName);
     }
 }

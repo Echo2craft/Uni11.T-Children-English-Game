@@ -19,7 +19,7 @@ public partial class Schedule
 
     public string? Status { get; set; }
 
-    public virtual Class Class { get; set; } = null!;
+    public virtual Class? Class { get; set; }
 
-    public virtual Session Session { get; set; } = null!;
+    public virtual Session? Session { get; set; }
 }

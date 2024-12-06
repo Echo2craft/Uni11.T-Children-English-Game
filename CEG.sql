@@ -590,7 +590,7 @@ INSERT [dbo].[Accounts] ([account_id], [role_id], [username], [password], [fulln
 GO
 INSERT [dbo].[Accounts] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [status]) VALUES (66, 4, N'KhaiTV66', N'pass123', N'Tran Van Khai', CAST(N'2024-10-18T00:00:00.000' AS DateTime), N'Male', N'Active')
 GO
-INSERT [dbo].[Accounts] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [status]) VALUES (67, 4, N'ManhVV', N'pass123', N'Vu Van Manh', CAST(N'2024-10-18T00:00:00.000' AS DateTime), N'Male', N'Active')
+INSERT [dbo].[Accounts] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [status]) VALUES (67, 4, N'ManhVV67', N'pass123', N'Vu Van Manh', CAST(N'2024-10-18T00:00:00.000' AS DateTime), N'Male', N'Active')
 GO
 SET IDENTITY_INSERT [dbo].[Accounts] OFF
 GO
@@ -870,25 +870,25 @@ INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [questio
 GO
 INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (10, 1, N'They are proud _ their accomplishments.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (11, 1, N'She is worried _ the exam.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (11, 2, N'She is worried _ the exam.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (12, 1, N'He is married _ a doctor.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (12, 2, N'He is married _ a doctor.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (13, 1, N'I am bored _ this movie.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (13, 2, N'I am bored _ this movie.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (14, 1, N'She is jealous _ her friend’s success.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (14, 2, N'She is jealous _ her friend’s success.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (15, 1, N'He is angry _ the delay.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (15, 2, N'He is angry _ the delay.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (16, 1, N'They are ready _ the party.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (16, 2, N'They are ready _ the party.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (17, 1, N'I am addicted _ video games.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (17, 2, N'I am addicted _ video games.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (18, 1, N'She is good _ solving problems.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (18, 2, N'She is good _ solving problems.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (19, 1, N'We are familiar _ this software.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (19, 2, N'We are familiar _ this software.')
 GO
-INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (20, 1, N'He is famous _ being an actor.')
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (20, 2, N'He is famous _ being an actor.')
 GO
 SET IDENTITY_INSERT [dbo].[HomeworkQuestion] OFF
 GO
@@ -968,185 +968,185 @@ SET IDENTITY_INSERT [dbo].[Schedule] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Session] ON 
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (1, 1, N'The Basics of Sentence Structure', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (1, 1, N'The Basics of Sentence Structure', N'Explore the building blocks of sentences, including subjects, verbs, and objects.', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (2, 1, N'Understanding Parts of Speech', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (2, 1, N'Understanding Parts of Speech', N'Learn about nouns, verbs, adjectives, adverbs, and how they work together in sentences.', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (3, 1, N'Subject-Verb Agreement', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (3, 1, N'Subject-Verb Agreement', N'Master the rules of agreement to ensure grammatical accuracy in your writing.', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (4, 1, N'Creating Compound Sentences', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (4, 1, N'Creating Compound Sentences', N'Discover how to connect ideas effectively using coordinating conjunctions.', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (5, 1, N'Using Modifiers Effectively', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (5, 1, N'Using Modifiers Effectively', N'Learn to use adjectives and adverbs to add depth and clarity to your sentences.', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (6, 1, N'Punctuating Sentences Correctly', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (6, 1, N'Punctuating Sentences Correctly', N'Understand the rules for using commas, periods, and other punctuation marks.', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (7, 1, N'Introducing Clauses and Phrases', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (7, 1, N'Introducing Clauses and Phrases', N'Explore how to use dependent and independent clauses to create complex sentences.', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (8, 1, N'Writing Clear and Concise Sentences', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (8, 1, N'Writing Clear and Concise Sentences', N'Practice techniques for eliminating redundancy and improving clarity.', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (9, 1, N'Avoiding Common Grammar Errors', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (9, 1, N'Avoiding Common Grammar Errors', N'Identify and correct frequent grammar mistakes to enhance your writing.', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (10, 1, N'Grammar Wrap-up: Practice Quiz', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (10, 1, N'Grammar Wrap-up: Practice Quiz', N'Test your understanding of sentence structure and grammar rules with a comprehensive quiz.', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (11, 2, N'Present Tenses in Everyday Use', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (11, 2, N'Present Tenses in Everyday Use', N'Learn to use present simple and continuous tenses for daily conversations.', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (12, 2, N'Exploring Past Simple and Continuous', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (12, 2, N'Exploring Past Simple and Continuous', N'Understand how to talk about completed actions and ongoing events in the past.', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (13, 2, N'Future Tenses: Planning Ahead', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (13, 2, N'Future Tenses: Planning Ahead', N'Master different ways to express future intentions, plans, and predictions.', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (14, 2, N'Perfect Tenses Simplified', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (14, 2, N'Perfect Tenses Simplified', N'Dive into the usage of perfect tenses to connect actions across different timeframes.', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (15, 2, N'When to Use Continuous Forms', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (15, 2, N'When to Use Continuous Forms', N'Discover when and how to use continuous tenses for actions in progress.', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (16, 2, N'Common Tense Mistakes', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (16, 2, N'Common Tense Mistakes', N'Identify and avoid frequent tense errors to improve accuracy.', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (17, 2, N'Conditional Sentences Explained', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (17, 2, N'Conditional Sentences Explained', N'Learn how to use different conditionals to discuss possibilities and hypothetical situations.', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (18, 2, N'Tenses in Storytelling', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (18, 2, N'Tenses in Storytelling', N'Practice combining tenses to narrate stories effectively.', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (19, 2, N'Practicing with Real-life Scenarios', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (19, 2, N'Practicing with Real-life Scenarios', N'Apply your knowledge of tenses to practical, everyday situations.', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (20, 2, N'Tense Review and Final Practice', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (20, 2, N'Tense Review and Final Practice', N'Consolidate your understanding of tenses through review and hands-on exercises.', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (21, 3, N'Expanding Descriptive Vocabulary', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (21, 3, N'Expanding Descriptive Vocabulary', N'Discover advanced descriptive words to make your communication more vivid.', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (22, 3, N'The Power of Adjectives and Adverbs', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (22, 3, N'The Power of Adjectives and Adverbs', N'Learn how to effectively use adjectives and adverbs to enhance sentences.', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (23, 3, N'Talking About Emotions', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (23, 3, N'Talking About Emotions', N'Master vocabulary to express and describe emotions accurately.', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (24, 3, N'Formal vs. Informal Words', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (24, 3, N'Formal vs. Informal Words', N'Understand the difference between formal and informal vocabulary for various contexts.', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (25, 3, N'Learning Prefixes and Suffixes', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (25, 3, N'Learning Prefixes and Suffixes', N'Expand your vocabulary by understanding how prefixes and suffixes modify meanings.', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (26, 3, N'Advanced Synonyms and Antonyms', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (26, 3, N'Advanced Synonyms and Antonyms', N'Deepen your knowledge with high-level synonyms and antonyms for precision.', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (27, 3, N'Vocabulary for Work and Study', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (27, 3, N'Vocabulary for Work and Study', N'Acquire essential words for professional and academic settings.', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (28, 3, N'Building Better Contextual Understanding', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (28, 3, N'Building Better Contextual Understanding', N'Learn to derive word meanings from context in different scenarios.', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (29, 3, N'Idiomatic Expressions for Fluency', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (29, 3, N'Idiomatic Expressions for Fluency', N'Explore idiomatic phrases to make your speech more fluent and natural.', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (30, 3, N'Final Vocabulary Test', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (30, 3, N'Final Vocabulary Test', N'Test your mastery of advanced vocabulary through a comprehensive challenge.', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (31, 4, N'Essential Words for Daily Life', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (31, 4, N'Essential Words for Daily Life', N'Learn the foundational vocabulary needed for everyday communication.', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (32, 4, N'Common Expressions and Idioms', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (32, 4, N'Common Expressions and Idioms', N'Explore frequently used idioms and expressions to sound more natural.', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (33, 4, N'Building Words from Root Forms', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (33, 4, N'Building Words from Root Forms', N'Understand word roots, prefixes, and suffixes to expand your vocabulary.', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (34, 4, N'Words for Talking About Family', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (34, 4, N'Words for Talking About Family', N'Master words and phrases for discussing family relationships and dynamics.', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (35, 4, N'Describing Places and Activities', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (35, 4, N'Describing Places and Activities', N'Learn descriptive vocabulary for locations, events, and activities.', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (36, 4, N'Vocabulary for Shopping and Food', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (36, 4, N'Vocabulary for Shopping and Food', N'Gain essential words and phrases for shopping, dining, and cooking.', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (37, 4, N'Talking About Weather and Seasons', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (37, 4, N'Talking About Weather and Seasons', N'Explore terms related to weather, climate, and seasonal changes.', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (38, 4, N'Words for Hobbies and Sports', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (38, 4, N'Words for Hobbies and Sports', N'Build your vocabulary for discussing hobbies, games, and sports.', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (39, 4, N'Expanding Your Vocabulary with Synonyms', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (39, 4, N'Expanding Your Vocabulary with Synonyms', N'Discover synonyms to avoid repetition and enrich your expression.', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (40, 4, N'Vocabulary Game Challenge', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (40, 4, N'Vocabulary Game Challenge', N'Reinforce your learning with interactive vocabulary games and challenges.', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (41, 5, N'Introduction to English Sounds', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (41, 5, N'Introduction to English Sounds', N'Learn the foundational vowel and consonant sounds in English.', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (42, 5, N'Mastering Vowels', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (42, 5, N'Mastering Vowels', N'Practice distinguishing and pronouncing long and short vowel sounds accurately.', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (43, 5, N'Understanding Consonant Clusters', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (43, 5, N'Understanding Consonant Clusters', N'Focus on combining consonants smoothly in words like "strength" and "plants."', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (44, 5, N'The Art of Syllable Stress', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (44, 5, N'The Art of Syllable Stress', N'Master syllable emphasis to improve clarity in speech.', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (45, 5, N'Common Mispronunciations to Avoid', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (45, 5, N'Common Mispronunciations to Avoid', N'Identify and correct frequent pronunciation errors for better communication.', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (46, 5, N'The Magic of Intonation', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (46, 5, N'The Magic of Intonation', N'Explore the musical quality of English by practicing rising and falling tones.', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (47, 5, N'Linking Words for Fluency', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (47, 5, N'Linking Words for Fluency', N'Learn to connect words naturally for a smoother speaking flow.', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (48, 5, N'Practice: Everyday Phrases', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (48, 5, N'Practice: Everyday Phrases', N'Apply pronunciation skills to common, real-life phrases and expressions.', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (49, 5, N'Real-life Conversations', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (49, 5, N'Real-life Conversations', N'Simulate everyday conversations to practice pronunciation in context.', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (50, 5, N'Final Pronunciation Challenge', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (50, 5, N'Final Pronunciation Challenge', N'Test your pronunciation mastery through a fun, practical speaking challenge.', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (51, 6, N'Breaking Down the IPA Chart', N'First Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (51, 6, N'Breaking Down the IPA Chart', N'Decode the International Phonetic Alphabet to understand English sounds better.', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (52, 6, N'Voiced vs. Voiceless Sounds', N'Second Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (52, 6, N'Voiced vs. Voiceless Sounds', N'Learn the difference between sounds like "b" and "p" or "z" and "s."', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (53, 6, N'Perfecting Diphthongs', N'Third Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (53, 6, N'Perfecting Diphthongs', N'Practice gliding vowel sounds like "oi" in "coin" or "ou" in "cloud."', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (54, 6, N'Silent Letters and Their Tricks', N'Fourth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (54, 6, N'Silent Letters and Their Tricks', N'Discover and overcome the challenges of silent letters in words like "knight" or "hour."', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (55, 6, N'Regional Accents vs. Standard English', N'Fifth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (55, 6, N'Regional Accents vs. Standard English', N'Understand variations in pronunciation between regions and standard English.', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (56, 6, N'Sounding Natural with Connected Speech', N'Sixth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (56, 6, N'Sounding Natural with Connected Speech', N'Master the art of linking and reducing sounds for natural fluency.', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (57, 6, N'Practicing Minimal Pairs', N'Seventh Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (57, 6, N'Practicing Minimal Pairs', N'Differentiate between similar-sounding words like "ship" and "sheep."', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (58, 6, N'Word Stress: Changing Meanings', N'Eighth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (58, 6, N'Word Stress: Changing Meanings', N'Learn how stressing different syllables can change word meanings (e.g., record vs. record).', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (59, 6, N'Listening and Imitation Exercises', N'Ninth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (59, 6, N'Listening and Imitation Exercises', N'Sharpen listening skills and mimic native speakers for accurate pronunciation.', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (60, 6, N'Pronunciation Mastery Test', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (60, 6, N'Pronunciation Mastery Test', N'Showcase your progress with a final test covering all aspects of pronunciation.', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (61, 7, N'Overview of Grammar Pitfalls', N'Tenth Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (61, 7, N'Overview of Grammar Pitfalls', N'Identify and understand the most common grammar issues faced by English learners.', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (62, 7, N'Avoiding Run-on Sentences', N'Tenth Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (62, 7, N'Avoiding Run-on Sentences', N'Learn to structure sentences properly to avoid long, unmanageable sentences.', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (63, 7, N'Tackling Comma Splices', N'Tenth Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (63, 7, N'Tackling Comma Splices', N'Discover how to fix comma-related errors and create clear, concise sentences.', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (64, 7, N'Using Articles Correctly', N'Tenth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (64, 7, N'Using Articles Correctly', N'Master the use of "a," "an," and "the" in different contexts.', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (65, 7, N'Pronoun Agreement and Reference', N'Tenth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (65, 7, N'Pronoun Agreement and Reference', N'Ensure that pronouns agree with their antecedents and are clear in meaning.', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (66, 7, N'Active vs. Passive Voice', N'Tenth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (66, 7, N'Active vs. Passive Voice', N'Understand when to use active voice for clarity and passive voice for emphasis.', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (67, 7, N'Prepositions Made Easy', N'Tenth Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (67, 7, N'Prepositions Made Easy', N'Simplify the correct use of prepositions in phrases and sentences.', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (68, 7, N'Fixing Dangling Modifiers', N'Tenth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (68, 7, N'Fixing Dangling Modifiers', N'Avoid confusing or misplaced modifiers to improve sentence clarity.', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (69, 7, N'Grammar Error Correction Practice', N'Tenth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (69, 7, N'Grammar Error Correction Practice', N'Engage in exercises to identify and correct various grammar errors.', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (70, 8, N'Real-world Grammar Application', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (70, 8, N'Real-world Grammar Application', N'Apply your grammar knowledge in practical writing and speaking tasks.', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (71, 8, N'Hard-to-Pronounce Words', N'Tenth Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (71, 8, N'Hard-to-Pronounce Words', N'Tackle a list of commonly mispronounced words and learn to say them with confidence.', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (72, 8, N'Mastering ‘Th’ Sounds', N'Tenth Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (72, 8, N'Mastering ‘Th’ Sounds', N'Focus on the challenging voiced and voiceless ''th'' sounds, like in "this" and "think."', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (73, 8, N'Pronouncing Long Words with Ease', N'Tenth Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (73, 8, N'Pronouncing Long Words with Ease', N'Break down multi-syllable words into manageable parts for accurate pronunciation.', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (74, 8, N'Common Homophones Explained', N'Tenth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (74, 8, N'Common Homophones Explained', N'Learn to distinguish and pronounce words that sound similar but have different meanings, such as "there" and "their."', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (75, 8, N'Practicing Stress in Phrases', N'Tenth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (75, 8, N'Practicing Stress in Phrases', N'Discover how stress patterns in phrases can change meaning and improve fluency.', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (76, 8, N'Tongue Twisters for Fun Learning', N'Tenth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (76, 8, N'Tongue Twisters for Fun Learning', N'Use engaging tongue twisters to sharpen articulation and improve pronunciation speed.', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (77, 8, N'Tricky Consonant Combinations', N'Tenth Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (77, 8, N'Tricky Consonant Combinations', N'Focus on challenging blends like "str," "bl," and "chr" to enhance clarity.', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (78, 8, N'Accent Reduction Tips', N'Tenth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (78, 8, N'Accent Reduction Tips', N'Learn techniques to neutralize strong accents and achieve a more standard English pronunciation.', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (79, 8, N'Listening Practice with Native Speakers', N'Tenth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (79, 8, N'Listening Practice with Native Speakers', N'Practice identifying and mimicking pronunciation from authentic audio clips.', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (80, 9, N'Confidence in Pronunciation', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (80, 9, N'Confidence in Pronunciation', N'Apply all skills in real-life scenarios to speak clearly and confidently.', 2, 10)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (81, 9, N'Learning Words with Games', N'Tenth Session', 2, 1)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (81, 9, N'Learning Words with Games', N'Enhance vocabulary with engaging word games like hangman and word bingo.', 2, 1)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (82, 9, N'Vocabulary for Everyday Actions', N'Tenth Session', 2, 2)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (82, 9, N'Vocabulary for Everyday Actions', N'Learn practical words and phrases for daily tasks and routines.', 2, 2)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (83, 9, N'Spelling Tips and Tricks', N'Tenth Session', 2, 3)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (83, 9, N'Spelling Tips and Tricks', N'Master common spelling rules and strategies to avoid errors.', 2, 3)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (84, 9, N'Words That Sound Alike', N'Tenth Session', 2, 4)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (84, 9, N'Words That Sound Alike', N'Explore homophones and learn to differentiate them in spelling and meaning.', 2, 4)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (85, 9, N'Building Vocabulary with Crossword Puzzles', N'Tenth Session', 2, 5)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (85, 9, N'Building Vocabulary with Crossword Puzzles', N'Solve crossword puzzles to discover new words and reinforce spelling.', 2, 5)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (86, 9, N'Fun with Word Associations', N'Tenth Session', 2, 6)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (86, 9, N'Fun with Word Associations', N'Use creative associations to remember word meanings and expand vocabulary.', 2, 6)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (87, 9, N'Practicing Vocabulary in Sentences', N'Tenth Session', 2, 7)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (87, 9, N'Practicing Vocabulary in Sentences', N'Create and practice sentences to reinforce new words in context.	', 2, 7)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (88, 9, N'Group Activities: Word Charades', N'Tenth Session', 2, 8)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (88, 9, N'Group Activities: Word Charades', N'Play charades to guess words and strengthen vocabulary recall.', 2, 8)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (89, 9, N'Listening and Spelling Exercises', N'Tenth Session', 2, 9)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (89, 9, N'Listening and Spelling Exercises', N'Improve spelling through listening activities and dictation practice.', 2, 9)
 GO
-INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (90, 9, N'Final Vocabulary Bee', N'Tenth Session', 2, 10)
+INSERT [dbo].[Session] ([session_id], [course_id], [title], [description], [hours], [session_number]) VALUES (90, 9, N'Final Vocabulary Bee', N'Test your vocabulary and spelling skills in a fun, competitive spelling bee challenge.', 2, 10)
 GO
 SET IDENTITY_INSERT [dbo].[Session] OFF
 GO

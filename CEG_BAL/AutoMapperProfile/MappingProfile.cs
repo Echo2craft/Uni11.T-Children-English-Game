@@ -5,6 +5,8 @@ using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Parent;
+using CEG_BAL.ViewModels.Transaction;
 using CEG_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -209,8 +211,6 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Course, CourseViewModel>()
                 .ReverseMap();
-            CreateMap<Enroll, EnrollViewModel>()
-                .ReverseMap();
             CreateMap<Session, SessionViewModel>()
                 .ReverseMap();
             CreateMap<Homework, HomeworkViewModel>()
@@ -226,8 +226,6 @@ namespace CEG_BAL.AutoMapperProfile
                 })
                 .ReverseMap();
             CreateMap<HomeworkAnswer, HomeworkAnswerViewModel>()
-                .ReverseMap();
-            CreateMap<Transaction, TransactionViewModel>()
                 .ReverseMap();
             CreateMap<Game, GameViewModel>()
                 .ReverseMap();
@@ -250,8 +248,35 @@ namespace CEG_BAL.AutoMapperProfile
             CreateMap<CreateNewSchedule, Schedule>()
                 .AfterMap((src, dest) =>
                 {
-                    dest.Status = Constants.SCHEDULE_STATUS_DRAFT;
+                    dest.Status = CEGConstants.SCHEDULE_STATUS_DRAFT;
                     dest.StartTime = src.ScheduleDate.HasValue ? TimeOnly.FromDateTime(src.ScheduleDate.Value) : default;
+                });
+            CreateMap<UpdateSchedule, Schedule>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.StartTime = src.ScheduleDate.HasValue ? TimeOnly.FromDateTime(src.ScheduleDate.Value) : default;
+                });
+
+            // Enroll
+            CreateMap<Enroll, EnrollViewModel>()
+                .ReverseMap();
+            CreateMap<CreateNewEnroll, Enroll>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.RegistrationDate = DateTime.Now;
+                    dest.EnrolledDate = DateTime.Now;
+                    dest.Status = CEGConstants.ENROLLMENT_STATUS_ENROLLED;
+                });
+
+            // Transaction
+            CreateMap<Transaction, TransactionViewModel>()
+                .ReverseMap();
+            CreateMap<CreateTransaction, Transaction>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.TransactionDate = DateTime.Now;
+                    dest.ConfirmDate = DateTime.Now;
+                    dest.TransactionStatus = CEGConstants.TRANSACTION_STATUS_COMPLETED;
                 });
 
             // Game Config

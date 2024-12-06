@@ -92,7 +92,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Status/Open")]
+        /*[HttpGet("All/Status/Open")]
         [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -101,6 +101,41 @@ namespace CEG_WebAPI.Controllers
             try
             {
                 var result = await _classService.GetOptionListByStatusOpen();
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class option list by status Open not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }*/
+
+        [HttpGet("All/Status/Open")]
+        [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassOptionListByStatusOpen(
+            [FromQuery] string stuFullname)
+        {
+            try
+            {
+                var result = await _classService.GetOptionListByStatusOpen(stuFullname);
                 if (result == null)
                 {
                     return NotFound(new
@@ -236,7 +271,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetById(id,true,true,true,true);
+                var result = await _classService.GetById(id,true,true,true,true,true);
                 if (result == null)
                 {
                     return NotFound(new
@@ -271,7 +306,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetById(id,true,true,true,true);
+                var result = await _classService.GetById(id,true,true,true,true,true);
                 if (result == null)
                 {
                     return NotFound(new
@@ -366,19 +401,19 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/Update/Status")]
+        [HttpPut("{claId}/Update/Status")]
         [Authorize(Roles = "Teacher,Admin")]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateStatus(
-            [FromRoute][Required] int id,
+            [FromRoute][Required] int claId,
             [FromBody][Required] string status
             )
         {
             try
             {
-                var result = await _classService.GetById(id);
+                var result = await _classService.GetById(claId);
                 if (result == null)
                 {
                     return NotFound(new
@@ -390,8 +425,8 @@ namespace CEG_WebAPI.Controllers
                 bool isValid = CEG_BAL_Library.IsClassNewStatusValid(result.Status, status);
                 if (isValid)
                 {
-                    _classService.UpdateStatus(id, status);
-                    result = await _classService.GetById(id);
+                    await _classService.UpdateStatus(claId, status);
+                    result = await _classService.GetById(claId);
                     return Ok(new
                     {
                         Status = true,
