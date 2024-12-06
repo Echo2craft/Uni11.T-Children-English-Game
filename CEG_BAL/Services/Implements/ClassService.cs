@@ -172,5 +172,10 @@ namespace CEG_BAL.Services.Implements
             var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(id);
             return clas != null && (clas.Status.Equals(Constants.CLASS_STATUS_DRAFT) || clas.Status.Equals(Constants.CLASS_STATUS_POSTPONED));
         }
+
+        public async Task<int> GetTotalAmount()
+        {
+            return await _unitOfWork.ClassRepositories.GetTotalAmount();
+        }
     }
 }

@@ -20,5 +20,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<int?> GetIdByAccountIdNoTracking(int id);
         Task<List<Student>> GetStudentByParentId(int parentId);
         Task<List<Student>> GetStudentByClassId(int classId);
+        Task<int> GetTotalAmountByParent(int id);
     }
 }

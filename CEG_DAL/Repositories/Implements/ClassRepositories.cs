@@ -300,5 +300,10 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Classes.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(c => c.ClassName == className);
         }
+
+        public async Task<int> GetTotalAmount()
+        {
+            return await _dbContext.Classes.CountAsync();
+        }
     }
 }

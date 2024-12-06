@@ -1,8 +1,8 @@
-﻿@page "/Admin/Transaction/Return"
-@model CEG_RazorWebApp.Pages.Admin.Transaction.TransactionReturnModel
+﻿@page "/Parent/Transaction/Return"
+@model CEG_RazorWebApp.Pages.Parent.Transaction.TransactionReturnModel
 @{
-    ViewData["Title"] = "Admin Transaction Return Page";
-    Layout = "~/Pages/Shared/_ALayout.cshtml";
+    ViewData["Title"] = "Parent Transaction Return Page";
+    Layout = "~/Pages/Shared/_PLayout.cshtml";
 
     var createTransaction = Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CreateTransactionVM));
     var correctValue = Model.TransactionResponse.Value / 100;
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="text-center mt-4">
-                    <a href="/Admin/Transaction/Index" class="btn btn-primary">Back to Transaction Index</a>
+                    <a href="/Parent/Transaction/Index" class="btn btn-primary">Back to Transaction Index</a>
                 </div>
             </div>
         </div>

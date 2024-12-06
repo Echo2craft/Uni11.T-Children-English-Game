@@ -269,8 +269,9 @@
             })
             .off('select2:select') // Remove previous bindings
             .on('select2:select', function (e) {
-                var text = $(this).select2('data')[0].text;
-                callApiGetStudentNameList(text);
+                //var text = $(this).select2('data')[0].text;
+                //callApiGetStudentNameList(text);
+                callApiGetStudentNameList();
             });
 
             $('#select2-student-fullname-dropdown').select2({
@@ -376,7 +377,6 @@
 
             // Serialize form data
             var formData = {
-                ParentFullname: $('#select2-parent-fullname-enrollment-dropdown').select2('data')[0].text,
                 StudentFullname: $('#select2-student-fullname-dropdown').select2('data')[0].text,
                 Classname: $('#select2-class-name-dropdown').select2('data')[0].text,
                 TransactionAmount: enrollAmount.getNumber(),
@@ -422,47 +422,10 @@
             });
         });
 
-        function callApiGetParentNameList(){
-            // Call API to get the list of parent names
-            $.ajax({
-                url: apiUrl + 'Parent/All/Fullname', // API endpoint
-                type: 'GET',
-                success: function (response) {
-                    // Check if the status is true
-                    if (response.status) {
-                        addParentEnrollmentOptions(response.data);
-                        // addParentDonationOptions(response.data);
-                    } else {
-                        showAlert('error', "Error: \n" + response.errorMessage);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    // Attempt to parse the response text if it is available
-                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
-                    // Extract the custom error message if it exists
-                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
-                    // Check if errorResponse.errors exists and is an object
-                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
-                        // Loop through each field in the errors object and append to the errorMessage
-                        for (var field in errorResponse.errors) {
-                            if (errorResponse.errors.hasOwnProperty(field)) {
-                                // Add each error message for the field, joining multiple messages if they exist
-                                var fieldErrors = errorResponse.errors[field].join(", ");
-                                errorMessage += `\n${field}: ${fieldErrors}`;
-                            }
-                        }
-                    }
-                    // Display the error message using your custom showAlert function
-                    showAlert('error', "Error: \n" + errorMessage);
-                }
-            });
-        }
-
-        function callApiGetStudentNameList(parentName){
+        function callApiGetStudentNameList(){
             // Call API to get the list of student names
             $.ajax({
-                url: apiUrl + 'Student/All/Fullname/ByParent/Name/' + parentName, // API endpoint
+                url: apiUrl + 'Student/All/Fullname/ByParent/' + id, // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token// Include the JWT token
@@ -597,12 +560,17 @@
                         transactionList = response.data;
                         console.log(transactionList);
                         sessionTable.clear().rows.add(transactionList).draw();
+                        callApiGetStudentNameList();
+                        callApiGetClassNameList();
                         // setClassDisplay(classList);
                     } else {
                         console.error("API returned false status.");
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
                     var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
@@ -616,9 +584,8 @@
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }

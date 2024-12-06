@@ -14,5 +14,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<Transaction?> GetByIdNoTracking(int id);
         Task<List<Transaction>> GetTransactionByParentId(int parentId);
         Task<Transaction?> GetTransactionByVnpayId(string? vnpayId);
+        Task<int> GetTotalAmount();
     }
 }
