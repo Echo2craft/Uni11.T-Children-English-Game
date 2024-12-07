@@ -779,6 +779,59 @@
                 }
             });
         }
+        // Teacher/{teacherName}/Upload/Certificate
+        function callApiPostUploadTeacherCertificate(fileInput, teacherName) {
+            // var fileInput = $('#fileInput')[0];
+            console.log(fileInput);
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            $.ajax({
+                url: apiUrl + 'Admin/Teacher/' + teacherName + '/Upload/Certificate', // Backend API endpoint
+                type: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                data: formData,
+                // contentType: false, Set to false to allow FormData to manage content type
+                // processData: false, Prevent jQuery from processing the FormData object
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+
         function callApiPostCreateTeacher(formData) {
             console.log(formData);
             $.ajax({
@@ -794,6 +847,7 @@
                 success: function (response) {
                     // Handle success (display a success message or redirect, etc.)
                     if (response.status) {
+                        callApiPostUploadTeacherCertificate(imageInput, formData.Account.Fullname);
                         showAlert('success', "Teacher create successfully");
                         callApiGetAccountList();
                     } else {
@@ -822,6 +876,7 @@
                 }
             });
         }
+
         function getParentNameList(){
             // Call API to get the list of teacher names
             $.ajax({

@@ -263,23 +263,11 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Password and Confirm Password do not match!"
                     });
                 }
-                TeacherViewModel teach = new TeacherViewModel()
-                {
-                    Email = newTeach.Email,
-                    Phone = newTeach.Phone,
-                    Address = newTeach.Address,
-                };
-                // Upload image if provided
-                //if (newTeach.ImageUpload != null)
-                //{
-                //    string imageUrl = await _teacherService.UploadToBlobAsync(newTeach.ImageUpload);
-                //    teach.Certificate = imageUrl;
-                //}
-                _teacherService.Create(teach, newTeach, newTeach.ImageUpload);
+                await _teacherService.Create(newTeach);
 
                 await _emailService.SendEmailAsync(
-                    _config.GetSection("Gmail:SenderName").Value,
-                    _config.GetSection("Gmail:Username").Value,
+                    _fromSenderName: _config.GetSection("Gmail:SenderName").Value,
+                    _fromEmail: _config.GetSection("Gmail:Username").Value,
                     newTeach.Account.Fullname,
                     newTeach.Email,
                     "Thank you for joining and supporting our CEG English Center community!",
@@ -290,9 +278,39 @@ namespace CEG_WebAPI.Controllers
                     "   <h4>Password: " + newTeach.Account.Password + "</h4>" +
                     "</div>",
                     _config,
-                    _config.GetSection("Gmail:Username").Value,
-                    _config.GetSection("Gmail:Password").Value
+                    _stmpUser: _config.GetSection("Gmail:Username").Value,
+                    _stmpAppPassword: _config.GetSection("Gmail:Password").Value
                 );
+                return Ok(new
+                {
+                    Data = true,
+                    Status = true,
+                    SuccessMessage = "Teacher account create successfully.",
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpPost("Teacher/{teacherName}/Upload/Certificate")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UploadTeacherCertificate(
+            [FromRoute][Required] string teacherName,
+            [FromBody][Required] IFormFile certificate)
+        {
+            try
+            {
+                await _teacherService.UploadToBlobAsync(teacherName,certificate, CEG_BAL.Configurations.CEGConstants.TEACHER_IMAGE_CERTIFICATE_TYPE);
                 return Ok(new
                 {
                     Data = true,
