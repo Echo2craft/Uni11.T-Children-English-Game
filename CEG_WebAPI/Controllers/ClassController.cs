@@ -65,6 +65,33 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/Count")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTotalClassAmount()
+        {
+            try
+            {
+                var result = await _classService.GetTotalAmount();
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         /*[HttpGet("All/Status/Open")]
         [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

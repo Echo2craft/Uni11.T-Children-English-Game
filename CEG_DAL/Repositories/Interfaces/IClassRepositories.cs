@@ -32,5 +32,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<List<Class>> GetListByTeacherId(int teacherId);
         Task<Class?> GetByClassName(string className);
         Task<int> GetIdByClassId(int id);
+        Task<int> GetTotalAmount();
     }
 }

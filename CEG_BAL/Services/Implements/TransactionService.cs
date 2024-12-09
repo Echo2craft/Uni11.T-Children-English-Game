@@ -92,5 +92,10 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.TransactionRepositories.Update(pay);
             _unitOfWork.Save();
         }
+
+        public async Task<int> GetTotalAmount()
+        {
+            return await _unitOfWork.TransactionRepositories.GetTotalAmount();
+        }
     }
 }
