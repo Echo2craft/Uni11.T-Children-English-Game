@@ -306,8 +306,16 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UploadTeacherCertificate(
             [FromRoute][Required] string teacherName,
-            [FromBody][Required] IFormFile certificate)
+            IFormFile certificate)
         {
+            if (certificate == null || certificate.Length == 0)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = "No certificate was uploaded or object file was empty."
+                });
+            }
             try
             {
                 await _teacherService.UploadToBlobAsync(teacherName,certificate, CEG_BAL.Configurations.CEGConstants.TEACHER_IMAGE_CERTIFICATE_TYPE);

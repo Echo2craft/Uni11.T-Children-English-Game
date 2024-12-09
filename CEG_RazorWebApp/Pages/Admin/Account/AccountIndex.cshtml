@@ -345,6 +345,7 @@
         var apiUrl = sessionStorage.getItem('apiUrl');
         var accountList = [];
         const imageInput = $("#createTeacher_ImageUpload");
+        let selectedFile = null; // Variable to hold the file
         const previewImage = $("#image-preview");
         var accountTable;
         $(document).ready(function () {
@@ -541,29 +542,7 @@
                     Email: $('#createTeacher_Email').val(),
                     Address: $('#createTeacher_Address').val(),
                     Phone: $('#createTeacher_Phone').val(),
-                    // ImageUpload: imageInput[0].files[0],
                 };
-                // Create a FormData object
-                // var formData = new FormData();
-
-                // Add Account fields individually to FormData
-                // formData.append("Account.Username", $('#createTeacher_Account_Username').val());
-                // formData.append("Account.Fullname", $('#createTeacher_Account_Fullname').val());
-                // formData.append("Account.Gender", $('#createTeacher_Account_Gender').val());
-                // formData.append("Account.Password", $('#createTeacher_Account_Password').val());
-                // formData.append("Account.ConfirmPassword", $('#createTeacher_Account_ConfirmPassword').val());
-
-                // Add other fields
-                // formData.append("Email", $('#createTeacher_Email').val());
-                // formData.append("Address", $('#createTeacher_Address').val());
-                // formData.append("Phone", $('#createTeacher_Phone').val());
-
-                // Add the file (ensure you have a file input element with ID 'imageInput')
-                // var imageInputAvail = imageInput[0].files[0];
-                // if (imageInputAvail) {
-                //     formData.append("ImageUpload", imageInput[0].files[0]);
-                // }
-                console.log(formData);
                 //Make the AJAX request
                 callApiPostCreateTeacher(formData);
                 $('#createTeacherForm').trigger("reset");
@@ -572,7 +551,6 @@
             // Handle image selection and preview
             imageInput.on("change", () => {
                 const file = imageInput[0].files[0];
-
                 if (file && file.type.startsWith("image/")) {
                     const reader = new FileReader();
 
@@ -582,8 +560,11 @@
                     };
 
                     reader.readAsDataURL(file);
+                    selectedFile = file; // Store the file in memory
+                    // console.log('File selected:', selectedFile);
                 } else {
                     showAlert("Please select a valid image file.");
+                    selectedFile = null; // Clear the reference if no file is selected
                     previewImage.hide();
                 }
             });
@@ -780,16 +761,15 @@
             });
         }
         // Teacher/{teacherName}/Upload/Certificate
-        function callApiPostUploadTeacherCertificate(fileInput, teacherName) {
+        function callApiPostUploadTeacherCertificate(teacherName) {
             // var fileInput = $('#fileInput')[0];
-            console.log(fileInput);
-            if (fileInput.files.length === 0) {
-                alert('Please select a file to upload.');
-                return;
-            }
-
+            // if (imageInput[0].files.length === 0) {
+            //     alert('Please select a file to upload.');
+            //     return;
+            // }
+            console.log('File selected:', selectedFile);
             var formData = new FormData();
-            formData.append('file', fileInput.files[0]);
+            formData.append('Certificate', selectedFile);
 
             $.ajax({
                 url: apiUrl + 'Admin/Teacher/' + teacherName + '/Upload/Certificate', // Backend API endpoint
@@ -833,7 +813,6 @@
         }
 
         function callApiPostCreateTeacher(formData) {
-            console.log(formData);
             $.ajax({
                 url: apiUrl + 'Admin/Teacher/Create', // Specify your Razor Page here
                 type: 'POST',
@@ -847,7 +826,7 @@
                 success: function (response) {
                     // Handle success (display a success message or redirect, etc.)
                     if (response.status) {
-                        callApiPostUploadTeacherCertificate(imageInput, formData.Account.Fullname);
+                        callApiPostUploadTeacherCertificate(formData.Account.Fullname);
                         showAlert('success', "Teacher create successfully");
                         callApiGetAccountList();
                     } else {
