@@ -399,33 +399,50 @@
             scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 const currentStatus = this.cell(rowIdx, 5).data(); // Current status
                 if (currentStatus !== "Ended" && currentStatus !== "Cancelled"){
-                    const startTime = this.cell(rowIdx, 3).data(); // Start time
-                    const endTime = this.cell(rowIdx, 4).data();   // End time
+                    // const startTime = this.cell(rowIdx, 3).data(); Start time
+                    // const endTime = this.cell(rowIdx, 4).data();   End time
 
-                    const isTimeInBetween = moment().isBetween(
-                        moment(startTime, "HH:mm:ss"),
-                        moment(endTime, "HH:mm:ss"),
-                        "HH:mm:ss"
-                    );
+                    // const isTimeInBetween = moment().isBetween(
+                    //     moment(startTime, "HH:mm:ss"),
+                    //     moment(endTime, "HH:mm:ss"),
+                    //     "HH:mm:ss"
+                    // );
 
-                    if (isTimeInBetween) {
-                        const scheduleId = this.cell(rowIdx, 0).data();
-                        const node = $(this.cell(rowIdx, 5).node());
+                    // if (isTimeInBetween) {
+                    //     const scheduleId = this.cell(rowIdx, 0).data();
+                    //     const node = $(this.cell(rowIdx, 5).node());
 
-                        // Change display to a select box if not already updated
-                        if (!node.children('select').length) {
-                            node.html(`
-                                        <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
-                                            ${getScheduleStatusOptions(currentStatus)}
-                                        </select>
-                                    `);
+                    //     Change display to a select box if not already updated
+                    //     if (!node.children('select').length) {
+                    //         node.html(`
+                    //                     <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
+                    //                         ${getScheduleStatusOptions(currentStatus)}
+                    //                     </select>
+                    //                 `);
 
-                            // Add change event listener to the select element
-                            node.find('select').on('change', function () {
-                                const newStatus = $(this).val();
-                                callApiUpdateScheduleStatus(scheduleId, newStatus);
-                            });
-                        }
+                    //         Add change event listener to the select element
+                    //         node.find('select').on('change', function () {
+                    //             const newStatus = $(this).val();
+                    //             callApiUpdateScheduleStatus(scheduleId, newStatus);
+                    //         });
+                    //     }
+                    // }
+                    const scheduleId = this.cell(rowIdx, 0).data();
+                    const node = $(this.cell(rowIdx, 5).node());
+
+                    // Change display to a select box if not already updated
+                    if (!node.children('select').length) {
+                        node.html(`
+                                                <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
+                                                    ${getScheduleStatusOptions(currentStatus)}
+                                                </select>
+                                            `);
+
+                        // Add change event listener to the select element
+                        node.find('select').on('change', function () {
+                            const newStatus = $(this).val();
+                            callApiUpdateScheduleStatus(scheduleId, newStatus);
+                        });
                     }
                 }
             });
