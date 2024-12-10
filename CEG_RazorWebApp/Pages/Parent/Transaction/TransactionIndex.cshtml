@@ -461,10 +461,10 @@
             });
         }
 
-        function callApiGetClassNameList() {
+        function callApiGetClassNameList(studentName) {
             // Call API to get the list of teacher names
             $.ajax({
-                url: apiUrl + 'Class/All/Status/Open', // API endpoint
+                url: apiUrl + 'Class/All/Status/Open?stuFullName=' + studentName, // API endpoint
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true
@@ -497,20 +497,6 @@
             });
         }
 
-        function addParentEnrollmentOptions(data) {
-            $('#select2-parent-fullname-enrollment-dropdown').empty();
-            data.forEach(item => {
-                // Add each item as an option
-
-                let newOption = new Option(item, item, false, false);
-                $('#select2-parent-fullname-enrollment-dropdown').append(newOption);
-            });
-            // Refresh the Select2 dropdown to show new options
-            $('#select2-parent-fullname-enrollment-dropdown').trigger('change'); // Ensure Select2 is updated
-            // Set up Student list based on the first data
-            callApiGetStudentNameList(data[0]);
-        }
-
         function addStudentOptions(data) {
             $('#select2-student-fullname-dropdown').empty();
             data.forEach(item => {
@@ -521,18 +507,28 @@
             });
             // Refresh the Select2 dropdown to show new options
             $('#select2-student-fullname-dropdown').trigger('change'); // Ensure Select2 is updated
+            callApiGetClassNameList(data[0]);
         }
         function addClassOptions(data) {
-            $('#select2-class-name-dropdown').empty();
-            data.forEach(item => {
-                // Add each item as an option
+            const dropdown = $('#select2-class-name-dropdown');
+            dropdown.empty(); // Clear any existing options
+            if (!data || data.length == 0) {
+                // Add a placeholder option indicating no classes are available
+                let emptyOption = new Option("No classes available", 10000, true, true);
+                dropdown.append(emptyOption);
+            } else {
+                data.forEach(item => {
+                    // Add each item as an option
+                    let newOption = new Option(item.className, item.enrollmentFee, false, false);
+                    dropdown.append(newOption);
+                });
 
-                let newOption = new Option(item.className, item.enrollmentFee, false, false);
-                $('#select2-class-name-dropdown').append(newOption);
-            });
+                // Set the initial value of `enrollAmount` to the first item's enrollment fee
+                enrollAmount.set(data[0].enrollmentFee);
+            }
+
             // Refresh the Select2 dropdown to show new options
-            $('#select2-class-name-dropdown').trigger('change'); // Ensure Select2 is updated
-            enrollAmount.set(data[0].enrollmentFee);
+            dropdown.trigger('change'); // Ensure Select2 is updated
         }
 
         function getTransactionStatusOptions() {
@@ -561,7 +557,6 @@
                         console.log(transactionList);
                         sessionTable.clear().rows.add(transactionList).draw();
                         callApiGetStudentNameList();
-                        callApiGetClassNameList();
                         // setClassDisplay(classList);
                     } else {
                         console.error("API returned false status.");
