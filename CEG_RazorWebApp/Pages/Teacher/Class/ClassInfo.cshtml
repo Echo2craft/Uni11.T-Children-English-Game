@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-6 customer-booking">
+                    <div class="col-xl-12 customer-booking">
                         <div class="row">
                             <div class="card profile col-12 mb-4">
                                 <div class="card-header" id="class-title-status">
@@ -207,7 +207,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-6 cardFB">
+                    <div class="col-xl-12 cardFB">
                         <div class="card profile">
                             <div class="card-header">
                                 <h4>Student List</h4>
@@ -231,12 +231,6 @@
                                                     aria-label="Student Name: activate to sort column ascending">
                                                     Student Name
                                                 </th>
-                                                @* <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="enroll-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Status: activate to sort column ascending">
-                                                    Status
-                                                </th> *@
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -348,6 +342,8 @@
             callApiGetClassDetail();
             scheduleTable = new DataTable('#schedule-table', {
                 data: [],
+                lengthMenu: [5, 10, 25, 50],
+                pageLength: 5,
                 deferRender: false,
                 responsive: true,
                 columns: [
@@ -385,6 +381,9 @@
                         }
                     }
                 },
+                select: {
+                    style: 'single'
+                },
             }).on('draw', function (e, settings) {
                 scheduleTable.column(6).visible(false, false);
                 updateScheduleStatuses();
@@ -399,26 +398,29 @@
             scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 const currentStatus = this.cell(rowIdx, 5).data(); // Current status
                 if (currentStatus !== "Ended" && currentStatus !== "Cancelled"){
-                    const startTime = this.cell(rowIdx, 3).data(); // Start time
-                    const endTime = this.cell(rowIdx, 4).data();   // End time
+                    const thisRowDate = this.cell(rowIdx, 2).data(); // This row date
+                    const scheduleId = this.cell(rowIdx, 0).data();
+                    // const startTime = this.cell(rowIdx, 3).data(); Start time
+                    // const endTime = this.cell(rowIdx, 4).data(); End time
 
-                    const isTimeInBetween = moment().isBetween(
-                        moment(startTime, "HH:mm:ss"),
-                        moment(endTime, "HH:mm:ss"),
-                        "HH:mm:ss"
-                    );
-
-                    if (isTimeInBetween) {
-                        const scheduleId = this.cell(rowIdx, 0).data();
+                    const isTimeAfter = moment().isAfter(thisRowDate);
+                    // const isTimeInBetween = moment().isBetween(
+                    //     moment(startTime, "HH:mm:ss"),
+                    //     moment(endTime, "HH:mm:ss"),
+                    //     "HH:mm:ss"
+                    // );
+                    if (isTimeAfter) {
+                        callApiUpdateScheduleStatus(scheduleId, "Ended");
+                    } else {
                         const node = $(this.cell(rowIdx, 5).node());
 
                         // Change display to a select box if not already updated
                         if (!node.children('select').length) {
                             node.html(`
-                                        <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
-                                            ${getScheduleStatusOptions(currentStatus)}
-                                        </select>
-                                    `);
+                                    <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
+                                        ${getScheduleStatusOptions(currentStatus)}
+                                    </select>
+                                `);
 
                             // Add change event listener to the select element
                             node.find('select').on('change', function () {
@@ -427,8 +429,72 @@
                             });
                         }
                     }
+                    // if (isTimeInBetween) {
+                    //     const scheduleId = this.cell(rowIdx, 0).data();
+                    //     const node = $(this.cell(rowIdx, 5).node());
+
+                    //     Change display to a select box if not already updated
+                    //     if (!node.children('select').length) {
+                    //         node.html(`
+                    //                     <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
+                    //                         ${getScheduleStatusOptions(currentStatus)}
+                    //                     </select>
+                    //                 `);
+
+                    //         Add change event listener to the select element
+                    //         node.find('select').on('change', function () {
+                    //             const newStatus = $(this).val();
+                    //             callApiUpdateScheduleStatus(scheduleId, newStatus);
+                    //         });
+                    //     }
+                    // }
                 }
             });
+        }
+        function getScheduleDateBasedOnToday(){
+            // Get today's date in the desired format
+            const today = moment().startOf('day'); // Format based on your data
+
+            // Get the page length (number of rows per page)
+            const pageLength = scheduleTable.page.len();
+
+            // Initialize variables to track the closest date and its row index
+            let closestDate = null;
+            let closestRowIndex = -1;
+
+            // Loop through all rows to find today's date or the closest previous date
+            scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                const dateInRow = moment(this.cell(rowIdx, 2).data()); // Adjust format to match your table data
+                if (dateInRow.isValid()) {
+                    if (dateInRow.isSame(today)) {
+                        // If today's date matches exactly, select this row
+                        closestDate = dateInRow;
+                        closestRowIndex = rowIdx;
+                        return false; // Stop searching
+                    } else if (dateInRow.isBefore(today)) {
+                        // If the date is before today, check if it's the closest one
+                        if (!closestDate || dateInRow.isAfter(closestDate)) {
+                            closestDate = dateInRow;
+                            closestRowIndex = rowIdx;
+                        }
+                    }
+                }
+            });
+
+            // If a matching or closest date row is found
+            if (closestRowIndex !== -1) {
+                // Calculate the page number
+                const pageNumber = Math.floor(closestRowIndex / pageLength);
+
+                // Navigate to the page containing the row
+                scheduleTable.page(pageNumber).draw(false);
+
+                // Select the row
+                scheduleTable.row(closestRowIndex).select();
+                console.log(`Selected row with date: ${closestDate.format("MM/DD/YYYY")}`);
+            } else {
+                console.log("No row found with today's date or any previous date.");
+            }
         }
         function getEnrollStatusOptions(selectedStatus) {
             var options = ['Enrolled', 'Cancelled']; // Example statuses
@@ -487,16 +553,8 @@
                             enrollTable.clear().rows.add(response.data.enrolls).draw();
                         }
                         if (response.data.schedules && response.data.schedules.length > 0) {
-                            // Clear any existing answers
-                            // $('#schedule_list').empty();
-                            // console.log(response.data.schedules);
                             scheduleTable.clear().rows.add(response.data.schedules).draw();
-                            // Loop through each answer and generate the HTML
-                            // response.data.homeworkAnswers.forEach(function (answer) {
-                            //     let answerHtml = generateAnswerHtml(answer,response.data.courseStatus); Assuming both answerInfo and updateAnswer are the same structure
-                            //     $('#schedule_list').append(answerHtml);
-                            // });
-
+                            getScheduleDateBasedOnToday();
                         }
                         // console.log(response.data);
                     } else {

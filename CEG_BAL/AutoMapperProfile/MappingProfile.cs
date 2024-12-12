@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CEG_BAL.Configurations;
 using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Account.Create;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Get;
@@ -198,9 +199,6 @@ namespace CEG_BAL.AutoMapperProfile
             CreateMap<Bird, BirdViewModel>().ReverseMap();
             CreateMap<Notification, NotificationViewModel>().ReverseMap();
             CreateMap<Feedback, FeedbackViewModel>().ReverseMap();*/
-
-            CreateMap<Account, AccountViewModel>()
-                .ReverseMap();
             CreateMap<Role, RoleViewModel>()
                 .ReverseMap();
             CreateMap<Teacher, TeacherViewModel>()
@@ -231,8 +229,20 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<GameLevel, GameLevelViewModel>()
                 .ReverseMap();
-
+            // Account
+            CreateMap<CreateNewAccount, Account>();
+            CreateMap<Account, AccountViewModel>()
+                .ReverseMap();
             // Teacher
+            CreateMap<Teacher, TeacherViewModel>();
+            CreateMap<CreateNewTeacher, Teacher>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.Account.CreatedDate = DateTime.Now;
+                    dest.Account.Status = CEGConstants.ACCOUNT_STATUS_ACTIVE;
+                    dest.Certificate = "not submited yet";
+                    dest.Image = "anonymous";
+                });
             CreateMap<Teacher, GetTeacherNameOption>()
                 .AfterMap((src,dest) =>
                 {

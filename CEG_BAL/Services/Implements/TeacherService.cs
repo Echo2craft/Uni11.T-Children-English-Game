@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
@@ -63,24 +64,27 @@ namespace CEG_BAL.Services.Implements
             return false;
         }
 
-        public async void Create(TeacherViewModel teacher, CreateNewTeacher newTeach, IFormFile certImage)
+        public async Task Create(CreateNewTeacher newTea)
         {
-            var acc = _mapper.Map<Teacher>(teacher);
-            acc.Account.CreatedDate = DateTime.Now;
-            acc.Account.Status = "Active";
-            acc.Account.RoleId = _unitOfWork.RoleRepositories.GetRoleIdByRoleName("Teacher").Result;
-            if (newTeach != null)
-            {
-                acc.Account.Fullname = newTeach.Account.Fullname;
-                acc.Account.Username = newTeach.Account.Username;
-                acc.Account.Gender = newTeach.Account.Gender;
-                acc.Account.Password = newTeach.Account.Password;
-                acc.Email = newTeach.Email;
-                acc.Phone = newTeach.Phone;
-                acc.Address = newTeach.Address;
-            }
+            if (newTea == null)
+                throw new ArgumentNullException(nameof(newTea), "The new teacher info cannot be null.");
 
-            if (certImage != null && certImage.Length > 0)
+            var tea = new Teacher();
+            _mapper.Map(newTea, tea);
+            tea.Account.RoleId = await _unitOfWork.RoleRepositories.GetRoleIdByRoleName(CEGConstants.ACCOUNT_ROLE_TEACHER);
+
+            // Save to the database
+            try
+            {
+                _unitOfWork.TeacherRepositories.Create(tea);
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating teacher account.", ex);
+            }
+            /*if (certImage != null && certImage.Length > 0)
             {
                 string imageUrl = await _storageService.UploadToBlobAsync(certImage, "certificate/");
                 acc.Certificate = imageUrl;
@@ -88,10 +92,7 @@ namespace CEG_BAL.Services.Implements
             else
             {
                 acc.Certificate = "";
-            }
-
-            _unitOfWork.TeacherRepositories.Create(acc);
-            _unitOfWork.Save();
+            }*/
         }
 
 
@@ -120,34 +121,44 @@ namespace CEG_BAL.Services.Implements
             return acc != null;
         }
 
-        public async Task<TeacherViewModel?> GetTeacherByAccountId(int id)
+        public async Task<TeacherViewModel?> GetByAccountId(int id)
         {
             var teacher = await _unitOfWork.TeacherRepositories.GetByAccountIdNoTracking(id);
-            if (teacher != null)
-            {
-                var teach = _mapper.Map<TeacherViewModel>(teacher);
-                return teach;
-            }
-            return null;
+            return teacher != null ? _mapper.Map<TeacherViewModel>(teacher) : null;
         }
-        /*public async Task<string> UploadToBlobAsync(IFormFile file)
-{
-   // Injected BlobServiceClient
-   var blobContainerClient = _storageService.GetBlobContainerClient();
-   await blobContainerClient.CreateIfNotExistsAsync();
-   await blobContainerClient.SetAccessPolicyAsync(Azure.Storage.Blobs.Models.PublicAccessType.Blob);
+        public async Task UploadToBlobAsync(string teacherName, IFormFile certificate, string imageType)
+        {
+            var tea = await _unitOfWork.TeacherRepositories.GetByFullname(teacherName) ??
+                throw new ArgumentNullException(teacherName, "Teacher goes by fullname not found.");
 
-   // Generate a unique file name
-   string fileName = Guid.NewGuid() + "-" + Path.GetExtension(file.FileName);
-   var blobClient = blobContainerClient.GetBlobClient(fileName);
+            // Injected BlobServiceClient
+            var blobContainerClient = _storageService.GetBlobContainerClient();
+            await blobContainerClient.CreateIfNotExistsAsync();
+            await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.Blob);
 
-   // Upload the file to Blob Storage
-   using (var stream = file.OpenReadStream())
-   {
-       await blobClient.UploadAsync(stream, true);
-   }
+            // Generate a unique file name
+            string fileName = Guid.NewGuid() + "-" + Path.GetExtension(certificate.FileName);
+            var blobClient = blobContainerClient.GetBlobClient(fileName);
 
-   return blobClient.Uri.ToString(); // Return the file URL
-}*/
+            // Upload the file to Blob Storage
+            using (var stream = certificate.OpenReadStream())
+            {
+                await blobClient.UploadAsync(stream, true);
+            }
+            if(imageType.Equals(CEGConstants.TEACHER_IMAGE_CERTIFICATE_TYPE))
+                tea.Certificate = blobClient.Uri.ToString();
+
+            // Save to the database
+            try
+            {
+                _unitOfWork.TeacherRepositories.Update(tea);
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while saving teacher certificate url link.", ex);
+            }
+        }
     }
 }
