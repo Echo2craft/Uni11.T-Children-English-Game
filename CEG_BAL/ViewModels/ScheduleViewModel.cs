@@ -18,7 +18,8 @@ namespace CEG_BAL.ViewModels
         public TimeOnly EndTime { get; set; }
 
         public string? Status { get; set; }
-        
+
+        public List<AttendanceViewModel>? Attendances { get; set; } = new List<AttendanceViewModel>();
 
         public ClassViewModel? Class { get; set; }
 
