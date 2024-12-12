@@ -13,6 +13,7 @@ namespace CEG_DAL.Infrastructure
     {
         private readonly MyDBContext _dbContext;
         private IAccountRepositories _accountRepositories;
+        private IAttendanceRepositories _attendanceRepositories;
         private IClassRepositories _classRepositories;
         private ICourseRepositories _courseRepositories;
         private IEnrollRepositories _enrollRepositories;
@@ -38,6 +39,7 @@ namespace CEG_DAL.Infrastructure
             _dbContext = context;
         }
         public IAccountRepositories AccountRepositories => _accountRepositories ??= new AccountRepositories(_dbContext);
+        public IAttendanceRepositories AttendanceRepositories => _attendanceRepositories ??= new AttendanceRepositories(_dbContext);
         public IClassRepositories ClassRepositories => _classRepositories ??= new ClassRepositories(_dbContext);
         public ICourseRepositories CourseRepositories => _courseRepositories ??= new CourseRepositories(_dbContext);
         public IEnrollRepositories EnrollRepositories => _enrollRepositories ??= new EnrollRepositories(_dbContext);
