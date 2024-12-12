@@ -170,7 +170,8 @@ namespace CEG_BAL.Configurations
                         [
                             CEGConstants.SCHEDULE_STATUS_UPCOMING,
                             CEGConstants.SCHEDULE_STATUS_ONGOING,
-                            CEGConstants.SCHEDULE_STATUS_NAME_CANCELLED
+                            CEGConstants.SCHEDULE_STATUS_CANCELLED,
+                            CEGConstants.SCHEDULE_STATUS_ENDED
                         ];
                         return validStatuses.Contains(newStatus);
                     }
