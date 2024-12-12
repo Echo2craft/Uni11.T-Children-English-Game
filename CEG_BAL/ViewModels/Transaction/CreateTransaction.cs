@@ -24,9 +24,9 @@ namespace CEG_BAL.ViewModels.Transaction
         public string TransactionType { get; set; } = null!;
         [Required(ErrorMessage = "Student's Fullname is required")]
         [DisplayName("Student's Fullname")]
-        public string? StudentFullname { get; set; }
+        public string StudentFullname { get; set; } = null!;
         [Required(ErrorMessage = "Class code is required")]
         [DisplayName("Class code")]
-        public string? ClassName { get; set; }
+        public string ClassName { get; set; } = null!;
     }
 }

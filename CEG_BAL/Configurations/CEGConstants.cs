@@ -52,6 +52,11 @@ namespace CEG_BAL.Configurations
         public readonly static string ACCOUNT_STATUS_DENIED = "Denied";
         public readonly static string ACCOUNT_STATUS_SUSPENDED = "Suspended";
 
+        public readonly static string ACCOUNT_ROLE_TEACHER = "Teacher";
+
+        public readonly static string ACCOUNT_IMAGE_AVATAR_TYPE = "Avatar";
+        public readonly static string TEACHER_IMAGE_CERTIFICATE_TYPE = "Certificate";
+
         public readonly static string COURSE_DIFFICULTY_TITLE = "Difficulty";
         public readonly static string COURSE_DIFFICULTY_BEGINNER = "Beginner";
         public readonly static string COURSE_DIFFICULTY_INTERMEDIATE = "Intermediate";

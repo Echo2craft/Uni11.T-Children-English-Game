@@ -95,6 +95,7 @@ namespace CEG_WebAPI
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<IStudentAnswerService, StudentAnswerService>();
             services.AddScoped<IStudentHomeworkService, StudentHomeworkService>();
             services.AddScoped<IStudentProgressService, StudentProgressService>();
 

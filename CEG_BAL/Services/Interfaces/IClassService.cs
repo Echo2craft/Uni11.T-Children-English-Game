@@ -16,9 +16,8 @@ namespace CEG_BAL.Services.Interfaces
         Task Update(int claId, UpdateClass upCla);
         Task UpdateStatus(int claId, string upClaStatus);
         Task<List<ClassViewModel>> GetClassList();
-        Task<List<GetClassForTransaction>> GetOptionListByStatusOpen();
+        Task<List<GetClassForTransaction>> GetOptionListByStatusOpen(string filterClassByStudentName = "");
         Task<List<ClassViewModel>> GetClassListParent();
-        Task<List<ClassViewModel>> GetListAdmin();
         Task<List<ClassViewModel>> GetListByTeacherAccountId(int id);
         /// <summary>
         /// Get Class Info by Class id. 
@@ -44,5 +43,6 @@ namespace CEG_BAL.Services.Interfaces
         Task<ClassViewModel?> GetByIdParent(int id);
         Task<ClassViewModel?> GetByClassName(string className);
         Task<bool> IsEditableById(int id);
+        Task<int> GetTotalAmount();
     }
 }

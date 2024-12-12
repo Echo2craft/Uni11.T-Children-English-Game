@@ -1,11 +1,10 @@
-using Azure.Storage.Blobs.Models;
 using CEG_BAL.ViewModels;
 using CEG_RazorWebApp.Libraries;
 using CEG_RazorWebApp.Models.Transaction.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CEG_RazorWebApp.Pages.Admin.Transaction
+namespace CEG_RazorWebApp.Pages.Parent.Transaction
 {
     public class TransactionReturnModel : PageModel
     {
@@ -13,7 +12,6 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
         private readonly IConfiguration _config;
         private readonly VnPayLibrary _vnPayLibrary;
         private readonly HttpClient _httpClient;
-
         public TransactionReturnModel(IConfiguration config, HttpClient httpClient)
         {
             _config = config;
@@ -43,20 +41,13 @@ namespace CEG_RazorWebApp.Pages.Admin.Transaction
                     VnpayId = TransactionResponse.VnpayId
                 };
 
-                if(transactionData.TransactionType == "Enrollment")
+                if (transactionData.TransactionType == "Enrollment")
                 {
                     transactionData.StudentFullname = ExtractValue(orderDetails, Constants.VNPAY_STUDENT_NAME_LABEL);
                     transactionData.ClassName = ExtractValue(orderDetails, Constants.VNPAY_CLASS_NAME_LABEL);
                 }
 
                 CreateTransactionVM = transactionData;
-
-                /*var apiResponse = await _httpClient.PostAsJsonAsync("https://localhost:7143/api/Transaction/Create", transactionData);
-
-                if (!apiResponse.IsSuccessStatusCode)
-                {
-                    TransactionResponse.Message = "Transaction processed, but failed to save.";
-                }*/
             }
             else
             {

@@ -107,6 +107,33 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/Count")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTotalTransactionAmount()
+        {
+            try
+            {
+                var result = await _transactionService.GetTotalAmount();
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("ByParent/{id}")]
         [Authorize(Roles = "Parent")]
         [ProducesResponseType(typeof(List<TransactionViewModel>), StatusCodes.Status200OK)]
@@ -246,12 +273,13 @@ namespace CEG_WebAPI.Controllers
                 }
                 if (newTra.TransactionType.Equals(CEGConstants.TRANSACTION_TYPE_ENROLLMENT))
                 {
-                    if (!classObj.Exists(clas => clas.ClassName.Equals(newTra.ClassName)))
+                    var existEnr = await _enrollService.GetByStudentFullnameAndClassName(newTra.StudentFullname, newTra.ClassName);
+                    if (existEnr != null)
                     {
-                        return NotFound(new
+                        return BadRequest(new
                         {
                             Status = false,
-                            ErrorMessage = "Class not found or not Open for Enrollment."
+                            ErrorMessage = "Student has already enrolled to this class."
                         });
                     }
                 }
