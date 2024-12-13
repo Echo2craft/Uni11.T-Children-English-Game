@@ -429,38 +429,41 @@
         });
         function updateScheduleStatuses() {
             scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                const currentStatus = this.cell(rowIdx, 5).data(); // Current status
+                const currentStatus = this.cell(rowIdx, 5).data(); // Current status in the table
                 if (currentStatus !== "Ended" && currentStatus !== "Cancelled"){
-                    const thisRowDate = this.cell(rowIdx, 2).data(); // This row date
-                    const scheduleId = this.cell(rowIdx, 0).data();
                     // const startTime = this.cell(rowIdx, 3).data(); Start time
                     // const endTime = this.cell(rowIdx, 4).data(); End time
-
-                    const isTimeAfter = moment().isAfter(thisRowDate);
                     // const isTimeInBetween = moment().isBetween(
                     //     moment(startTime, "HH:mm:ss"),
                     //     moment(endTime, "HH:mm:ss"),
                     //     "HH:mm:ss"
                     // );
-                    if (isTimeAfter) {
-                        callApiUpdateScheduleStatus(scheduleId, "Ended");
-                    } else {
-                        const node = $(this.cell(rowIdx, 5).node());
+                    const thisRowDate = moment(this.cell(rowIdx, 2).data(), "YYYY-MM-DDTHH:mm:ss"); // Parse date
+                    const thisRowEndTime = moment(this.cell(rowIdx, 4).data(), "HH:mm:ss"); // Parse time only
+                    const scheduleId = this.cell(rowIdx, 0).data(); // Schedule ID
 
-                        // Change display to a select box if not already updated
-                        if (!node.children('select').length) {
-                            node.html(`
-                                    <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
-                                        ${getScheduleStatusOptions(currentStatus)}
-                                    </select>
-                                `);
+                    // Combine date and time for full comparison
+                    const fullRowDateTime = thisRowDate.clone().set({
+                        hour: thisRowEndTime.hours(),
+                        minute: thisRowEndTime.minutes(),
+                        second: thisRowEndTime.seconds(),
+                    });
 
-                            // Add change event listener to the select element
-                            node.find('select').on('change', function () {
-                                const newStatus = $(this).val();
-                                callApiUpdateScheduleStatus(scheduleId, newStatus);
-                            });
+                    // Check if the current date-time is after the row's date-time
+                    const isGivenDateBefore = moment().isAfter(thisRowDate);
+                    const isScheduleOverdue = moment().isAfter(fullRowDateTime);
+
+                    if (isGivenDateBefore) {
+                        if (isScheduleOverdue) {
+                            // Call API to update status to "Ended"
+                            callApiUpdateScheduleStatus(scheduleId, "Ended");
+                        } else {
+                            // Render status dropdown
+                            renderStatusDropdown(this, rowIdx, currentStatus, scheduleId);
                         }
+                    } else {
+                        // Render status dropdown for future dates
+                        renderStatusDropdown(this, rowIdx, currentStatus, scheduleId);
                     }
                     // if (isTimeInBetween) {
                     //     const scheduleId = this.cell(rowIdx, 0).data();
@@ -483,6 +486,27 @@
                     // }
                 }
             });
+        }
+        /**
+        * Renders the status dropdown in the specified row cell.
+        */
+        function renderStatusDropdown(row, rowIdx, currentStatus, scheduleId) {
+            const node = $(row.cell(rowIdx, 5).node());
+
+            // Avoid re-rendering if the dropdown already exists
+            if (!node.children('select').length) {
+                node.html(`
+                    <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
+                        ${getScheduleStatusOptions(currentStatus)}
+                    </select>
+                `);
+
+                // Add change event listener to the select element
+                node.find('select').on('change', function () {
+                    const newStatus = $(this).val();
+                    callApiUpdateScheduleStatus(scheduleId, newStatus);
+                });
+            }
         }
         function getScheduleDateBasedOnToday(){
             // Get today's date in the desired format
@@ -551,7 +575,7 @@
             var html = '';
             switch (selectedStatus) {
                 case 'Upcoming':
-                    options = ['Upcoming', 'Ongoing', 'Cancelled']
+                    options = ['Upcoming', 'Ongoing', 'Ended', 'Cancelled']
                     break;
                 case 'Ongoing':
                     options = ['Ongoing', 'Ended', 'Cancelled']

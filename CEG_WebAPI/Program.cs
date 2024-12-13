@@ -78,6 +78,7 @@ namespace CEG_WebAPI
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IAttendanceService,AttendanceService>();
             services.AddScoped<IClassService, ClassService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IEnrollService, EnrollService>();

@@ -107,10 +107,6 @@ namespace CEG_DAL.Repositories.Implements
                             Description = sch.Session.Description,
                             Hours = sch.Session.Hours
                         },
-                        Attendances = includeAttendances ? sch.Attendances.Select(att => new Attendance()
-                        {
-
-                        }).OrderBy(att => att.StudentId).ToList() : null
                     }).OrderBy(sch => sch.ScheduleDate).ToList() : null,
                     Enrolls = c.Enrolls.Select(s => new Enroll()
                     {
