@@ -50,7 +50,7 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<Transaction>> GetTransactionByParentId(int parentId)
+        public async Task<List<Transaction>> GetTransactionByParentId(int? parentId)
         {
             return await _dbContext.Transactions.Where(t => t.ParentId == parentId).ToListAsync();
         }

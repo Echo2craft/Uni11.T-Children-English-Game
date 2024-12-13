@@ -148,7 +148,8 @@ namespace CEG_BAL.Services.Implements
         {
             var studentId = await _unitOfWork.StudentRepositories.GetIdByAccountIdNoTracking(id);
             if (studentId == 0) return new List<ClassViewModel>();
-            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByStudentId(studentId));
+            return null;
+            //return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByStudentId(studentId));
         }
         public async Task Update(int claId, UpdateClass upCla)
         {

@@ -229,6 +229,9 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
+
+
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -271,7 +274,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetById(id,true,true,true,true,true);
+                var result = await _classService.GetById(id, true, true, true, true, true);
                 if (result == null)
                 {
                     return NotFound(new
@@ -306,7 +309,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetById(id,true,true,true,true,true);
+                var result = await _classService.GetById(id, true, true, true, true, true);
                 if (result == null)
                 {
                     return NotFound(new
@@ -341,7 +344,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetByIdParent(id);
+                var result = await _classService.GetById(id, true, true, true, true, true);
                 if (result == null)
                 {
                     return NotFound(new
@@ -482,7 +485,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Teacher not found."
                     });
                 }
-                await _classService.Update(id,upCla);
+                await _classService.Update(id, upCla);
                 result = await _classService.GetById(id);
                 return Ok(new
                 {

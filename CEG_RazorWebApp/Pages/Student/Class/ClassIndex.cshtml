@@ -1,7 +1,7 @@
 ﻿@page "/Student/Class/Index"
 @model CEG_RazorWebApp.Pages.Student.Class.ClassIndexModel
 @{
-    ViewData["Title"] = "Class Page";
+    ViewData["Title"] = "Student All Enrolled Classes Page";
     string? search = string.Empty;
     Layout = "~/Pages/Shared/_SLayout.cshtml";
 }
@@ -39,9 +39,9 @@
                             <ul class="nav nav-tabs">
                                 <!-- dung vong for o day -->
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="/Teacher/Class/Index">
+                                    <a class="nav-link active" data-toggle="tab" href="/Student/Class/Index">
                                         <i class='bx bx-home-alt-2'></i>
-                                        <span>All Classes</span>
+                                        <span>All your Enrolled Classes</span>
                                     </a>
                                 </li>
                             </ul>
@@ -65,7 +65,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row card-content" id="classList">
+                                    <div class="row card-content" id="enrollList">
                                         <!-- dung vong for o day -->
                                     </div>
                                     <!-- end tapnet -->
@@ -78,30 +78,30 @@
         </div>
     </div>
     <script>
-        var id = sessionStorage.getItem('usrId');
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
-        var classList = [];
+        var id = sessionStorage.getItem('usrId');
+        var enrollList = [];
         $(document).ready(function () {
-            callApiGetClassList();
+            callApiGetEnrollList();
             // Search event handler
             $('#search').on('keyup', function (event) {
                 // Get the search term
                 var searchTerm = $(this).val().toLowerCase();
 
                 // Filter the classes based on the search term
-                var filteredclassList = classList.filter(function (classObject) {
-                    return classObject.className.toLowerCase().includes(searchTerm);
+                var filteredenrollList = enrollList.filter(function (enroll) {
+                    return enroll.class.className.toLowerCase().includes(searchTerm);
                 });
 
                 // Display the filtered classList
-                setClassDisplay(filteredclassList);
+                setEnrollDisplay(filteredenrollList);
             });
         });
         // Function to call API for class list
-        function callApiGetClassList() {
+        function callApiGetEnrollList() {
             $.ajax({
-                    url: apiUrl + `Class/${id}/All`, // Use teacherId in the API URL
+                url: apiUrl + `Enroll/Student/${id}`, // API Endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -109,80 +109,93 @@
                 success: function (response) {
                     if (response.status) {
                         classList = response.data;
-                        setClassDisplay(classList);
+                        setEnrollDisplay(classList);
                     } else {
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    alert("Error in api call: " + error);
-                    console.error("Error in api call:", error);
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
                 }
             });
         }
 
         // Function to display class list
-        function setClassDisplay(data) {
-            var classList = $('#classList');
-            classList.empty();
-            $.each(data, function (index, classObj) {
-                var formattedStartDate = formatDate(classObj.startDate, { ignoreHour: true });
-                var formattedEndDate = formatDate(classObj.endDate, { ignoreHour: true });
-                var filteredEnrollList = classObj.enrolls.filter(function (enroll) {
+        function setEnrollDisplay(data) {
+            var enrollList = $('#enrollList');
+            enrollList.empty();
+            $.each(data, function (index, enroll) {
+                var formattedStartDate = formatDate(enroll.class.startDate);
+                var formattedEndDate = formatDate(enroll.class.endDate);
+                var filteredEnrollList = enroll.class.enrolls.filter(function (enroll) {
                     return enroll.status === 'Enrolled';
                 });
                 var statusText = '';
-                switch (classObj.status) {
+                var statusText = '';
+                switch (enroll.class.status) {
                     case 'Open':
-                    case 'Ongoing':
-                        statusText = `<span class="outcome" style="float: left;">Status: ${classObj.status}</span>`
+                        statusText = `<span class="outcome" style="float: left;">Status: ${enroll.class.status}</span>`
                         break;
                     case 'Draft':
                     case 'Postponed':
-                        statusText = `<span class="approval" style="float: left;">Status: ${classObj.status}</span>`
+                        statusText = `<span class="approval" style="float: left;">Status: ${enroll.class.status}</span>`
                         break;
                     case 'Ended':
                     case 'Cancelled':
-                        statusText = `<span class="destroy" style="float: left;">Status: ${classObj.status}</span>`
+                        statusText = `<span class="destroy" style="float: left;">Status: ${enroll.class.status}</span>`
                         break;
                 }
-                formatter = new Intl.NumberFormat('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                });
                 // Construct card HTML
                 var cardHtml = `
-                    <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
-                        <div class="card1 card-child">
-                            <div class="club-name">
-                                Class Code: ${classObj.className}
-                                <div class="status">
-                                    ${statusText}
+                            <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                                <div class="card1 card-child">
+                                    <div class="club-name">
+                                        Class Code: ${enroll.class.className}
+                                        <div class="status">
+                                            ${statusText}
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="club-title">
+                                            <ul>
+                                                <li><h6>Course:</h6><span>${enroll.class.course.courseName}</span></li>
+                                                <li><h6>Teacher:</h6><span>${enroll.class.teacher.account.fullname}</span></li>
+                                                <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
+                                                <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
+                                                <li><h6>Minimum students amount:</h6><span>${enroll.class.minimumStudents}</span></li>
+                                                <li><h6>Maximum students amount:</h6><span>${enroll.class.maximumStudents}</span></li>
+                                                <li><h6>Current students amount:</h6><span>${filteredEnrollList.length}</span></li>
+                                                <li><h6>Weekly scheduled sessions amount:</h6><span>${enroll.class.schedules.length}</span></li>
+                                                <li><h6>Current enrolls amount:</h6><span>${enroll.class.enrolls.length}</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mx-auto">
+                                        <a class="btn btn-primary clickable-row" href="/Parent/Class/${enroll.class.classId}/Info" role="button">Details</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="club-title">
-                                    <ul>
-                                        <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
-                                        <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
-                                        <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
-                                        <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
-                                        <li><h6>Enrollment Fee:</h6><span>${formatter.format(classObj.enrollmentFee)}</span></li>
-                                        <li><h6>Minimum students amount:</h6><span>${classObj.minimumStudents}</span></li>
-                                        <li><h6>Maximum students amount:</h6><span>${classObj.maximumStudents}</span></li>
-                                        <li><h6>Current students amount:</h6><span>${filteredEnrollList.length}</span></li>
-                                        <li><h6>Weekly scheduled sessions amount:</h6><span>${classObj.schedules.length}</span></li>
-                                        <li><h6>Current enrolls amount:</h6><span>${classObj.enrolls.length}</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="form-group mx-auto">
-                                <a class="btn btn-primary clickable-row" href="/Teacher/Class/${classObj.classId}/Info" role="button">Details</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                classList.append(cardHtml);
+                        `;
+                // Append the constructed HTML to the enroll list container
+                // <form method="get" asp-route-id="${classObj.classId}">
+                //     <button class="btn btn-primary clickable-row" type="submit">See Detail</button>
+                // </form>
+                enrollList.append(cardHtml);
             });
         }
     </script>

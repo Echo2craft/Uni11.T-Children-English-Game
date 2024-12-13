@@ -112,7 +112,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<string>> GetStudentNameListByParent(int id)
         {
-            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             if (parentId == 0) return null;
             return await _unitOfWork.StudentRepositories.GetStudentNameListByParent(parentId);
         }
@@ -124,7 +124,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<StudentViewModel>> GetStudentByParentAccountId(int id)
         {
-            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             if (parentId == 0) return null;
             return _mapper.Map<List<StudentViewModel>>(await _unitOfWork.StudentRepositories.GetStudentByParentId(parentId));
         }
@@ -170,7 +170,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<int> GetTotalAmountByParent(int id)
         {
-            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             if (parentId == 0) throw new Exception("Parent not found.");
             return await _unitOfWork.StudentRepositories.GetTotalAmountByParent(parentId);
         }
