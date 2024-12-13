@@ -25,13 +25,16 @@ namespace CEG_DAL.Repositories.Implements
         /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
         /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
         /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
+        /// <param name="includeSchedule">Default: false, determine whether if the query should include class's schedules info</param>
+        /// <param name="includeAttendances">Default: false, determine whether if the query should include class's schedules attendances info</param>
         public async Task<Class?> GetByIdNoTracking(
             int id, 
             bool includeTeacher = false, 
             bool includeCourse = false, 
             bool includeSession = false, 
             bool filterSession = false,
-            bool includeSchedule = false
+            bool includeSchedule = false,
+            bool includeAttendances = false
             )
         {
             return await _dbContext.Classes
@@ -103,7 +106,11 @@ namespace CEG_DAL.Repositories.Implements
                             Title = sch.Session.Title,
                             Description = sch.Session.Description,
                             Hours = sch.Session.Hours
-                        }
+                        },
+                        Attendances = includeAttendances ? sch.Attendances.Select(att => new Attendance()
+                        {
+
+                        }).OrderBy(att => att.StudentId).ToList() : null
                     }).OrderBy(sch => sch.ScheduleDate).ToList() : null,
                     Enrolls = c.Enrolls.Select(s => new Enroll()
                     {
@@ -284,6 +291,48 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<int> GetTotalAmount()
         {
             return await _dbContext.Classes.CountAsync();
+        }
+
+        public async Task<List<Class>> GetListByStudentId(int studentId)
+        {
+            return await _dbContext.Classes
+                 .AsNoTrackingWithIdentityResolution()
+                 .Where(c => c.s == teacherId && c.Status != "Draft")
+                 .Select(c => new Class
+                 {
+                     ClassId = c.ClassId,
+                     ClassName = c.ClassName,
+                     StartDate = c.StartDate,
+                     EndDate = c.EndDate,
+                     MinimumStudents = c.MinimumStudents,
+                     MaximumStudents = c.MaximumStudents,
+                     EnrollmentFee = c.EnrollmentFee,
+                     TeacherId = c.TeacherId,
+                     CourseId = c.CourseId,
+                     Status = c.Status,
+                     Teacher = new Teacher // Create a new Teacher object
+                     {
+                         TeacherId = c.Teacher.TeacherId,
+                         Email = c.Teacher.Email,
+                         Phone = c.Teacher.Phone,
+                         Image = c.Teacher.Image,
+                         Account = new Account
+                         {
+                             Fullname = c.Teacher.Account.Fullname,
+                             Gender = c.Teacher.Account.Gender,
+                         }
+                         // Add other necessary properties here, but do NOT include Classes
+                     },
+                     Course = new Course // Create a new Course object
+                     {
+                         CourseId = c.Course.CourseId,
+                         CourseName = c.Course.CourseName
+                         // Add other necessary properties here, but do NOT include Classes
+                     },
+                     Schedules = c.Schedules,
+                     Enrolls = c.Enrolls,
+                 })
+                 .ToListAsync();
         }
     }
 }

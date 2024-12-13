@@ -51,7 +51,7 @@
                         <div class="row">
                             <div class="card profile col-12 mb-4">
                                 <div class="card-header" id="class-title-status">
-                                    <h4>Class <label id="class-class-title" class="truncate"></label> Information</h4>
+                                    <h4 id="class-class-title">Class Information</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="row mb-sm-2">
@@ -61,7 +61,7 @@
                                         <div class="col-sm-7" id="class-status">
                                         </div>
                                     </div>
-                                    <div class="row mb-sm-2">
+                                    @* <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
                                             <label class="col-form-label">Class Code:</label>
                                         </div>
@@ -69,7 +69,7 @@
                                             <span id="class-name">
                                             </span>
                                         </div>
-                                    </div>
+                                    </div> *@
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
                                             <label class="col-form-label">Course information:</label>
@@ -1213,8 +1213,9 @@
             $('#class-status').empty();
             $('select#updateClassStatus_Status').empty();
             $('#class-status').append(statusText);
-            $('#class-class-title').text(data.className);
-            $('#class-name').text(data.className);
+            $('#class-class-title').text('Class ' + data.className + ' Infomations');
+            // $('#class-class-title').text(data.className);
+            // $('#class-name').text(data.className);
             $('#class-teacher').text(data.teacher.account.fullname);
             $('#class-teacher').attr('href', `/Admin/Teacher/${data.teacher.accountId}/Info`);
             $('#class-course').text(data.course.courseName);

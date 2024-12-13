@@ -72,13 +72,16 @@ namespace CEG_BAL.Services.Implements
         /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
         /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
         /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
+        /// <param name="includeSchedule">Default: false, determine whether if the query should include class's schedules info</param>
+        /// <param name="includeAttendances">Default: false, determine whether if the query should include class's schedules attendances info</param>
         public async Task<ClassViewModel?> GetById(
             int id, 
             bool includeTeacher = true, 
             bool includeCourse = true,
             bool includeSession = false, 
             bool filterSession = false,
-            bool includeSchedule = true
+            bool includeSchedule = true,
+            bool includeAttendances = true
         )
         {
             var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(
@@ -87,7 +90,8 @@ namespace CEG_BAL.Services.Implements
                 includeCourse: includeCourse, 
                 includeSession: includeSession, 
                 filterSession: filterSession,
-                includeSchedule: includeSchedule
+                includeSchedule: includeSchedule,
+                includeAttendances: includeAttendances
             );
             if (clas == null) return null;
             var viewCla = _mapper.Map<ClassViewModel>(clas);
@@ -138,6 +142,13 @@ namespace CEG_BAL.Services.Implements
             var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
             if (teacherId == 0) return new List<ClassViewModel>();
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByTeacherId(teacherId));
+        }
+        
+        public async Task<List<ClassViewModel>> GetListByStudentAccountId(int id)
+        {
+            var studentId = await _unitOfWork.StudentRepositories.GetIdByAccountIdNoTracking(id);
+            if (studentId == 0) return new List<ClassViewModel>();
+            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByStudentId(studentId));
         }
         public async Task Update(int claId, UpdateClass upCla)
         {
