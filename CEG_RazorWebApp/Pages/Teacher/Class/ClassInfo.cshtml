@@ -13,6 +13,7 @@
 </head>
 <body>
     <div class="main-content">
+        <div id="alertContainer"></div>
         <div class="main">
             <div class="container-fluid">
                 <div class="row">
@@ -49,7 +50,6 @@
                                 <div class="card-header" id="class-title-status">
                                     <h4 id="class-class-title">Class Information</h4>
                                 </div>
-                                <div id="alertContainer"></div>
                                 <div class="card-body">
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
@@ -288,6 +288,7 @@
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
         var enrollTable;
+        var attendanceTable;
         var scheduleTable;
         $(document).ready(function() {
             // Registering the custom feature with DataTables
@@ -434,32 +435,14 @@
                 if (type === 'row') {
                     indexes.forEach(function (rowIdx) {
                         // var data = dt.row(rowIdx).data();
-                        // var dateCell = $(dt.cell(rowIdx, 4).node()).find('input');
-
-                        // Enable input in the date cell
-                        // dateCell.prop('disabled', false);
-                        // dateCell.on('change', function () {
-                        //     var endDateTime = new Date(dateCell.val());
-                        //     endDateTime.setHours(endDateTime.getHours() + data.hours);
-
-                        //     var endTimeCell = $(dt.cell(rowIdx, 5).node()).find('#schedule-end-date');
-                        //     endTimeCell.text(moment(endDateTime).format("MM/DD/YYYY hh:mm A"));
-                        // });
-                        console.log(dt.row(rowIdx).data());
+                        const scheduleId = dt.row(rowIdx).data().scheduleId;
+                        callApiGetAttendanceList(scheduleId);
                     });
                 }
             }).on('deselect', function (e, dt, type, indexes) {
                 if (type === 'row') {
                     indexes.forEach(function (rowIdx) {
-                        // console.log(dt.row(rowIdx).data());
-                        // var data = dt.row(rowIdx).data();
-                        // var dateCell = $(dt.cell(rowIdx, 4).node()).find('input');
-
-                        // If already selected, unselect and remove from scheduleTable
-                        // selectedSessionIds.delete(rowIdx);
-
-                        // Disable input in the date cell
-                        // dateCell.prop('disabled', true);
+                        attendanceTable.clear().draw();
                     });
                 }
             });
@@ -467,6 +450,37 @@
             setInterval(() => {
                 updateScheduleStatuses(); // Function to update rows
             }, 5000); // Check every 5 seconds (5000ms). Adjust interval as needed.
+
+            attendanceTable = new DataTable('#student-table', {
+                data: [],
+                deferRender: false,
+                responsive: true,
+                lengthMenu: [5, 10, 25, 50],
+                pageLength: 5,
+                columns: [
+                    { 
+                        data: 'studentId' 
+                    },
+                    { 
+                        data: 'student.account.fullname' 
+                    },
+                    {
+                        data: 'hasAttended'
+                    }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'Search student...'
+                        },
+                        searchIcon: {
+                        }
+                    }
+                },
+                select: {
+                    style: 'single'
+                },
+            });
 
         });
         function updateScheduleStatuses() {
@@ -710,10 +724,69 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    alert("Error in api call:" + error);
-                    console.error("Error in api call:", error);
-                    //showAlert('success', 'Data fetched successfully.');
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiGetAttendanceList(scheduleId) {
+            $.ajax({
+                url: apiUrl + 'Attendance/All/ByScheduleId/' + scheduleId, // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+                    // Check if the status is true
+                    if (response.status) {
+                        if (response.data && response.data.length > 0) {
+                            attendanceTable.clear().rows.add(response.data).draw();
+                        }
+                        else {
+                            attendanceTable.clear().draw();
+                        }
+                        // showAlert('success', 'Schedule status updated');
+                    } else {
+                        showAlert('error', 'Failed to fetch attendance list. Error: ' + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }

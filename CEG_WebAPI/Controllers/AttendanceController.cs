@@ -90,6 +90,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpGet("All/ByScheduleId/{scheduleId}")]
+        [Authorize(Roles = "Teacher")]
         [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

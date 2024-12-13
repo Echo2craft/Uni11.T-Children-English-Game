@@ -43,7 +43,14 @@ namespace CEG_DAL.Repositories.Implements
                     AttendanceId = att.AttendanceId,
                     ScheduleId = att.ScheduleId,
                     StudentId = att.StudentId,
-                    HasAttended = att.HasAttended
+                    HasAttended = att.HasAttended,
+                    Student = new Student()
+                    {
+                        Account = new Account()
+                        {
+                            Fullname = att.Student.Account.Fullname,
+                        }
+                    }
                 })
                 .ToListAsync();
         }
