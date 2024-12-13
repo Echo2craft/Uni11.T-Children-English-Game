@@ -230,7 +230,16 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Class>> GetListByTeacherId(int teacherId)
         {
-            return await _dbContext.Classes
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 }
+            };
+
+            var classes = await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
                 .Where(c => c.TeacherId == teacherId && c.Status != "Draft")
                 .Select(c => new Class
@@ -268,6 +277,9 @@ namespace CEG_DAL.Repositories.Implements
                     Enrolls = c.Enrolls,
                 })
                 .ToListAsync();
+            return classes
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
         }
 
         public async Task<int> GetIdByClassId(int id)

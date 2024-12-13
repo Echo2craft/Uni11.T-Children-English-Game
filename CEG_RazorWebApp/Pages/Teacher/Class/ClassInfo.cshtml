@@ -197,6 +197,12 @@
                                                         aria-label="Hours: activate to sort column ascending">
                                                         Session Hours
                                                     </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="session-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Schedule Id: activate to sort column ascending">
+                                                        Schedule Id
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -403,6 +409,9 @@
                     },
                     {
                         data: 'session.hours'
+                    },
+                    {
+                        data: 'scheduleId'
                     }
                 ],
                 layout: {
@@ -419,7 +428,40 @@
                 },
             }).on('draw', function (e, settings) {
                 scheduleTable.column(6).visible(false, false);
+                scheduleTable.column(7).visible(false, false);
                 updateScheduleStatuses();
+            }).on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    indexes.forEach(function (rowIdx) {
+                        // var data = dt.row(rowIdx).data();
+                        // var dateCell = $(dt.cell(rowIdx, 4).node()).find('input');
+
+                        // Enable input in the date cell
+                        // dateCell.prop('disabled', false);
+                        // dateCell.on('change', function () {
+                        //     var endDateTime = new Date(dateCell.val());
+                        //     endDateTime.setHours(endDateTime.getHours() + data.hours);
+
+                        //     var endTimeCell = $(dt.cell(rowIdx, 5).node()).find('#schedule-end-date');
+                        //     endTimeCell.text(moment(endDateTime).format("MM/DD/YYYY hh:mm A"));
+                        // });
+                        console.log(dt.row(rowIdx).data());
+                    });
+                }
+            }).on('deselect', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    indexes.forEach(function (rowIdx) {
+                        // console.log(dt.row(rowIdx).data());
+                        // var data = dt.row(rowIdx).data();
+                        // var dateCell = $(dt.cell(rowIdx, 4).node()).find('input');
+
+                        // If already selected, unselect and remove from scheduleTable
+                        // selectedSessionIds.delete(rowIdx);
+
+                        // Disable input in the date cell
+                        // dateCell.prop('disabled', true);
+                    });
+                }
             });
             // Set up the timer to frequently check the current time
             setInterval(() => {
@@ -548,9 +590,9 @@
 
                 // Select the row
                 scheduleTable.row(closestRowIndex).select();
-                console.log(`Selected row with date: ${closestDate.format("MM/DD/YYYY")}`);
+                // console.log(`Selected row with date: ${closestDate.format("MM/DD/YYYY")}`);
             } else {
-                console.log("No row found with today's date or any previous date.");
+                // console.log("No row found with today's date or any previous date.");
             }
         }
         function getEnrollStatusOptions(selectedStatus) {
@@ -603,7 +645,7 @@
                     // Log the entire response to the console for debugging
                     // Check if the status is true
                     if (response.status) {
-                        console.log(response.data);
+                        // console.log(response.data);
                         setClassDisplay(response.data);
                         // Check if homeworkAnswers is empty
                         if (response.data.enrolls && response.data.enrolls.length > 0) {
