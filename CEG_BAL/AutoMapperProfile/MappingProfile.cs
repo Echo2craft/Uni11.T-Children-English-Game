@@ -267,6 +267,9 @@ namespace CEG_BAL.AutoMapperProfile
                     dest.StartTime = src.ScheduleDate.HasValue ? TimeOnly.FromDateTime(src.ScheduleDate.Value) : default;
                 });
 
+            // Attendance
+            CreateMap<Attendance, AttendanceViewModel>();
+
             // Enroll
             CreateMap<Enroll, EnrollViewModel>()
                 .ReverseMap();

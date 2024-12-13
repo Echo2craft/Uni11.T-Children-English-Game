@@ -23,6 +23,8 @@ public partial class Student
 
     public virtual Account Account { get; set; } = null!;
 
+    public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
+
     public virtual ICollection<Enroll> Enrolls { get; set; } = new List<Enroll>();
 
     public virtual Parent Parent { get; set; } = null!;

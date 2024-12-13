@@ -10,6 +10,7 @@ namespace CEG_DAL.Infrastructure
     public interface IUnitOfWork : IDisposable
     {
         IAccountRepositories AccountRepositories { get; }
+        IAttendanceRepositories AttendanceRepositories { get; }
         IClassRepositories ClassRepositories { get; }
         ICourseRepositories CourseRepositories { get; }
         IEnrollRepositories EnrollRepositories { get; }

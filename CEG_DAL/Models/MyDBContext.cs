@@ -17,6 +17,8 @@ public partial class MyDBContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
+    public virtual DbSet<Attendance> Attendances { get; set; }
+
     public virtual DbSet<Class> Classes { get; set; }
 
     public virtual DbSet<Course> Courses { get; set; }
@@ -80,6 +82,28 @@ public partial class MyDBContext : DbContext
                 .HasForeignKey(d => d.RoleId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Accounts_Role");
+        });
+
+        modelBuilder.Entity<Attendance>(entity =>
+        {
+            entity.ToTable("Attendance");
+
+            entity.Property(e => e.AttendanceId)
+                .ValueGeneratedNever()
+                .HasColumnName("attendance_id");
+            entity.Property(e => e.HasAttended).HasColumnName("has_attended");
+            entity.Property(e => e.ScheduleId).HasColumnName("schedule_id");
+            entity.Property(e => e.StudentId).HasColumnName("student_id");
+
+            entity.HasOne(d => d.Schedule).WithMany(p => p.Attendances)
+                .HasForeignKey(d => d.ScheduleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Attendance_Schedule");
+
+            entity.HasOne(d => d.Student).WithMany(p => p.Attendances)
+                .HasForeignKey(d => d.StudentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Attendance_Student");
         });
 
         modelBuilder.Entity<Class>(entity =>
@@ -296,7 +320,6 @@ public partial class MyDBContext : DbContext
 
             entity.HasOne(d => d.Homework).WithMany(p => p.HomeworkQuestions)
                 .HasForeignKey(d => d.HomeworkId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_HomeworkQuestion_Homework");
         });
 
