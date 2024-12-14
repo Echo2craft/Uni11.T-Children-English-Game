@@ -13,6 +13,7 @@
 </head>
 <body>
     <div class="main-content">
+        <div id="alertContainer"></div>
         <div class="main">
             <div class="container-fluid">
                 <div class="row">
@@ -49,7 +50,6 @@
                                 <div class="card-header" id="class-title-status">
                                     <h4 id="class-class-title">Class Information</h4>
                                 </div>
-                                <div id="alertContainer"></div>
                                 <div class="card-body">
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
@@ -197,6 +197,12 @@
                                                         aria-label="Hours: activate to sort column ascending">
                                                         Session Hours
                                                     </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="session-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Schedule Id: activate to sort column ascending">
+                                                        Schedule Id
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -282,6 +288,7 @@
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
         var enrollTable;
+        var attendanceTable;
         var scheduleTable;
         $(document).ready(function() {
             // Registering the custom feature with DataTables
@@ -403,6 +410,9 @@
                     },
                     {
                         data: 'session.hours'
+                    },
+                    {
+                        data: 'scheduleId'
                     }
                 ],
                 layout: {
@@ -419,48 +429,97 @@
                 },
             }).on('draw', function (e, settings) {
                 scheduleTable.column(6).visible(false, false);
+                scheduleTable.column(7).visible(false, false);
                 updateScheduleStatuses();
+            }).on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    indexes.forEach(function (rowIdx) {
+                        // var data = dt.row(rowIdx).data();
+                        const scheduleId = dt.row(rowIdx).data().scheduleId;
+                        callApiGetAttendanceList(scheduleId);
+                    });
+                }
+            }).on('deselect', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    indexes.forEach(function (rowIdx) {
+                        attendanceTable.clear().draw();
+                    });
+                }
             });
             // Set up the timer to frequently check the current time
             setInterval(() => {
                 updateScheduleStatuses(); // Function to update rows
             }, 5000); // Check every 5 seconds (5000ms). Adjust interval as needed.
 
+            attendanceTable = new DataTable('#student-table', {
+                data: [],
+                deferRender: false,
+                responsive: true,
+                lengthMenu: [5, 10, 25, 50],
+                pageLength: 5,
+                columns: [
+                    { 
+                        data: 'studentId' 
+                    },
+                    { 
+                        data: 'student.account.fullname' 
+                    },
+                    {
+                        data: 'hasAttended'
+                    }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'Search student...'
+                        },
+                        searchIcon: {
+                        }
+                    }
+                },
+                select: {
+                    style: 'single'
+                },
+            });
+
         });
         function updateScheduleStatuses() {
             scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                const currentStatus = this.cell(rowIdx, 5).data(); // Current status
+                const currentStatus = this.cell(rowIdx, 5).data(); // Current status in the table
                 if (currentStatus !== "Ended" && currentStatus !== "Cancelled"){
-                    const thisRowDate = this.cell(rowIdx, 2).data(); // This row date
-                    const scheduleId = this.cell(rowIdx, 0).data();
                     // const startTime = this.cell(rowIdx, 3).data(); Start time
                     // const endTime = this.cell(rowIdx, 4).data(); End time
-
-                    const isTimeAfter = moment().isAfter(thisRowDate);
                     // const isTimeInBetween = moment().isBetween(
                     //     moment(startTime, "HH:mm:ss"),
                     //     moment(endTime, "HH:mm:ss"),
                     //     "HH:mm:ss"
                     // );
-                    if (isTimeAfter) {
-                        callApiUpdateScheduleStatus(scheduleId, "Ended");
-                    } else {
-                        const node = $(this.cell(rowIdx, 5).node());
+                    const thisRowDate = moment(this.cell(rowIdx, 2).data(), "YYYY-MM-DDTHH:mm:ss"); // Parse date
+                    const thisRowEndTime = moment(this.cell(rowIdx, 4).data(), "HH:mm:ss"); // Parse time only
+                    const scheduleId = this.cell(rowIdx, 0).data(); // Schedule ID
 
-                        // Change display to a select box if not already updated
-                        if (!node.children('select').length) {
-                            node.html(`
-                                    <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
-                                        ${getScheduleStatusOptions(currentStatus)}
-                                    </select>
-                                `);
+                    // Combine date and time for full comparison
+                    const fullRowDateTime = thisRowDate.clone().set({
+                        hour: thisRowEndTime.hours(),
+                        minute: thisRowEndTime.minutes(),
+                        second: thisRowEndTime.seconds(),
+                    });
 
-                            // Add change event listener to the select element
-                            node.find('select').on('change', function () {
-                                const newStatus = $(this).val();
-                                callApiUpdateScheduleStatus(scheduleId, newStatus);
-                            });
+                    // Check if the current date-time is after the row's date-time
+                    const isGivenDateBefore = moment().isAfter(thisRowDate);
+                    const isScheduleOverdue = moment().isAfter(fullRowDateTime);
+
+                    if (isGivenDateBefore) {
+                        if (isScheduleOverdue) {
+                            // Call API to update status to "Ended"
+                            callApiUpdateScheduleStatus(scheduleId, "Ended");
+                        } else {
+                            // Render status dropdown
+                            renderStatusDropdown(this, rowIdx, currentStatus, scheduleId);
                         }
+                    } else {
+                        // Render status dropdown for future dates
+                        renderStatusDropdown(this, rowIdx, currentStatus, scheduleId);
                     }
                     // if (isTimeInBetween) {
                     //     const scheduleId = this.cell(rowIdx, 0).data();
@@ -483,6 +542,27 @@
                     // }
                 }
             });
+        }
+        /**
+        * Renders the status dropdown in the specified row cell.
+        */
+        function renderStatusDropdown(row, rowIdx, currentStatus, scheduleId) {
+            const node = $(row.cell(rowIdx, 5).node());
+
+            // Avoid re-rendering if the dropdown already exists
+            if (!node.children('select').length) {
+                node.html(`
+                    <select class="custom-select form-control schedule-status" id="schedule-status-${rowIdx}">
+                        ${getScheduleStatusOptions(currentStatus)}
+                    </select>
+                `);
+
+                // Add change event listener to the select element
+                node.find('select').on('change', function () {
+                    const newStatus = $(this).val();
+                    callApiUpdateScheduleStatus(scheduleId, newStatus);
+                });
+            }
         }
         function getScheduleDateBasedOnToday(){
             // Get today's date in the desired format
@@ -524,9 +604,9 @@
 
                 // Select the row
                 scheduleTable.row(closestRowIndex).select();
-                console.log(`Selected row with date: ${closestDate.format("MM/DD/YYYY")}`);
+                // console.log(`Selected row with date: ${closestDate.format("MM/DD/YYYY")}`);
             } else {
-                console.log("No row found with today's date or any previous date.");
+                // console.log("No row found with today's date or any previous date.");
             }
         }
         function getEnrollStatusOptions(selectedStatus) {
@@ -551,7 +631,7 @@
             var html = '';
             switch (selectedStatus) {
                 case 'Upcoming':
-                    options = ['Upcoming', 'Ongoing', 'Cancelled']
+                    options = ['Upcoming', 'Ongoing', 'Ended', 'Cancelled']
                     break;
                 case 'Ongoing':
                     options = ['Ongoing', 'Ended', 'Cancelled']
@@ -579,7 +659,7 @@
                     // Log the entire response to the console for debugging
                     // Check if the status is true
                     if (response.status) {
-                        console.log(response.data);
+                        // console.log(response.data);
                         setClassDisplay(response.data);
                         // Check if homeworkAnswers is empty
                         if (response.data.enrolls && response.data.enrolls.length > 0) {
@@ -644,10 +724,69 @@
                         console.error("API returned false status.");
                     }
                 },
-                error: function (error) {
-                    alert("Error in api call:" + error);
-                    console.error("Error in api call:", error);
-                    //showAlert('success', 'Data fetched successfully.');
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiGetAttendanceList(scheduleId) {
+            $.ajax({
+                url: apiUrl + 'Attendance/All/ByScheduleId/' + scheduleId, // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+                    // Check if the status is true
+                    if (response.status) {
+                        if (response.data && response.data.length > 0) {
+                            attendanceTable.clear().rows.add(response.data).draw();
+                        }
+                        else {
+                            attendanceTable.clear().draw();
+                        }
+                        // showAlert('success', 'Schedule status updated');
+                    } else {
+                        showAlert('error', 'Failed to fetch attendance list. Error: ' + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
