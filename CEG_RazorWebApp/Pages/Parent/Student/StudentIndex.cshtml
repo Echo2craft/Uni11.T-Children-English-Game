@@ -121,8 +121,8 @@
 
     <script>
         var token = sessionStorage.getItem('token');
-        var id = sessionStorage.getItem('usrId')
-        var apiUrl = 'https://localhost:7143/api/';
+        var apiUrl = sessionStorage.getItem('apiUrl');
+        var id = sessionStorage.getItem('usrId');
         var studentList = [];
         $(document).ready(function () {
             callApiGetStudentList();
