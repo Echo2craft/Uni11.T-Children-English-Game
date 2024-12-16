@@ -461,7 +461,7 @@ html body {
     left: 255px;
     float: right;
     width: calc(100% - 235px);
-    z-index: 1;
+    z-index: 4;
     background: rgba(236, 240, 241, 0.95);
     transition: 0.3s;
     border-bottom: 1px solid #e7e7e7;
@@ -1206,6 +1206,12 @@ html body {
         vertical-align: top !important;
         border-top: 1px solid #EEEEEE !important;
     }
+
+/*        .table td.custom-select-cell {
+            padding: 0 !important;
+            vertical-align: middle !important;
+            border-top: 1px solid #EEEEEE !important;
+        }*/
 
     .action-button i {
         height: 20px;

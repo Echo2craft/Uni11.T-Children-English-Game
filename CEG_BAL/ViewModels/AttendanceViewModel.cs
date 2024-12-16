@@ -8,6 +8,7 @@ namespace CEG_BAL.ViewModels
 {
     public class AttendanceViewModel
     {
+        public int? AttendanceId { get; set; }
         public int StudentId { get; set; }
         public string HasAttended { get; set; } = null!;
 

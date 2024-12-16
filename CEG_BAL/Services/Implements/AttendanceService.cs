@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -38,9 +40,9 @@ namespace CEG_BAL.Services.Implements
             throw new NotImplementedException();
         }
 
-        public Task<AttendanceViewModel?> GetById(int id)
+        public async Task<AttendanceViewModel?> GetById(int id)
         {
-            throw new NotImplementedException();
+            return _mapper.Map<AttendanceViewModel>(await _unitOfWork.AttendanceRepositories.GetByIdNoTracking(id));
         }
 
         public async Task<List<AttendanceViewModel>> GetListNoTracking()
@@ -63,9 +65,31 @@ namespace CEG_BAL.Services.Implements
             throw new NotImplementedException();
         }
 
-        public Task UpdateStatus(int claId, string upClaStatus)
+        public async Task UpdateStatus(int attId, string upAttendStatus)
         {
-            throw new NotImplementedException();
+            // Fetch the existing record
+            var att = await _unitOfWork.AttendanceRepositories.GetByIdNoTracking(attId)
+                ?? throw new KeyNotFoundException("Attendance not found.");
+
+            att.HasAttended = upAttendStatus;
+            // Reattach entity and mark it as modified
+            _unitOfWork.AttendanceRepositories.Update(att);
+
+            // Save changes
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating attendant's status.", ex);
+            }
         }
     }
 }
