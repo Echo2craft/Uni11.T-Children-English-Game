@@ -388,14 +388,16 @@
                 responsive: true,
                 columns: [
                     {
-                        data: 'scheduleNumber'
+                        data: 'scheduleNumber',
+                        className: 'dt-head-left'
                     },
                     {
                         data: 'session.title'
                     },
                     {
                         data: 'scheduleDate',
-                        render: DataTable.render.date("dddd, DD/MM/YYYY")
+                        render: DataTable.render.date("dddd, DD/MM/YYYY"),
+                        className: 'dt-head-left'
                     },
                     {
                         data: 'startTime',
@@ -459,13 +461,24 @@
                 pageLength: 5,
                 columns: [
                     { 
-                        data: 'studentId' 
+                        data: 'studentId',
+                        className: 'dt-head-left'
                     },
                     { 
                         data: 'student.account.fullname' 
                     },
                     {
-                        data: 'hasAttended'
+                        data: 'hasAttended', // Add an attendance column
+                        render: function (data, type, row) {
+                            // Render a checkbox, set checked if "attend", unchecked if "absent"
+                            const checked = data === 'Attended' ? 'checked' : '';
+                            return `
+                            <input type="checkbox" class="attendance-checkbox dt-select-checkbox" ${checked}
+                                data-student-id="${row.studentId}">
+                        `;
+                        },
+                        orderable: false, // Prevent sorting on this column
+                        searchable: false // Prevent searching on this column
                     }
                 ],
                 layout: {
@@ -480,6 +493,17 @@
                 select: {
                     style: 'single'
                 },
+            }).on('draw', function (e, settings) {
+                // Attach listener to checkboxes after the table is drawn
+                $('#student-table .attendance-checkbox').off('change').on('change', function () {
+                    const studentId = $(this).data('student-id');
+                    const isChecked = $(this).is(':checked');
+                    const status = isChecked ? 'Attended' : 'Absent';
+
+                    // Update the data or call API
+                    console.log(`Student ID: ${studentId}, New Status: ${status}`);
+                    // updateAttendanceStatus(scheduleId, status); // Call your API or update logic here
+                });
             });
 
         });
