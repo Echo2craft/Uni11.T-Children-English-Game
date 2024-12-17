@@ -10,6 +10,8 @@ namespace CEG_DAL.Repositories.Interfaces
 {
     public interface IAttendanceRepositories : IRepositoryBase<Attendance>
     {
-
+        Task<List<Attendance>?> GetListNoTracking();
+        Task<List<Attendance>?> GetListByScheduleIdNoTracking(int scheduleId);
+        Task<Attendance?> GetByIdNoTracking(int id);
     }
 }

@@ -208,6 +208,7 @@ namespace CEG_BAL.Configurations
             }
             return false;
         }
+
         /*public static bool IsClassNewWeeklyScheduleValid(string newSchedule)
         {
             var validSchedule = new List<string>()
@@ -249,6 +250,38 @@ namespace CEG_BAL.Configurations
                         validStatuses =
                         [
                             CEGConstants.ENROLL_STATUS_SUSPENDED
+                        ];
+                        return validStatuses.Contains(newStatus);
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
+            return false;
+        }
+
+        public static bool IsAttendanceNewStatusValid(string currentStatus, string newStatus)
+        {
+            var validStatuses = Array.Empty<string>();
+            if (currentStatus == null) return false;
+            switch (currentStatus)
+            {
+                case var value when value.Equals(CEGConstants.ATTENDANCE_STATUS_ATTENDED):
+                    {
+                        validStatuses =
+                        [
+                            CEGConstants.ATTENDANCE_STATUS_ATTENDED,
+                            CEGConstants.ATTENDANCE_STATUS_ABSENT
+                        ];
+                        return validStatuses.Contains(newStatus);
+                    }
+                case var value when value.Equals(CEGConstants.ATTENDANCE_STATUS_ABSENT):
+                    {
+                        validStatuses =
+                        [
+                            CEGConstants.ATTENDANCE_STATUS_ATTENDED,
+                            CEGConstants.ATTENDANCE_STATUS_ABSENT
                         ];
                         return validStatuses.Contains(newStatus);
                     }
