@@ -306,7 +306,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetById(id,true,true,true,true,true);
+                var result = await _classService.GetById(id,true,true,true,true,true,true);
                 if (result == null)
                 {
                     return NotFound(new
