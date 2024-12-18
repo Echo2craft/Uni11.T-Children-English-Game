@@ -15,5 +15,6 @@ namespace CEG_BAL.Services.Interfaces
         Task Update(int id, UpdateHomeworkResult upHomRes);
         Task<List<HomeworkResultViewModel>> GetList();
         Task<HomeworkResultViewModel?> GetById(int id);
+        Task<HomeworkResultViewModel?> GetByStudentIdAndHomeworkId(int stuId, int homId);
     }
 }

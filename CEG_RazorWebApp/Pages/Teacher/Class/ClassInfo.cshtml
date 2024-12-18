@@ -210,7 +210,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="card-body" id="schedule_list">
+                                <div class="card-body" id="student_list" style="display: none; overflow: hidden;">
                                     @* <h5>No scheduled session found</h5> *@
                                     <div id="student-table_wrapper" class="dataTables_wrapper no-footer">
                                         <table id="student-table"
@@ -243,6 +243,38 @@
                                         </table>
                                     </div>
                                 </div>
+                                @* <div class="card-body" id="student_homework_list">
+                                    <div id="student-homework-table_wrapper" class="dataTables_wrapper no-footer">
+                                        <table id="student-homework-table"
+                                               class="table table-striped table-bordered dataTable no-footer compact"
+                                               aria-describedby="student-homework-table_info">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="student-homework-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Homework ID: activate to sort column ascending">
+                                                        Homework ID
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="student-homework-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Homework name: activate to sort column ascending">
+                                                        Homework Name
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="student-homework-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Score: activate to sort column ascending">
+                                                        Score
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div> *@
                             </div>
                         </div>
                     </div>
@@ -290,6 +322,9 @@
         var enrollTable;
         var attendanceTable;
         var scheduleTable;
+        let isTableDataEmpty = false; // To track if response data is empty
+        let hideTableTimer = null; // Timer to handle delayed table hiding
+        let isTableVisible = false; // Track the table visibility status
         $(document).ready(function() {
             // Registering the custom feature with DataTables
             DataTable.feature.register('searchIcon', function (settings, opts) {
@@ -432,20 +467,80 @@
             }).on('draw', function (e, settings) {
                 scheduleTable.column(6).visible(false, false);
                 scheduleTable.column(7).visible(false, false);
+
                 updateScheduleStatuses();
             }).on('select', function (e, dt, type, indexes) {
                 if (type === 'row') {
-                    indexes.forEach(function (rowIdx) {
-                        // var data = dt.row(rowIdx).data();
-                        const scheduleId = dt.row(rowIdx).data().scheduleId;
-                        callApiGetAttendanceList(scheduleId);
-                    });
+                    // Clear any pending hide action
+                    if (hideTableTimer) {
+                        clearTimeout(hideTableTimer);
+                        hideTableTimer = null;
+                    }
+                    const rowScheduleId = dt.row(indexes[0]).data().scheduleId;
+                    callApiGetAttendanceList(rowScheduleId);
+                    // if (!$('#student_list').is(':visible')) {
+                    //     $('#student_list').stop(true, true).slideDown(400); Slide down to show the table
+                    // }
+                    // Ensure the target table is visible
+                    // if (!isTableDataEmpty) {
+                    //     $('#student_list').stop(true, true).slideDown(400); Slide down to show the table
+                    // }
+
+                    // Ensure the target table is visible
+                    if (!isTableVisible) {
+                        $('#student_list').stop(true, true).slideDown(300);
+                        isTableVisible = true;
+                    }
+
+                    // indexes.forEach(function (rowIdx) {
+                    //     var data = dt.row(rowIdx).data();
+                    //     const scheduleId = dt.row(rowIdx).data().scheduleId;
+                    //     callApiGetAttendanceList(scheduleId);
+                    //     Check if the target table is not empty
+                    //     if (targetTable.data().any()) {
+                    //         Animate slide down to reveal the target table
+                    //         $('#student_list').stop(true, true).slideDown(400); Adjust duration as needed
+                    //     }
+                    // });
                 }
             }).on('deselect', function (e, dt, type, indexes) {
                 if (type === 'row') {
-                    indexes.forEach(function (rowIdx) {
-                        attendanceTable.clear().draw();
-                    });
+                    // Check if there are still any selected rows
+                    // const selectedRows = dt.rows({ selected: true }).count();
+                    // if (selectedRows === 0) {
+                    //     attendanceTable.clear().draw();
+                    //     Slide up to hide the table if no rows are selected
+                    //     $('#student_list').stop(true, true).slideUp(400);
+                    // }
+                    // Only hide the table if no rows are selected
+                    // if(selectedRows === 0 && ){
+                    //     dt.clear().draw();
+                    //     isTableDataEmpty = true;
+                    // }
+                    // Set a short timer to delay hiding the table
+                    hideTableTimer = setTimeout(() => {
+                        const selectedRows = dt.rows({ selected: true }).count();
+
+                        // Only hide the table if no rows are selected
+                        if (selectedRows === 0 && isTableVisible) {
+                            $('#student_list').stop(true, true).slideUp(300);
+                            attendanceTable.clear().draw();
+                            isTableVisible = false;
+                        }
+                    }, 50); // Short delay to ensure the `select` event has been triggered if applicable
+                    // if (selectedRows === 0) {
+                    //     dt.clear().draw();
+                    //     $('#student_list').stop(true, true).slideUp(400); Slide up to hide the table
+                    // }
+                    // indexes.forEach(function (rowIdx) {
+                    //     Animate slide up to hide the target table
+                    //     attendanceTable.clear().draw();
+                    //     Check if the target table is not empty
+                    //     if (!targetTable.data().any()) {
+                    //         Animate slide down to reveal the target table
+                    //         $('#student_list').stop(true, true).slideUp(400); Adjust duration as needed
+                    //     }
+                    // });
                 }
             });
             // Set up the timer to frequently check the current time
@@ -473,9 +568,9 @@
                             // Render a checkbox, set checked if "attend", unchecked if "absent"
                             const checked = data === 'Attended' ? 'checked' : '';
                             return `
-                            <input type="checkbox" class="attendance-checkbox dt-select-checkbox" ${checked}
-                                data-attendance-id="${row.attendanceId}">
-                        `;
+                                <input type="checkbox" class="attendance-checkbox dt-select-checkbox" ${checked}
+                                    data-attendance-id="${row.attendanceId}">
+                            `;
                         },
                         orderable: false, // Prevent sorting on this column
                         searchable: false // Prevent searching on this column
@@ -495,13 +590,18 @@
                 },
             }).on('draw', function (e, settings) {
                 // Attach listener to checkboxes after the table is drawn
-                $('#student-table .attendance-checkbox').off('change').on('change', function () {
-                    const attendanceId = $(this).data('attendance-id');
-                    const isChecked = $(this).is(':checked');
-                    const status = isChecked ? 'Attended' : 'Absent';
+                $('#student-table .attendance-checkbox')
+                    .off('click  change')
+                    .on('click', function (e) {
+                        e.stopPropagation(); // Prevent row selection when checkbox is clicked
+                    })
+                    .on('change', function () {
+                        const attendanceId = $(this).data('attendance-id');
+                        const isChecked = $(this).is(':checked');
+                        const status = isChecked ? 'Attended' : 'Absent';
 
-                    // Update the data or call API
-                    callApiUpdateAttendanceStatus(attendanceId, status); // Call your API or update logic here
+                        // Update the data or call API
+                        callApiUpdateAttendanceStatus(attendanceId, status); // Call your API or update logic here
                 });
             });
 
@@ -519,7 +619,7 @@
                     // );
                     const thisRowDate = moment(this.cell(rowIdx, 2).data(), "YYYY-MM-DDTHH:mm:ss"); // Parse date
                     const thisRowEndTime = moment(this.cell(rowIdx, 4).data(), "HH:mm:ss"); // Parse time only
-                    const scheduleId = this.cell(rowIdx, 0).data(); // Schedule ID
+                    const scheduleId = this.cell(rowIdx, 7).data(); // Schedule ID
 
                     // Combine date and time for full comparison
                     const fullRowDateTime = thisRowDate.clone().set({
@@ -584,10 +684,15 @@
                 node.addClass('custom-select-cell');
 
                 // Add change event listener to the select element
-                node.find('select').on('change', function () {
-                    const newStatus = $(this).val();
-                    callApiUpdateScheduleStatus(scheduleId, newStatus);
-                });
+                node.find('select')
+                    .off('click  change')
+                    .on('click', function (e) {
+                        e.stopPropagation(); // Prevent row selection when checkbox is clicked
+                    })
+                    .on('change', function () {
+                        const newStatus = $(this).val();
+                        callApiUpdateScheduleStatus(scheduleId, newStatus);
+                    });
             }
         }
         function getScheduleDateBasedOnToday(){
@@ -784,9 +889,11 @@
                     // Check if the status is true
                     if (response.status) {
                         if (response.data && response.data.length > 0) {
+                            isTableDataEmpty = false;
                             attendanceTable.clear().rows.add(response.data).draw();
                         }
                         else {
+                            isTableDataEmpty = true;
                             attendanceTable.clear().draw();
                         }
                         // showAlert('success', 'Schedule status updated');

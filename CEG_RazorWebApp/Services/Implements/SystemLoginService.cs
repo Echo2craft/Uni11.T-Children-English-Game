@@ -3,16 +3,20 @@ using CEG_RazorWebApp.Services.Interfaces;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using CEG_RazorWebApp.Models.Auth;
+using CEG_RazorWebApp.Libraries;
+using CEG_BAL.ViewModels.Authenticates;
+using CEG_BAL.Configurations;
+using CEG_RazorWebApp.Libraries.Models;
 
 namespace CEG_RazorWebApp.Services.Implements
 {
-    /*public class SystemLoginService : ISystemLoginService
+    public class SystemLoginService : ISystemLoginService
     {
         private readonly ILogger<SystemLoginService> _logger;
         private readonly IConfiguration _config;
         private readonly HttpClient client = null;
         private string AuthenAPI_URL = "";
-        private readonly BirdClubLibrary methcall = new();
+        private readonly CEG_RAZOR_Library methcall = new();
         private readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
@@ -32,8 +36,8 @@ namespace CEG_RazorWebApp.Services.Implements
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
-            *//*client.BaseAddress = new Uri(config.GetSection("DefaultApiUrl:ConnectionString").Value);
-            AuthenAPI_URL = "/api/User";*//*
+            client.BaseAddress = new Uri(config.GetSection(CEGConstants.SYSTEM_DEFAULT_API_HTTPS_URL_CONFIG_PATH).Value);
+            AuthenAPI_URL = "/api/User";
         }
 
         public async Task<string?> GetTokenAsync()
@@ -42,14 +46,14 @@ namespace CEG_RazorWebApp.Services.Implements
 
             AuthenRequest authenRequest = new()
             {
-                Username = _config.GetSection(Library.Constants.SYSTEM_DEFAULT_ACCOUNT_USR_NAME).Value,
-                Password = _config.GetSection(Library.Constants.SYSTEM_DEFAULT_ACCOUNT_USR_PASSWORD).Value
+                Username = _config.GetSection(CEGConstants.SYSTEM_DEFAULT_ACCOUNT_USR_NAME).Value,
+                Password = _config.GetSection(CEGConstants.SYSTEM_DEFAULT_ACCOUNT_USR_PASSWORD).Value
             };
 
-            var authenResponse = await methcall.CallMethodReturnObject<GetAuthenResponse>(
+            var authenResponse = await methcall.CallMethodReturnObject<DefaultResponseModel<AuthenResponse>>(
                 _httpClient: client,
                 options: jsonOptions,
-                methodName: Library.Constants.POST_METHOD,
+                methodName: CEGConstants.POST_METHOD,
                 url: AuthenAPI_URL,
                 inputType: authenRequest,
                 _logger: _logger);
@@ -63,5 +67,5 @@ namespace CEG_RazorWebApp.Services.Implements
 
             return responseAuth.AccessToken;
         }
-    }*/
+    }
 }
