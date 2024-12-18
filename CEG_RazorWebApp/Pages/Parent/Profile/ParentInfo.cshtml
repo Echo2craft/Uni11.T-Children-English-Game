@@ -1,10 +1,9 @@
-﻿@page "/Admin/Teacher/{accountId}/Info"
-@model CEG_RazorWebApp.Pages.Admin.Account.TeacherInfoModel
+﻿@page "/Parent/Profile"
+@model CEG_RazorWebApp.Pages.Parent.Profile.ParentInfoModel
 @{
-    ViewData["Title"] = "Teacher Account Info Page";
+    ViewData["Title"] = "Parent Account Info Page";
     var accountInfo = Model.AccountInfo;
     Layout = Model.LayoutUrl;
-    var accountId = Model.AccountId;
 }
 <html lang="en">
 <head>
@@ -27,19 +26,7 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Account/Index">Account</a>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <span>/</span>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <a href="/Admin/Teacher/@accountId/Info">@accountId</a>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <span>/</span>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <a href="/Admin/Teacher/@accountId/Info">Info</a>
+                                <a href="/Parent/Profile">Profile</a>
                             </li>
                         </ol>
                     </div>
@@ -51,8 +38,8 @@
                             <div class="card profile col-12 mb-4">
                                 <div class="card-header">
                                     <h4 id="account-headerinfo">Account Information</h4>
-                                    <div class="edit-info" id="teacher-info-edit-toggle">
-                                        <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editTeacher"></i>
+                                    <div class="edit-info" id="parent-info-edit-toggle">
+                                        <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editParent"></i>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -97,7 +84,7 @@
                                             <label class="col-form-label">Email:</label>
                                         </div>
                                         <div class="col-md-7">
-                                            <span id="teacher-account-email">
+                                            <span id="parent-account-email">
                                             </span>
                                         </div>
                                     </div>
@@ -106,7 +93,7 @@
                                             <label class="col-form-label">Phone Number:</label>
                                         </div>
                                         <div class="col-md-7">
-                                            <span id="teacher-account-phonenumber">
+                                            <span id="parent-account-phonenumber">
                                             </span>
                                         </div>
                                     </div>
@@ -115,7 +102,7 @@
                                             <label class="col-form-label">Address:</label>
                                         </div>
                                         <div class="col-md-7">
-                                            <span id="teacher-account-address">
+                                            <span id="parent-account-address">
                                             </span>
                                         </div>
                                     </div>
@@ -154,7 +141,7 @@
                 <section>
                     <div class="card">
                         <div class="card-body">
-                            <div id="accordion">
+                            <div class="accordion">
                                 <div id="alertContainer"></div>
                                 <!-- Thông tin cá nhân -->
                                 <div class="card mx-5 mb-2">
@@ -256,7 +243,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--Change password -->
                                 <div class="card mx-5 mb-2">
                                     <div class="card-header card-setting" id="headingTwo">
                                         <h5 class="mb-0">
@@ -306,12 +292,13 @@
     <script>
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
+        var id =sessionStorage.getItem('usrId');
         $(document).ready(function () {
-            callApiGetTeacherDetail();
+            callApiGetParentDetail();
         });
-        function callApiGetTeacherDetail() {
+        function callApiGetParentDetail() {
             $.ajax({
-                url: apiUrl + 'Teacher/Account/@accountId', // API endpoint
+                url: apiUrl + 'Parent/Account/' + id, // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token// Include the JWT token
@@ -322,7 +309,9 @@
 
                     // Check if the status is true
                     if (response.status) {
-                        setAccountDisplay(response.data);
+                        accountDetail = response.data;
+
+                        setAccountDisplay(accountDetail);
                     } else {
                         console.error("API returned false status.");
                     }
@@ -339,9 +328,9 @@
             $('#account-id').text(data.account.accountId);
             $('#account-username').text(data.account.username);
             $('#account-fullname').text(data.account.fullname);
-            $('#teacher-account-email').text(data.email);
-            $('#teacher-account-phonenumber').text(data.phone);
-            $('#teacher-account-address').text(data.address);
+            $('#parent-account-email').text(data.email);
+            $('#parent-account-phonenumber').text(data.phone);
+            $('#parent-account-address').text(data.address);
             $('#account-gender').text(data.account.gender);
             $('#account-createddate').text(formatDate(data.account.createdDate)); // Format the date if needed
             $('#account-role').text(data.account.role.roleName);
@@ -356,27 +345,6 @@
             });
 
             return html;
-        }
-        function formatDate(date) {
-            let d = new Date(date);
-
-            // Get day, month, year
-            let day = String(d.getDate()).padStart(2, '0');
-            let month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-            let year = d.getFullYear();
-
-            // Get hours, minutes
-            let hours = String(d.getHours()).padStart(2, '0');
-            let minutes = String(d.getMinutes()).padStart(2, '0');
-
-            // Optionally, get seconds
-            let seconds = String(d.getSeconds()).padStart(2, '0');
-
-            // Return the formatted date and time as `dd/mm/yyyy hh:mm`
-            return `${day}/${month}/${year} ${hours}:${minutes}`;
-
-            // If you want to include seconds as well, use this return:
-            // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         }
     </script>
 </body>

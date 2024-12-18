@@ -1,0 +1,33 @@
+﻿@page "/Home/Course/Index"
+@model CEG_RazorWebApp.Pages.Home.CourseIndexModel
+@{
+    ViewData["Title"] = "Children English Game Course List Page";
+}
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/Index.css">
+</head>
+<body>
+    <section class="content__list-room container">
+        <div class="row">
+            <div class="col-9">
+                <div class="content__list row">
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        var apiUrl = sessionStorage.getItem('apiUrl');
+        $(document).ready(function () {
+            callApiGetCourseList();
+        }
+        function callApiGetCourseList() {
+
+        }
+    </script>
+</body>
+</html>

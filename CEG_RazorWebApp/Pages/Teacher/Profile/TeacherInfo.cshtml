@@ -1,10 +1,9 @@
-﻿@page "/Admin/Teacher/{accountId}/Info"
-@model CEG_RazorWebApp.Pages.Admin.Account.TeacherInfoModel
+﻿@page "/Teacher/Profile"
+@model CEG_RazorWebApp.Pages.Teacher.Profile.TeacherInfoModel
 @{
     ViewData["Title"] = "Teacher Account Info Page";
     var accountInfo = Model.AccountInfo;
     Layout = Model.LayoutUrl;
-    var accountId = Model.AccountId;
 }
 <html lang="en">
 <head>
@@ -27,19 +26,7 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Account/Index">Account</a>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <span>/</span>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <a href="/Admin/Teacher/@accountId/Info">@accountId</a>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <span>/</span>
-                            </li>
-                            <li class="breadcrumd-item">
-                                <a href="/Admin/Teacher/@accountId/Info">Info</a>
+                                <a href="/Teacher/Profile">Profile</a>
                             </li>
                         </ol>
                     </div>
@@ -306,12 +293,13 @@
     <script>
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
+        var id = sessionStorage.getItem('usrId');
         $(document).ready(function () {
             callApiGetTeacherDetail();
         });
         function callApiGetTeacherDetail() {
             $.ajax({
-                url: apiUrl + 'Teacher/Account/@accountId', // API endpoint
+                url: apiUrl + 'Teacher/Account/' + id, // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token// Include the JWT token
