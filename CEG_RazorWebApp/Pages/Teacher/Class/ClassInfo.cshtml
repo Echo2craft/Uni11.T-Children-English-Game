@@ -236,6 +236,12 @@
                                                         aria-label="Student Name: activate to sort column ascending">
                                                         Attendance
                                                     </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="student-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Homework Progress: activate to sort column ascending">
+                                                        Homework Progress
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -322,6 +328,7 @@
         var enrollTable;
         var attendanceTable;
         var scheduleTable;
+        let selectedRow;
         let isTableDataEmpty = false; // To track if response data is empty
         let hideTableTimer = null; // Timer to handle delayed table hiding
         let isTableVisible = false; // Track the table visibility status
@@ -564,16 +571,24 @@
                     },
                     {
                         data: 'hasAttended', // Add an attendance column
-                        render: function (data, type, row) {
+                        render: function (data, type, row, meta) {
                             // Render a checkbox, set checked if "attend", unchecked if "absent"
+                            const statusText = scheduleTable.rows({ selected: true }).data()[0].status;
                             const checked = data === 'Attended' ? 'checked' : '';
+                            const disabled = statusText === 'Ended' || statusText === 'Cancelled' ? 'disabled' : '';
                             return `
-                                <input type="checkbox" class="attendance-checkbox dt-select-checkbox" ${checked}
-                                    data-attendance-id="${row.attendanceId}">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="attendance-checkbox custom-control-input" ${checked}
+                                        data-attendance-id="${row.attendanceId}" id="customCheck${row.attendanceId}" ${disabled} >
+                                    <label class="custom-control-label" for="customCheck${row.attendanceId}">${data}</label>
+                                </div>
                             `;
                         },
                         orderable: false, // Prevent sorting on this column
                         searchable: false // Prevent searching on this column
+                    },
+                    {
+                        data: null
                     }
                 ],
                 layout: {
@@ -585,12 +600,9 @@
                         }
                     }
                 },
-                select: {
-                    style: 'single'
-                },
             }).on('draw', function (e, settings) {
                 // Attach listener to checkboxes after the table is drawn
-                $('#student-table .attendance-checkbox')
+                $('#student-table div .attendance-checkbox')
                     .off('click  change')
                     .on('click', function (e) {
                         e.stopPropagation(); // Prevent row selection when checkbox is clicked
@@ -600,8 +612,15 @@
                         const isChecked = $(this).is(':checked');
                         const status = isChecked ? 'Attended' : 'Absent';
 
+                        const node = $(this).parent();
+
                         // Update the data or call API
                         callApiUpdateAttendanceStatus(attendanceId, status); // Call your API or update logic here
+                        if (node.children('label').length > 0) {
+                            const label = node.children('label');
+                            // console.log(node);
+                            label.text(status);
+                        }
                 });
             });
 
@@ -695,7 +714,7 @@
                     });
             }
         }
-        function getScheduleDateBasedOnToday(){
+        function getScheduleDateBasedOnTodayOrDefault(defaultRowIdx) {
             // Get today's date in the desired format
             const today = moment().startOf('day'); // Format based on your data
 
@@ -736,9 +755,22 @@
                 // Select the row
                 scheduleTable.row(closestRowIndex).select();
                 // console.log(`Selected row with date: ${closestDate.format("MM/DD/YYYY")}`);
-            } else {
+            } else if (defaultRowIdx !== undefined) {
+                scheduleTable.row(defaultRowIdx).select(); // Re-select the row by its index
                 // console.log("No row found with today's date or any previous date.");
+            } else {
+                attendanceTable.clear().draw();
             }
+        }
+        // Function to get the currently selected row's data and index
+        function getSelectedRowInfo() {
+            const selectedRows = scheduleTable.rows({ selected: true });
+            if (selectedRows.count() > 0) {
+                const rowIndex = selectedRows.indexes()[0]; // Get the index of the first selected row
+                const rowData = selectedRows.data()[0]; // Get the data of the first selected row
+                return { rowIndex, rowData };
+            }
+            return null; // No row is selected
         }
         function getEnrollStatusOptions(selectedStatus) {
             var options = ['Enrolled', 'Cancelled']; // Example statuses
@@ -797,8 +829,9 @@
                             enrollTable.clear().rows.add(response.data.enrolls).draw();
                         }
                         if (response.data.schedules && response.data.schedules.length > 0) {
+                            selectedRow = getSelectedRowInfo();
                             scheduleTable.clear().rows.add(response.data.schedules).draw();
-                            getScheduleDateBasedOnToday();
+                            getScheduleDateBasedOnTodayOrDefault(selectedRow.rowIndex);
                         }
                         // console.log(response.data);
                     } else {
