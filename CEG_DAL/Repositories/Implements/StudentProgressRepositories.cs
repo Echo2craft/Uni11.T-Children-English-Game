@@ -27,5 +27,21 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.StudentProgresses.AsNoTrackingWithIdentityResolution().ToListAsync();
         }
+
+        public async Task<List<StudentProgress>> GetListByHomeworkId(int homId)
+        {
+            return await _dbContext.StudentProgresses
+                .AsNoTrackingWithIdentityResolution()
+                .Where(stuPro => stuPro.StudentHomeworks.Any(stuHom => stuHom.HomeworkId == homId))
+                .ToListAsync();
+        }
+
+        public async Task<List<StudentProgress>> GetListByMultipleHomeworkId(int[] homIds)
+        {
+            return await _dbContext.StudentProgresses
+                .AsNoTrackingWithIdentityResolution()
+                .Where(stuPro => stuPro.StudentHomeworks.Any(stuHom => homIds.Contains(stuHom.HomeworkId)))
+                .ToListAsync();
+        }
     }
 }

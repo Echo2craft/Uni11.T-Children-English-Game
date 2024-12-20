@@ -831,7 +831,8 @@
                         if (response.data.schedules && response.data.schedules.length > 0) {
                             selectedRow = getSelectedRowInfo();
                             scheduleTable.clear().rows.add(response.data.schedules).draw();
-                            getScheduleDateBasedOnTodayOrDefault(selectedRow.rowIndex);
+                            if(selectedRow == null)
+                                getScheduleDateBasedOnTodayOrDefault(selectedRow != null ? selectedRow.rowIndex : 1);
                         }
                         // console.log(response.data);
                     } else {
@@ -912,7 +913,7 @@
         }
         function callApiGetAttendanceList(scheduleId) {
             $.ajax({
-                url: apiUrl + 'Attendance/All/ByScheduleId/' + scheduleId, // API endpoint
+                url: apiUrl + 'Teacher/Student/Attendance/All/ByScheduleId/' + scheduleId, // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token, // Token for authentication
