@@ -590,18 +590,15 @@
                     {
                         data: 'studentProgress',
                         render: function (data, type, row, meta){
-                            if(data){
-                                if (data.totalPoint)
-                                    return `
-                                                    ${data.totalPoint} Points
-                                        `;
-                                return `
-                                        ${data}
-                                    `;
-                            }
-                            return `
-                                      Records not found
-                                    `;
+                            // if(data){
+                            //     if (row.homeworkCurrentProgress && row.homeworkAmount)
+                            //         return `${row.homeworkCurrentProgress} / ${row.homeworkAmount} Homeworks submitted`;
+                            //     return `${data}`;
+                            // }
+                            // return `
+                            //           Records not found
+                            //         `;
+                            return `${row.homeworkCurrentProgress} / ${row.homeworkAmount} Homeworks submitted`;
                         }
                     }
                 ],
@@ -938,7 +935,7 @@
                     if (response.status) {
                         if (response.data && response.data.length > 0) {
                             isTableDataEmpty = false;
-                            console.log(response.data);
+                            // console.log(response.data);
                             attendanceTable.clear().rows.add(response.data).draw();
                         }
                         else {

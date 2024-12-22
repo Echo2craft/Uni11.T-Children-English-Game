@@ -13,6 +13,9 @@ namespace CEG_BAL.ViewModels.Admin.Get
         public int StudentId { get; set; }
         public string HasAttended { get; set; } = null!;
 
+        public int HomeworkCurrentProgress { get; set; } = 0;
+        public int HomeworkAmount { get; set; } = 0;
+
         public StudentProgressViewModel? StudentProgress { get; set; }
 
         public ScheduleViewModel Schedule { get; set; } = null!;

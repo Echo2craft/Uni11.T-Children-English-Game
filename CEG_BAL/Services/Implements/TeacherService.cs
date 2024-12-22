@@ -133,9 +133,16 @@ namespace CEG_BAL.Services.Implements
             var stuProList = _mapper.Map<List<StudentProgressViewModel>>(await _unitOfWork.StudentProgressRepositories.GetListByMultipleHomeworkId(homIds.ToArray()));
             foreach (var stuAct in stuActList)
             {
+                stuAct.HomeworkAmount = homIds.Count;
                 if(stuProList.Any(stuPro => stuPro.StudentId == stuAct.StudentId))
                 {
                     stuAct.StudentProgress = stuProList.Where(stuPro => stuPro.StudentId == stuAct.StudentId).FirstOrDefault();
+                    if(stuAct.StudentProgress != null)
+                    {
+                        stuAct.HomeworkCurrentProgress = stuAct.StudentProgress.StudentHomeworks
+                            .Where(stuHom => homIds.Contains(stuHom.HomeworkId) && stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED)
+                            .Count();
+                    }
                 }
             }
             return stuActList;
