@@ -75,7 +75,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<TransactionViewModel>> GetTransactionByParentAccountId(int id)
         {
-            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             if (parentId == 0) return null;
             return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetTransactionByParentId(parentId));
         }

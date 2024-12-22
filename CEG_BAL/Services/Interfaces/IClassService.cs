@@ -19,6 +19,7 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<GetClassForTransaction>> GetOptionListByStatusOpen(string filterClassByStudentName = "");
         Task<List<ClassViewModel>> GetClassListParent();
         Task<List<ClassViewModel>> GetListByTeacherAccountId(int id);
+        Task<List<ClassViewModel>> GetListByStudentAccountId(int id);
         /// <summary>
         /// Get Class Info by Class id. 
         /// int id, class id to be use to query. 

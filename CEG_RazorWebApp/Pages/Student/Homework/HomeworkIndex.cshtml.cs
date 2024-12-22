@@ -33,7 +33,7 @@ namespace CEG_RazorWebApp.Pages.Student.Homework
         private readonly CEG_RAZOR_Library methcall = new();
         [BindProperty]
         public List<HomeworkInfoVM>? Homeworks { get; set; }
-        public string? LayoutUrl { get; set; } = Constants.TEACHER_LAYOUT_URL;
+        public string? LayoutUrl { get; set; } = Constants.STUDENT_LAYOUT_URL;
         //[BindProperty]
         //public CreateClassVM? CreateClass { get; set; } = new CreateClassVM();
         public HomeworkIndexModel(ILogger<HomeworkIndexModel> logger, IConfiguration config, IMapper mapper)

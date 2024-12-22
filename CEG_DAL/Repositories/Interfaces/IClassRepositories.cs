@@ -33,6 +33,7 @@ namespace CEG_DAL.Repositories.Interfaces
             bool includeAttendances = false
         );
         Task<List<Class>> GetListByTeacherId(int teacherId);
+        Task<List<Class>> GetListByStudentId(int studentId);
         Task<Class?> GetByClassName(string className);
         Task<int> GetIdByClassId(int id);
         Task<int> GetTotalAmount();

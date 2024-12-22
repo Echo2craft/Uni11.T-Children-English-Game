@@ -305,5 +305,10 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Classes.CountAsync();
         }
+
+        public async Task<List<Class>> GetListByStudentId(int studentId)
+        {
+            return null;
+        }
     }
 }
