@@ -588,7 +588,21 @@
                         searchable: false // Prevent searching on this column
                     },
                     {
-                        data: null
+                        data: 'studentProgress',
+                        render: function (data, type, row, meta){
+                            if(data){
+                                if (data.totalPoint)
+                                    return `
+                                                    ${data.totalPoint} Points
+                                        `;
+                                return `
+                                        ${data}
+                                    `;
+                            }
+                            return `
+                                      Records not found
+                                    `;
+                        }
                     }
                 ],
                 layout: {
@@ -924,6 +938,7 @@
                     if (response.status) {
                         if (response.data && response.data.length > 0) {
                             isTableDataEmpty = false;
+                            console.log(response.data);
                             attendanceTable.clear().rows.add(response.data).draw();
                         }
                         else {
