@@ -89,7 +89,6 @@ public partial class MyDBContext : DbContext
             entity.ToTable("Attendance");
 
             entity.Property(e => e.AttendanceId)
-                .ValueGeneratedNever()
                 .HasColumnName("attendance_id");
             entity.Property(e => e.HasAttended).HasColumnName("has_attended");
             entity.Property(e => e.ScheduleId).HasColumnName("schedule_id");

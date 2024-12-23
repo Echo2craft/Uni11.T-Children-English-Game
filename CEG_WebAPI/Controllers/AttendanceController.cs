@@ -1,4 +1,5 @@
-﻿using CEG_BAL.Services.Implements;
+﻿using CEG_BAL.Configurations;
+using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -114,6 +115,58 @@ namespace CEG_WebAPI.Controllers
                     Status = true,
                     Data = result
                 });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpPut("{attId}/Update/Status")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateStatus(
+            [FromRoute][Required] int attId,
+            [FromBody][Required] string status
+            )
+        {
+            try
+            {
+                var result = await _attendanceService.GetById(attId);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Attendance does not exist."
+                    });
+                }
+                bool isValid = CEG_BAL_Library.IsAttendanceNewStatusValid(result.HasAttended, status);
+                if (isValid)
+                {
+                    await _attendanceService.UpdateStatus(attId, status);
+                    result = await _attendanceService.GetById(attId);
+                    return Ok(new
+                    {
+                        Status = true,
+                        Data = result
+                    });
+                }
+                else
+                {
+                    return BadRequest(new
+                    {
+                        Status = false,
+                        ErrorMessage = "New status is either an old status or not a valid status for requested attendance"
+                    });
+                }
             }
             catch (Exception ex)
             {

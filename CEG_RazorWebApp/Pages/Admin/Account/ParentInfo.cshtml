@@ -156,28 +156,7 @@
                         <div class="card-body">
 
                             <div id="accordion">
-                                @if (TempData["Success"] != null)
-                                {
-                                    <div class="alert alert-success alert-dismissible fade show" id="notif">
-                                        <i class='bx bx-message-alt-x p-1'></i>
-                                        <strong class="mr-1">@TempData["Success"]</strong>
-                                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                            <span><i class='bx bx-x'></i></span>
-                                        </button>
-                                    </div>
-                                    TempData["Success"] = null;
-                                }
-                                else if (TempData["Error"] != null)
-                                {
-                                    <div class="alert alert-danger alert-dismissible fade show" id="notif">
-                                        <i class='bx bx-message-alt-x p-1'></i>
-                                        <strong class="mr-1">@TempData["Error"]</strong>
-                                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                            <span><i class='bx bx-x'></i></span>
-                                        </button>
-                                    </div>
-                                    TempData["Error"] = null;
-                                }
+                                <div id="alertContainer"></div>
                                 <!-- Thông tin cá nhân -->
                                 <div class="card mx-5 mb-2">
                                     <div class="card-header card-setting" id="headingOne">
@@ -318,7 +297,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -330,38 +308,9 @@
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
         $(document).ready(function () {
-            callApiGetTeacherDetail();
-            // Function to display alerts
-            function showAlert(type, message) {
-                var alertHtml = '';
-
-                if (type === 'success') {
-                    alertHtml = `
-                                    <div class="alert alert-success alert-dismissible fade show" id="notif">
-                                        <i class='bx bx-message-alt-x p-1'></i>
-                                        <strong class="mr-1">` + message + `</strong>
-                                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                            <span><i class='bx bx-x'></i></span>
-                                        </button>
-                                    </div>
-                                `;
-                } else if (type === 'error') {
-                    alertHtml = `
-                                    <div class="alert alert-danger alert-dismissible fade show" id="notif">
-                                        <i class='bx bx-message-alt-x p-1'></i>
-                                        <strong class="mr-1">` + message + `</strong>
-                                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                            <span><i class='bx bx-x'></i></span>
-                                        </button>
-                                    </div>
-                                `;
-                }
-
-                // Inject the alert HTML into the alert container
-                $('#alertContainer').html(alertHtml);
-            }
+            callApiGetParentDetail();
         });
-        function callApiGetTeacherDetail() {
+        function callApiGetParentDetail() {
             $.ajax({
                 url: apiUrl + 'Parent/Account/@accountId', // API endpoint
                 type: 'GET',

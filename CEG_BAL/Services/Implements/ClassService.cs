@@ -196,11 +196,48 @@ namespace CEG_BAL.Services.Implements
                 foreach (var error in errorList) errorMessage += error;
                 throw new ArgumentException(errorMessage);
             }
+            if (upClaStatus == CEGConstants.CLASS_STATUS_OPEN)
+            {
+                foreach (var sche in cla.Schedules)
+                {
+                    sche.Status = CEGConstants.SCHEDULE_STATUS_UPCOMING;
+                    _unitOfWork.ScheduleRepositories.Update(sche);
+                }
+            }
 
-            foreach(var sche in cla.Schedules){
-                // var schedule = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(sche.ScheduleId);
-                sche.Status = CEGConstants.SCHEDULE_STATUS_UPCOMING;
-                _unitOfWork.ScheduleRepositories.Update(sche);
+            if (upClaStatus == CEGConstants.CLASS_STATUS_ONGOING)
+            {
+                foreach (var sche in cla.Schedules)
+                {
+                    foreach(var enr in cla.Enrolls)
+                    {
+                        /*sche.Attendances.Add(new Attendance()
+                        {
+                            StudentId = enr.StudentId,
+                            ScheduleId = sche.ScheduleId,
+                            HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT,
+                        });*/
+
+                        sche.Attendances.Add(new Attendance()
+                        {
+                            StudentId = enr.StudentId,
+                            ScheduleId = sche.ScheduleId,
+                            HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT,
+                        });
+                        enr.Student = null;
+
+                        // Add attendance without setting the Schedule navigation property
+                        /*var attendance = new Attendance()
+                        {
+                            StudentId = enr.StudentId,
+                            ScheduleId = sche.ScheduleId, // Set only the foreign key
+                            HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT
+                        };*/
+                        // Add attendance directly to the database or to the collection
+                        //_unitOfWork.AttendanceRepositories.Create(attendance);
+                    }
+                    // _unitOfWork.ScheduleRepositories.Update(sche);
+                }
             }
 
             cla.Status = upClaStatus;

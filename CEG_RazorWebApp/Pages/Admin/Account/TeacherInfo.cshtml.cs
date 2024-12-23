@@ -8,7 +8,6 @@ namespace CEG_RazorWebApp.Pages.Admin.Account
 {
     public class TeacherInfoModel : PageModel
     {
-        private CEG_RAZOR_Library methcall = new();
         public string? LayoutUrl { get; set; } = Constants.ADMIN_LAYOUT_URL;
         public AccountInfoVM? AccountInfo { get; set; } = new AccountInfoVM();
         public int AccountId = 0;

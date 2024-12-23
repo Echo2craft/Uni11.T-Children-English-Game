@@ -118,13 +118,31 @@ namespace CEG_BAL.Services.Implements
             }
         }
 
-        public void UpdateStatus(int id, string status)
+        public async Task UpdateStatus(int schId, string upSchStatus)
         {
-            var sche = _unitOfWork.ScheduleRepositories.GetByIdNoTracking(id).Result;
-            if (sche == null) return;
-            sche.Status = status;
-            _unitOfWork.ScheduleRepositories.Update(sche);
-            _unitOfWork.Save();
+            // Fetch the existing record
+            var sch = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(schId)
+                ?? throw new KeyNotFoundException("Schedule not found.");
+
+            sch.Status = upSchStatus;
+            // Reattach entity and mark it as modified
+            _unitOfWork.ScheduleRepositories.Update(sch);
+
+            // Save changes
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating the class.", ex);
+            }
         }
     }
 }

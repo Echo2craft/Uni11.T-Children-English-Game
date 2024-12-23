@@ -5,17 +5,16 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using System;
-/*using CEG_WebMVC.Models.Member;
-using CEG_BAL.ViewModels.Authenticates;
-using CEG_WebMVC.Models.Manager;*/
 using CEG_RazorWebApp.Services.Interfaces;
+using CEG_BAL.Configurations;
+using CEG_RazorWebApp.Libraries;
 
 namespace CEG_RazorWebApp.Services.HostedServices
 {
-    /*public class MembershipExpiryService : IHostedService, IDisposable
+    /*public class ChangeClassStatusService : IHostedService, IDisposable
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly ILogger<MembershipExpiryService> _logger;
+        private readonly ILogger<ChangeClassStatusService> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _config;
         private Timer _timer;
@@ -27,8 +26,8 @@ namespace CEG_RazorWebApp.Services.HostedServices
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             PropertyNameCaseInsensitive = true,
         };
-        private readonly BirdClubLibrary methcall = new();
-        public MembershipExpiryService(IConfiguration configuration, IServiceScopeFactory scopeFactory, ILogger<MembershipExpiryService> logger, IHttpClientFactory httpClientFactory)
+        private readonly CEG_RAZOR_Library methcall = new();
+        public ChangeClassStatusService(IConfiguration configuration, IServiceScopeFactory scopeFactory, ILogger<ChangeClassStatusService> logger, IHttpClientFactory httpClientFactory)
         {
             _scopeFactory = scopeFactory;
             _logger = logger;
@@ -38,9 +37,9 @@ namespace CEG_RazorWebApp.Services.HostedServices
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Membership Expiry Service is starting.");
+            _logger.LogInformation("Change Class Status Service is starting.");
 
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromHours(12)); // Adjust the interval as needed
+            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(5)); // Adjust the interval as needed
 
             return Task.CompletedTask;
         }
@@ -104,7 +103,7 @@ namespace CEG_RazorWebApp.Services.HostedServices
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Membership Expiry Service is stopping.");
+            _logger.LogInformation("Change Class Status Service is stopping.");
 
             _timer?.Change(Timeout.Infinite, 0);
 

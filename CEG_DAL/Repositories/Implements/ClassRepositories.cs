@@ -111,6 +111,11 @@ namespace CEG_DAL.Repositories.Implements
                     Enrolls = c.Enrolls.Select(s => new Enroll()
                     {
                         EnrollId = s.EnrollId,
+                        StudentId = s.StudentId,
+                        ClassId = s.ClassId,
+                        EnrolledDate = s.EnrolledDate,
+                        TransactionId = s.TransactionId,
+                        RegistrationDate = s.RegistrationDate,
                         Student = new Student()
                         {
                             Account = new Account()

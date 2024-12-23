@@ -557,7 +557,7 @@
                         data: 'status',
                         render: function (data, type, row, meta) {
                             return `
-                                <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
+                                <select class="custom-select enroll-status" data-enrollid="${row.enrollId}">
                                 `
                                 + getEnrollStatusOptions(data) +
                                 `
