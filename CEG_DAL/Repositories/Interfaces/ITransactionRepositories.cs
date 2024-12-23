@@ -15,5 +15,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<List<Transaction>> GetTransactionByParentId(int? parentId);
         Task<Transaction?> GetTransactionByVnpayId(string? vnpayId);
         Task<int> GetTotalAmount();
+        Task<int> GetSumValue();
     }
 }
