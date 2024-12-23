@@ -161,5 +161,42 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
+
+        [HttpGet("Student/Attendance/All/ByScheduleId/{scheduleId}")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAttendanceByScheduleId(
+            [FromRoute][Required] int scheduleId
+            )
+        {
+            try
+            {
+                var result = await _teacherService.GetStudentActivityListByScheduleId(scheduleId);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Attendance List Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
     }
 }

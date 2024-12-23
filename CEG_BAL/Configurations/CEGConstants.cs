@@ -149,6 +149,11 @@ namespace CEG_BAL.Configurations
         public readonly static string SCHEDULE_STATUS_ENDED = "Ended";
         public readonly static string SCHEDULE_STATUS_NAME_ENDED = "Ended";
 
+        public readonly static string STUDENT_HOMEWORK_STATUS_SUBMITTED = "Submitted";
+        public readonly static string STUDENT_HOMEWORK_STATUS_NAME_SUBMITTED = "Submitted";
+        public readonly static string STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED = "NotSubmitted";
+        public readonly static string STUDENT_HOMEWORK_STATUS_NAME_NOT_SUBMITTED = "Not Submitted";
+
         /*public readonly static string CLASS_SCHEDULE_MONDAY_THURSDAY = "Monday and Thursday each week";
         public readonly static string CLASS_SCHEDULE_TUESDAY_FRIDAY = "Tuesday and Friday each week";
         public readonly static string CLASS_SCHEDULE_WEDNESDAY_SATURDAY = "Wednesday and Saturday each week";*/

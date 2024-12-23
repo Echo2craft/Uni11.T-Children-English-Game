@@ -2013,6 +2013,9 @@ html body {
         margin-left: 20px;
         font-size: 1.2em;
     }
+table.dataTable.table > tbody > tr.selected > * > label {
+    color: rgb(var(--dt-row-selected-text));
+}
 .bxs-add-to-queue.bx-sm {
     margin: 0px 5px;
 }

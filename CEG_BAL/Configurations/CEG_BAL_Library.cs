@@ -95,6 +95,7 @@ namespace CEG_BAL.Configurations
                         validStatuses =
                         [
                             CEGConstants.CLASS_STATUS_OPEN,
+                            CEGConstants.CLASS_STATUS_ONGOING,
                             CEGConstants.CLASS_STATUS_POSTPONED,
                             CEGConstants.CLASS_STATUS_CANCELLED,
                             CEGConstants.CLASS_STATUS_ENDED
@@ -118,6 +119,7 @@ namespace CEG_BAL.Configurations
                         [
                             CEGConstants.CLASS_STATUS_POSTPONED,
                             CEGConstants.CLASS_STATUS_OPEN,
+                            CEGConstants.CLASS_STATUS_ONGOING,
                             CEGConstants.CLASS_STATUS_CANCELLED,
                             CEGConstants.CLASS_STATUS_ENDED
                         ];
