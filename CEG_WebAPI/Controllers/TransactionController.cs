@@ -134,6 +134,32 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/Sum")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSumTransactionValue()
+        {
+            try
+            {
+                var result = await _transactionService.GetSumValue();
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("ByParent/{id}")]
         [Authorize(Roles = "Parent")]
         [ProducesResponseType(typeof(List<TransactionViewModel>), StatusCodes.Status200OK)]
