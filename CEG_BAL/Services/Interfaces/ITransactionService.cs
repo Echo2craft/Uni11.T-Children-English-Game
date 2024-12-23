@@ -17,5 +17,6 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<TransactionViewModel>> GetTransactionByParentAccountId(int id);
         Task<TransactionViewModel?> GetTransactionByVnpayId(string? vnpayId);
         Task<int> GetTotalAmount();
+        Task<int> GetSumValue();
     }
 }

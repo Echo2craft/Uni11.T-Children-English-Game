@@ -10,6 +10,7 @@ using CEG_DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CEG_BAL.Services.Implements
 {
@@ -233,6 +234,13 @@ namespace CEG_BAL.Services.Implements
         public async Task<int> GetTotalAmount()
         {
             return await _unitOfWork.ClassRepositories.GetTotalAmount();
+        }
+
+        public async Task<int> GetTotalAmountByTeacherAccountId(int id)
+        {
+            var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
+            if (teacherId == 0) return 0;
+            return await _unitOfWork.ClassRepositories.GetTotalAmountByTeacherId(teacherId);
         }
     }
 }

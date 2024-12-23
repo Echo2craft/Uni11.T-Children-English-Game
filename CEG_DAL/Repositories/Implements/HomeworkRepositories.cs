@@ -42,6 +42,7 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.Homeworks.AsNoTrackingWithIdentityResolution().Where(home => home.SessionId == sessionId).ToListAsync();
         }
 
+
         public async Task<Homework?> GetByTitle(string name)
         {
             return await _dbContext.Homeworks

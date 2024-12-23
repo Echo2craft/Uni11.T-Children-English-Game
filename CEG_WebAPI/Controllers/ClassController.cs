@@ -176,7 +176,7 @@ namespace CEG_WebAPI.Controllers
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class List Not Found!"
+                        ErrorMessage = "Class List Not Found or Empty!"
                     });
                 }
                 return Ok(new
@@ -230,7 +230,32 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-
+        [HttpGet("{id}/All/Count")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTotalClassAmountByTeacher([FromRoute] int id)
+        {
+            try
+            {
+                var result = await _classService.GetTotalAmountByTeacherAccountId(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]

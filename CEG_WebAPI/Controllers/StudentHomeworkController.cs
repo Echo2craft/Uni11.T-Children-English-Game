@@ -26,7 +26,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(List<StudentHomeworkViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetStudentAnswerList()
+        public async Task<IActionResult> GetStudentHomeworkList()
         {
             try
             {
@@ -60,7 +60,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(StudentHomeworkViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetStudentAnswerById(
+        public async Task<IActionResult> GetStudentHomeworkById(
             [FromRoute][Required] int id
             )
         {
@@ -92,11 +92,47 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("ByStudent/{id}")]
+        [ProducesResponseType(typeof(List<StudentHomeworkViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetStudentHomeworkByStudentId(
+            [FromRoute][Required] int id)
+        {
+            try
+            {
+                var result = await _studentHomeworkService.GetListByStudentId(id);
+                if (result == null || result.Count == 0)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Student homework list not found or empty!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpPost("Create")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateStudentAnswer(
+        public async Task<IActionResult> CreateStudentHomework(
             [FromBody][Required] CreateNewStudentHomework newStuHom
             )
         {
