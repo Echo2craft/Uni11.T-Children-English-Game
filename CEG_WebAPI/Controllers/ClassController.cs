@@ -176,7 +176,7 @@ namespace CEG_WebAPI.Controllers
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class List Not Found!"
+                        ErrorMessage = "Class List Not Found or Empty!"
                     });
                 }
                 return Ok(new
