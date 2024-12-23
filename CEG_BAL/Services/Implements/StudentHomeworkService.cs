@@ -72,6 +72,12 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<StudentHomeworkViewModel>>(await _unitOfWork.StudentHomeworkRepositories.GetList());
         }
 
+        public async Task<List<StudentHomeworkViewModel>?> GetListByStudentId(int id)
+        {
+            var studentId = await _unitOfWork.StudentRepositories.GetIdByAccountIdNoTracking(id);
+            return studentId == 0 ? null : _mapper.Map<List<StudentHomeworkViewModel>>(await _unitOfWork.StudentHomeworkRepositories.GetListByStudentId(studentId));
+        }
+
         public async Task Update(int stuHomId, UpdateStudentHomework upStuHom)
         {
             if (upStuHom == null)
