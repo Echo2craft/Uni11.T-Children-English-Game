@@ -208,7 +208,16 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Class>> GetClassListParent()
         {
-            return await _dbContext.Classes
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 }
+            };
+
+            var classes = await _dbContext.Classes
                 .Select(c => new Class
                 {
                     ClassId = c.ClassId,
@@ -244,6 +253,9 @@ namespace CEG_DAL.Repositories.Implements
                     Enrolls = c.Enrolls,
                 })
                 .ToListAsync();
+            return classes
+                .Where(c => c.Status == "Open")
+                .ToList();
         }
 
         public async Task<List<Class>> GetListByTeacherId(int teacherId)
@@ -317,6 +329,11 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<int> GetTotalAmount()
         {
             return await _dbContext.Classes.CountAsync();
+        }
+
+        public async Task<int> GetTotalAmountByTeacherId(int id)
+        {
+            return await _dbContext.Classes.Where(c => c.TeacherId == id && c.Status != "Draft").CountAsync();
         }
 
         public async Task<List<Class>> GetListByStudentId(int studentId)

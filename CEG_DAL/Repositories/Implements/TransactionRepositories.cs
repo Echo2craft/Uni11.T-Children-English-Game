@@ -64,5 +64,10 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Transactions.CountAsync();
         }
+
+        public async Task<int> GetSumValue()
+        {
+            return await _dbContext.Transactions.SumAsync(t => t.TransactionAmount);
+        }
     }
 }
