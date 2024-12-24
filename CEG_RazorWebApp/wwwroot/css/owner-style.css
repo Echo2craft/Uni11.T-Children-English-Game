@@ -2027,4 +2027,16 @@ div.dt-container div.dt-paging ul.pagination {
     background-color: #34495e;
     border-color: #34495e;
 }
+.selected .custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
+    border-color: white;
+}
+.selected .custom-control-input:checked ~ .custom-control-label::before {
+    border-color: white;
+}
+.selected .custom-control-input[disabled] ~ .custom-control-label, .custom-control-input:disabled ~ .custom-control-label {
+    color: white;
+}
+/*.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after{
+    background-image: 
+}*/
 /**/

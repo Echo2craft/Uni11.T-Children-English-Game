@@ -14,13 +14,15 @@ namespace CEG_WebAPI.Controllers
     public class TeacherController : ControllerBase
     {
         private readonly ITeacherService _teacherService;
+        private readonly IEmailService _emailService;
         private readonly IConfiguration _config;
 
         public TeacherController(
-            ITeacherService teacherService, IConfiguration config)
+            ITeacherService teacherService, IConfiguration config, IEmailService emailService)
         {
             _teacherService = teacherService;
             _config = config;
+            _emailService = emailService;
         }
 
         [HttpGet("All")]

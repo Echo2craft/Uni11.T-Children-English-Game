@@ -131,7 +131,17 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Class>> GetList()
         {
-            return await _dbContext.Classes
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 },
+                { "Draft", 5 }
+            };
+
+            var classes = await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
                 .Select(c => new Class
                 {
@@ -168,6 +178,9 @@ namespace CEG_DAL.Repositories.Implements
                     Enrolls = c.Enrolls,
                 })
                 .ToListAsync();
+            return classes
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
         }
 
         public async Task<List<Class>> GetOptionListByStatusOpen(string filterClassByStudentName = "")
