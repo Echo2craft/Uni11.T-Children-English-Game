@@ -169,5 +169,28 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Students.Where(s => s.ParentId == id).CountAsync();
         }
+
+        public async Task<List<object>> GetStudentListWithTotalPoints()
+        {
+            var studentWithPoints = await _dbContext.Students
+                .Select(s => new
+                {
+                    StudentName = s.Account.Fullname, // Get the student's name
+                    TotalProgressPoints = s.StudentProgresses
+                        .Sum(sp => (int?)sp.TotalPoint) ?? 0,
+                    TotalHomeworkPoints = s.StudentProgresses
+                        .SelectMany(sp => sp.StudentHomeworks)
+                        .Sum(sh => (int?)sh.HomeworkResult.TotalPoint) ?? 0
+                })
+                .Select(s => new
+                {
+                    s.StudentName,
+                    TotalPoints = s.TotalProgressPoints + s.TotalHomeworkPoints
+                })
+                .OrderByDescending(s => s.TotalPoints) // Sort by points
+                .ToListAsync();
+
+            return studentWithPoints.Cast<object>().ToList();
+        }
     }
 }

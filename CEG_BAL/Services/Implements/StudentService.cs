@@ -3,6 +3,7 @@ using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Home;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -133,6 +134,23 @@ namespace CEG_BAL.Services.Implements
             var classId = await _unitOfWork.ClassRepositories.GetIdByClassId(id);
             if (classId == 0) return null;
             return _mapper.Map<List<StudentViewModel>>(await _unitOfWork.StudentRepositories.GetStudentByClassId(classId));
+        }
+        public async Task<List<StudentLeaderboard>> GetStudentListByPointRank()
+        {
+            // Fetch anonymous objects from repository
+            var studentsWithPoints = await _unitOfWork.StudentRepositories.GetStudentListWithTotalPoints();
+
+            // Map to DTOs
+            var rankedStudents = studentsWithPoints
+                .Select((student, index) => new StudentLeaderboard
+                {
+                    StudentName = (string)student.GetType().GetProperty("StudentName")?.GetValue(student),
+                    Rank = index + 1,
+                    Points = (int)student.GetType().GetProperty("TotalPoints")?.GetValue(student)
+                })
+                .ToList();
+
+            return rankedStudents;
         }
         public void Update(StudentViewModel student, UpdateStudent studentNewInfo)
         {

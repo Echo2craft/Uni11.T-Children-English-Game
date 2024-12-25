@@ -21,5 +21,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<List<Student>> GetStudentByParentId(int? parentId);
         Task<List<Student>> GetStudentByClassId(int classId);
         Task<int> GetTotalAmountByParent(int? id);
+        Task<List<object>> GetStudentListWithTotalPoints();
     }
 }

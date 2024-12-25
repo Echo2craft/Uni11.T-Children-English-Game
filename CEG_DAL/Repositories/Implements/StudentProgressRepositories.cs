@@ -59,5 +59,21 @@ namespace CEG_DAL.Repositories.Implements
                 })
                 .ToListAsync();
         }
+
+        public async Task UpdateStudentProgressTotalPointsAsync()
+        {
+            var studentProgresses = await _dbContext.StudentProgresses
+                .Include(sp => sp.StudentHomeworks)
+                .ThenInclude(sh => sh.HomeworkResult)
+                .ToListAsync();
+
+            foreach (var progress in studentProgresses)
+            {
+                progress.TotalPoint = progress.StudentHomeworks
+                    .Sum(sh => sh.HomeworkResult.TotalPoint ?? 0);
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }
