@@ -185,7 +185,7 @@ namespace CEG_WebAPI.Controllers
                 bool isValid = CEG_BAL_Library.IsScheduleNewStatusValid(result.Status, status);
                 if (isValid)
                 {
-                    _scheduleService.UpdateStatus(id, status);
+                    await _scheduleService.UpdateStatus(id, status);
                     result = await _scheduleService.GetById(id);
                     return Ok(new
                     {

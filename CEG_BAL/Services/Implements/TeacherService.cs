@@ -126,6 +126,27 @@ namespace CEG_BAL.Services.Implements
             var teacher = await _unitOfWork.TeacherRepositories.GetByAccountIdNoTracking(id);
             return teacher != null ? _mapper.Map<TeacherViewModel>(teacher) : null;
         }
+        public async Task<List<GetStudentActivity>> GetStudentActivityListByScheduleId(int schId)
+        {
+            var stuActList = _mapper.Map<List<GetStudentActivity>>(await _unitOfWork.AttendanceRepositories.GetListByScheduleIdNoTracking(schId));
+            List<int> homIds = await _unitOfWork.HomeworkRepositories.GetIdListByScheduleId(schId);
+            var stuProList = _mapper.Map<List<StudentProgressViewModel>>(await _unitOfWork.StudentProgressRepositories.GetListByMultipleHomeworkId(homIds.ToArray()));
+            foreach (var stuAct in stuActList)
+            {
+                stuAct.HomeworkAmount = homIds.Count;
+                if(stuProList.Any(stuPro => stuPro.StudentId == stuAct.StudentId))
+                {
+                    stuAct.StudentProgress = stuProList.Where(stuPro => stuPro.StudentId == stuAct.StudentId).FirstOrDefault();
+                    if(stuAct.StudentProgress != null)
+                    {
+                        stuAct.HomeworkCurrentProgress = stuAct.StudentProgress.StudentHomeworks
+                            .Where(stuHom => homIds.Contains(stuHom.HomeworkId) && stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED)
+                            .Count();
+                    }
+                }
+            }
+            return stuActList;
+        }
         public async Task UploadToBlobAsync(string teacherName, IFormFile certificate, string imageType)
         {
             var tea = await _unitOfWork.TeacherRepositories.GetByFullname(teacherName) ??

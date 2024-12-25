@@ -60,13 +60,50 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(HomeworkResultViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetStudentAnswerById(
+        public async Task<IActionResult> GetHomeworkResultById(
             [FromRoute][Required] int id
             )
         {
             try
             {
                 var result = await _homeworkResultService.GetById(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Homework result not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("ByStudent/{stuId}/ByHomework/{homId}")]
+        [ProducesResponseType(typeof(HomeworkResultViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetHomeworkResultByStudentIdAndHomeworkId(
+            [FromRoute][Required] int stuId,
+            [FromRoute][Required] int homId
+            )
+        {
+            try
+            {
+                var result = await _homeworkResultService.GetByStudentIdAndHomeworkId(stuId,homId);
                 if (result == null)
                 {
                     return NotFound(new

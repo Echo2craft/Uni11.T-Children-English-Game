@@ -269,6 +269,7 @@ namespace CEG_BAL.AutoMapperProfile
 
             // Attendance
             CreateMap<Attendance, AttendanceViewModel>();
+            CreateMap<Attendance, GetStudentActivity>();
 
             // Enroll
             CreateMap<Enroll, EnrollViewModel>()
