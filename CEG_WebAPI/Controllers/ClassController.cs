@@ -239,7 +239,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetListByTeacherAccountId(id);
+                var result = await _classService.GetListByStudentAccountId(id);
                 if (result == null)
                 {
                     return NotFound(new
