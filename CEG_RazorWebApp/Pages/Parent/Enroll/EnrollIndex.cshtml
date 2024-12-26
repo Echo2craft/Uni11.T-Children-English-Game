@@ -91,7 +91,10 @@
 
                 // Filter the classes based on the search term
                 var filteredenrollList = enrollList.filter(function (enroll) {
-                    return enroll.class.className.toLowerCase().includes(searchTerm);
+                    return (
+                        enroll.class.className.toLowerCase().includes(searchTerm) ||
+                        enroll.student.account.fullName.toLowerCase().includes(searchTerm)
+                    );
                 });
 
                 // Display the filtered classList
