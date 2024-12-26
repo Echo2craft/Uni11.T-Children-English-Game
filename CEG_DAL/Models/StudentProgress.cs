@@ -9,9 +9,13 @@ public partial class StudentProgress
 
     public int StudentId { get; set; }
 
+    public int ClassId { get; set; }
+
     public int? TotalPoint { get; set; }
 
     public TimeOnly? Playtime { get; set; }
+
+    public virtual Class Class { get; set; } = null!;
 
     public virtual Student Student { get; set; } = null!;
 

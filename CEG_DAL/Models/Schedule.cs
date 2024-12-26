@@ -21,7 +21,7 @@ public partial class Schedule
 
     public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
 
-    public virtual Class? Class { get; set; }
+    public virtual Class Class { get; set; } = null!;
 
-    public virtual Session? Session { get; set; }
+    public virtual Session Session { get; set; } = null!;
 }

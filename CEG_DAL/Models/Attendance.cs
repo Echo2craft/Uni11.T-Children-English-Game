@@ -13,7 +13,7 @@ public partial class Attendance
 
     public string HasAttended { get; set; } = null!;
 
-    public virtual Schedule? Schedule { get; set; }
+    public virtual Schedule Schedule { get; set; } = null!;
 
-    public virtual Student? Student { get; set; }
+    public virtual Student Student { get; set; } = null!;
 }
