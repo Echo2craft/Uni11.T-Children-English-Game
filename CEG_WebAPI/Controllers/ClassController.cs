@@ -393,6 +393,40 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
+        [HttpGet("Student/{id}")]
+        [Authorize(Roles = "Student")]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassByIdStudent([FromRoute] int id)
+        {
+            try
+            {
+                var result = await _classService.GetListByStudentAccountId(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
 
         [HttpGet("Parent/{id}")]
         [Authorize(Roles = "Parent")]
