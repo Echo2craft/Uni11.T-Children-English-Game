@@ -36,8 +36,25 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.StudentHomeworks
                 .AsNoTrackingWithIdentityResolution()
-                .Include(s => s.StudentProgress)
                 .Where(s => s.StudentProgress.StudentId == id)
+                .Select(stuHom => new StudentHomework()
+                {
+                    StudentHomeworkId = stuHom.StudentHomeworkId,
+                    StudentProgressId = stuHom.StudentProgressId,
+                    HomeworkResultId = stuHom.HomeworkResultId,
+                    HomeworkId = stuHom.HomeworkId,
+                    Point = stuHom.Point,
+                    Playtime = stuHom.Playtime,
+                    CorrectAnswers = stuHom.CorrectAnswers,
+                    Status = stuHom.Status,
+                    StudentProgress = new StudentProgress()
+                    {
+                        StudentProgressId = stuHom.StudentProgressId,
+                        StudentId = stuHom.StudentProgressId,
+                        TotalPoint = stuHom.StudentProgress.TotalPoint,
+                        Playtime = stuHom.StudentProgress.Playtime,
+                    },
+                })
                 .ToListAsync();
         }
     }

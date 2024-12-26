@@ -142,6 +142,13 @@ namespace CEG_BAL.Services.Implements
                         stuAct.HomeworkCurrentProgress = stuAct.StudentProgress.StudentHomeworks
                             .Where(stuHom => homIds.Contains(stuHom.HomeworkId) && stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED)
                             .Count();
+                        if(stuAct.StudentProgress.StudentHomeworks.Count > 0)
+                        {
+                            for (int i = 0; i < stuAct.StudentProgress.StudentHomeworks.Count; i++)
+                            {
+                                stuAct.StudentProgress.StudentHomeworks[i].Homework.HomeworkNumber = i + 1;
+                            }
+                        }
                     }
                 }
             }

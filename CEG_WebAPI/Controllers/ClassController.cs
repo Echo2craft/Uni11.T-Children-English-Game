@@ -231,7 +231,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpGet("All/ByStudent/{id}")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Student")]
         [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -239,7 +239,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _classService.GetListByTeacherAccountId(id);
+                var result = await _classService.GetListByStudentAccountId(id);
                 if (result == null)
                 {
                     return NotFound(new

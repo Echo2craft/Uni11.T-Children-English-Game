@@ -338,7 +338,56 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Class>> GetListByStudentId(int studentId)
         {
-            return null;
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 }
+            };
+
+            var classes = await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Where(c => c.Enrolls.Any(enr => enr.StudentId == studentId) && c.Status != "Draft")
+                .Select(c => new Class
+                {
+                    ClassId = c.ClassId,
+                    ClassName = c.ClassName,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    MinimumStudents = c.MinimumStudents,
+                    MaximumStudents = c.MaximumStudents,
+                    EnrollmentFee = c.EnrollmentFee,
+                    TeacherId = c.TeacherId,
+                    CourseId = c.CourseId,
+                    Status = c.Status,
+                    Teacher = new Teacher // Create a new Teacher object
+                    {
+                        TeacherId = c.Teacher.TeacherId,
+                        Email = c.Teacher.Email,
+                        Phone = c.Teacher.Phone,
+                        Image = c.Teacher.Image,
+                        Account = new Account
+                        {
+                            Fullname = c.Teacher.Account.Fullname,
+                            Gender = c.Teacher.Account.Gender,
+                        }
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Course = new Course // Create a new Course object
+                    {
+                        CourseId = c.Course.CourseId,
+                        CourseName = c.Course.CourseName
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
+                })
+                .ToListAsync();
+            return classes
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
         }
     }
 }

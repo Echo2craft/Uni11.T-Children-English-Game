@@ -634,7 +634,7 @@
                 },
                 select: {
                     style: 'single',
-                    selector: 'td:not(:has(input.attendance-checkbox))'
+                    // selector: 'td:not(:has(input.attendance-checkbox)) div:not(.custom-control)'
                 },
             }).on('draw', function (e, settings) {
                 // Attach listener to checkboxes after the table is drawn
@@ -680,9 +680,13 @@
                 // $('#student-table').on('click', '.attendance-checkbox-label', function (e) {
                 //     e.stopPropagation(); Prevent the click event from bubbling up to the row
                 // });
+            }).on('user-select', function (e, dt, type, cell, originalEvent) {
+                // Prevent row selection when clicking on the checkbox or label
+                if ($(originalEvent.target).is('input.attendance-checkbox, label.custom-control-label')) {
+                    e.preventDefault();
+                }
             }).on('select', function (e, dt, type, indexes) {
                 if (type === 'row') {
-                    console.log('check');
                     // Clear any pending hide action
                     if (hideAttendanceTableTimer) {
                         clearTimeout(hideAttendanceTableTimer);
@@ -705,11 +709,10 @@
                         studentDetails.studentProgress &&
                         studentDetails.studentProgress.studentHomeworks &&
                         studentDetails.studentProgress.studentHomeworks.length > 0) {
-                        console.log('this is not empty!');
                         isHomeworkTableDataEmpty = false;
+                        console.log(studentDetails.studentProgress);
                         homeworkTable.clear().rows.add(studentDetails.studentProgress.studentHomeworks).draw();
                     } else {
-                        console.log('this is empty!');
                         isHomeworkTableDataEmpty = true;
                         homeworkTable.clear().draw();
                     }
@@ -745,7 +748,6 @@
                 }
             }).on('deselect', function (e, dt, type, indexes) {
                 if (type === 'row') {
-                    console.log('uncheck');
                     // Check if there are still any selected rows
                     // const selectedRows = dt.rows({ selected: true }).count();
                     // if (selectedRows === 0) {
@@ -792,15 +794,11 @@
                 pageLength: 5,
                 columns: [
                     {
-                        data: 'homeworkId',
+                        data: 'homework.homeworkNumber',
                         className: 'dt-head-left'
                     },
                     {
-                        data: null, // 'student.account.fullname'
-                        render: function (data, type, row, meta) {
-                            return ` bruh
-                                    `;
-                        },
+                        data: 'homework.title', // 'student.account.fullname'
                     },
                     {
                         data: 'point',
@@ -823,6 +821,13 @@
                     },
                     {
                         data: 'status',
+                        render: function (data, type, row, meta) {
+                            console.log(row);
+                            const submitted = data === 'Submitted' ? 
+                                '<span class="outcome" style="float: left;">Submitted</span>' : 
+                                '<span class="destroy" style="float: left;">Not Submitted</span>';
+                            return ` ${submitted} `;
+                        },
                         // data: 'studentProgress',
                         // render: function (data, type, row, meta) {
                         //     if(data){
@@ -839,9 +844,18 @@
                     {
                         data: null,
                         render: function (data, type, row, meta) {
-                            return ` bruh
-                                            `;
+                            // Example condition for showing the button
+                            if (row.status && row.status === "NotSubmitted") {
+                                return `
+                                    <button class="btn btn-primary btn-sm submit-button" data-id="${row.id}">
+                                        Remind Parent
+                                    </button>
+                                `;
+                            }
+                            return `<span>No Action Required</span>`;
                         },
+                        orderable: false,
+                        searchable: false,
                     }
                 ],
                 layout: {
@@ -853,6 +867,55 @@
                         }
                     }
                 },
+            }).on('draw', function (e, settings) {
+                // Attach listener to checkboxes after the table is drawn
+                $('#student-table div .attendance-checkbox')
+                    .off('change')
+                    // .on('click', function (e) {
+                    //     e.stopPropagation(); Prevent row selection when checkbox is clicked
+                    // })
+                    .on('change', function (e) {
+                        const attendanceId = $(this).data('attendance-id');
+                        const isChecked = $(this).is(':checked');
+                        const status = isChecked ? 'Attended' : 'Absent';
+
+                        const node = $(this).parent();
+
+                        // Update the data or call API
+                        callApiUpdateAttendanceStatus(attendanceId, status);//  Call your API or update logic here
+                        if (node.children('label').length > 0) {
+                            const label = node.children('label');
+                            // console.log(node);
+                            label.text(status);
+                        }
+                    });
+                $('#student-table').on('click', '.submit-button', function () {
+                    const id = $(this).data('id'); // Get the ID from the button's data attribute
+
+                    // Call your API
+                    callApiSubmit(id);
+                });
+                // $('#student-table')
+                // .on('click', '.attendance-checkbox', function (e) {
+                //     e.stopPropagation(); Prevent the click event from bubbling up to the row
+                // })
+                // .on('change', '.attendance-checkbox', function () {
+                //     const attendanceId = $(this).data('attendance-id');
+                //     const isChecked = $(this).is(':checked');
+                //     const status = isChecked ? 'Attended' : 'Absent';
+
+                //     const node = $(this).parent();
+
+                //     Update the data or call API
+                //     callApiUpdateAttendanceStatus(attendanceId, status); Call your API or update logic here
+                //     if (node.children('label').length > 0) {
+                //         const label = node.children('label');
+                //         label.text(status);
+                //     }
+                // });
+                // $('#student-table').on('click', '.attendance-checkbox-label', function (e) {
+                //     e.stopPropagation(); Prevent the click event from bubbling up to the row
+                // });
             });
 
         });

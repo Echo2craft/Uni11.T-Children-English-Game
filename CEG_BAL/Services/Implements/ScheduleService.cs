@@ -52,12 +52,7 @@ namespace CEG_BAL.Services.Implements
         public async Task<ScheduleViewModel?> GetById(int id)
         {
             var sche = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(id);
-            if (sche != null)
-            {
-                var sch = _mapper.Map<ScheduleViewModel>(sche);
-                return sch;
-            }
-            return null;
+            return sche != null ? _mapper.Map<ScheduleViewModel>(sche) : null;
         }
 
         public Task<ScheduleViewModel?> GetByIdAdmin(int id)

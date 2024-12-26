@@ -54,7 +54,16 @@ namespace CEG_DAL.Repositories.Implements
                         Playtime = stuHom.Playtime,
                         StudentAnswers = stuHom.StudentAnswers,
                         HomeworkResult = stuHom.HomeworkResult,
+                        Homework = new Homework()
+                        {
+                            HomeworkId = stuHom.HomeworkId,
+                            Title = stuHom.Homework.Title,
+                        },
                         Status = stuHom.Status,
+                        StudentProgress = new StudentProgress()
+                        {
+                            StudentId = stuPro.StudentId,
+                        },
                     }).ToList()
                 })
                 .ToListAsync();
