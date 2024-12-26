@@ -88,8 +88,7 @@ public partial class MyDBContext : DbContext
         {
             entity.ToTable("Attendance");
 
-            entity.Property(e => e.AttendanceId)
-                .HasColumnName("attendance_id");
+            entity.Property(e => e.AttendanceId).HasColumnName("attendance_id");
             entity.Property(e => e.HasAttended).HasColumnName("has_attended");
             entity.Property(e => e.ScheduleId).HasColumnName("schedule_id");
             entity.Property(e => e.StudentId).HasColumnName("student_id");
@@ -491,9 +490,15 @@ public partial class MyDBContext : DbContext
             entity.ToTable("StudentProgress");
 
             entity.Property(e => e.StudentProgressId).HasColumnName("student_progress_id");
+            entity.Property(e => e.ClassId).HasColumnName("class_id");
             entity.Property(e => e.Playtime).HasColumnName("playtime");
             entity.Property(e => e.StudentId).HasColumnName("student_id");
             entity.Property(e => e.TotalPoint).HasColumnName("total_point");
+
+            entity.HasOne(d => d.Class).WithMany(p => p.StudentProgresses)
+                .HasForeignKey(d => d.ClassId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StudentProgress_Class");
 
             entity.HasOne(d => d.Student).WithMany(p => p.StudentProgresses)
                 .HasForeignKey(d => d.StudentId)
