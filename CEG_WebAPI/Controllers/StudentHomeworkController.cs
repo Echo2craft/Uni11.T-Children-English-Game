@@ -92,16 +92,16 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("ByStudent/{id}")]
+        [HttpGet("ByStudent/{stuId}")]
         [ProducesResponseType(typeof(List<StudentHomeworkViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetStudentHomeworkByStudentId(
-            [FromRoute][Required] int id)
+            [FromRoute][Required] int stuId)
         {
             try
             {
-                var result = await _studentHomeworkService.GetListByStudentId(id);
+                var result = await _studentHomeworkService.GetListByStudentId(stuId);
                 if (result == null || result.Count == 0)
                 {
                     return NotFound(new

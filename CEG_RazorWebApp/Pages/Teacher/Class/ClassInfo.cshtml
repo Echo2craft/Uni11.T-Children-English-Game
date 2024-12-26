@@ -710,6 +710,7 @@
                         studentDetails.studentProgress.studentHomeworks &&
                         studentDetails.studentProgress.studentHomeworks.length > 0) {
                         isHomeworkTableDataEmpty = false;
+                        console.log(studentDetails.studentProgress);
                         homeworkTable.clear().rows.add(studentDetails.studentProgress.studentHomeworks).draw();
                     } else {
                         isHomeworkTableDataEmpty = true;
@@ -793,7 +794,7 @@
                 pageLength: 5,
                 columns: [
                     {
-                        data: 'homeworkId',
+                        data: 'homework.homeworkNumber',
                         className: 'dt-head-left'
                     },
                     {
@@ -822,8 +823,10 @@
                         data: 'status',
                         render: function (data, type, row, meta) {
                             console.log(row);
-                            const submitted = data === 'Submitted' ? 'Submitted' : 'Not Submitted';
-                            return ` <span>${submitted}</span> `;
+                            const submitted = data === 'Submitted' ? 
+                                '<span class="outcome" style="float: left;">Submitted</span>' : 
+                                '<span class="destroy" style="float: left;">Not Submitted</span>';
+                            return ` ${submitted} `;
                         },
                         // data: 'studentProgress',
                         // render: function (data, type, row, meta) {
@@ -886,7 +889,12 @@
                             label.text(status);
                         }
                     });
+                $('#student-table').on('click', '.submit-button', function () {
+                    const id = $(this).data('id'); // Get the ID from the button's data attribute
 
+                    // Call your API
+                    callApiSubmit(id);
+                });
                 // $('#student-table')
                 // .on('click', '.attendance-checkbox', function (e) {
                 //     e.stopPropagation(); Prevent the click event from bubbling up to the row
