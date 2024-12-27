@@ -208,36 +208,76 @@ namespace CEG_BAL.Services.Implements
 
             if (upClaStatus == CEGConstants.CLASS_STATUS_ONGOING)
             {
-                foreach (var sche in cla.Schedules)
-                {
-                    foreach(var enr in cla.Enrolls)
-                    {
-                        /*sche.Attendances.Add(new Attendance()
-                        {
-                            StudentId = enr.StudentId,
-                            ScheduleId = sche.ScheduleId,
-                            HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT,
-                        });*/
+                // Extract distinct session IDs from the class's schedules
 
+                // - `cla.Schedules`: A collection of schedules associated with the class
+                // - `.Select(s => s.SessionId)`: Extracts the SessionId from each schedule
+                // - `.Distinct()`: Ensures each SessionId appears only once
+                var sessionIds = cla.Schedules.Select(s => s.SessionId).Distinct();
+
+                // Fetch a dictionary mapping session IDs to their associated homework lists
+
+                // - `_unitOfWork.HomeworkRepositories.GetListBySessionIds(sessionIds)`:
+                //   Retrieves all homework items for the given session IDs from the database.
+                // - `.GroupBy(h => h.SessionId)`:
+                //   Groups the retrieved homework items by their SessionId.
+                // - `.ToDictionary(g => g.Key, g => g.ToList())`:
+                //   Converts the grouped items into a dictionary where:
+                //     - Key: SessionId (unique identifier for each session)
+                //     - Value: List of homework items associated with that SessionId
+                var homeworkDictionary = (await _unitOfWork.HomeworkRepositories.GetListBySessionIds(sessionIds.ToArray()))
+                    .GroupBy(h => h.SessionId)
+                    .ToDictionary(g => g.Key, g => g.ToList());
+
+                foreach (var enr in cla.Enrolls)
+                {
+                    // Add student progress
+                    var stuPro = new StudentProgress()
+                    {
+                        Playtime = TimeOnly.MinValue,
+                        TotalPoint = 0,
+                        StudentId = enr.StudentId,
+                        ClassId = enr.ClassId,
+                    };
+                    foreach(var sche in cla.Schedules)
+                    {
+                        // Add attendance
                         sche.Attendances.Add(new Attendance()
                         {
                             StudentId = enr.StudentId,
                             ScheduleId = sche.ScheduleId,
                             HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT,
                         });
+
                         enr.Student = null;
 
-                        // Add attendance without setting the Schedule navigation property
-                        /*var attendance = new Attendance()
+                        // Get homework list for the session using TryGetValue method
+                        if (homeworkDictionary.TryGetValue(sche.SessionId, out List<Homework> homList))
                         {
-                            StudentId = enr.StudentId,
-                            ScheduleId = sche.ScheduleId, // Set only the foreign key
-                            HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT
-                        };*/
-                        // Add attendance directly to the database or to the collection
-                        //_unitOfWork.AttendanceRepositories.Create(attendance);
+                            // Add student homework for each homework item in the list
+                            foreach (var hom in homList)
+                            {
+                                stuPro.StudentHomeworks.Add(new StudentHomework()
+                                {
+                                    CorrectAnswers = 0,
+                                    HomeworkId = hom.HomeworkId,
+                                    Playtime = TimeOnly.MinValue,
+                                    Point = 0,
+                                    Status = CEGConstants.STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED,
+                                });
+                            }
+                        }
                     }
-                    // _unitOfWork.ScheduleRepositories.Update(sche);
+                    cla.StudentProgresses.Add(stuPro);
+                    // Add attendance without setting the Schedule navigation property
+                    /*var attendance = new Attendance()
+                    {
+                        StudentId = enr.StudentId,
+                        ScheduleId = sche.ScheduleId, // Set only the foreign key
+                        HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT
+                    };*/
+                    // Add attendance directly to the database or to the collection
+                    //_unitOfWork.AttendanceRepositories.Create(attendance);
                 }
             }
 

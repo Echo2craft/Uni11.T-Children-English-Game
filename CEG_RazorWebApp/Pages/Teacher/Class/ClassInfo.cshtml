@@ -710,7 +710,7 @@
                         studentDetails.studentProgress.studentHomeworks &&
                         studentDetails.studentProgress.studentHomeworks.length > 0) {
                         isHomeworkTableDataEmpty = false;
-                        console.log(studentDetails.studentProgress);
+                        // console.log(studentDetails.studentProgress);
                         homeworkTable.clear().rows.add(studentDetails.studentProgress.studentHomeworks).draw();
                     } else {
                         isHomeworkTableDataEmpty = true;
@@ -822,7 +822,7 @@
                     {
                         data: 'status',
                         render: function (data, type, row, meta) {
-                            console.log(row);
+                            // console.log(row);
                             const submitted = data === 'Submitted' ? 
                                 '<span class="outcome" style="float: left;">Submitted</span>' : 
                                 '<span class="destroy" style="float: left;">Not Submitted</span>';
@@ -844,10 +844,28 @@
                     {
                         data: null,
                         render: function (data, type, row, meta) {
+                            // Get the data of the selected row
+                            const selectedRowData = scheduleTable.rows({ selected: true }).data().toArray();
+
                             // Example condition for showing the button
                             if (row.status && row.status === "NotSubmitted") {
+                                // If you want the first selected row
+                                if (selectedRowData.length > 0) {
+                                    const firstRowData = selectedRowData[0].scheduleNumber;
+                                    return `
+                                            <button class="btn btn-primary btn-sm submit-button"
+                                                data-homid="${row.homeworkId}"
+                                                data-stuid="${row.studentProgress.studentId}"
+                                                data-schid="${firstRowData}" >
+                                                Remind Parent
+                                            </button>
+                                        `;
+                                }
                                 return `
-                                    <button class="btn btn-primary btn-sm submit-button" data-id="${row.id}">
+                                    <button class="btn btn-primary btn-sm submit-button" 
+                                        data-hom-id="${row.homeworkId}" 
+                                        data-stu-id="${row.studentProgress.studentId}" 
+                                        data-sch-id="0" >
                                         Remind Parent
                                     </button>
                                 `;
@@ -868,54 +886,21 @@
                     }
                 },
             }).on('draw', function (e, settings) {
-                // Attach listener to checkboxes after the table is drawn
-                $('#student-table div .attendance-checkbox')
-                    .off('change')
-                    // .on('click', function (e) {
-                    //     e.stopPropagation(); Prevent row selection when checkbox is clicked
-                    // })
-                    .on('change', function (e) {
-                        const attendanceId = $(this).data('attendance-id');
-                        const isChecked = $(this).is(':checked');
-                        const status = isChecked ? 'Attended' : 'Absent';
+                // Attach listener to button after the table is drawn
+                $('#homework-table .submit-button').off('click').on('click', function (e) {
+                    console.log($(this));
+                    // Gather form data
+                    var creEmaReq = {
+                        StudentId: $(this).data('stuid'),
+                        HomeworkId: $(this).data('homid'),
+                        ScheduleId: $(this).data('schid'),
+                    };
 
-                        const node = $(this).parent();
-
-                        // Update the data or call API
-                        callApiUpdateAttendanceStatus(attendanceId, status);//  Call your API or update logic here
-                        if (node.children('label').length > 0) {
-                            const label = node.children('label');
-                            // console.log(node);
-                            label.text(status);
-                        }
-                    });
-                $('#student-table').on('click', '.submit-button', function () {
-                    const id = $(this).data('id'); // Get the ID from the button's data attribute
+                    console.log(creEmaReq);
 
                     // Call your API
-                    callApiSubmit(id);
+                    callApiPostEmailRemindHomework(creEmaReq);
                 });
-                // $('#student-table')
-                // .on('click', '.attendance-checkbox', function (e) {
-                //     e.stopPropagation(); Prevent the click event from bubbling up to the row
-                // })
-                // .on('change', '.attendance-checkbox', function () {
-                //     const attendanceId = $(this).data('attendance-id');
-                //     const isChecked = $(this).is(':checked');
-                //     const status = isChecked ? 'Attended' : 'Absent';
-
-                //     const node = $(this).parent();
-
-                //     Update the data or call API
-                //     callApiUpdateAttendanceStatus(attendanceId, status); Call your API or update logic here
-                //     if (node.children('label').length > 0) {
-                //         const label = node.children('label');
-                //         label.text(status);
-                //     }
-                // });
-                // $('#student-table').on('click', '.attendance-checkbox-label', function (e) {
-                //     e.stopPropagation(); Prevent the click event from bubbling up to the row
-                // });
             });
 
         });
@@ -1205,6 +1190,47 @@
                 }
             });
         }
+        function callApiPostEmailRemindHomework(creEmaReq) {
+            $.ajax({
+                url: apiUrl + 'Teacher/SendRemindHomeworkEmail', // API endpoint
+                type: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json',
+                data: JSON.stringify(creEmaReq),
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+                    // Check if the status is true
+                    if (response.status) { 
+                        showAlert('success', 'Remind homework email sent!');
+                    } else {
+                        showAlert('error', 'Failed to send email. Error: ' + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+
         function callApiGetAttendanceList(scheduleId) {
             $.ajax({
                 url: apiUrl + 'Teacher/Student/Attendance/All/ByScheduleId/' + scheduleId, // API endpoint

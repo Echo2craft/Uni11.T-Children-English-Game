@@ -2,6 +2,7 @@
 using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Get;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -210,20 +211,18 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Teacher/SendEmail/Student/{stuId}/Schedule/{schId}/Homework/{homId}")]
+        [HttpPost("SendRemindHomeworkEmail")]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SendEmailRemindHomeworktoParent(
-            [FromRoute][Required] int stuId,
-            [FromRoute][Required] int homId,
-            [FromRoute][Required] int schId
+            [FromBody][Required] CreateRemindHomeworkEmail emaReq
             )
         {
             try
             {
-                var stu = await _studentService.GetStudentById(stuId);
+                var stu = await _studentService.GetStudentById(emaReq.StudentId);
                 if (stu == null)
                 {
                     return NotFound(new
@@ -232,7 +231,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Student Not Found!"
                     });
                 }
-                var hom = await _homeworkService.GetHomeworkById(homId);
+                var hom = await _homeworkService.GetHomeworkById(emaReq.HomeworkId);
                 if (hom == null)
                 {
                     return NotFound(new
@@ -241,7 +240,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Homework Not Found!"
                     });
                 }
-                var sch = await _scheduleService.GetById(schId);
+                var sch = await _scheduleService.GetById(emaReq.ScheduleId);
                 if (sch == null)
                 {
                     return NotFound(new
@@ -250,19 +249,19 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Schedule Not Found!"
                     });
                 }
-                var stuHomList = await _studentHomeworkService.GetListByStudentId(stuId);
+                var stuHomList = await _studentHomeworkService.GetListByStudentId(emaReq.StudentId);
                 if(stuHomList == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Error, student homework not found."
+                        ErrorMessage = "Student homework not found."
                     });
                 }
                 if (stuHomList != null && 
                     stuHomList.Any(stuHom =>
-                        stuHom.StudentProgress.StudentId == stuId &&
-                        stuHom.HomeworkId == homId &&
+                        stuHom.StudentProgress.StudentId == emaReq.StudentId &&
+                        stuHom.HomeworkId == emaReq.HomeworkId &&
                         stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED
                         )
                     )
@@ -286,7 +285,7 @@ namespace CEG_WebAPI.Controllers
                     $"    We are writing to inform you that your child, <strong>{stu.Account.Fullname}</strong>, " +
                     "       has not submitted their homework for the assignment titled " +
                     $"    <strong>{hom.Title}</strong>." +
-                    $" This homework is from schedule number <strong>{sch.ScheduleNumber}</strong>" +
+                    $" This homework is from schedule number <strong>{sch.Session.SessionNumber}</strong>" +
                     $" of the class <strong>{sch.Class.ClassName}</strong>." +
                     "</p>" +
                     "<p>" +

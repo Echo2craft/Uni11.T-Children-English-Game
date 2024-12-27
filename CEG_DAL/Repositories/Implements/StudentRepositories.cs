@@ -106,6 +106,7 @@ namespace CEG_DAL.Repositories.Implements
                     Parent = new Parent
                     {
                         ParentId = stu.ParentId,
+                        Email = stu.Parent.Email,
                         Account = new Account
                         {
                             AccountId = stu.Parent.AccountId,
