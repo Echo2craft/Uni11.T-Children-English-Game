@@ -128,20 +128,39 @@ namespace CEG_BAL.Services.Implements
         }
         public async Task<List<GetStudentActivity>> GetStudentActivityListByScheduleId(int schId)
         {
-            var stuActList = _mapper.Map<List<GetStudentActivity>>(await _unitOfWork.AttendanceRepositories.GetListByScheduleIdNoTracking(schId));
+            // Fetch the student activities for the schedule and map to the view model
+            var stuActList = _mapper.Map<List<GetStudentActivity>>(
+                await _unitOfWork.AttendanceRepositories.GetListByScheduleIdNoTracking(schId)
+            );
+
+            // Fetch the homework IDs associated with the schedule
             List<int> homIds = await _unitOfWork.HomeworkRepositories.GetIdListByScheduleId(schId);
-            var stuProList = _mapper.Map<List<StudentProgressViewModel>>(await _unitOfWork.StudentProgressRepositories.GetListByMultipleHomeworkId(homIds.ToArray()));
+
+            // Fetch the student progress records for the relevant homework IDs and map to the view model
+            var stuProList = _mapper.Map<List<StudentProgressViewModel>>(
+                await _unitOfWork.StudentProgressRepositories.GetListByMultipleHomeworkId(homIds.ToArray())
+            );
+
+            // Iterate through each student activity and enrich it with additional data
             foreach (var stuAct in stuActList)
             {
+                // Set the total homework count
                 stuAct.HomeworkAmount = homIds.Count;
-                if(stuProList.Any(stuPro => stuPro.StudentId == stuAct.StudentId))
+
+                // Find the matching student progress for the current student
+                var matchingStuPro = stuProList.FirstOrDefault(stuPro => stuPro.StudentId == stuAct.StudentId);
+                if (matchingStuPro != null)
                 {
-                    stuAct.StudentProgress = stuProList.Where(stuPro => stuPro.StudentId == stuAct.StudentId).FirstOrDefault();
-                    if(stuAct.StudentProgress != null)
+                    stuAct.StudentProgress = matchingStuPro;
+
+                    // Calculate the current homework progress for the student
+                    stuAct.HomeworkCurrentProgress = matchingStuPro.StudentHomeworks
+                        .Count(stuHom => homIds.Contains(stuHom.HomeworkId) && stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED);
+
+                    // Assign homework numbers if there are any student homeworks
+                    for (int i = 0; i < matchingStuPro.StudentHomeworks.Count; i++)
                     {
-                        stuAct.HomeworkCurrentProgress = stuAct.StudentProgress.StudentHomeworks
-                            .Where(stuHom => homIds.Contains(stuHom.HomeworkId) && stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED)
-                            .Count();
+                        matchingStuPro.StudentHomeworks[i].Homework.HomeworkNumber = i + 1;
                     }
                 }
             }

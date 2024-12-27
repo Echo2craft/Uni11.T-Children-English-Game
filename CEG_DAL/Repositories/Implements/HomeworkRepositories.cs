@@ -41,7 +41,18 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Homework>?> GetListBySessionId(int sessionId)
         {
-            return await _dbContext.Homeworks.AsNoTrackingWithIdentityResolution().Where(home => home.SessionId == sessionId).ToListAsync();
+            return await _dbContext.Homeworks
+                .AsNoTrackingWithIdentityResolution()
+                .Where(home => home.SessionId == sessionId)
+                .ToListAsync();
+        }
+
+        public async Task<List<Homework>> GetListBySessionIds(int[] sesId)
+        {
+            return await _dbContext.Homeworks
+                .AsNoTrackingWithIdentityResolution()
+                .Where(h => sesId.Contains(h.SessionId))
+                .ToListAsync();
         }
 
         public async Task<List<int>> GetIdListByScheduleId(int schId)

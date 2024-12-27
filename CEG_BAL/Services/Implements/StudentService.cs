@@ -92,13 +92,7 @@ namespace CEG_BAL.Services.Implements
         public async Task<StudentViewModel?> GetStudentById(int id)
         {
             var user = await _unitOfWork.StudentRepositories.GetByIdNoTracking(id);
-            if (user != null)
-            {
-                //var mem = await _unitOfWork.MemberRepository.GetByIdNoTracking(user.MemberId);
-                var usr = _mapper.Map<StudentViewModel>(user);
-                return usr;
-            }
-            return null;
+            return user != null ? _mapper.Map<StudentViewModel>(user) : null;
         }
 
         public async Task<List<StudentViewModel>> GetStudentList()

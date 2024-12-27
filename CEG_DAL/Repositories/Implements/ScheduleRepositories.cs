@@ -28,6 +28,27 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Schedules
                 .AsNoTrackingWithIdentityResolution()
+                .Select(sch => new Schedule()
+                {
+                    ScheduleId = sch.ScheduleId,
+                    ScheduleDate = sch.ScheduleDate,
+                    StartTime = sch.StartTime,
+                    EndTime = sch.EndTime,
+                    Status = sch.Status,
+                    Session = new Session()
+                    {
+                        SessionId = sch.SessionId,
+                        SessionNumber = sch.Session.SessionNumber,
+                        Title = sch.Session.Title,
+                        Description = sch.Session.Description,
+                        Hours = sch.Session.Hours,
+                    },
+                    Class = new Class()
+                    {
+                        ClassId = sch.ClassId,
+                        ClassName = sch.Class.ClassName,
+                    }
+                })
                 .FirstOrDefaultAsync(s => s.ScheduleId == id);
         }
 
