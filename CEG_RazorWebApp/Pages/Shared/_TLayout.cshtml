@@ -90,6 +90,7 @@
                     </div>
                 </div>
             </div>
+            <div id="alertContainer"></div>
         </div>
     </div>
     @RenderBody()
@@ -160,7 +161,7 @@
 
             // Find the corresponding <a> element with the href attribute matching the current URL
             var $currentLink = $('.slide-menu a[href="' + currentUrl + '"]');
-
+            console.log(currentUrl);
             // Add the active class based on the current URL
             if ($currentLink.closest('ul').hasClass('sub-menu')) {
                 $currentLink.closest('li.sub-active').addClass('active');

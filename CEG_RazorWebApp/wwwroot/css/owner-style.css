@@ -2039,6 +2039,24 @@ div.dt-container div.dt-paging ul.pagination {
 button.btn.btn-primary.btn-sm.submit-button{
     color: white;
 }
+.class-info-table{
+    font-size: medium;
+}
+    .class-info-table .status-info {
+        font-size: large;
+    }
+        .class-info-table .status-info .outcome{
+            font-size: 16px;
+        }
+        .class-info-table .status-info .approval {
+            font-size: 16px;
+        }
+        .class-info-table .status-info .destroy {
+            font-size: 16px;
+        }
+.earnings-info-table {
+    font-size: large;
+}
 /*.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after{
     background-image: 
 }*/
