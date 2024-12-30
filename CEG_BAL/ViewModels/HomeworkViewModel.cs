@@ -11,6 +11,8 @@ namespace CEG_BAL.ViewModels
     {
         public int? HomeworkId { get; set; }
 
+        public int? HomeworkNumber { get; set; }
+
         public string? Title { get; set; }
 
         public string? Description { get; set; }

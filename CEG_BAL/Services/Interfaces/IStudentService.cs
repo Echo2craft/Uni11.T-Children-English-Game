@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Home;
 
 namespace CEG_BAL.Services.Interfaces
 {
@@ -19,6 +20,7 @@ namespace CEG_BAL.Services.Interfaces
         Task<StudentViewModel?> GetStudentByAccountId(int id);
         Task<List<StudentViewModel>> GetStudentByParentAccountId(int id);
         Task<List<StudentViewModel>> GetStudentByClassId(int id);
+        Task<List<StudentLeaderboard>> GetStudentListByPointRank();
         void Create(StudentViewModel student, CreateNewStudent newStu);
         void Update(StudentViewModel student, UpdateStudent studentNewInfo);
         Task<int> GetTotalAmountByParent(int id);

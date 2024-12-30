@@ -15,6 +15,8 @@ namespace CEG_DAL.Repositories.Interfaces
         // Task<bool>? isExistedByStudentFullname(string studentFullname);
         Task<List<Enroll>> GetEnrollByParentId(int? parentId);
         Task<List<Enroll>> GetEnrollByStudentId(int? studentId);
+        Task<List<Enroll>> GetByClassId(int? claId);
+        Task<int> GetCountByClassId(int? claId);
         Task<Enroll?> GetByStudentFullnameAndClassName(string stuFullName, string claName);
     }
 }

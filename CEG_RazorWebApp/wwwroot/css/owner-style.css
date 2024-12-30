@@ -174,14 +174,14 @@ html body {
 }
 
 #notif {
-    left: 30%;
-    right: auto;
-    top: auto;
-    width: 50%;
+    left: 30% !important;
+    right: auto !important;
+    top: auto !important;
+    width: 50% !important;
     animation: notif 200 3s ease-in-out none;
 }
 #alertContainer .admin-alert#notif {
-    white-space: pre-wrap;
+    white-space: pre-wrap !important;
     left: 30%;
     right: auto;
     top: auto;
@@ -2034,6 +2034,9 @@ div.dt-container div.dt-paging ul.pagination {
     border-color: white;
 }
 .selected .custom-control-input[disabled] ~ .custom-control-label, .custom-control-input:disabled ~ .custom-control-label {
+    color: white;
+}
+button.btn.btn-primary.btn-sm.submit-button{
     color: white;
 }
 /*.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after{
