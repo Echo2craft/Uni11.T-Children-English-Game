@@ -277,17 +277,15 @@ html body {
     }
 
         .navigation .slide-menu .logo {
-            padding-right: 5px;
+            padding-right: 3px;
             max-height: 90px;
             width: auto;
-            margin: 10px auto;
-            display: block;
         }
 
     .navigation.active .slide-menu .logo {
         max-width: 40px;
-        margin-bottom: 37px;
-        margin-top: 38px;
+        /*margin-bottom: 37px;
+        margin-top: 38px;*/
     }
 
     .navigation .slide-menu > li {
@@ -298,6 +296,9 @@ html body {
         border-top-left-radius: 30px;
         border-bottom-left-radius: 30px;
     }
+        .navigation .slide-menu > li.logo {
+            margin: 10px auto;
+        }
 
         .navigation .slide-menu > li.active {
             background-color: #ecf0f1;
@@ -307,6 +308,12 @@ html body {
         .navigation .slide-menu > li:hover {
             background-color: #ecf0f1;
             color: #34495e;
+        }
+        .navigation .slide-menu > li.logo.active,
+        .navigation .slide-menu > li.logo:hover {
+            background: #34495e;
+            color: #ecf0f1;
+            border-radius: 20px;
         }
 
 /*        .navigation .slide-menu > li:nth-child(3).active,
@@ -327,12 +334,20 @@ html body {
     font-size: 17px;
 }
 
+.slide-menu li.logo a {
+    justify-content: center;
+}
+
 .slide-menu li.active a {
     color: #34495e;
 }
 
 .slide-menu > li a:hover {
     color: #34495e;
+}
+
+.slide-menu > li.logo a:hover {
+    color: #ecf0f1;
 }
 
 /*.slide-menu > li:nth-child(3) a:hover {
@@ -383,6 +398,11 @@ html body {
     display: none;
 }*/
 
+.slide-menu > li.logo a::before,
+.slide-menu > li.logo.active a::before {
+    display: none;
+}
+
 .sub-menu li:hover a::after,
 .slide-menu > li:hover a::after,
 .slide-menu > li.active a::after {
@@ -402,6 +422,11 @@ html body {
 .slide-menu > li:nth-child(3).active a::after {
     display: none;
 }*/
+
+.slide-menu > li.logo a::after,
+.slide-menu > li.logo.active a::after {
+    display: none;
+}
 
 .navigation .sub-menu {
     position: static;
