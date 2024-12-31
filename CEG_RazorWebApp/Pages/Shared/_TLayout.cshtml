@@ -40,12 +40,12 @@
         <div class="container">
             <div class="navigation">
                 <ul class="slide-menu">
-                    <div class="logo">
+                    <li class="logo">
                         <a href="/Teacher/Index">
                             @* <i class='bx bxs-graduation bx-lg'></i> *@
                             <img class="logo" src="~/images/study.png" alt="logo">
                         </a>
-                    </div>
+                    </li>
                     <li data-toggle="tooltip" data-placement="right" title="Overview">
                         <a href="/Teacher/Index">
                             <span><i class='bx bx-home-alt-2'></i></span>
@@ -90,6 +90,7 @@
                     </div>
                 </div>
             </div>
+            <div id="alertContainer"></div>
         </div>
     </div>
     @RenderBody()
@@ -160,7 +161,7 @@
 
             // Find the corresponding <a> element with the href attribute matching the current URL
             var $currentLink = $('.slide-menu a[href="' + currentUrl + '"]');
-
+            console.log(currentUrl);
             // Add the active class based on the current URL
             if ($currentLink.closest('ul').hasClass('sub-menu')) {
                 $currentLink.closest('li.sub-active').addClass('active');
