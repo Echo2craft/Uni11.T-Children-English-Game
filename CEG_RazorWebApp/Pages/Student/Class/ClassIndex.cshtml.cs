@@ -10,6 +10,8 @@ namespace CEG_RazorWebApp.Pages.Student.Class
 {
     public class ClassIndexModel : PageModel
     {
+        [BindProperty]
+        public string? SchedulePresets { get; set; }
         public void OnGet()
         {
         }

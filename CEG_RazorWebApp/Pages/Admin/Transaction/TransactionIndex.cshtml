@@ -364,7 +364,7 @@
             //     theme: 'bootstrap4'
             // });
 
-            sessionTable = new DataTable('#transaction-table', {
+            transactionTable = new DataTable('#transaction-table', {
                 data: [],
                 deferRender: false,
                 responsive: true,
@@ -663,7 +663,7 @@
                     // Check if the status is true
                     if (response.status) {
                         transactionList = response.data;
-                        sessionTable.clear().rows.add(transactionList).draw();
+                        transactionTable.clear().rows.add(transactionList).draw();
                         callApiGetParentNameList();
                         // $('#createTransaction_TransactionStatus').empty();
                         // $('#createTransaction_TransactionStatus').append(getTransactionStatusOptions());
