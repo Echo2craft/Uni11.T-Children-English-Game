@@ -88,6 +88,7 @@
                 success: function (response) {
                     // Handle success (display a success message or redirect, etc.)
                     if (response.status) {
+                        console.log(response.roleName);
                         showAlert('success', "Login successfully");
                         sessionStorage.setItem('token', response.data.accessToken);
                         sessionStorage.setItem('role', response.data.roleName);
