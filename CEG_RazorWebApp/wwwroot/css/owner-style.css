@@ -2082,6 +2082,14 @@ button.btn.btn-primary.btn-sm.submit-button{
 .earnings-info-table {
     font-size: large;
 }
+.nav-pills .nav-link.active.class-tab, .nav-pills .show > .nav-link.class-tab {
+    color: black;
+    border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+.nav-pills .nav-link.class-tab {
+    border-radius: 0.25rem 0.25rem 0rem 0rem;
+}
 /*.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after{
     background-image: 
 }*/

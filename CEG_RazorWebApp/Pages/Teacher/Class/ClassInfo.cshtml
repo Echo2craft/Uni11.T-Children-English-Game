@@ -46,28 +46,28 @@
                     <div class="card">
                         <div class="card-body">
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs">
+                            <ul class="nav nav-pills nav-fill flex-column flex-sm-row" role="tablist">
                                 <!-- dung vong for o day -->
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#class_info_Tab" role="tab" aria-controls="info" aria-selected="true">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab active flex-sm-fill text-sm-center" data-toggle="tab" href="#class_info_Tab" role="tab" aria-controls="info" aria-selected="true">
                                         <i class='bx bx-home-alt-2'></i>
                                         <span>Class Information</span>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#schedule_list_Tab" role="tab" aria-controls="schedule" aria-selected="true">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab flex-sm-fill text-sm-center" data-toggle="tab" href="#schedule_list_Tab" role="tab" aria-controls="schedule" aria-selected="true">
                                         <i class='bx bx-home-alt-2'></i>
                                         <span>Schedules</span>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#student_list_Tab" role="tab" aria-controls="student" aria-selected="true">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab flex-sm-fill text-sm-center" data-toggle="tab" href="#student_list_Tab" role="tab" aria-controls="student" aria-selected="true">
                                         <i class='bx bx-home-alt-2'></i>
                                         <span>Students</span>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#earning_list_Tab" role="tab" aria-controls="earning" aria-selected="true">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab flex-sm-fill text-sm-center" data-toggle="tab" href="#earning_list_Tab" role="tab" aria-controls="earning" aria-selected="true">
                                         <i class='bx bx-home-alt-2'></i>
                                         <span>Earnings</span>
                                     </a>
@@ -76,7 +76,7 @@
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <!-- class_info_Tab -->
-                                <div class="tab-pane active" id="class_info_Tab" role="tabpanel">
+                                <div class="tab-pane fade show active" id="class_info_Tab" role="tabpanel">
                                     <div class="card profile mb-4">
                                         <div class="card-header" id="class-title-status">
                                             <h4 id="class-class-title">Class Information</h4>
@@ -84,6 +84,10 @@
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="table table-borderless class-info-table">
+                                                    <colgroup>
+                                                        <col style="width: 30%;">
+                                                        <col style="width: 70%;">
+                                                    </colgroup>
                                                     <tbody>
                                                         <tr class="status-info">
                                                             <th class="text-md-right">Status:</th>
@@ -130,7 +134,7 @@
                                     </div>
                                 </div>
                                 <!-- class_info_Tab -->
-                                <div class="tab-pane" id="schedule_list_Tab" role="tabpanel">
+                                <div class="tab-pane fade" id="schedule_list_Tab" role="tabpanel">
                                     <div class="card profile mb-4">
                                         <div class="card-header" id="class-allow-add-schedule">
                                             <h4>Scheduled Session List</h4>
@@ -317,7 +321,7 @@
                                     </div>
                                 </div>
                                 <!-- class_info_Tab -->
-                                <div class="tab-pane" id="student_list_Tab" role="tabpanel">
+                                <div class="tab-pane fade" id="student_list_Tab" role="tabpanel">
                                     <div class="card profile mb-4">
                                         <div class="card-header">
                                             <h4>Student List</h4>
@@ -351,7 +355,7 @@
                                     </div>
                                 </div>
                                 <!-- class_info_Tab -->
-                                <div class="tab-pane" id="earning_list_Tab" role="tabpanel">
+                                <div class="tab-pane fade" id="earning_list_Tab" role="tabpanel">
                                     <div class="card profile mb-4">
                                         <div class="card-header">
                                             <h4>Expected Earnings</h4>
@@ -359,6 +363,10 @@
                                         <div class="card-body">
                                             <div class="table-responsive">
                                                 <table class="table table-borderless earnings-info-table">
+                                                    <colgroup>
+                                                        <col style="width: 30%;">
+                                                        <col style="width: 70%;">
+                                                    </colgroup>
                                                     <tbody>
                                                         <tr>
                                                             <th class="text-md-right">Expected amount:</th>
