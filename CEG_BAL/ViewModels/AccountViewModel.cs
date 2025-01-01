@@ -24,6 +24,8 @@ namespace CEG_BAL.ViewModels
 
         public string Gender { get; set; } = null!;
 
+        public int TotalAmount { get; set; }
+
         public string Status { get; set; } = null!;
 
         public virtual RoleViewModel Role { get; set; } = null!;
