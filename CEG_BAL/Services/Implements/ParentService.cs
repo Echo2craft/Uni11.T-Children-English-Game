@@ -2,6 +2,7 @@
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
+using CEG_BAL.ViewModels.Admin.Get;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -78,9 +79,9 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map < List <ParentViewModel >>(await _unitOfWork.ParentRepositories.GetParentList());
         }
 
-        public async Task<List<string>> GetParentNameList()
+        public async Task<List<GetParentNameOption>> GetParentNameList()
         {
-            return await _unitOfWork.ParentRepositories.GetParentNameList();
+            return _mapper.Map<List<GetParentNameOption>>(await _unitOfWork.ParentRepositories.GetParentNameList());
         }
 
         public async Task<bool> IsParentExistByEmail(string email)
