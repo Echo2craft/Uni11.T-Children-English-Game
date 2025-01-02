@@ -10,13 +10,24 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/Index.css">
 </head>
-<body>
-    <section class="content__list-room container">
-        <div class="row">
+<body class="background">
+    <div class="Title"><h1>Courses</h1></div>
+    <hr />
+    <div class="header__breadcrumb container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Home/Index" class="text-decoration-none">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">All Courses</li>
+            </ol>
+        </nav>
+    </div>
+    <section>
+        <div class="row contain">
             <div class="col-9">
-                <div class="content__list row">
-
+                <div id="course-list" class="content__list row">
+                    <!-- Dynamic course cards will be injected here -->
                 </div>
+                <div class="pagination mb-3"></div>
             </div>
         </div>
     </section>

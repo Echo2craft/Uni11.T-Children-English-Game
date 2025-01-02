@@ -83,6 +83,51 @@
         var id = sessionStorage.getItem('usrId');
         var enrollList = [];
         $(document).ready(function () {
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('searchIcon', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bx-search-alt question-search-icon',
+                    hideLabel: true // Hide search label
+                }, opts);
+
+                // Create a container for the icon
+                let container = document.createElement('div');
+                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                // Create the icon element
+                let icon = document.createElement('i');
+                icon.className = options.iconClass;
+
+                // Check if pagination is enabled
+                // if (settings.oFeatures.bFilter) {
+                //     console.log(settings.oFeatures.bFilter);
+                //     console.log('Pagination is enabled for this DataTable.');
+                // }
+
+                setTimeout(() => {
+                    // Find the .dt-search container inside the DataTable wrapper
+                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                    if (searchContainer.length) {
+                        searchContainer.append(icon);
+                    } else {
+                        // Append icon to container
+                        container.appendChild(icon);
+                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                        $(settings.nTableWrapper).prepend(container);
+                    }
+                    if (options.hideLabel) {
+                        // Find the .dt-search label container inside the DataTable wrapper
+                        let searchLabel = searchContainer.find('label');
+                        if (searchLabel.length) {
+                            searchLabel.text('');
+                        } else {
+                            console.log('Label of search div not found!');
+                        }
+                    }
+                }, 100);
+                return '';
+            });
             callApiGetEnrollList();
             // Search event handler
             $('#search').on('keyup', function (event) {
@@ -108,8 +153,8 @@
                 },
                 success: function (response) {
                     if (response.status) {
-                        classList = response.data;
-                        setEnrollDisplay(classList);
+                        enrollList = response.data;
+                        setEnrollDisplay(enrollList);
                     } else {
                         console.error("API returned false status.");
                     }
@@ -146,9 +191,9 @@
                     return enroll.status === 'Enrolled';
                 });
                 var statusText = '';
-                var statusText = '';
                 switch (enroll.class.status) {
                     case 'Open':
+                    case 'Ongoing':
                         statusText = `<span class="outcome" style="float: left;">Status: ${enroll.class.status}</span>`
                         break;
                     case 'Draft':
