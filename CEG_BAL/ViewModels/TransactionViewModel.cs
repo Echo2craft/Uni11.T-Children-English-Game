@@ -11,7 +11,7 @@ namespace CEG_BAL.ViewModels
     {
         public int TransactionId { get; set; }
 
-        public int ParentId { get; set; }
+        public int AccountId { get; set; }
 
         public string ParentFullname { get; set; } = null!;
 
@@ -33,6 +33,6 @@ namespace CEG_BAL.ViewModels
 
         public List<EnrollViewModel> Enrolls { get; set; } = new List<EnrollViewModel>();
 
-        public ParentViewModel Parent { get; set; } = null!;
+        public AccountViewModel Account { get; set; } = null!;
     }
 }

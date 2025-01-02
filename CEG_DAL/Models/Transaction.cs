@@ -7,7 +7,7 @@ public partial class Transaction
 {
     public int TransactionId { get; set; }
 
-    public int ParentId { get; set; }
+    public int AccountId { get; set; }
 
     public string? VnpayId { get; set; }
 
@@ -21,7 +21,7 @@ public partial class Transaction
 
     public DateTime ConfirmDate { get; set; }
 
-    public virtual ICollection<Enroll> Enrolls { get; set; } = new List<Enroll>();
+    public virtual Account Account { get; set; } = null!;
 
-    public virtual Parent Parent { get; set; } = null!;
+    public virtual ICollection<Enroll> Enrolls { get; set; } = new List<Enroll>();
 }
