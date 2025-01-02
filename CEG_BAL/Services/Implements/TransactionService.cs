@@ -42,7 +42,8 @@ namespace CEG_BAL.Services.Implements
 
             var tra = new Transaction();
             _mapper.Map(newTra, tra);
-            tra.ParentId = await _unitOfWork.ParentRepositories.GetIdByFullname(newTra.ParentFullname);
+            var par = await _unitOfWork.ParentRepositories.GetByFullname(newTra.ParentFullname);
+            tra.AccountId = par != null ? par.AccountId : throw new ArgumentNullException(nameof(newTra), "The new transaction info contains invalid Parent Fullname.");
             // Save to the database
             try
             {

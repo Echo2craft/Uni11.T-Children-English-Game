@@ -37,13 +37,9 @@ namespace CEG_DAL.Repositories.Implements
                     TransactionDate = tra.TransactionDate,
                     ConfirmDate = tra.ConfirmDate,
                     TransactionStatus = tra.TransactionStatus,
-                    Parent = new Parent
+                    Account = new Account
                     {
-                        ParentId = tra.ParentId,
-                        Account = new Account
-                        {
-                            Fullname = tra.Parent.Account.Fullname,
-                        }
+                        Fullname = tra.Account.Fullname
                     }
                 })
                 .AsNoTrackingWithIdentityResolution()
@@ -52,7 +48,7 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Transaction>> GetTransactionByParentId(int? parentId)
         {
-            return await _dbContext.Transactions.Where(t => t.ParentId == parentId).ToListAsync();
+            return await _dbContext.Transactions.Where(t => t.Account.Parents.Any(par => par.ParentId == parentId)).ToListAsync();
         }
 
         public async Task<Transaction?> GetTransactionByVnpayId(string? vnpayId)
