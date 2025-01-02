@@ -18,5 +18,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<string> GetRoleByAccountId(int id);
         Task<bool> UpdateStatusById(string status, int id);
         Task<int> GetIdByUsername(string username);
+        Task<int> GetIdByFullname(string fullname);
     }
 }

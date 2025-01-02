@@ -370,7 +370,7 @@
                 responsive: true,
                 columns: [
                     { data: 'transactionId' },
-                    { data: 'parent.account.fullname' },
+                    { data: 'account.fullname' },
                     { data: 'vnpayId' },
                     { 
                         data: 'transactionAmount',
@@ -379,7 +379,8 @@
                                 style: 'currency',
                                 currency: 'VND',
                             });
-                            return '<span>' + formatter.format(data) + '</span >';
+                            var formatPrice = formatter.format(data);
+                            return `<span class="price-format" data-price="${data}">${formatPrice}</span >`;
                         }
                     },
                     { data: 'transactionType' },
@@ -597,17 +598,16 @@
         }
         function addParentEnrollmentOptions(data) {
             $('#select2-parent-fullname-enrollment-dropdown').empty();
-            console.log(data);
             data.forEach(item => {
                 // Add each item as an option
 
-                let newOption = new Option(item, item, false, false);
+                let newOption = new Option(item.parentName, item.parentName, false, false);
                 $('#select2-parent-fullname-enrollment-dropdown').append(newOption);
             });
             // Refresh the Select2 dropdown to show new options
             $('#select2-parent-fullname-enrollment-dropdown').trigger('change'); // Ensure Select2 is updated
             // Set up Student list based on the first data
-            callApiGetStudentNameList(data[0]);
+            callApiGetStudentNameList(data[0].parentName);
         }
         function addStudentOptions(data) {
             $('#select2-student-fullname-dropdown').empty();

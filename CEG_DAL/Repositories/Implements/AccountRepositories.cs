@@ -36,7 +36,10 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<Account?> GetByUsername(string username)
         {
-            return await _dbContext.Accounts.AsNoTrackingWithIdentityResolution().Include(a => a.Role).SingleOrDefaultAsync(acc => acc.Username == username);
+            return await _dbContext.Accounts
+                .AsNoTrackingWithIdentityResolution()
+                .Include(a => a.Role)
+                .SingleOrDefaultAsync(acc => acc.Username == username);
         }
 
         public async Task<string?> GetRoleByAccountId(int id)
@@ -54,9 +57,22 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<int> GetIdByUsername(string username)
         {
-            var result = await (from acc in _dbContext.Accounts where acc.Username.Trim().ToLower() == username.Trim().ToLower() select acc).FirstOrDefaultAsync();
+            return await _dbContext.Accounts
+                .AsNoTrackingWithIdentityResolution()
+                .Where(acc => acc.Username.Trim().ToLower() == username.Trim().ToLower())
+                .Select(acc => acc.AccountId)
+                .FirstOrDefaultAsync();
+            /*var result = await (from acc in _dbContext.Accounts where acc.Username.Trim().ToLower() == username.Trim().ToLower() select acc).FirstOrDefaultAsync();
             if (result != null) return result.AccountId;
-            return 0;
+            return 0;*/
+        }
+        public async Task<int> GetIdByFullname(string fullname)
+        {
+            return await _dbContext.Accounts
+                .AsNoTrackingWithIdentityResolution()
+                .Where(acc => acc.Fullname.Trim().ToLower() == fullname.Trim().ToLower())
+                .Select(acc => acc.AccountId)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<bool> UpdateStatusById(string status, int id)
