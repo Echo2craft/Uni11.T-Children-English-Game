@@ -8,7 +8,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/Index.css">
+    <link rel="stylesheet" href="~/css/Meeting.css">
 </head>
 <body class="background">
     <div class="Title"><h1>Classes</h1></div>
@@ -21,23 +21,12 @@
             </ol>
         </nav>
     </div>
-    <section>
-        <div class="row contain">
-            <div class="col-9">
-                <div id="class-list" class="content__list row">
-
-                </div>
-            </div>
-        </div>
+    <!-- CONTENT -->
+    <section class="content__list-room container" id="full-filter">
+        <partial name="PartialViews/_ClassListPartial" />
     </section>
     <script>
-        var apiUrl = sessionStorage.getItem('apiUrl');
-        $(document).ready(function () {
-            callApiGetClassList();
-        }
-        function callApiGetClassList() {
-
-        }
+        
     </script>
 </body>
 </html>
