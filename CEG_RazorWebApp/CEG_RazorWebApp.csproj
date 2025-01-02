@@ -32,7 +32,6 @@
   <ItemGroup>
     <Folder Include="Libraries\Attributes\" />
     <Folder Include="Models\Schedule\Update\" />
-    <Folder Include="Pages\Teacher\Earning\" />
   </ItemGroup>
    
 </Project>
