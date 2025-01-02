@@ -21,6 +21,8 @@ public partial class Transaction
 
     public DateTime ConfirmDate { get; set; }
 
+    public string? Description { get; set; }
+
     public virtual Account Account { get; set; } = null!;
 
     public virtual ICollection<Enroll> Enrolls { get; set; } = new List<Enroll>();
