@@ -21,7 +21,7 @@ namespace CEG_BAL.ViewModels
 
         public string? ClassName { get; set; }
 
-        public string VnpayId { get; set; } = null!;
+        public string? VnpayId { get; set; }
 
         public int TransactionAmount { get; set; }
 
@@ -32,6 +32,8 @@ namespace CEG_BAL.ViewModels
         public string TransactionType { get; set; } = null!;
 
         public DateTime ConfirmDate { get; set; }
+
+        public string? Description { get; set; }
 
         public List<EnrollViewModel> Enrolls { get; set; } = new List<EnrollViewModel>();
 

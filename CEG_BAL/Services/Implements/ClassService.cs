@@ -5,6 +5,7 @@ using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Home;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.EntityFrameworkCore;
@@ -151,6 +152,19 @@ namespace CEG_BAL.Services.Implements
             if (studentId == 0) return new List<ClassViewModel>();
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByStudentId(studentId.Value));
             //return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByStudentId(studentId));
+        }
+
+        public async Task<List<ClassViewModel>> GetClassListFilter(ClassFilter filter)
+        {
+            var classes = await _unitOfWork.ClassRepositories.GetList();
+
+            // Apply filtering
+            if (!string.IsNullOrEmpty(filter.Status))
+            {
+                classes = classes.Where(c => c.Status.Equals(filter.Status, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return _mapper.Map<List<ClassViewModel>>(classes);
         }
         public async Task Update(int claId, UpdateClass upCla)
         {

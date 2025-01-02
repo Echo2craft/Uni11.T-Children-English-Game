@@ -542,6 +542,7 @@ public partial class MyDBContext : DbContext
             entity.Property(e => e.ConfirmDate)
                 .HasColumnType("datetime")
                 .HasColumnName("confirm_date");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.TransactionAmount).HasColumnName("transaction_amount");
             entity.Property(e => e.TransactionDate)
                 .HasColumnType("datetime")
