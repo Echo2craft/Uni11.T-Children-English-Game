@@ -35,6 +35,8 @@ namespace CEG_DAL.Repositories.Implements
                     StartTime = sch.StartTime,
                     EndTime = sch.EndTime,
                     Status = sch.Status,
+                    SessionId = sch.SessionId,
+                    ClassId = sch.ClassId,
                     Session = new Session()
                     {
                         SessionId = sch.SessionId,
@@ -47,6 +49,7 @@ namespace CEG_DAL.Repositories.Implements
                     {
                         ClassId = sch.ClassId,
                         ClassName = sch.Class.ClassName,
+                        Status = sch.Class.Status,
                     }
                 })
                 .FirstOrDefaultAsync(s => s.ScheduleId == id);

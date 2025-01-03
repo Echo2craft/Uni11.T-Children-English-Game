@@ -201,10 +201,6 @@ namespace CEG_BAL.AutoMapperProfile
             CreateMap<Feedback, FeedbackViewModel>().ReverseMap();*/
             CreateMap<Role, RoleViewModel>()
                 .ReverseMap();
-            CreateMap<Teacher, TeacherViewModel>()
-                .ReverseMap();
-            CreateMap<Parent, ParentViewModel>()
-                .ReverseMap();
             CreateMap<Student, StudentViewModel>()
                 .ReverseMap();
             CreateMap<Course, CourseViewModel>()
@@ -234,7 +230,8 @@ namespace CEG_BAL.AutoMapperProfile
             CreateMap<Account, AccountViewModel>()
                 .ReverseMap();
             // Teacher
-            CreateMap<Teacher, TeacherViewModel>();
+            CreateMap<Teacher, TeacherViewModel>()
+                .ReverseMap();
             CreateMap<CreateNewTeacher, Teacher>()
                 .AfterMap((src, dest) =>
                 {
@@ -247,6 +244,14 @@ namespace CEG_BAL.AutoMapperProfile
                 .AfterMap((src,dest) =>
                 {
                     dest.TeacherName = src.Account.Fullname;
+                });
+            // Parent
+            CreateMap<Parent, ParentViewModel>()
+                .ReverseMap();
+            CreateMap<Parent, GetParentNameOption>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.ParentName = src.Account.Fullname;
                 });
 
             // Class
@@ -283,8 +288,7 @@ namespace CEG_BAL.AutoMapperProfile
                 });
 
             // Transaction
-            CreateMap<Transaction, TransactionViewModel>()
-                .ReverseMap();
+            CreateMap<Transaction, TransactionViewModel>();
             CreateMap<CreateTransaction, Transaction>()
                 .AfterMap((src, dest) =>
                 {

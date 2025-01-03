@@ -46,12 +46,17 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<Transaction>> GetTransactionByParentId(int? parentId)
+        public async Task<List<Transaction>> GetAllByParentId(int? parentId)
         {
             return await _dbContext.Transactions.Where(t => t.Account.Parents.Any(par => par.ParentId == parentId)).ToListAsync();
         }
 
-        public async Task<Transaction?> GetTransactionByVnpayId(string? vnpayId)
+        public async Task<List<Transaction>> GetAllByTeacherId(int? teacherId)
+        {
+            return await _dbContext.Transactions.Where(t => t.Account.Teachers.Any(par => par.TeacherId == teacherId)).ToListAsync();
+        }
+
+        public async Task<Transaction?> GetByVnpayId(string? vnpayId)
         {
             return await _dbContext.Transactions.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(t => t.VnpayId == vnpayId);
         }

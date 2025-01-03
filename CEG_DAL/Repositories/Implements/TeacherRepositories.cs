@@ -71,9 +71,10 @@ namespace CEG_DAL.Repositories.Implements
         }
         public async Task<int> GetIdByAccountId(int id)
         {
-            var result = await (from t in _dbContext.Teachers where t.AccountId == id select t).FirstOrDefaultAsync();
-            if (result != null) return result.TeacherId;
-            return 0;
+            return await _dbContext.Teachers
+                .Where(par => par.AccountId == id)
+                .Select(p => p.TeacherId)
+                .FirstOrDefaultAsync();
         }
     }
 }
