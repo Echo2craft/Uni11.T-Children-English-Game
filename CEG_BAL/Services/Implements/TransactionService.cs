@@ -81,13 +81,20 @@ namespace CEG_BAL.Services.Implements
         {
             var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             if (parentId == 0) return null;
-            return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetTransactionByParentId(parentId));
+            return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetAllByParentId(parentId));
         }
 
-        public async Task<TransactionViewModel?> GetTransactionByVnpayId(string? vnpayId)
+        public async Task<List<TransactionViewModel>> GetAllByTeacherAccountId(int id)
+        {
+            var teaId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
+            if (teaId == 0) return new List<TransactionViewModel>();
+            return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetAllByTeacherId(teaId));
+        }
+
+        public async Task<TransactionViewModel?> GetByVnpayId(string? vnpayId)
         {
             return _mapper.Map<TransactionViewModel>(await
-                _unitOfWork.TransactionRepositories.GetTransactionByVnpayId(vnpayId));
+                _unitOfWork.TransactionRepositories.GetByVnpayId(vnpayId));
         }
 
         public void Update(TransactionViewModel model)

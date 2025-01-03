@@ -27,7 +27,7 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Teacher/Earning/Index">Transaction</a>
+                                <a href="/Teacher/Earning/Index">Earnings</a>
                             </li>
                         </ol>
                     </div>
@@ -41,7 +41,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#home1">
                                         <i class='bx bx-home-alt-2'></i>
-                                        <span>All Transactions</span>
+                                        <span>All Earnings</span>
                                     </a>
                                 </li>
                             </ul>
@@ -188,6 +188,7 @@
         </div>
     </div> *@
     <script>
+        var id = sessionStorage.getItem('usrId');
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
         var transactionList;
@@ -317,7 +318,7 @@
                 columns: [
                     { data: 'transactionId' },
                     { data: 'account.fullname' },
-                    { data: 'vnpayId' },
+                    { data: 'account.fullname' },
                     { 
                         data: 'transactionAmount',
                         render: function (data, type, row, meta) {
@@ -330,6 +331,7 @@
                         }
                     },
                     { data: 'transactionType' },
+                    { data: 'description' },
                     {
                         data: 'transactionDate',
                         // render: function (data, type, row, meta) {
@@ -582,7 +584,7 @@
         }
         function callApiGetTransactionList() {
             $.ajax({
-                url: apiUrl + 'Transaction/All', // API endpoint
+                url: apiUrl + `Transaction/All/ByTeacher/${id}`, // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token// Include the JWT token
@@ -593,8 +595,10 @@
                     // Check if the status is true
                     if (response.status) {
                         transactionList = response.data;
-                        transactionTable.clear().rows.add(transactionList).draw();
-                        callApiGetParentNameList();
+
+                        console.log(response.data);
+                        // transactionTable.clear().rows.add(transactionList).draw();
+                        // callApiGetParentNameList();
                         // $('#createTransaction_TransactionStatus').empty();
                         // $('#createTransaction_TransactionStatus').append(getTransactionStatusOptions());
                     } else {
