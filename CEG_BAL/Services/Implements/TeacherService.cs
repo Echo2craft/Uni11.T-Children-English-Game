@@ -111,14 +111,12 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<bool> IsExistByFullname(string fullname)
         {
-            var acc = await _unitOfWork.TeacherRepositories.GetByFullname(fullname);
-            return acc != null;
+            return await _unitOfWork.TeacherRepositories.GetByFullname(fullname) != null;
         }
 
         public async Task<bool> IsExistById(int id)
         {
-            var acc = await _unitOfWork.TeacherRepositories.GetByIdNoTracking(id);
-            return acc != null;
+            return await _unitOfWork.TeacherRepositories.GetByIdNoTracking(id) != null;
         }
 
         public async Task<TeacherViewModel?> GetByAccountId(int id)

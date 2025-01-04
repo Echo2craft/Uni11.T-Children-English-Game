@@ -38,7 +38,24 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<Teacher?> GetByIdNoTracking(int id)
         {
-            return await _dbContext.Teachers.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(t => t.TeacherId == id);
+            return await _dbContext.Teachers
+                .AsNoTrackingWithIdentityResolution()
+                .Where(tea => tea.TeacherId == id)
+                .Select(tea => new Teacher()
+                {
+                    TeacherId = tea.TeacherId,
+                    AccountId = tea.AccountId,
+                    Address = tea.Address,
+                    Certificate = tea.Certificate,
+                    Image = tea.Image,
+                    Email = tea.Email,
+                    Phone = tea.Phone,
+                    Account = new Account()
+                    {
+                        Fullname = tea.Account.Fullname,
+                    },
+                })
+                .SingleOrDefaultAsync();
         }
 
         public async Task<Teacher?> GetByEmail(string email)

@@ -52,6 +52,9 @@ namespace CEG_BAL.Configurations
         public readonly static string ACCOUNT_STATUS_DENIED = "Denied";
         public readonly static string ACCOUNT_STATUS_SUSPENDED = "Suspended";
 
+        public readonly static string ACCOUNT_ROLE_ADMIN = "Admin";
+        public readonly static string ACCOUNT_ROLE_PARENT = "Parent";
+        public readonly static string ACCOUNT_ROLE_STUDENT = "Student";
         public readonly static string ACCOUNT_ROLE_TEACHER = "Teacher";
 
         public readonly static string ACCOUNT_IMAGE_AVATAR_TYPE = "Avatar";
@@ -197,12 +200,19 @@ namespace CEG_BAL.Configurations
         public const int SESSION_HOURS = 1;
         public const int TRANSACTION_MINIMUM_AMOUNT = 5000;
 
-        public readonly static string VNPAY_PARENT_NAME_LABEL = "Parent: ";
-        public readonly static string VNPAY_AMOUNT_LABEL = "Amount: ";
-        public readonly static string VNPAY_STUDENT_NAME_LABEL = "Student for Enrollment: ";
-        public readonly static string VNPAY_CLASS_NAME_LABEL = "Enrolling Class: ";
+        public readonly static string TRANSACTION_RECEIVER_LABEL = "Receiver: ";
+        public readonly static string TRANSACTION_PAYER_LABEL = "Payer: ";
+        public readonly static string TRANSACTION_USER_PARENT_NAME_LABEL = "Parent ";
+        public readonly static string TRANSACTION_USER_SYSTEM_NAME_LABEL = "System";
+        public readonly static string TRANSACTION_USER_TEACHER_ID_LABEL = "Teacher id: ";
+        public readonly static string TRANSACTION_USER_TEACHER_NAME_LABEL = "Teacher ";
+        public readonly static string TRANSACTION_AMOUNT_LABEL = "Amount: ";
+        public readonly static string TRANSACTION_RECEIVER_STUDENT_NAME_FOR_ENROLLMENT_LABEL = "Student for Enrollment: ";
+        public readonly static string TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL = "Assigned Class: ";
+        public readonly static string TRANSACTION_DESCRIPTION_ENROLLING_CLASS_NAME_LABEL = "Enrolling Class: ";
         public readonly static string TRANSACTION_STATUS_COMPLETED = "Completed";
         public readonly static string TRANSACTION_TYPE_ENROLLMENT = "Enrollment";
+        public readonly static string TRANSACTION_TYPE_EARNING = "Earning";
         public readonly static string ENROLLMENT_STATUS_ENROLLED = "Enrolled";
 
         /* public readonly static string BIRD_STATUS_ACTIVE = "Active";
