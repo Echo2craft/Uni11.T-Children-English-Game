@@ -288,7 +288,16 @@ namespace CEG_BAL.AutoMapperProfile
                 });
 
             // Transaction
-            CreateMap<Transaction, TransactionViewModel>();
+            CreateMap<Transaction, TransactionViewModel>()
+                .AfterMap((src, dest) =>
+                {
+                    if (src.TransactionType.Equals(CEGConstants.TRANSACTION_TYPE_EARNING) && src.Description != null)
+                    {
+                        var desStr = src.Description.Split(',');
+                        dest.PayerFullname = desStr[0].Substring(CEGConstants.TRANSACTION_PAYER_LABEL.Length);
+                        dest.ReceiverFullname = desStr[3].Substring(CEGConstants.TRANSACTION_RECEIVER_LABEL.Length);
+                    }
+                });
             CreateMap<CreateTransaction, Transaction>()
                 .AfterMap((src, dest) =>
                 {

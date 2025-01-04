@@ -17,7 +17,9 @@ namespace CEG_BAL.ViewModels
 
         public string? StudentFullname { get; set; }
 
-        public string? TeacherFullname { get; set; }
+        public string? PayerFullname { get; set; }
+
+        public string? ReceiverFullname { get; set; }
 
         public string? ClassName { get; set; }
 

@@ -317,8 +317,8 @@
                 responsive: true,
                 columns: [
                     { data: 'transactionId' },
-                    { data: 'account.fullname' },
-                    { data: 'account.fullname' },
+                    { data: 'payerFullname' },
+                    { data: 'receiverFullname' },
                     { 
                         data: 'transactionAmount',
                         render: function (data, type, row, meta) {
@@ -596,8 +596,8 @@
                     if (response.status) {
                         transactionList = response.data;
 
-                        console.log(response.data);
-                        // transactionTable.clear().rows.add(transactionList).draw();
+                        // console.log(response.data);
+                        transactionTable.clear().rows.add(transactionList).draw();
                         // callApiGetParentNameList();
                         // $('#createTransaction_TransactionStatus').empty();
                         // $('#createTransaction_TransactionStatus').append(getTransactionStatusOptions());

@@ -55,7 +55,7 @@ namespace CEG_DAL.Repositories.Implements
         {
             // Fetch all transactions where Description is not null
             var transactions = await _dbContext.Transactions
-                .Where(t => t.Description != null)
+                .Where(t => t.Description != null && t.TransactionType.Equals("Earning"))
                 .ToListAsync();
 
             // Filter transactions in-memory using the custom method
@@ -82,8 +82,8 @@ namespace CEG_DAL.Repositories.Implements
         private static bool CheckTeacherIdFromDescription(string? des, int? teaId)
         {
             if(des == null) return false;
-            string teaSec = des.Split(',')[3]; // Get Teacher section
-            string teaIdLabel = "Receiver: Teacher id: ";
+            string teaSec = des.Split(',')[4]; // Get Teacher section
+            string teaIdLabel = "Teacher id: ";
             var teaDesId = Int32.Parse(teaSec.Substring(teaIdLabel.Length));
             return  teaDesId == teaId;
         }
