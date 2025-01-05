@@ -312,12 +312,15 @@ namespace CEG_BAL.Services.Implements
                     Description = CEGConstants.TRANSACTION_PAYER_LABEL + CEGConstants.TRANSACTION_USER_SYSTEM_NAME_LABEL + "," +
                                 CEGConstants.TRANSACTION_AMOUNT_LABEL + $"{amo}," +
                                 CEGConstants.TRANSACTION_TYPE_EARNING + "," +
+                                CEGConstants.TRANSACTION_METHOD_LABEL + CEGConstants.TRANSACTION_METHOD_SYSTEM_DEPOSIT + "," +
                                 CEGConstants.TRANSACTION_USER_TEACHER_ID_LABEL + $"{cla.TeacherId}," +
                                 CEGConstants.TRANSACTION_RECEIVER_LABEL +  CEGConstants.TRANSACTION_USER_TEACHER_NAME_LABEL + $"{tea.Account.Fullname}," +
                                 CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL + $"{cla.ClassName}",
                 };
                 _unitOfWork.TransactionRepositories.Create(tra);
                 cla.Enrolls = null;
+                tea.Account.TotalAmount += amo;
+                _unitOfWork.TeacherRepositories.Update(tea);
             }
 
             cla.Status = upClaStatus;

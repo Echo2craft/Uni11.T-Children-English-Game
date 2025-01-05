@@ -1,4 +1,5 @@
 ﻿using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Teacher.Transaction;
 using CEG_BAL.ViewModels.Transaction;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<TransactionViewModel>> GetTransactionList();
         Task<TransactionViewModel?> GetTransactionById(int id);
         Task<List<TransactionViewModel>> GetTransactionByParentAccountId(int id);
-        Task<List<TransactionViewModel>> GetAllByTeacherAccountId(int id);
+        Task<List<EarningViewModel>> GetAllByTeacherAccountId(int id);
         Task<TransactionViewModel?> GetByVnpayId(string? vnpayId);
         Task<int> GetTotalAmount();
         Task<int> GetSumValue();

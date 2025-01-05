@@ -3,6 +3,7 @@ using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Parent;
+using CEG_BAL.ViewModels.Teacher.Transaction;
 using CEG_BAL.ViewModels.Transaction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -136,7 +137,7 @@ namespace CEG_WebAPI.Controllers
 
         [HttpGet("All/ByTeacher/{id}")]
         [Authorize(Roles = "Teacher")]
-        [ProducesResponseType(typeof(List<TransactionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<EarningViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllTransactionsByTeacherAccountId([FromRoute][Required] int id)

@@ -3,6 +3,7 @@ using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Parent;
+using CEG_BAL.ViewModels.Teacher.Transaction;
 using CEG_BAL.ViewModels.Transaction;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
@@ -84,11 +85,11 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetAllByParentId(parentId));
         }
 
-        public async Task<List<TransactionViewModel>> GetAllByTeacherAccountId(int id)
+        public async Task<List<EarningViewModel>> GetAllByTeacherAccountId(int id)
         {
             var teaId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
-            if (teaId == 0) return new List<TransactionViewModel>();
-            return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetAllByTeacherId(teaId));
+            if (teaId == 0) return new List<EarningViewModel>();
+            return _mapper.Map<List<EarningViewModel>>(await _unitOfWork.TransactionRepositories.GetAllByTeacherId(teaId));
         }
 
         public async Task<TransactionViewModel?> GetByVnpayId(string? vnpayId)

@@ -1,21 +1,16 @@
-﻿using CEG_DAL.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CEG_BAL.ViewModels
+namespace CEG_BAL.ViewModels.Teacher.Transaction
 {
-    public class TransactionViewModel
+    public class EarningViewModel
     {
         public int TransactionId { get; set; }
 
         public int AccountId { get; set; }
-
-        public string ParentFullname { get; set; } = null!;
-
-        public string? StudentFullname { get; set; }
 
         public string? PayerFullname { get; set; }
 
@@ -38,9 +33,5 @@ namespace CEG_BAL.ViewModels
         public DateTime ConfirmDate { get; set; }
 
         public string? Description { get; set; }
-
-        public List<EnrollViewModel> Enrolls { get; set; } = new List<EnrollViewModel>();
-
-        public AccountViewModel Account { get; set; } = null!;
     }
 }

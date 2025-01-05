@@ -7,6 +7,7 @@ using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_BAL.ViewModels.Parent;
+using CEG_BAL.ViewModels.Teacher.Transaction;
 using CEG_BAL.ViewModels.Transaction;
 using CEG_DAL.Models;
 using System;
@@ -288,14 +289,23 @@ namespace CEG_BAL.AutoMapperProfile
                 });
 
             // Transaction
-            CreateMap<Transaction, TransactionViewModel>()
+            CreateMap<Transaction, TransactionViewModel>();
+            CreateMap<Transaction, EarningViewModel>()
                 .AfterMap((src, dest) =>
                 {
-                    if (src.TransactionType.Equals(CEGConstants.TRANSACTION_TYPE_EARNING) && src.Description != null)
+                    if (src.Description != null)
                     {
-                        var desStr = src.Description.Split(',');
+                        var desStr = src.Description.Split(',').ToList();
                         dest.PayerFullname = desStr[0].Substring(CEGConstants.TRANSACTION_PAYER_LABEL.Length);
-                        dest.ReceiverFullname = desStr[3].Substring(CEGConstants.TRANSACTION_RECEIVER_LABEL.Length);
+                        dest.PaymentMethod = desStr[3].Substring(CEGConstants.TRANSACTION_METHOD_LABEL.Length);
+                        dest.ReceiverFullname = desStr[4].Substring(CEGConstants.TRANSACTION_RECEIVER_LABEL.Length);
+                        dest.ClassName = desStr[6].Substring(CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL.Length);
+                        dest.Description = desStr[5];
+                        desStr.RemoveRange(0, 7);
+                        foreach (var str in desStr)
+                        {
+                            dest.Description += "," + str;
+                        }
                     }
                 });
             CreateMap<CreateTransaction, Transaction>()

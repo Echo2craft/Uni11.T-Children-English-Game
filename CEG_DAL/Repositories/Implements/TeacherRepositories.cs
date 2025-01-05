@@ -53,6 +53,14 @@ namespace CEG_DAL.Repositories.Implements
                     Account = new Account()
                     {
                         Fullname = tea.Account.Fullname,
+                        AccountId = tea.AccountId,
+                        CreatedDate = tea.Account.CreatedDate,
+                        Gender = tea.Account.Gender,
+                        Password = tea.Account.Password,
+                        Status = tea.Account.Status,
+                        Username = tea.Account.Username,
+                        RoleId = tea.Account.RoleId,
+                        TotalAmount = tea.Account.TotalAmount,
                     },
                 })
                 .SingleOrDefaultAsync();

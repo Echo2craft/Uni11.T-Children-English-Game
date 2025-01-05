@@ -210,6 +210,10 @@ namespace CEG_BAL.Configurations
         public readonly static string TRANSACTION_RECEIVER_STUDENT_NAME_FOR_ENROLLMENT_LABEL = "Student for Enrollment: ";
         public readonly static string TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL = "Assigned Class: ";
         public readonly static string TRANSACTION_DESCRIPTION_ENROLLING_CLASS_NAME_LABEL = "Enrolling Class: ";
+        public readonly static string TRANSACTION_METHOD_LABEL = "Payment method: ";
+        public readonly static string TRANSACTION_METHOD_PAID_IN_CASHES = "Paid in cashes";
+        public readonly static string TRANSACTION_METHOD_VNPAY = "Vnpay";
+        public readonly static string TRANSACTION_METHOD_SYSTEM_DEPOSIT = "System deposit";
         public readonly static string TRANSACTION_STATUS_COMPLETED = "Completed";
         public readonly static string TRANSACTION_TYPE_ENROLLMENT = "Enrollment";
         public readonly static string TRANSACTION_TYPE_EARNING = "Earning";
