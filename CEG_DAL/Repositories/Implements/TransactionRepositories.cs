@@ -53,7 +53,15 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Transaction>> GetAllByTeacherId(int? teacherId)
         {
-            return await _dbContext.Transactions.Where(t => t.Account.Teachers.Any(par => par.TeacherId == teacherId)).ToListAsync();
+            // Fetch all transactions where Description is not null
+            var transactions = await _dbContext.Transactions
+                .Where(t => t.Description != null && t.TransactionType.Equals("Earning"))
+                .ToListAsync();
+
+            // Filter transactions in-memory using the custom method
+            return transactions
+                .Where(t => CheckTeacherIdFromDescription(t.Description, teacherId))
+                .ToList();
         }
 
         public async Task<Transaction?> GetByVnpayId(string? vnpayId)
@@ -69,6 +77,15 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<int> GetSumValue()
         {
             return await _dbContext.Transactions.SumAsync(t => t.TransactionAmount);
+        }
+
+        private static bool CheckTeacherIdFromDescription(string? des, int? teaId)
+        {
+            if(des == null) return false;
+            string teaSec = des.Split(',')[5]; // Get Teacher section
+            string teaIdLabel = "Teacher id: ";
+            var teaDesId = Int32.Parse(teaSec.Substring(teaIdLabel.Length));
+            return  teaDesId == teaId;
         }
     }
 }
