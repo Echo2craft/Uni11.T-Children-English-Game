@@ -93,6 +93,9 @@ namespace CEG_BAL.Services.Implements
             _mapper.Map(upSch, sch);
             sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(sch.SessionId)).Hours.Value);
 
+            sch.Class = null;
+            sch.Session = null;
+
             // Reattach entity and mark it as modified
             _unitOfWork.ScheduleRepositories.Update(sch);
 
@@ -109,7 +112,7 @@ namespace CEG_BAL.Services.Implements
             catch (Exception ex)
             {
                 // Log and rethrow unexpected exceptions
-                throw new Exception("An unexpected error occurred while updating the student progress.", ex);
+                throw new Exception("An unexpected error occurred while updating the schedule.", ex);
             }
         }
 

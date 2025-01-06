@@ -3,6 +3,7 @@ using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Parent;
+using CEG_BAL.ViewModels.Teacher.Transaction;
 using CEG_BAL.ViewModels.Transaction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -134,6 +135,41 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/ByTeacher/{id}")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(typeof(List<EarningViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAllTransactionsByTeacherAccountId([FromRoute][Required] int id)
+        {
+            try
+            {
+                var result = await _transactionService.GetAllByTeacherAccountId(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Transaction list for teacher not found."
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("All/Sum")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -176,7 +212,7 @@ namespace CEG_WebAPI.Controllers
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Transaction List Not Found!"
+                        ErrorMessage = "Transaction list for parent not found."
                     });
                 }
                 return Ok(new
@@ -207,6 +243,15 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
+                var checkClassFull = await _classService.CheckClassFull(newTraReq.Classname);
+                if (checkClassFull)
+                {
+                    return BadRequest(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class is full."
+                    });
+                }
                 var parentObj = await _parentService.IsExistByFullname(newTraReq.ParentFullname);
                 if(!parentObj)
                 {
@@ -270,6 +315,15 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
+                var checkClassFull = await _classService.CheckClassFull(newTra.ClassName);
+                if (checkClassFull)
+                {
+                    return BadRequest(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class is full."
+                    });
+                }
                 var resultParentName = await _parentService.IsExistByFullname(newTra.ParentFullname);
                 if (!resultParentName)
                 {

@@ -2,6 +2,7 @@
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Home;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<ClassViewModel>> GetClassListParent();
         Task<List<ClassViewModel>> GetListByTeacherAccountId(int id);
         Task<List<ClassViewModel>> GetListByStudentAccountId(int id);
+        Task<List<ClassViewModel>> GetClassListFilter(ClassFilter filter);
         /// <summary>
         /// Get Class Info by Class id. 
         /// int id, class id to be use to query. 
@@ -49,5 +51,6 @@ namespace CEG_BAL.Services.Interfaces
         Task<bool> IsEditableById(int id);
         Task<int> GetTotalAmount();
         Task<int> GetTotalAmountByTeacherAccountId(int id);
+        Task<bool> CheckClassFull(string className);
     }
 }

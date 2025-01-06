@@ -37,25 +37,34 @@ namespace CEG_DAL.Repositories.Implements
                     TransactionDate = tra.TransactionDate,
                     ConfirmDate = tra.ConfirmDate,
                     TransactionStatus = tra.TransactionStatus,
-                    Parent = new Parent
+                    Account = new Account
                     {
-                        ParentId = tra.ParentId,
-                        Account = new Account
-                        {
-                            Fullname = tra.Parent.Account.Fullname,
-                        }
+                        Fullname = tra.Account.Fullname
                     }
                 })
                 .AsNoTrackingWithIdentityResolution()
                 .ToListAsync();
         }
 
-        public async Task<List<Transaction>> GetTransactionByParentId(int? parentId)
+        public async Task<List<Transaction>> GetAllByParentId(int? parentId)
         {
-            return await _dbContext.Transactions.Where(t => t.ParentId == parentId).ToListAsync();
+            return await _dbContext.Transactions.Where(t => t.Account.Parents.Any(par => par.ParentId == parentId)).ToListAsync();
         }
 
-        public async Task<Transaction?> GetTransactionByVnpayId(string? vnpayId)
+        public async Task<List<Transaction>> GetAllByTeacherId(int? teacherId)
+        {
+            // Fetch all transactions where Description is not null
+            var transactions = await _dbContext.Transactions
+                .Where(t => t.Description != null && t.TransactionType.Equals("Earning"))
+                .ToListAsync();
+
+            // Filter transactions in-memory using the custom method
+            return transactions
+                .Where(t => CheckTeacherIdFromDescription(t.Description, teacherId))
+                .ToList();
+        }
+
+        public async Task<Transaction?> GetByVnpayId(string? vnpayId)
         {
             return await _dbContext.Transactions.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(t => t.VnpayId == vnpayId);
         }
@@ -68,6 +77,15 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<int> GetSumValue()
         {
             return await _dbContext.Transactions.SumAsync(t => t.TransactionAmount);
+        }
+
+        private static bool CheckTeacherIdFromDescription(string? des, int? teaId)
+        {
+            if(des == null) return false;
+            string teaSec = des.Split(',')[5]; // Get Teacher section
+            string teaIdLabel = "Teacher id: ";
+            var teaDesId = Int32.Parse(teaSec.Substring(teaIdLabel.Length));
+            return  teaDesId == teaId;
         }
     }
 }
