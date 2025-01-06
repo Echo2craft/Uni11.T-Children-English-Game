@@ -242,6 +242,15 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
+                var checkClassFull = await _classService.CheckClassFull(newTraReq.Classname);
+                if (checkClassFull)
+                {
+                    return BadRequest(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class is full."
+                    });
+                }
                 var parentObj = await _parentService.IsExistByFullname(newTraReq.ParentFullname);
                 if(!parentObj)
                 {
@@ -305,6 +314,15 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
+                var checkClassFull = await _classService.CheckClassFull(newTra.ClassName);
+                if (checkClassFull)
+                {
+                    return BadRequest(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class is full."
+                    });
+                }
                 var resultParentName = await _parentService.IsExistByFullname(newTra.ParentFullname);
                 if (!resultParentName)
                 {

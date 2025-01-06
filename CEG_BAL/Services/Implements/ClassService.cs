@@ -333,5 +333,12 @@ namespace CEG_BAL.Services.Implements
             if (teacherId == 0) return 0;
             return await _unitOfWork.ClassRepositories.GetTotalAmountByTeacherId(teacherId);
         }
+
+        public async Task<bool> CheckClassFull(string className)
+        {
+            var cla = await _unitOfWork.ClassRepositories.GetByClassName(className);
+            if (cla.NumberOfStudents == cla.MaximumStudents) return true;
+            return false;
+        }
     }
 }
