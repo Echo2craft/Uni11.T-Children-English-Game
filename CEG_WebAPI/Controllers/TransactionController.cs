@@ -135,6 +135,33 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/Count/{id}")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTotalTransactionAmountByAccountId(
+            [FromRoute][Required] int id)
+        {
+            try
+            {
+                var result = await _transactionService.GetTotalAmountByAccountId(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("All/ByTeacher/{id}")]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(typeof(List<EarningViewModel>), StatusCodes.Status200OK)]

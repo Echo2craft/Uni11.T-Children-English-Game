@@ -15,6 +15,8 @@ namespace CEG_BAL.ViewModels
 
         public int HomeworkResultId { get; set; }
 
+        public int HomeworkNumber { get; set; }
+
         public int Point { get; set; }
 
         public TimeOnly? Playtime { get; set; }
