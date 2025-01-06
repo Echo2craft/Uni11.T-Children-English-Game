@@ -53,6 +53,11 @@ namespace CEG_BAL.Services.Implements
             try
             {
                 _unitOfWork.EnrollRepositories.Create(enr);
+
+                // Update the NumberOfStudents field for the class
+                cla.NumberOfStudents++;
+                _unitOfWork.ClassRepositories.Update(cla);
+                
                 _unitOfWork.Save();
             }
             catch (Exception ex)

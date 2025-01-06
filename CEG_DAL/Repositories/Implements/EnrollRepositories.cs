@@ -32,8 +32,6 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-
-
         public async Task<List<Enroll>> GetEnrollByParentId(int? parentId)
         {
             return await _dbContext.Enrolls
@@ -63,6 +61,7 @@ namespace CEG_DAL.Repositories.Implements
                         EndDate = e.Class.EndDate,
                         MinimumStudents = e.Class.MinimumStudents,
                         MaximumStudents = e.Class.MaximumStudents,
+                        NumberOfStudents = e.Class.NumberOfStudents,
                         TeacherId = e.Class.TeacherId,
                         CourseId = e.Class.CourseId,
                         Status = e.Class.Status,
@@ -114,6 +113,7 @@ namespace CEG_DAL.Repositories.Implements
                         EndDate = e.Class.EndDate,
                         MinimumStudents = e.Class.MinimumStudents,
                         MaximumStudents = e.Class.MaximumStudents,
+                        NumberOfStudents = e.Class.NumberOfStudents,
                         TeacherId = e.Class.TeacherId,
                         CourseId = e.Class.CourseId,
                         Status = e.Class.Status,
@@ -172,6 +172,7 @@ namespace CEG_DAL.Repositories.Implements
                         EndDate = e.Class.EndDate,
                         MinimumStudents = e.Class.MinimumStudents,
                         MaximumStudents = e.Class.MaximumStudents,
+                        NumberOfStudents = e.Class.NumberOfStudents,
                         TeacherId = e.Class.TeacherId,
                         CourseId = e.Class.CourseId,
                         Status = e.Class.Status,

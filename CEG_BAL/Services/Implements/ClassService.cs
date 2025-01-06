@@ -313,8 +313,8 @@ namespace CEG_BAL.Services.Implements
                                 CEGConstants.TRANSACTION_AMOUNT_LABEL + $"{amo}," +
                                 CEGConstants.TRANSACTION_TYPE_EARNING + "," +
                                 CEGConstants.TRANSACTION_METHOD_LABEL + CEGConstants.TRANSACTION_METHOD_SYSTEM_DEPOSIT + "," +
-                                CEGConstants.TRANSACTION_USER_TEACHER_ID_LABEL + $"{cla.TeacherId}," +
                                 CEGConstants.TRANSACTION_RECEIVER_LABEL +  CEGConstants.TRANSACTION_USER_TEACHER_NAME_LABEL + $"{tea.Account.Fullname}," +
+                                CEGConstants.TRANSACTION_USER_TEACHER_ID_LABEL + $"{cla.TeacherId}," +
                                 CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL + $"{cla.ClassName}",
                 };
                 _unitOfWork.TransactionRepositories.Create(tra);
@@ -360,6 +360,13 @@ namespace CEG_BAL.Services.Implements
             var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
             if (teacherId == 0) return 0;
             return await _unitOfWork.ClassRepositories.GetTotalAmountByTeacherId(teacherId);
+        }
+
+        public async Task<bool> CheckClassFull(string className)
+        {
+            var cla = await _unitOfWork.ClassRepositories.GetByClassName(className);
+            if (cla.NumberOfStudents == cla.MaximumStudents) return true;
+            return false;
         }
     }
 }
