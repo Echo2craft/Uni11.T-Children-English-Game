@@ -5,6 +5,7 @@ using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Home;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.EntityFrameworkCore;
@@ -152,6 +153,19 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByStudentId(studentId.Value));
             //return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByStudentId(studentId));
         }
+
+        public async Task<List<ClassViewModel>> GetClassListFilter(ClassFilter filter)
+        {
+            var classes = await _unitOfWork.ClassRepositories.GetList();
+
+            // Apply filtering
+            if (!string.IsNullOrEmpty(filter.Status))
+            {
+                classes = classes.Where(c => c.Status.Equals(filter.Status, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return _mapper.Map<List<ClassViewModel>>(classes);
+        }
         public async Task Update(int claId, UpdateClass upCla)
         {
             if (upCla == null)
@@ -279,6 +293,34 @@ namespace CEG_BAL.Services.Implements
                     // Add attendance directly to the database or to the collection
                     //_unitOfWork.AttendanceRepositories.Create(attendance);
                 }
+            }
+
+            if (upClaStatus == CEGConstants.CLASS_STATUS_ENDED)
+            {
+                var adm = (await _unitOfWork.AccountRepositories.GetListByRole(CEGConstants.ACCOUNT_ROLE_ADMIN)).FirstOrDefault() ?? throw new KeyNotFoundException("Admin account not found for transaction.");
+                var tea = (await _unitOfWork.TeacherRepositories.GetByIdNoTracking(cla.TeacherId)) ?? throw new KeyNotFoundException("Teacher account not found for transaction.");
+                int amo = cla.EnrollmentFee * cla.Enrolls.Count * 70 / 100; // Transaction Amount
+                var tra = new Transaction()
+                {
+                    VnpayId = null,
+                    AccountId = adm.AccountId,
+                    TransactionAmount = amo,
+                    TransactionDate = DateTime.UtcNow,
+                    ConfirmDate = DateTime.UtcNow,
+                    TransactionStatus = CEGConstants.TRANSACTION_STATUS_COMPLETED,
+                    TransactionType = CEGConstants.TRANSACTION_TYPE_EARNING,
+                    Description = CEGConstants.TRANSACTION_PAYER_LABEL + CEGConstants.TRANSACTION_USER_SYSTEM_NAME_LABEL + "," +
+                                CEGConstants.TRANSACTION_AMOUNT_LABEL + $"{amo}," +
+                                CEGConstants.TRANSACTION_TYPE_EARNING + "," +
+                                CEGConstants.TRANSACTION_METHOD_LABEL + CEGConstants.TRANSACTION_METHOD_SYSTEM_DEPOSIT + "," +
+                                CEGConstants.TRANSACTION_USER_TEACHER_ID_LABEL + $"{cla.TeacherId}," +
+                                CEGConstants.TRANSACTION_RECEIVER_LABEL +  CEGConstants.TRANSACTION_USER_TEACHER_NAME_LABEL + $"{tea.Account.Fullname}," +
+                                CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL + $"{cla.ClassName}",
+                };
+                _unitOfWork.TransactionRepositories.Create(tra);
+                cla.Enrolls = null;
+                tea.Account.TotalAmount += amo;
+                _unitOfWork.TeacherRepositories.Update(tea);
             }
 
             cla.Status = upClaStatus;

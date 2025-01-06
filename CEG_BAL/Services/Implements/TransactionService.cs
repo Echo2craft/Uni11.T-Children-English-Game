@@ -3,6 +3,7 @@ using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Parent;
+using CEG_BAL.ViewModels.Teacher.Transaction;
 using CEG_BAL.ViewModels.Transaction;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
@@ -42,12 +43,15 @@ namespace CEG_BAL.Services.Implements
 
             var tra = new Transaction();
             _mapper.Map(newTra, tra);
-            var par = await _unitOfWork.ParentRepositories.GetByFullname(newTra.ParentFullname);
-            tra.AccountId = par != null ? par.AccountId : throw new ArgumentNullException(nameof(newTra), "The new transaction info contains invalid Parent Fullname.");
+            var par = await _unitOfWork.AccountRepositories.GetIdByFullname(newTra.ParentFullname);
+            tra.AccountId = par != 0 ? 
+                par : 
+                throw new ArgumentNullException(nameof(newTra.ParentFullname), "The new transaction info contains invalid Parent Fullname.");
+
+            _unitOfWork.TransactionRepositories.Create(tra);
             // Save to the database
             try
             {
-                _unitOfWork.TransactionRepositories.Create(tra);
                 _unitOfWork.Save();
             }
             catch (Exception ex)
@@ -78,13 +82,20 @@ namespace CEG_BAL.Services.Implements
         {
             var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             if (parentId == 0) return null;
-            return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetTransactionByParentId(parentId));
+            return _mapper.Map<List<TransactionViewModel>>(await _unitOfWork.TransactionRepositories.GetAllByParentId(parentId));
         }
 
-        public async Task<TransactionViewModel?> GetTransactionByVnpayId(string? vnpayId)
+        public async Task<List<EarningViewModel>> GetAllByTeacherAccountId(int id)
+        {
+            var teaId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
+            if (teaId == 0) return new List<EarningViewModel>();
+            return _mapper.Map<List<EarningViewModel>>(await _unitOfWork.TransactionRepositories.GetAllByTeacherId(teaId));
+        }
+
+        public async Task<TransactionViewModel?> GetByVnpayId(string? vnpayId)
         {
             return _mapper.Map<TransactionViewModel>(await
-                _unitOfWork.TransactionRepositories.GetTransactionByVnpayId(vnpayId));
+                _unitOfWork.TransactionRepositories.GetByVnpayId(vnpayId));
         }
 
         public void Update(TransactionViewModel model)

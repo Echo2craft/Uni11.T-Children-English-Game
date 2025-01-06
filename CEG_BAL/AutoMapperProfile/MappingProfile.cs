@@ -7,6 +7,7 @@ using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_BAL.ViewModels.Parent;
+using CEG_BAL.ViewModels.Teacher.Transaction;
 using CEG_BAL.ViewModels.Transaction;
 using CEG_DAL.Models;
 using System;
@@ -201,10 +202,6 @@ namespace CEG_BAL.AutoMapperProfile
             CreateMap<Feedback, FeedbackViewModel>().ReverseMap();*/
             CreateMap<Role, RoleViewModel>()
                 .ReverseMap();
-            CreateMap<Teacher, TeacherViewModel>()
-                .ReverseMap();
-            CreateMap<Parent, ParentViewModel>()
-                .ReverseMap();
             CreateMap<Student, StudentViewModel>()
                 .ReverseMap();
             CreateMap<Course, CourseViewModel>()
@@ -234,7 +231,8 @@ namespace CEG_BAL.AutoMapperProfile
             CreateMap<Account, AccountViewModel>()
                 .ReverseMap();
             // Teacher
-            CreateMap<Teacher, TeacherViewModel>();
+            CreateMap<Teacher, TeacherViewModel>()
+                .ReverseMap();
             CreateMap<CreateNewTeacher, Teacher>()
                 .AfterMap((src, dest) =>
                 {
@@ -247,6 +245,14 @@ namespace CEG_BAL.AutoMapperProfile
                 .AfterMap((src,dest) =>
                 {
                     dest.TeacherName = src.Account.Fullname;
+                });
+            // Parent
+            CreateMap<Parent, ParentViewModel>()
+                .ReverseMap();
+            CreateMap<Parent, GetParentNameOption>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.ParentName = src.Account.Fullname;
                 });
 
             // Class
@@ -283,8 +289,25 @@ namespace CEG_BAL.AutoMapperProfile
                 });
 
             // Transaction
-            CreateMap<Transaction, TransactionViewModel>()
-                .ReverseMap();
+            CreateMap<Transaction, TransactionViewModel>();
+            CreateMap<Transaction, EarningViewModel>()
+                .AfterMap((src, dest) =>
+                {
+                    if (src.Description != null)
+                    {
+                        var desStr = src.Description.Split(',').ToList();
+                        dest.PayerFullname = desStr[0].Substring(CEGConstants.TRANSACTION_PAYER_LABEL.Length);
+                        dest.PaymentMethod = desStr[3].Substring(CEGConstants.TRANSACTION_METHOD_LABEL.Length);
+                        dest.ReceiverFullname = desStr[4].Substring(CEGConstants.TRANSACTION_RECEIVER_LABEL.Length);
+                        dest.ClassName = desStr[6].Substring(CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL.Length);
+                        dest.Description = desStr[5];
+                        desStr.RemoveRange(0, 7);
+                        foreach (var str in desStr)
+                        {
+                            dest.Description += "," + str;
+                        }
+                    }
+                });
             CreateMap<CreateTransaction, Transaction>()
                 .AfterMap((src, dest) =>
                 {
