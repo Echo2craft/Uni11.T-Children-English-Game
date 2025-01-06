@@ -337,9 +337,11 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.Classes.CountAsync();
         }
 
-        public async Task<int> GetTotalAmountByTeacherId(int id)
+        public async Task<int> GetTotalAmountByTeacherId(int id, string? status = null)
         {
-            return await _dbContext.Classes.Where(c => c.TeacherId == id && c.Status != "Draft").CountAsync();
+            var classes = await _dbContext.Classes
+                .Where(c => c.TeacherId == id && c.Status != "Draft").ToListAsync();
+            return status != null ? classes.Where(c => c.Status == status).Count() : classes.Count();
         }
 
         public async Task<List<Class>> GetListByStudentId(int studentId)

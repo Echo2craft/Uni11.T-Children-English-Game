@@ -355,11 +355,11 @@ namespace CEG_BAL.Services.Implements
             return await _unitOfWork.ClassRepositories.GetTotalAmount();
         }
 
-        public async Task<int> GetTotalAmountByTeacherAccountId(int id)
+        public async Task<int> GetTotalAmountByTeacherAccountIdAndClassStatus(int id, string? status = null)
         {
             var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
             if (teacherId == 0) return 0;
-            return await _unitOfWork.ClassRepositories.GetTotalAmountByTeacherId(teacherId);
+            return await _unitOfWork.ClassRepositories.GetTotalAmountByTeacherId(teacherId, status);
         }
 
         public async Task<bool> CheckClassFull(string className)
