@@ -310,8 +310,6 @@ namespace CEG_BAL.Services.Implements
                     TransactionStatus = CEGConstants.TRANSACTION_STATUS_COMPLETED,
                     TransactionType = CEGConstants.TRANSACTION_TYPE_EARNING,
                     Description = CEGConstants.TRANSACTION_PAYER_LABEL + CEGConstants.TRANSACTION_USER_SYSTEM_NAME_LABEL + "," +
-                                CEGConstants.TRANSACTION_AMOUNT_LABEL + $"{amo}," +
-                                CEGConstants.TRANSACTION_TYPE_EARNING + "," +
                                 CEGConstants.TRANSACTION_METHOD_LABEL + CEGConstants.TRANSACTION_METHOD_SYSTEM_DEPOSIT + "," +
                                 CEGConstants.TRANSACTION_RECEIVER_LABEL +  CEGConstants.TRANSACTION_USER_TEACHER_NAME_LABEL + $"{tea.Account.Fullname}," +
                                 CEGConstants.TRANSACTION_USER_TEACHER_ID_LABEL + $"{cla.TeacherId}," +
