@@ -1,31 +1,5 @@
-﻿@{
-    List<string> statuses = new List<string> { "Open", "Ongoing", "Ended", "Draft", "Cancelled" };
-}
-<div class="row contain">
-    <div class="content__filter col-3">
-        <div class="content__filter-tabs-left">
-            <div class="tabs-left-title">
-                <h3 class="heading">Filter</h3>
-            </div>
-            <div class="tabs-left-filter" style="background-color:white">
-                <fieldset class="filter-group">
-                    <legend>Status</legend>
-                    <div class="checkboxes">
-                        @foreach (var status in statuses)
-                        {
-                            <div class="input-group">
-                                <div class="form-check">
-                                    <input type="checkbox" id="@status" name="status" value="@status" />
-                                    <label for="@status">@status</label>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </fieldset>
-            </div>
-        </div>
-    </div>
-    <div class="col-9">
+﻿<div class="row contain">
+    <div class="col-12">
         <div id="class-list" class="content__list row">
             <!-- Class list will be rendered here -->
         </div>

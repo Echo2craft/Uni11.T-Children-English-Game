@@ -129,6 +129,11 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetList());
         }
 
+        public async Task<List<ClassViewModel>> GetClassListHome()
+        {
+            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListHome());
+        }
+
         public async Task<List<GetClassForTransaction>> GetOptionListByStatusOpen(string filterClassByStudentName = "")
         {
             return _mapper.Map<List<GetClassForTransaction>>(await _unitOfWork.ClassRepositories.GetOptionListByStatusOpen(filterClassByStudentName));

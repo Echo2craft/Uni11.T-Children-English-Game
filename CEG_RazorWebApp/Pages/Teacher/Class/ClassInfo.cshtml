@@ -874,17 +874,17 @@
                             // Example condition for showing the button
                             if (row.status && row.status === "NotSubmitted") {
                                 // If you want the first selected row
-                                if (selectedRowData.length > 0) {
-                                    const firstRowData = selectedRowData[0].scheduleNumber;
-                                    return `
-                                            <button class="btn btn-primary btn-sm submit-button"
-                                                data-homid="${row.homeworkId}"
-                                                data-stuid="${row.studentProgress.studentId}"
-                                                data-schid="${firstRowData}" >
-                                                Remind Parent
-                                            </button>
-                                        `;
-                                }
+                                //if (selectedRowData.length > 0) {
+                                //    const firstRowData = selectedRowData[0].scheduleNumber;
+                                //    return `
+                                //            <button class="btn btn-primary btn-sm submit-button"
+                                //                data-homid="${row.homeworkId}"
+                                //                data-stuid="${row.studentProgress.studentId}"
+                                //                data-schid="${firstRowData}" >
+                                //                Remind Parent
+                                //            </button>
+                                //        `;
+                                //}
                                 return `
                                     <button class="btn btn-primary btn-sm submit-button" 
                                         data-hom-id="${row.homeworkId}" 
