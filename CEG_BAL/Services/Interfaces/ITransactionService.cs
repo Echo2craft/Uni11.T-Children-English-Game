@@ -19,6 +19,7 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<EarningViewModel>> GetAllByTeacherAccountId(int id);
         Task<TransactionViewModel?> GetByVnpayId(string? vnpayId);
         Task<int> GetTotalAmount();
+        Task<int> GetTotalAmountByAccountId(int id);
         Task<int> GetSumValue();
     }
 }
