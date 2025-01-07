@@ -832,7 +832,7 @@
             data.forEach(item => {
                 // Add each item as an option
 
-                let newOption = parentFullname == item ? new Option(item, item, true, true) : new Option(item, item, false, false);
+                let newOption = parentFullname == item.parentName ? new Option(item.parentName, item.parentName, true, true) : new Option(item.parentName, item.parentName, false, false);
                 $('#select2-parent-fullname-dropdown').append(newOption);
             });
             // Refresh the Select2 dropdown to show new options
