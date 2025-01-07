@@ -304,7 +304,7 @@
                 $('#EditHomeworkForm').submit(function (event) {
                     event.preventDefault(); // Prevent the form from submitting normally
 
-                    //Get the form data
+                    // Get the form data
                     var formData = {
                         title: $('input[id="updateHomework_Title"]').val(),
                         description: $('textarea[id="updateHomework_Description"]').val(),
@@ -312,7 +312,7 @@
                         type: $('select[id="updateHomework_Type"]').val()
                     };
 
-                    //Make the AJAX request
+                    // Make the AJAX request
                     callApiPutUpdateHomework(formData);
                     $('#EditHomeworkForm').trigger("reset");
                 });
