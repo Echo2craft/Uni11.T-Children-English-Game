@@ -1,5 +1,6 @@
 ﻿using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
+using CEG_BAL.ViewModels.Admin.Get;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace CEG_BAL.Services.Interfaces
     public interface IParentService
     {
         Task<List<ParentViewModel>> GetParentList();
-        Task<List<string>> GetParentNameList();
+        Task<List<GetParentNameOption>> GetParentNameList();
         Task<ParentViewModel?> GetParentById(int id);
         Task<ParentViewModel?> GetParentByAccountId(int id);
         Task<bool> IsParentExistByEmail(string email);

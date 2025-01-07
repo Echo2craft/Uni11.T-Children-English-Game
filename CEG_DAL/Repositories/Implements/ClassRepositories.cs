@@ -25,13 +25,16 @@ namespace CEG_DAL.Repositories.Implements
         /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
         /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
         /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
+        /// <param name="includeSchedule">Default: false, determine whether if the query should include class's schedules info</param>
+        /// <param name="includeAttendances">Default: false, determine whether if the query should include class's schedules attendances info</param>
         public async Task<Class?> GetByIdNoTracking(
             int id, 
             bool includeTeacher = false, 
             bool includeCourse = false, 
             bool includeSession = false, 
             bool filterSession = false,
-            bool includeSchedule = false
+            bool includeSchedule = false,
+            bool includeAttendances = false
             )
         {
             return await _dbContext.Classes
@@ -45,6 +48,7 @@ namespace CEG_DAL.Repositories.Implements
                     EndDate = c.EndDate,
                     MinimumStudents = c.MinimumStudents,
                     MaximumStudents = c.MaximumStudents,
+                    NumberOfStudents = c.NumberOfStudents,
                     EnrollmentFee = c.EnrollmentFee,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
@@ -103,11 +107,16 @@ namespace CEG_DAL.Repositories.Implements
                             Title = sch.Session.Title,
                             Description = sch.Session.Description,
                             Hours = sch.Session.Hours
-                        }
+                        },
                     }).OrderBy(sch => sch.ScheduleDate).ToList() : null,
                     Enrolls = c.Enrolls.Select(s => new Enroll()
                     {
                         EnrollId = s.EnrollId,
+                        StudentId = s.StudentId,
+                        ClassId = s.ClassId,
+                        EnrolledDate = s.EnrolledDate,
+                        TransactionId = s.TransactionId,
+                        RegistrationDate = s.RegistrationDate,
                         Student = new Student()
                         {
                             Account = new Account()
@@ -123,7 +132,17 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Class>> GetList()
         {
-            return await _dbContext.Classes
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 },
+                { "Draft", 5 }
+            };
+
+            var classes = await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
                 .Select(c => new Class
                 {
@@ -133,6 +152,7 @@ namespace CEG_DAL.Repositories.Implements
                     EndDate = c.EndDate,
                     MinimumStudents = c.MinimumStudents,
                     MaximumStudents = c.MaximumStudents,
+                    NumberOfStudents = c.NumberOfStudents,
                     EnrollmentFee = c.EnrollmentFee,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
@@ -160,6 +180,62 @@ namespace CEG_DAL.Repositories.Implements
                     Enrolls = c.Enrolls,
                 })
                 .ToListAsync();
+            return classes
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
+        }
+
+        public async Task<List<Class>> GetListHome()
+        {
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+            };
+
+            var classes = await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Where(c => c.Status == "Open" || c.Status == "Ongoing")
+                .Select(c => new Class
+                {
+                    ClassId = c.ClassId,
+                    ClassName = c.ClassName,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    MinimumStudents = c.MinimumStudents,
+                    MaximumStudents = c.MaximumStudents,
+                    NumberOfStudents = c.NumberOfStudents,
+                    EnrollmentFee = c.EnrollmentFee,
+                    TeacherId = c.TeacherId,
+                    CourseId = c.CourseId,
+                    Status = c.Status,
+                    Teacher = new Teacher // Create a new Teacher object
+                    {
+                        TeacherId = c.Teacher.TeacherId,
+                        Email = c.Teacher.Email,
+                        Phone = c.Teacher.Phone,
+                        Image = c.Teacher.Image,
+                        Account = new Account
+                        {
+                            Fullname = c.Teacher.Account.Fullname,
+                            Gender = c.Teacher.Account.Gender,
+                        }
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Course = new Course // Create a new Course object
+                    {
+                        CourseId = c.Course.CourseId,
+                        CourseName = c.Course.CourseName
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
+                })
+                .ToListAsync();
+            return classes
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
         }
 
         public async Task<List<Class>> GetOptionListByStatusOpen(string filterClassByStudentName = "")
@@ -187,7 +263,18 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Class>> GetClassListParent()
         {
-            return await _dbContext.Classes
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 }
+            };
+
+            var classes = await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Where(c => c.Status != "Draft")
                 .Select(c => new Class
                 {
                     ClassId = c.ClassId,
@@ -196,6 +283,7 @@ namespace CEG_DAL.Repositories.Implements
                     EndDate = c.EndDate,
                     MinimumStudents = c.MinimumStudents,
                     MaximumStudents = c.MaximumStudents,
+                    NumberOfStudents = c.NumberOfStudents,
                     EnrollmentFee = c.EnrollmentFee,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
@@ -223,11 +311,23 @@ namespace CEG_DAL.Repositories.Implements
                     Enrolls = c.Enrolls,
                 })
                 .ToListAsync();
+            return classes
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
         }
 
         public async Task<List<Class>> GetListByTeacherId(int teacherId)
         {
-            return await _dbContext.Classes
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 }
+            };
+
+            var classes = await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
                 .Where(c => c.TeacherId == teacherId && c.Status != "Draft")
                 .Select(c => new Class
@@ -238,6 +338,7 @@ namespace CEG_DAL.Repositories.Implements
                     EndDate = c.EndDate,
                     MinimumStudents = c.MinimumStudents,
                     MaximumStudents = c.MaximumStudents,
+                    NumberOfStudents = c.NumberOfStudents,
                     EnrollmentFee = c.EnrollmentFee,
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
@@ -265,6 +366,9 @@ namespace CEG_DAL.Repositories.Implements
                     Enrolls = c.Enrolls,
                 })
                 .ToListAsync();
+            return classes
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
         }
 
         public async Task<int> GetIdByClassId(int id)
@@ -284,6 +388,68 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<int> GetTotalAmount()
         {
             return await _dbContext.Classes.CountAsync();
+        }
+
+        public async Task<int> GetTotalAmountByTeacherId(int id, string? status = null)
+        {
+            var classes = await _dbContext.Classes
+                .Where(c => c.TeacherId == id && c.Status != "Draft").ToListAsync();
+            return status != null ? classes.Where(c => c.Status == status).Count() : classes.Count();
+        }
+
+        public async Task<List<Class>> GetListByStudentId(int studentId)
+        {
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 }
+            };
+
+            var classes = await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Where(c => c.Enrolls.Any(enr => enr.StudentId == studentId) && c.Status != "Draft")
+                .Select(c => new Class
+                {
+                    ClassId = c.ClassId,
+                    ClassName = c.ClassName,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    MinimumStudents = c.MinimumStudents,
+                    MaximumStudents = c.MaximumStudents,
+                    NumberOfStudents = c.NumberOfStudents,
+                    EnrollmentFee = c.EnrollmentFee,
+                    TeacherId = c.TeacherId,
+                    CourseId = c.CourseId,
+                    Status = c.Status,
+                    Teacher = new Teacher // Create a new Teacher object
+                    {
+                        TeacherId = c.Teacher.TeacherId,
+                        Email = c.Teacher.Email,
+                        Phone = c.Teacher.Phone,
+                        Image = c.Teacher.Image,
+                        Account = new Account
+                        {
+                            Fullname = c.Teacher.Account.Fullname,
+                            Gender = c.Teacher.Account.Gender,
+                        }
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Course = new Course // Create a new Course object
+                    {
+                        CourseId = c.Course.CourseId,
+                        CourseName = c.Course.CourseName
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
+                })
+                .ToListAsync();
+            return classes
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
         }
     }
 }

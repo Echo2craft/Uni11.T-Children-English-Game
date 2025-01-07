@@ -15,6 +15,6 @@ namespace CEG_BAL.ViewModels
 
         public TimeOnly? Playtime { get; set; }
 
-        public List<StudentHomeworkViewModel> StudentHomework { get; set; } = new List<StudentHomeworkViewModel>();
+        public List<StudentHomeworkViewModel> StudentHomeworks { get; set; } = new List<StudentHomeworkViewModel>();
     }
 }

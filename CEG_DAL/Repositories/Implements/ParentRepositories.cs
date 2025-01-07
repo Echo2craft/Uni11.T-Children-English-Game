@@ -27,11 +27,18 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Parents.ToListAsync();
         }
-        public async Task<List<string>> GetParentNameList()
+        public async Task<List<Parent>> GetParentNameList()
         {
             return await _dbContext.Parents
                 .AsNoTrackingWithIdentityResolution()
-                .Select(p => p.Account.Fullname)
+                .Select(t => new Parent
+                {
+                    ParentId = t.ParentId,
+                    Account = new Account
+                    {
+                        Fullname = t.Account.Fullname,
+                    }
+                })
                 .ToListAsync();
         }
 
@@ -70,11 +77,12 @@ namespace CEG_DAL.Repositories.Implements
                 .SingleOrDefaultAsync(t => t.Account.AccountId == id);
         }
 
-        public async Task<int> GetIdByAccountId(int id)
+        public async Task<int?> GetIdByAccountIdNoTracking(int id)
         {
-            var result = await (from p in _dbContext.Parents where p.AccountId == id select p).FirstOrDefaultAsync();
-            if (result != null) return result.ParentId;
-            return 0;
+            return await _dbContext.Parents
+                .Where(par => par.AccountId == id)
+                .Select(p => p.ParentId)
+                .FirstOrDefaultAsync();
         }
     }
 }

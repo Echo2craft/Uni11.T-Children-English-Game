@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CEG_RazorWebApp.Pages.Admin.Transaction
+namespace CEG_RazorWebApp.Pages.Home
 {
-    public class TransactionInfoModel : PageModel
+    public class CourseIndexModel : PageModel
     {
         public void OnGet()
         {

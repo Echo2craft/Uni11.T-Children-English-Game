@@ -52,12 +52,7 @@ namespace CEG_BAL.Services.Implements
         public async Task<ScheduleViewModel?> GetById(int id)
         {
             var sche = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(id);
-            if (sche != null)
-            {
-                var sch = _mapper.Map<ScheduleViewModel>(sche);
-                return sch;
-            }
-            return null;
+            return sche != null ? _mapper.Map<ScheduleViewModel>(sche) : null;
         }
 
         public Task<ScheduleViewModel?> GetByIdAdmin(int id)
@@ -98,6 +93,9 @@ namespace CEG_BAL.Services.Implements
             _mapper.Map(upSch, sch);
             sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(sch.SessionId)).Hours.Value);
 
+            sch.Class = null;
+            sch.Session = null;
+
             // Reattach entity and mark it as modified
             _unitOfWork.ScheduleRepositories.Update(sch);
 
@@ -114,17 +112,35 @@ namespace CEG_BAL.Services.Implements
             catch (Exception ex)
             {
                 // Log and rethrow unexpected exceptions
-                throw new Exception("An unexpected error occurred while updating the student progress.", ex);
+                throw new Exception("An unexpected error occurred while updating the schedule.", ex);
             }
         }
 
-        public void UpdateStatus(int id, string status)
+        public async Task UpdateStatus(int schId, string upSchStatus)
         {
-            var sche = _unitOfWork.ScheduleRepositories.GetByIdNoTracking(id).Result;
-            if (sche == null) return;
-            sche.Status = status;
-            _unitOfWork.ScheduleRepositories.Update(sche);
-            _unitOfWork.Save();
+            // Fetch the existing record
+            var sch = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(schId)
+                ?? throw new KeyNotFoundException("Schedule not found.");
+
+            sch.Status = upSchStatus;
+            // Reattach entity and mark it as modified
+            _unitOfWork.ScheduleRepositories.Update(sch);
+
+            // Save changes
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating the class.", ex);
+            }
         }
     }
 }

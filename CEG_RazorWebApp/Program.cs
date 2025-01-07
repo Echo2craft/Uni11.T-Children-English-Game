@@ -1,6 +1,7 @@
 using CEG_BAL.Configurations;
 using CEG_RazorWebApp.Libraries;
 using CEG_RazorWebApp.Libraries.Authorizations;
+using CEG_RazorWebApp.Services.HostedServices;
 using CEG_RazorWebApp.Services.Implements;
 using CEG_RazorWebApp.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -98,11 +99,11 @@ namespace CEG_RazorWebApp
                 });
             });*/
             // Add scoped services
-            //services.AddScoped<ISystemLoginService, SystemLoginService>();
+            services.AddScoped<ISystemLoginService, SystemLoginService>();
             services.AddScoped<IVnPayService, VnPayService>();
 
             // Add Hosted services
-            /*services.AddHostedService<MembershipExpiryService>();*/
+            // services.AddHostedService<ChangeClassStatusService>();
         }
 
         private static void ConfigureMiddleware(WebApplication app)

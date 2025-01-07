@@ -1,7 +1,7 @@
 ﻿@page "/Admin/Student/{accountId}/Info"
 @model CEG_RazorWebApp.Pages.Admin.Account.StudentInfoModel
 @{
-    ViewData["Title"] = "Parent Account Info Page";
+    ViewData["Title"] = "Student Account Info Page";
     var accountInfo = Model.AccountInfo;
     var updateStudent = Model.UpdateStudentInfo;
     var updatePassword = Model.UpdatePasswordInfo;
@@ -125,10 +125,10 @@
                                     </div>
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Highscore:</label>
+                                            <label class="col-form-label">Total Score:</label>
                                         </div>
                                         <div class="col-md-7">
-                                            <span id="student-account-highscore">
+                                            <span id="student-account-totalscore">
                                             </span>
                                         </div>
                                     </div>
@@ -578,7 +578,7 @@
             if (data.enrolls && data.enrolls.length > 0) {
                 enrollTable.clear().rows.add(data.enrolls).draw();
             }
-            // Call API to get the list of teacher names
+            // Call API to get the list of parent names
             $.ajax({
                 url: apiUrl + 'Parent/All/Fullname', // API endpoint
                 type: 'GET',
@@ -622,7 +622,7 @@
             $('#student-account-age').text(data.age);
             $('#student-account-birthdate').text(formatDate(data.birthdate, { ignoreHour : true }));
             $('#student-account-description').text(data.description);
-            $('#student-account-highscore').text(data.highscore);
+            $('#student-account-totalscore').text(data.totalscore);
             $('#student-account-playtime').text(data.playtime);
             $('#student-account-curlevel').text(data.curLevel);
             $('#student-account-points').text(data.points);
@@ -660,8 +660,6 @@
         });
         $("#updateStudentForm").submit(function (event) {
             event.preventDefault(); // Prevent the form from submitting
-
-
             // Gather form data
             var studentData = {
                 Description: $("#updateStudent_Description").val(),
@@ -672,7 +670,7 @@
                     Gender: $("#updateStudent_Account_Gender").val(),
                 }
             };
-            console.log(studentData);
+            // console.log(studentData);
             // Make the AJAX POST request
             $.ajax({
                 url: apiUrl + 'Student/Account/@accountId/Update',
@@ -834,7 +832,7 @@
             data.forEach(item => {
                 // Add each item as an option
 
-                let newOption = parentFullname == item ? new Option(item, item, true, true) : new Option(item, item, false, false);
+                let newOption = parentFullname == item.parentName ? new Option(item.parentName, item.parentName, true, true) : new Option(item.parentName, item.parentName, false, false);
                 $('#select2-parent-fullname-dropdown').append(newOption);
             });
             // Refresh the Select2 dropdown to show new options

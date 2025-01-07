@@ -179,7 +179,8 @@
         var id = sessionStorage.getItem('usrId')
         var apiUrl = sessionStorage.getItem('apiUrl');
         var role = sessionStorage.getItem('role');
-        var transactionList;
+        var transactionList = [];
+        var transactionTable;
         $(document).ready(function () {
             // Registering the custom feature with DataTables
             DataTable.feature.register('toggle', function (settings, opts) {
@@ -305,7 +306,7 @@
                 }
             });
 
-            sessionTable = new DataTable('#transaction-table', {
+            transactionTable = new DataTable('#transaction-table', {
                 data: [],
                 deferRender: false,
                 responsive: true,
@@ -555,7 +556,7 @@
                     if (response.status) {
                         transactionList = response.data;
                         console.log(transactionList);
-                        sessionTable.clear().rows.add(transactionList).draw();
+                        transactionTable.clear().rows.add(transactionList).draw();
                         callApiGetStudentNameList();
                         // setClassDisplay(classList);
                     } else {

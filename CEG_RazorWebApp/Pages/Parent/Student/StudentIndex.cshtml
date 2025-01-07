@@ -31,7 +31,6 @@
                     </div>
                 </div>
                 <section>
-                    <div id="alertContainer"></div>
                     <div class="card">
                         <div class="card-body">
                             <!-- Nav tabs -->
@@ -49,22 +48,12 @@
                             <div class="tab-content">
                                 <!-- home1 -->
                                 <div class="tab-pane active" id="home1" role="tabpanel">
-                                    <div class="row search">
-                                        <div class="col-sm-12 d-flex">
-                                            <div class="col-sm-6 d-flex justify-content-end">
-                                                <div>
-                                                    <label>
-                                                        <input id="search" class="form-control" type="text" placeholder="Search Username...">
-                                                        <i class='bx bx-search-alt'></i>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="row">
                                     </div>
-                                    <div id="history-table_wrapper" class="dataTables_wrapper no-footer">
-                                        <table id="history-table"
-                                               class="table table-striped table-bordered dataTable no-footer"
-                                               aria-describedby="history-table_info">
+                                    <div id="student-table_wrapper" class="dataTables_wrapper no-footer">
+                                        <table id="student-table"
+                                               class="table table-stripped table-bordered dataTable no-footer"
+                                               aria-describedby="student-table_info">
                                             <thead>
                                                 <tr>
                                                     <th class="sorting sorting_asc" tabindex="0"
@@ -78,6 +67,18 @@
                                                         colspan="1" aria-sort="ascending"
                                                         aria-label="Student Full Name: activate to sort column ascending">
                                                         Full name
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="account-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Gender: activate to sort column ascending">
+                                                        Gender
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="account-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Student Created Date: activate to sort column ascending">
+                                                        Created Date
                                                     </th>
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="history-table" rowspan="1"
@@ -103,14 +104,20 @@
                                                         aria-label="Student Birth Date: activate to sort column ascending">
                                                         Birth Date
                                                     </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="account-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Status: activate to sort column ascending">
+                                                        Status
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             </tbody>
                                         </table>
                                     </div>
+                                    <!-- end tapnet -->
                                 </div>
-                                <!-- end tapnet -->
                             </div>
                         </div>
                     </div>
@@ -121,53 +128,92 @@
 
     <script>
         var token = sessionStorage.getItem('token');
-        var id = sessionStorage.getItem('usrId')
-        var apiUrl = 'https://localhost:7143/api/';
+        var apiUrl = sessionStorage.getItem('apiUrl');
+        var id = sessionStorage.getItem('usrId');
         var studentList = [];
+        var studentTable;
         $(document).ready(function () {
-            callApiGetStudentList();
-            $('#search').on('keyup', function (event) {
-                // Get the search term
-                var searchTerm = $(this).val().toLowerCase();
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('searchIcon', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bx-search-alt question-search-icon',
+                    hideLabel: true // Hide search label
+                }, opts);
 
-                // Filter the classes based on the search term
-                var filteredstudentList = studentList.filter(function (student) {
-                    return student.account.fullname.toLowerCase().includes(searchTerm);
-                });
+                // Create a container for the icon
+                let container = document.createElement('div');
+                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
 
-                // Display the filtered studentList
-                setStudentDisplay(filteredstudentList);
+                // Create the icon element
+                let icon = document.createElement('i');
+                icon.className = options.iconClass;
+
+                // Check if pagination is enabled
+                // if (settings.oFeatures.bFilter) {
+                //     console.log(settings.oFeatures.bFilter);
+                //     console.log('Pagination is enabled for this DataTable.');
+                // }
+
+                setTimeout(() => {
+                    // Find the .dt-search container inside the DataTable wrapper
+                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                    if (searchContainer.length) {
+                        searchContainer.append(icon);
+                    } else {
+                        // Append icon to container
+                        container.appendChild(icon);
+                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                        $(settings.nTableWrapper).prepend(container);
+                    }
+                    if (options.hideLabel) {
+                        // Find the .dt-search label container inside the DataTable wrapper
+                        let searchLabel = searchContainer.find('label');
+                        if (searchLabel.length) {
+                            searchLabel.text('');
+                        } else {
+                            console.log('Label of search div not found!');
+                        }
+                    }
+                }, 100);
+                return '';
             });
+            studentTable = new DataTable('#student-table', {
+                data: [],
+                deferRender: false,
+                responsive: true,
+                columns: [
+                    {
+                        data: 'account.username'
+                    },
+                    { data: 'account.fullname' },
+                    { data: 'account.gender' },
+                    {
+                        data: 'account.createdDate',
+                        render: DataTable.render.date("dddd, DD/MM/YYYY")
+                    },
+                    { data: 'description' },
+                    { data: 'curLevel' },
+                    { data: 'age' },
+                    {
+                        data: 'birthdate',
+                        render: DataTable.render.date("dddd, DD/MM/YYYY")
+                    },
+                    { data: 'account.status' },
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'search info...'
+                        },
+                        searchIcon: {
+                        }
+                    }
+                }
+            });
+            callApiGetStudentList();
         });
-        // Function to display alerts
-        function showAlert(type, message) {
-            var alertHtml = '';
-
-            if (type === 'success') {
-                alertHtml = `
-                                        <div class="alert alert-success alert-dismissible fade show" id="notif">
-                                            <i class='bx bx-message-alt-x p-1'></i>
-                                            <strong class="mr-1">` + message + `</strong>
-                                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                                <span><i class='bx bx-x'></i></span>
-                                            </button>
-                                        </div>
-                                    `;
-            } else if (type === 'error') {
-                alertHtml = `
-                                        <div class="alert alert-danger alert-dismissible fade show" id="notif">
-                                            <i class='bx bx-message-alt-x p-1'></i>
-                                            <strong class="mr-1">` + message + `</strong>
-                                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                                <span><i class='bx bx-x'></i></span>
-                                            </button>
-                                        </div>
-                                    `;
-            }
-
-            // Inject the alert HTML into the alert container
-            $('#alertContainer').html(alertHtml);
-        }
+        
         function callApiGetStudentList() {
             $.ajax({
                 url: apiUrl + `Student/ByParent/${id}`, // API endpoint
@@ -182,80 +228,35 @@
                     // Check if the status is true
                     if (response.status) {
                         studentList = response.data;
-
-                        setStudentDisplay(studentList);
-                        showAlert('success', 'Student list get successfully!');
+                        if (studentList && studentList.length > 0) {
+                            studentTable.clear().rows.add(studentList).draw();
+                        }
+                        //showAlert('success', 'Student list get successfully!');
                     } else {
-                        showAlert('error', "Error in api call:" + error);
-                        console.error("API returned false status.");
+                        showAlert('error', "Error:" + response.errorMessage);
                     }
                 },
-                error: function (error) {
-                    showAlert('error', "Error in api call:" + error);
-                    console.error("Error in api call:", error);
-                    //showAlert('success', 'Data fetched successfully.');
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
-        }
-        function setStudentDisplay(data) {
-            var tableBody = $('#history-table tbody'); // Reference to the <id="history-table"> element
-            tableBody.empty(); // Clear any existing options
-            // Loop through the data array and append each class div
-            $.each(data, function (index, student) {
-                //var url = `href="/Parent/Student/${student.account.accountId}/Info"`
-                // Construct card HTML
-                var rowHtml = `
-                                        <tr class="${index % 2 === 0 ? 'even' : 'odd'}">
-                                            <td class="sorting_1">
-                                                <input type="hidden" name="listRequest[${index}].UserName" value="${student.account.username}" class="form-control" />
-                                                ${student.account.username}
-                                            </td>
-                                            <td>
-                                                <input type="hidden" name="listRequest[${index}].FullName" value="${student.account.fullname}" class="form-control" />
-                                                ${student.account.fullname}
-                                            </td>
-                                            <td>
-                                                <input type="hidden" name="listRequest[${index}].Description" value="${student.description}" class="form-control" />
-                                                ${student.description}
-                                            </td>
-                                            <td>
-                                                <input type="hidden" name="listRequest[${index}].CurLevel" value="${student.curLevel}" class="form-control" />
-                                                ${student.curLevel}
-                                            </td>
-                                            <td>
-                                                <input type="hidden" name="listRequest[${index}].Age" value="${student.age}" class="form-control" />
-                                                ${student.age}
-                                            </td>
-                                            <td>
-                                                <input type="hidden" name="listRequest[${index}].Birthdate" value="${student.birthdate}" class="form-control" />
-                                                ${formatDate(student.birthdate)}
-                                            </td>
-                                        <tr>
-                                    `;
-                // Append the constructed HTML to the class list container
-                tableBody.append(rowHtml);
-            });
-        }
-        function formatDate(date) {
-            let d = new Date(date);
-
-            // Get day, month, year
-            let day = String(d.getDate()).padStart(2, '0');
-            let month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-            let year = d.getFullYear();
-
-            // Get hours, minutes
-            let hours = String(d.getHours()).padStart(2, '0');
-            let minutes = String(d.getMinutes()).padStart(2, '0');
-
-            // Optionally, get seconds
-            let seconds = String(d.getSeconds()).padStart(2, '0');
-
-            // Return the formatted date and time as `dd/mm/yyyy hh:mm`
-            return `${day}/${month}/${year} ${hours}:${minutes}`;
-
-            // If you want to include seconds as well, use this return:
-            // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         }
     </script>
 </body>

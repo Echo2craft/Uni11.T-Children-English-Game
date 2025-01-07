@@ -15,11 +15,13 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<TeacherViewModel>> GetTeacherList();
         Task<List<GetTeacherNameOption>?> GetTeacherNameOptionList();
         Task<TeacherViewModel?> GetTeacherById(int id);
-        Task<TeacherViewModel?> GetTeacherByAccountId(int id);
+        Task<TeacherViewModel?> GetByAccountId(int accId);
         Task<bool> IsExistByEmail(string email);
         Task<bool> IsExistByFullname(string fullname);
         Task<bool> IsExistById(int id);
-        void Create(TeacherViewModel teacher, CreateNewTeacher newTeach, IFormFile certImage);
+        Task Create(CreateNewTeacher newTeach);
         void Update(TeacherViewModel teacher);
+        Task<List<GetStudentActivity>> GetStudentActivityListByScheduleId(int schId);
+        Task UploadToBlobAsync(string teacherName, IFormFile certificate, string imageType);
     }
 }

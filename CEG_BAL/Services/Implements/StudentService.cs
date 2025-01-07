@@ -3,6 +3,7 @@ using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Home;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -91,13 +92,7 @@ namespace CEG_BAL.Services.Implements
         public async Task<StudentViewModel?> GetStudentById(int id)
         {
             var user = await _unitOfWork.StudentRepositories.GetByIdNoTracking(id);
-            if (user != null)
-            {
-                //var mem = await _unitOfWork.MemberRepository.GetByIdNoTracking(user.MemberId);
-                var usr = _mapper.Map<StudentViewModel>(user);
-                return usr;
-            }
-            return null;
+            return user != null ? _mapper.Map<StudentViewModel>(user) : null;
         }
 
         public async Task<List<StudentViewModel>> GetStudentList()
@@ -112,7 +107,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<string>> GetStudentNameListByParent(int id)
         {
-            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             if (parentId == 0) return null;
             return await _unitOfWork.StudentRepositories.GetStudentNameListByParent(parentId);
         }
@@ -124,7 +119,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<StudentViewModel>> GetStudentByParentAccountId(int id)
         {
-            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             if (parentId == 0) return null;
             return _mapper.Map<List<StudentViewModel>>(await _unitOfWork.StudentRepositories.GetStudentByParentId(parentId));
         }
@@ -133,6 +128,23 @@ namespace CEG_BAL.Services.Implements
             var classId = await _unitOfWork.ClassRepositories.GetIdByClassId(id);
             if (classId == 0) return null;
             return _mapper.Map<List<StudentViewModel>>(await _unitOfWork.StudentRepositories.GetStudentByClassId(classId));
+        }
+        public async Task<List<StudentLeaderboard>> GetStudentListByPointRank()
+        {
+            // Fetch anonymous objects from repository
+            var studentsWithPoints = await _unitOfWork.StudentRepositories.GetStudentListWithTotalPoints();
+
+            // Map to DTOs
+            var rankedStudents = studentsWithPoints
+                .Select((student, index) => new StudentLeaderboard
+                {
+                    StudentName = (string)student.GetType().GetProperty("StudentName")?.GetValue(student),
+                    Rank = index + 1,
+                    Points = (int)student.GetType().GetProperty("TotalPoints")?.GetValue(student)
+                })
+                .ToList();
+
+            return rankedStudents;
         }
         public void Update(StudentViewModel student, UpdateStudent studentNewInfo)
         {
@@ -170,7 +182,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<int> GetTotalAmountByParent(int id)
         {
-            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             if (parentId == 0) throw new Exception("Parent not found.");
             return await _unitOfWork.StudentRepositories.GetTotalAmountByParent(parentId);
         }

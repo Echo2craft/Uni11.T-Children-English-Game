@@ -37,12 +37,12 @@
         <div class="container">
             <div class="navigation">
                 <ul class="slide-menu">
-                    <div class="logo">
+                    <li class="logo">
                         <a href="/Parent/Index">
                             @* <i class='bx bxs-graduation bx-lg'></i> *@
                             <img class="logo" src="~/images/study.png" alt="logo">
                         </a>
-                    </div>
+                    </li>
                     <li data-toggle="tooltip" data-placement="right" title="Overview">
                         <a href="/Parent/Index">
                             <span><i class='bx bx-home-alt-2'></i></span>
@@ -61,16 +61,16 @@
                             <span class="title">Classes</span>
                         </a>
                     </li>
-                    <li data-toggle="tooltip" data-placement="right" title="Enroll">
-                        <a href="/Parent/Enroll/Index">
-                            <span><i class='bx bx-notepad'></i></span>
-                            <span class="title">Enrolled Classes</span>
-                        </a>
-                    </li>
-                    <li data-toggle="tooltip" data-placement="right" title="Transaction">
+                    <li data-toggle="tooltip" data-placement="right" title="Transactions">
                         <a href="/Parent/Transaction/Index">
                             <span><i class='bx bx-receipt'></i></span>
                             <span class="title">Transactions</span>
+                        </a>
+                    </li>
+                    <li data-toggle="tooltip" data-placement="right" title="Profile">
+                        <a href="/Parent/Profile">
+                            <span><i class='bx bx-user'></i></span>
+                            <span class="title">Profile</span>
                         </a>
                     </li>
                 </ul>
@@ -102,6 +102,8 @@
         </div>
     </div>
     @RenderBody()
+    <!-- Moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Popper JS-->
@@ -247,7 +249,10 @@
             });
         });
 
-        function formatTime(timeString, includeSeconds = false, includeAmPm = false) {
+        function formatTime(timeString, {
+            includeSeconds = false,
+            includeAmPm = false
+        } = {}) {
             // Parse hours, minutes, and seconds from the input string
             let [hours, minutes, seconds] = timeString.split(':').map(Number);
 
@@ -281,7 +286,14 @@
             // Return formatted time string
             return `${hours}:${minutes}:${seconds}`;
         };
-        function formatDate(date, ignoreHour = false, addDayOfWeek = false, includeAmPm = false, monthBeforeDate = false, lineBreak = false) {
+        function formatDate(date, {
+            ignoreHour = false,
+            addDayOfWeek = false,
+            includeAmPm = false,
+            monthBeforeDate = false,
+            lineBreak = false,
+            inputDateFormat = false // New option for YYYY-MM-DD format
+        } = {}) {
             let d = new Date(date);
 
             // Get day, month, year
@@ -308,6 +320,10 @@
             if (addDayOfWeek) {
                 const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                 dayOfWeek = daysOfWeek[d.getDay()] + ', ';
+            }
+            // Handle input format: return only `YYYY-MM-DD`
+            if (inputDateFormat) {
+                return `${year}-${month}-${day}`;
             }
             // Return only the date if `ignoreHour` is true
             if (ignoreHour) {

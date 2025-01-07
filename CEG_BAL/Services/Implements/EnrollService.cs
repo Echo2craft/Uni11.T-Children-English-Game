@@ -53,6 +53,11 @@ namespace CEG_BAL.Services.Implements
             try
             {
                 _unitOfWork.EnrollRepositories.Create(enr);
+
+                // Update the NumberOfStudents field for the class
+                cla.NumberOfStudents++;
+                _unitOfWork.ClassRepositories.Update(cla);
+                
                 _unitOfWork.Save();
             }
             catch (Exception ex)
@@ -75,8 +80,14 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<List<EnrollViewModel>?> GetEnrollByParentAccountId(int id)
         {
-            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountId(id);
+            var parentId = await _unitOfWork.ParentRepositories.GetIdByAccountIdNoTracking(id);
             return parentId == 0 ? null : _mapper.Map<List<EnrollViewModel>>(await _unitOfWork.EnrollRepositories.GetEnrollByParentId(parentId));
+        }
+
+        public async Task<List<EnrollViewModel>?> GetEnrollByStudentAccountId(int id)
+        {
+            var studentId = await _unitOfWork.StudentRepositories.GetIdByAccountIdNoTracking(id);
+            return studentId == 0 ? null : _mapper.Map<List<EnrollViewModel>>(await _unitOfWork.EnrollRepositories.GetEnrollByStudentId(studentId));
         }
 
         public void Update(EnrollViewModel model)

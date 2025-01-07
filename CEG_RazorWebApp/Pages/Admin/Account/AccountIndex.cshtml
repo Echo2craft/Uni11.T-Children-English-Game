@@ -119,7 +119,7 @@
                 </div>
                 <ul class="nav nav-tabs justify-content-center" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active align-items-center d-flex w-auto" data-toggle="tab" href="#student_Tab" role="tab" aria-controls="student" aria-selected="false">
+                        <a class="nav-link active align-items-center d-flex w-auto" data-toggle="tab" href="#student_Tab" role="tab" aria-controls="student" aria-selected="true">
                             <span>Student</span>
                         </a>
                     </li>
@@ -129,7 +129,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link align-items-center d-flex w-auto" data-toggle="tab" href="#teacher_Tab" role="tab" aria-controls="teacher" aria-selected="true">
+                        <a class="nav-link align-items-center d-flex w-auto" data-toggle="tab" href="#teacher_Tab" role="tab" aria-controls="teacher" aria-selected="false">
                             <span>Teacher</span>
                         </a>
                     </li>
@@ -144,17 +144,17 @@
                                 <div class="row p-4">
                                     <div class="col-12">
                                         <div class="row form-group">
-                                            <label asp-for="@createStudent.Account.Username" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createStudent.Account.Username" value="@createStudent.Account.Username" type="text" placeholder="User Name" required class="form-control col-md-8">
+                                            <label asp-for="@createStudent.Account.Username" class="col-form-label"></label>
+                                            <input asp-for="@createStudent.Account.Username" value="@createStudent.Account.Username" type="text" placeholder="User Name" required class="form-control">
                                             <span asp-validation-for="@createStudent.Account.Username" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createStudent.Account.Fullname" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createStudent.Account.Fullname" value="@createStudent.Account.Fullname" type="text" placeholder="Full Name" required class="form-control col-md-8">
+                                            <label asp-for="@createStudent.Account.Fullname" class="col-form-label"></label>
+                                            <input asp-for="@createStudent.Account.Fullname" value="@createStudent.Account.Fullname" type="text" placeholder="Full Name" required class="form-control">
                                             <span asp-validation-for="@createStudent.Account.Fullname" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createStudent.ParentUsername" class="col-md-4 col-form-label text-md-right">Select existing Parent to be associated with this Student</label>
+                                            <label asp-for="@createStudent.ParentUsername" class="col-form-label">Select existing Parent to be associated with this Student</label>
                                             <div class="col-md-8 p-0">
                                                 <!-- search bar with dropdown list-->
                                                 <select id="select2-parent-fullname-dropdown" class="form-control custom-select" style="width: 100%;">
@@ -163,33 +163,33 @@
                                             <span asp-validation-for="@createStudent.ParentUsername" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            @* <label asp-for="@createStudent.ParentUsername" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createStudent.ParentUsername" value="@createStudent.ParentUsername" type="text" placeholder="Parent's Account User Name" required class="form-control col-md-8">
+                                            @* <label asp-for="@createStudent.ParentUsername" class="col-form-label"></label>
+                                            <input asp-for="@createStudent.ParentUsername" value="@createStudent.ParentUsername" type="text" placeholder="Parent's Account User Name" required class="form-control">
                                             <span asp-validation-for="@createStudent.ParentUsername" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
 
-                                            <label asp-for="@createStudent.Birthdate" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createStudent.Birthdate" value="@createStudent.Birthdate.ToString("yyyy-MM-ddTHH:mm")" type="datetime-local" min="@DateTime.Now.AddYears(-16).ToString("yyyy-MM-ddTHH:mm")" max="@DateTime.Now.AddYears(-12).ToString("yyyy-MM-ddTHH:mm")" asp-format="{0:yyyy-MM-ddTHH:mm}" required class="form-control col-md-8">
+                                            <label asp-for="@createStudent.Birthdate" class="col-form-label"></label>
+                                            <input asp-for="@createStudent.Birthdate" value="@createStudent.Birthdate.ToString("yyyy-MM-ddTHH:mm")" type="datetime-local" min="@DateTime.Now.AddYears(-16).ToString("yyyy-MM-ddTHH:mm")" max="@DateTime.Now.AddYears(-12).ToString("yyyy-MM-ddTHH:mm")" asp-format="{0:yyyy-MM-ddTHH:mm}" required class="form-control">
                                             <span asp-validation-for="@createStudent.Birthdate" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createStudent.Description" class="col-md-4 col-form-label text-md-right"></label>
-                                            <textarea asp-for="@createStudent.Description" value="@createStudent.Description" required class="form-control col-md-8"></textarea>
+                                            <label asp-for="@createStudent.Description" class="col-form-label"></label>
+                                            <textarea asp-for="@createStudent.Description" value="@createStudent.Description" required class="form-control"></textarea>
                                             <span asp-validation-for="@createStudent.Description" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createStudent.Account.Gender" class="col-md-4 col-form-label text-md-right"></label>
-                                            <select class="form-control col-md-8 custom-select" asp-for="@createStudent.Account.Gender"></select>
+                                            <label asp-for="@createStudent.Account.Gender" class="col-form-label"></label>
+                                            <select class="form-control custom-select" asp-for="@createStudent.Account.Gender"></select>
                                             <span asp-validation-for="@createStudent.Account.Gender" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createStudent.Account.Password" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createStudent.Account.Password" value="@createStudent.Account.Password" type="password" placeholder="Password" class="form-control col-md-8" required>
+                                            <label asp-for="@createStudent.Account.Password" class="col-form-label"></label>
+                                            <input asp-for="@createStudent.Account.Password" value="@createStudent.Account.Password" type="password" placeholder="Password" class="form-control" required>
                                             <span asp-validation-for="@createStudent.Account.Password" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createStudent.Account.ConfirmPassword" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createStudent.Account.ConfirmPassword" value="@createStudent.Account.ConfirmPassword" type="password" placeholder="Confirm Password" class="form-control col-md-8" required>
+                                            <label asp-for="@createStudent.Account.ConfirmPassword" class="col-form-label"></label>
+                                            <input asp-for="@createStudent.Account.ConfirmPassword" value="@createStudent.Account.ConfirmPassword" type="password" placeholder="Confirm Password" class="form-control" required>
                                             <span asp-validation-for="@createStudent.Account.ConfirmPassword" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                         </div>
@@ -211,43 +211,43 @@
                                 <div class="row p-4">
                                     <div class="col-12">
                                         <div class="row form-group">
-                                            <label asp-for="@createParent.Account.Username" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createParent.Account.Username" value="@createParent.Account.Username" type="text" placeholder="User Name" required class="form-control col-md-8">
+                                            <label asp-for="@createParent.Account.Username" class="col-form-label"></label>
+                                            <input asp-for="@createParent.Account.Username" value="@createParent.Account.Username" type="text" placeholder="User Name" required class="form-control">
                                             <span asp-validation-for="@createParent.Account.Username" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createParent.Account.Fullname" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createParent.Account.Fullname" value="@createParent.Account.Fullname" type="text" placeholder="Full Name" required class="form-control col-md-8">
+                                            <label asp-for="@createParent.Account.Fullname" class="col-form-label"></label>
+                                            <input asp-for="@createParent.Account.Fullname" value="@createParent.Account.Fullname" type="text" placeholder="Full Name" required class="form-control">
                                             <span asp-validation-for="@createParent.Account.Fullname" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createParent.Address" class="col-md-4 col-form-label text-md-right"></label>
-                                            <textarea asp-for="@createParent.Address" value="@createParent.Address" required class="form-control col-md-8"></textarea>
+                                            <label asp-for="@createParent.Address" class="col-form-label"></label>
+                                            <textarea asp-for="@createParent.Address" value="@createParent.Address" required class="form-control"></textarea>
                                             <span asp-validation-for="@createParent.Address" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createParent.Account.Gender" class="col-md-4 col-form-label text-md-right"></label>
-                                            <select class="form-control col-md-8 custom-select" asp-for="@createParent.Account.Gender"></select>
+                                            <label asp-for="@createParent.Account.Gender" class="col-form-label"></label>
+                                            <select class="form-control custom-select" asp-for="@createParent.Account.Gender"></select>
                                             <span asp-validation-for="@createParent.Account.Gender" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createParent.Email" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createParent.Email" value="@createParent.Email" type="email" placeholder="Email" class="form-control col-md-8" required>
+                                            <label asp-for="@createParent.Email" class="col-form-label"></label>
+                                            <input asp-for="@createParent.Email" value="@createParent.Email" type="email" placeholder="Email" class="form-control" required>
                                             <span asp-validation-for="@createParent.Email" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createParent.Phone" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createParent.Phone" value="@createParent.Phone" type="tel" placeholder="Phone number" class="form-control col-md-8" required>
+                                            <label asp-for="@createParent.Phone" class="col-form-label"></label>
+                                            <input asp-for="@createParent.Phone" value="@createParent.Phone" type="tel" placeholder="Phone number" class="form-control" required>
                                             <span asp-validation-for="@createParent.Phone" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createParent.Account.Password" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createParent.Account.Password" value="@createParent.Account.Password" type="password" placeholder="Password" class="form-control col-md-8" required>
+                                            <label asp-for="@createParent.Account.Password" class="col-form-label"></label>
+                                            <input asp-for="@createParent.Account.Password" value="@createParent.Account.Password" type="password" placeholder="Password" class="form-control" required>
                                             <span asp-validation-for="@createParent.Account.Password" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                            <label asp-for="@createParent.Account.ConfirmPassword" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createParent.Account.ConfirmPassword" value="@createParent.Account.ConfirmPassword" type="password" placeholder="Confirm Password" class="form-control col-md-8" required>
+                                            <label asp-for="@createParent.Account.ConfirmPassword" class="col-form-label"></label>
+                                            <input asp-for="@createParent.Account.ConfirmPassword" value="@createParent.Account.ConfirmPassword" type="password" placeholder="Confirm Password" class="form-control" required>
                                             <span asp-validation-for="@createParent.Account.ConfirmPassword" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                         </div>
@@ -266,64 +266,83 @@
                         </div>
                         <form method="post" id="createTeacherForm">
                             <div class="modal-body">
-                                <div class="row p-4">
-                                    <div class="col-12">
-                                        <div class="row form-group">
-                                            <label asp-for="@createTeacher.Account.Username" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createTeacher.Account.Username" value="@createTeacher.Account.Username" type="text" placeholder="User Name" required class="form-control col-md-8">
+                                <div class="row justify-content-center p-4">
+                                    <div class="col-xl-12 justify-content-around form-row">
+                                        <div class="form-group col-xl-4">
+                                            <label asp-for="@createTeacher.Account.Username" class="col-form-label"></label>
+                                            <input asp-for="@createTeacher.Account.Username" value="@createTeacher.Account.Username" type="text" placeholder="User Name" required 
+                                                class="form-control">
                                             <span asp-validation-for="@createTeacher.Account.Username" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                                class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
 
-                                            <label asp-for="@createTeacher.Account.Fullname" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createTeacher.Account.Fullname" value="@createTeacher.Account.Fullname" type="text" placeholder="Full Name" required class="form-control col-md-8">
-                                            <span asp-validation-for="@createTeacher.Account.Fullname" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTeacher.Address" class="col-md-4 col-form-label text-md-right"></label>
-                                            <textarea asp-for="@createTeacher.Address" value="@createTeacher.Address" required class="form-control col-md-8"></textarea>
-                                            <span asp-validation-for="@createTeacher.Address" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTeacher.Account.Gender" class="col-md-4 col-form-label text-md-right"></label>
-                                            <select class="form-control col-md-8 custom-select" asp-for="@createTeacher.Account.Gender"></select>
-                                            <span asp-validation-for="@createTeacher.Account.Gender" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTeacher.Email" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createTeacher.Email" value="@createTeacher.Email" type="email" placeholder="Email" class="form-control col-md-8" required>
-                                            <span asp-validation-for="@createTeacher.Email" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTeacher.Phone" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createTeacher.Phone" value="@createTeacher.Phone" type="tel" placeholder="Phone number" class="form-control col-md-8" required>
-                                            <span asp-validation-for="@createTeacher.Phone" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTeacher.Account.Password" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createTeacher.Account.Password" value="@createTeacher.Account.Password" type="password" placeholder="Password" class="form-control col-md-8" required>
-                                            <span asp-validation-for="@createTeacher.Account.Password" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTeacher.Account.ConfirmPassword" class="col-md-4 col-form-label text-md-right"></label>
-                                            <input asp-for="@createTeacher.Account.ConfirmPassword" value="@createTeacher.Account.ConfirmPassword" type="password" placeholder="Confirm Password" class="form-control col-md-8" required>
-                                            <span asp-validation-for="@createTeacher.Account.ConfirmPassword" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            @* <label class="col-md-4 col-form-label text-md-right" asp-for="@createTeacher.ImageUpload">Upload Certificate Image:</label>
-                                            <input class="form-control col-md-8" type="file" asp-for="@createTeacher.ImageUpload" accept="image/*" />
-                                            <span asp-validation-for="@createTeacher.ImageUpload" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
-                                            <label class="col-md-4 col-form-label text-md-right" asp-for="@createTeacher.ImageUpload">Upload Certificate Image:</label>
-                                            <div class="col-md-8 custom-file">
-                                                <input type="file" class="col-md-8 custom-file-input" asp-for="@createTeacher.ImageUpload" required accept="image/*">
-                                                <label class="col-md-8 custom-file-label" asp-for="@createTeacher.ImageUpload">Choose image to upload</label>
-                                                <div class="invalid-feedback">Example invalid custom file feedback</div>
-                                            </div>
+                                            @* <label for="createSchedule_SessionNumber" class="col-form-label">Session Number</label>
+                                            <input id="createSchedule_SessionNumber" type="number" class="form-control" value="0" readonly="" required="">
+                                            <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span> *@
                                         </div>
-                                        <div class="row form-group justify-content-center">
-                                            <div id="preview-container">
-                                                <img class="w-100" id="image-preview" src="" alt="Certificate Image Preview" style="display:none; max-height: 800px;" />
-                                            </div>
+                                        <div class="form-group col-xl-8">
+                                            <label asp-for="@createTeacher.Account.Fullname" class="col-form-label"></label>
+                                            <input asp-for="@createTeacher.Account.Fullname" value="@createTeacher.Account.Fullname" type="text" placeholder="Full Name" required 
+                                                class="form-control">
+                                            <span asp-validation-for="@createTeacher.Account.Fullname" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 justify-content-around form-row">
+                                        <div class="form-group col-xl-4">
+                                            <label asp-for="@createTeacher.Account.Gender" class="col-form-label"></label>
+                                            <select class="form-control custom-select" asp-for="@createTeacher.Account.Gender"></select>
+                                            <span asp-validation-for="@createTeacher.Account.Gender" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                        </div>
+                                        <div class="form-group col-xl-8">
+                                            <label asp-for="@createTeacher.Address" class="col-form-label"></label>
+                                            <textarea asp-for="@createTeacher.Address" value="@createTeacher.Address" required 
+                                                class="form-control"></textarea>
+                                            <span asp-validation-for="@createTeacher.Address" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 justify-content-around form-row">
+                                        <div class="form-group col-xl-4">
+                                            <label asp-for="@createTeacher.Phone" class="col-form-label"></label>
+                                            <input asp-for="@createTeacher.Phone" value="@createTeacher.Phone" type="tel" placeholder="Phone number" 
+                                                class="form-control" required>
+                                            <span asp-validation-for="@createTeacher.Phone" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                        </div>
+                                        <div class="form-group col-xl-8">
+                                            <label asp-for="@createTeacher.Email" class="col-form-label"></label>
+                                            <input asp-for="@createTeacher.Email" value="@createTeacher.Email" type="email" placeholder="Email" 
+                                                class="form-control" required>
+                                            <span asp-validation-for="@createTeacher.Email" id="error_message"
+                                                class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 justify-content-around form-row">
+                                        <div class="form-group col-xl-6">
+                                            <label asp-for="@createTeacher.Account.Password" class="col-form-label"></label>
+                                            <input asp-for="@createTeacher.Account.Password" value="@createTeacher.Account.Password" type="password" placeholder="Password" class="form-control" required>
+                                            <span asp-validation-for="@createTeacher.Account.Password" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                        </div>
+                                        <div class="form-group col-xl-6">
+                                            <label asp-for="@createTeacher.Account.ConfirmPassword" class="col-form-label"></label>
+                                            <input asp-for="@createTeacher.Account.ConfirmPassword" value="@createTeacher.Account.ConfirmPassword" type="password" placeholder="Confirm Password" class="form-control" required>
+                                            <span asp-validation-for="@createTeacher.Account.ConfirmPassword" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 justify-content-around form-row">
+                                        <label class="col-form-label" asp-for="@createTeacher.ImageUpload">Upload Certificate Image:</label>
+                                        <div class="col-md-12 custom-file">
+                                            <input type="file" class="col-md-12 custom-file-input" asp-for="@createTeacher.ImageUpload" required accept="image/*">
+                                            <label class="col-md-12 custom-file-label" asp-for="@createTeacher.ImageUpload">Choose image to upload</label>
+                                            <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row col-xl-12 justify-content-center">
+                                        <div id="preview-container">
+                                            <img class="w-100" id="image-preview" src="" alt="Certificate Image Preview" style="display:none; max-height: 800px;" />
                                         </div>
                                     </div>
                                 </div>
@@ -345,6 +364,7 @@
         var apiUrl = sessionStorage.getItem('apiUrl');
         var accountList = [];
         const imageInput = $("#createTeacher_ImageUpload");
+        let selectedFile = null; // Variable to hold the file
         const previewImage = $("#image-preview");
         var accountTable;
         $(document).ready(function () {
@@ -541,29 +561,7 @@
                     Email: $('#createTeacher_Email').val(),
                     Address: $('#createTeacher_Address').val(),
                     Phone: $('#createTeacher_Phone').val(),
-                    // ImageUpload: imageInput[0].files[0],
                 };
-                // Create a FormData object
-                // var formData = new FormData();
-
-                // Add Account fields individually to FormData
-                // formData.append("Account.Username", $('#createTeacher_Account_Username').val());
-                // formData.append("Account.Fullname", $('#createTeacher_Account_Fullname').val());
-                // formData.append("Account.Gender", $('#createTeacher_Account_Gender').val());
-                // formData.append("Account.Password", $('#createTeacher_Account_Password').val());
-                // formData.append("Account.ConfirmPassword", $('#createTeacher_Account_ConfirmPassword').val());
-
-                // Add other fields
-                // formData.append("Email", $('#createTeacher_Email').val());
-                // formData.append("Address", $('#createTeacher_Address').val());
-                // formData.append("Phone", $('#createTeacher_Phone').val());
-
-                // Add the file (ensure you have a file input element with ID 'imageInput')
-                // var imageInputAvail = imageInput[0].files[0];
-                // if (imageInputAvail) {
-                //     formData.append("ImageUpload", imageInput[0].files[0]);
-                // }
-                console.log(formData);
                 //Make the AJAX request
                 callApiPostCreateTeacher(formData);
                 $('#createTeacherForm').trigger("reset");
@@ -572,7 +570,6 @@
             // Handle image selection and preview
             imageInput.on("change", () => {
                 const file = imageInput[0].files[0];
-
                 if (file && file.type.startsWith("image/")) {
                     const reader = new FileReader();
 
@@ -582,8 +579,11 @@
                     };
 
                     reader.readAsDataURL(file);
+                    selectedFile = file; // Store the file in memory
+                    // console.log('File selected:', selectedFile);
                 } else {
                     showAlert("Please select a valid image file.");
+                    selectedFile = null; // Clear the reference if no file is selected
                     previewImage.hide();
                 }
             });
@@ -779,8 +779,59 @@
                 }
             });
         }
+        // Teacher/{teacherName}/Upload/Certificate
+        function callApiPostUploadTeacherCertificate(teacherName) {
+            // var fileInput = $('#fileInput')[0];
+            // if (imageInput[0].files.length === 0) {
+            //     alert('Please select a file to upload.');
+            //     return;
+            // }
+            console.log('File selected:', selectedFile);
+            var formData = new FormData();
+            formData.append('Certificate', selectedFile);
+
+            $.ajax({
+                url: apiUrl + 'Admin/Teacher/' + teacherName + '/Upload/Certificate', // Backend API endpoint
+                type: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                data: formData,
+                // contentType: false, Set to false to allow FormData to manage content type
+                // processData: false, Prevent jQuery from processing the FormData object
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+
         function callApiPostCreateTeacher(formData) {
-            console.log(formData);
             $.ajax({
                 url: apiUrl + 'Admin/Teacher/Create', // Specify your Razor Page here
                 type: 'POST',
@@ -794,6 +845,7 @@
                 success: function (response) {
                     // Handle success (display a success message or redirect, etc.)
                     if (response.status) {
+                        callApiPostUploadTeacherCertificate(formData.Account.Fullname);
                         showAlert('success', "Teacher create successfully");
                         callApiGetAccountList();
                     } else {
@@ -822,6 +874,7 @@
                 }
             });
         }
+
         function getParentNameList(){
             // Call API to get the list of teacher names
             $.ajax({
@@ -880,7 +933,7 @@
             data.forEach(item => {
                 // Add each item as an option
 
-                let newOption = new Option(item, item, false, false);
+                let newOption = new Option(item.parentName, item.parentName, false, false);
                 $('#select2-parent-fullname-dropdown').append(newOption);
             });
             // Refresh the Select2 dropdown to show new options

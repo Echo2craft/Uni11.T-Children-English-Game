@@ -2,6 +2,7 @@
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -163,6 +164,40 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/Rank")]
+        [ProducesResponseType(typeof(StudentLeaderboard), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetStudentListByRank()
+        {
+            try
+            {
+                var result = await _studentService.GetStudentListByPointRank();
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Student List Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -226,7 +261,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpGet("Account/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Student")]
         [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

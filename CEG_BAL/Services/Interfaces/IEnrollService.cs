@@ -16,6 +16,7 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<EnrollViewModel>> GetList();
         Task<EnrollViewModel?> GetById (int id);
         Task<List<EnrollViewModel>?> GetEnrollByParentAccountId(int id);
+        Task<List<EnrollViewModel>?> GetEnrollByStudentAccountId(int id);
         Task<EnrollViewModel?> GetByStudentFullnameAndClassName(string stuFullname, string claName);
     }
 }

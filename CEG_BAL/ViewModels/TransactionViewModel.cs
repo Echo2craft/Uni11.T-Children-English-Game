@@ -11,15 +11,21 @@ namespace CEG_BAL.ViewModels
     {
         public int TransactionId { get; set; }
 
-        public int ParentId { get; set; }
+        public int AccountId { get; set; }
 
         public string ParentFullname { get; set; } = null!;
 
         public string? StudentFullname { get; set; }
 
+        public string? PayerFullname { get; set; }
+
+        public string? PaymentMethod { get; set; }
+
+        public string? ReceiverFullname { get; set; }
+
         public string? ClassName { get; set; }
 
-        public string VnpayId { get; set; } = null!;
+        public string? VnpayId { get; set; }
 
         public int TransactionAmount { get; set; }
 
@@ -31,8 +37,10 @@ namespace CEG_BAL.ViewModels
 
         public DateTime ConfirmDate { get; set; }
 
+        public string? Description { get; set; }
+
         public List<EnrollViewModel> Enrolls { get; set; } = new List<EnrollViewModel>();
 
-        public ParentViewModel Parent { get; set; } = null!;
+        public AccountViewModel Account { get; set; } = null!;
     }
 }

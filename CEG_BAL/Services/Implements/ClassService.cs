@@ -5,11 +5,13 @@ using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Home;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CEG_BAL.Services.Implements
 {
@@ -72,13 +74,16 @@ namespace CEG_BAL.Services.Implements
         /// <param name="includeCourse">Default: false, determine whether if the query should include course info</param>
         /// <param name="includeSession">Default: false, determine whether if the query should include course's sessions info</param>
         /// <param name="filterSession">Default: false, determine whether if the query should include filter session infos to only contain unscheduled session</param>
+        /// <param name="includeSchedule">Default: false, determine whether if the query should include class's schedules info</param>
+        /// <param name="includeAttendances">Default: false, determine whether if the query should include class's schedules attendances info</param>
         public async Task<ClassViewModel?> GetById(
             int id, 
             bool includeTeacher = true, 
             bool includeCourse = true,
             bool includeSession = false, 
             bool filterSession = false,
-            bool includeSchedule = true
+            bool includeSchedule = true,
+            bool includeAttendances = true
         )
         {
             var clas = await _unitOfWork.ClassRepositories.GetByIdNoTracking(
@@ -87,7 +92,8 @@ namespace CEG_BAL.Services.Implements
                 includeCourse: includeCourse, 
                 includeSession: includeSession, 
                 filterSession: filterSession,
-                includeSchedule: includeSchedule
+                includeSchedule: includeSchedule,
+                includeAttendances: includeAttendances
             );
             if (clas == null) return null;
             var viewCla = _mapper.Map<ClassViewModel>(clas);
@@ -123,6 +129,11 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetList());
         }
 
+        public async Task<List<ClassViewModel>> GetClassListHome()
+        {
+            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListHome());
+        }
+
         public async Task<List<GetClassForTransaction>> GetOptionListByStatusOpen(string filterClassByStudentName = "")
         {
             return _mapper.Map<List<GetClassForTransaction>>(await _unitOfWork.ClassRepositories.GetOptionListByStatusOpen(filterClassByStudentName));
@@ -138,6 +149,27 @@ namespace CEG_BAL.Services.Implements
             var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
             if (teacherId == 0) return new List<ClassViewModel>();
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByTeacherId(teacherId));
+        }
+        
+        public async Task<List<ClassViewModel>> GetListByStudentAccountId(int id)
+        {
+            var studentId = await _unitOfWork.StudentRepositories.GetIdByAccountIdNoTracking(id);
+            if (studentId == 0) return new List<ClassViewModel>();
+            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByStudentId(studentId.Value));
+            //return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListByStudentId(studentId));
+        }
+
+        public async Task<List<ClassViewModel>> GetClassListFilter(ClassFilter filter)
+        {
+            var classes = await _unitOfWork.ClassRepositories.GetList();
+
+            // Apply filtering
+            if (!string.IsNullOrEmpty(filter.Status))
+            {
+                classes = classes.Where(c => c.Status.Equals(filter.Status, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return _mapper.Map<List<ClassViewModel>>(classes);
         }
         public async Task Update(int claId, UpdateClass upCla)
         {
@@ -184,11 +216,114 @@ namespace CEG_BAL.Services.Implements
                 foreach (var error in errorList) errorMessage += error;
                 throw new ArgumentException(errorMessage);
             }
+            if (upClaStatus == CEGConstants.CLASS_STATUS_OPEN)
+            {
+                foreach (var sche in cla.Schedules)
+                {
+                    sche.Status = CEGConstants.SCHEDULE_STATUS_UPCOMING;
+                    _unitOfWork.ScheduleRepositories.Update(sche);
+                }
+            }
 
-            foreach(var sche in cla.Schedules){
-                // var schedule = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(sche.ScheduleId);
-                sche.Status = CEGConstants.SCHEDULE_STATUS_UPCOMING;
-                _unitOfWork.ScheduleRepositories.Update(sche);
+            if (upClaStatus == CEGConstants.CLASS_STATUS_ONGOING)
+            {
+                // Extract distinct session IDs from the class's schedules
+
+                // - `cla.Schedules`: A collection of schedules associated with the class
+                // - `.Select(s => s.SessionId)`: Extracts the SessionId from each schedule
+                // - `.Distinct()`: Ensures each SessionId appears only once
+                var sessionIds = cla.Schedules.Select(s => s.SessionId).Distinct();
+
+                // Fetch a dictionary mapping session IDs to their associated homework lists
+
+                // - `_unitOfWork.HomeworkRepositories.GetListBySessionIds(sessionIds)`:
+                //   Retrieves all homework items for the given session IDs from the database.
+                // - `.GroupBy(h => h.SessionId)`:
+                //   Groups the retrieved homework items by their SessionId.
+                // - `.ToDictionary(g => g.Key, g => g.ToList())`:
+                //   Converts the grouped items into a dictionary where:
+                //     - Key: SessionId (unique identifier for each session)
+                //     - Value: List of homework items associated with that SessionId
+                var homeworkDictionary = (await _unitOfWork.HomeworkRepositories.GetListBySessionIds(sessionIds.ToArray()))
+                    .GroupBy(h => h.SessionId)
+                    .ToDictionary(g => g.Key, g => g.ToList());
+
+                foreach (var enr in cla.Enrolls)
+                {
+                    // Add student progress
+                    var stuPro = new StudentProgress()
+                    {
+                        Playtime = TimeOnly.MinValue,
+                        TotalPoint = 0,
+                        StudentId = enr.StudentId,
+                        ClassId = enr.ClassId,
+                    };
+                    foreach(var sche in cla.Schedules)
+                    {
+                        // Add attendance
+                        sche.Attendances.Add(new Attendance()
+                        {
+                            StudentId = enr.StudentId,
+                            ScheduleId = sche.ScheduleId,
+                            HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT,
+                        });
+
+                        enr.Student = null;
+
+                        // Get homework list for the session using TryGetValue method
+                        if (homeworkDictionary.TryGetValue(sche.SessionId, out List<Homework> homList))
+                        {
+                            // Add student homework for each homework item in the list
+                            foreach (var hom in homList)
+                            {
+                                stuPro.StudentHomeworks.Add(new StudentHomework()
+                                {
+                                    CorrectAnswers = 0,
+                                    HomeworkId = hom.HomeworkId,
+                                    Playtime = TimeOnly.MinValue,
+                                    Point = 0,
+                                    Status = CEGConstants.STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED,
+                                });
+                            }
+                        }
+                    }
+                    cla.StudentProgresses.Add(stuPro);
+                    // Add attendance without setting the Schedule navigation property
+                    /*var attendance = new Attendance()
+                    {
+                        StudentId = enr.StudentId,
+                        ScheduleId = sche.ScheduleId, // Set only the foreign key
+                        HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT
+                    };*/
+                    // Add attendance directly to the database or to the collection
+                    //_unitOfWork.AttendanceRepositories.Create(attendance);
+                }
+            }
+
+            if (upClaStatus == CEGConstants.CLASS_STATUS_ENDED)
+            {
+                var adm = (await _unitOfWork.AccountRepositories.GetListByRole(CEGConstants.ACCOUNT_ROLE_ADMIN)).FirstOrDefault() ?? throw new KeyNotFoundException("Admin account not found for transaction.");
+                var tea = (await _unitOfWork.TeacherRepositories.GetByIdNoTracking(cla.TeacherId)) ?? throw new KeyNotFoundException("Teacher account not found for transaction.");
+                int amo = cla.EnrollmentFee * cla.Enrolls.Count * 70 / 100; // Transaction Amount
+                var tra = new Transaction()
+                {
+                    VnpayId = null,
+                    AccountId = adm.AccountId,
+                    TransactionAmount = amo,
+                    TransactionDate = DateTime.UtcNow,
+                    ConfirmDate = DateTime.UtcNow,
+                    TransactionStatus = CEGConstants.TRANSACTION_STATUS_COMPLETED,
+                    TransactionType = CEGConstants.TRANSACTION_TYPE_EARNING,
+                    Description = CEGConstants.TRANSACTION_PAYER_LABEL + CEGConstants.TRANSACTION_USER_SYSTEM_NAME_LABEL + "," +
+                                CEGConstants.TRANSACTION_METHOD_LABEL + CEGConstants.TRANSACTION_METHOD_SYSTEM_DEPOSIT + "," +
+                                CEGConstants.TRANSACTION_RECEIVER_LABEL +  CEGConstants.TRANSACTION_USER_TEACHER_NAME_LABEL + $"{tea.Account.Fullname}," +
+                                CEGConstants.TRANSACTION_USER_TEACHER_ID_LABEL + $"{cla.TeacherId}," +
+                                CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL + $"{cla.ClassName}",
+                };
+                _unitOfWork.TransactionRepositories.Create(tra);
+                cla.Enrolls = null;
+                tea.Account.TotalAmount += amo;
+                _unitOfWork.TeacherRepositories.Update(tea);
             }
 
             cla.Status = upClaStatus;
@@ -221,6 +356,20 @@ namespace CEG_BAL.Services.Implements
         public async Task<int> GetTotalAmount()
         {
             return await _unitOfWork.ClassRepositories.GetTotalAmount();
+        }
+
+        public async Task<int> GetTotalAmountByTeacherAccountIdAndClassStatus(int id, string? status = null)
+        {
+            var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
+            if (teacherId == 0) return 0;
+            return await _unitOfWork.ClassRepositories.GetTotalAmountByTeacherId(teacherId, status);
+        }
+
+        public async Task<bool> CheckClassFull(string className)
+        {
+            var cla = await _unitOfWork.ClassRepositories.GetByClassName(className);
+            if (cla.NumberOfStudents == cla.MaximumStudents) return true;
+            return false;
         }
     }
 }

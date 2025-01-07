@@ -54,6 +54,8 @@ namespace CEG_BAL.Services.Implements
             }
         }
 
+        // GetByStudentIdAndHomeworkIdNoTracking
+
         public async Task<List<HomeworkResultViewModel>> GetList()
         {
             return _mapper.Map<List<HomeworkResultViewModel>>(await _unitOfWork.HomeworkResultRepositories.GetList());
@@ -62,6 +64,12 @@ namespace CEG_BAL.Services.Implements
         public async Task<HomeworkResultViewModel?> GetById(int id)
         {
             var viewHomRes = await _unitOfWork.HomeworkResultRepositories.GetByIdNoTracking(id);
+            return viewHomRes != null ? _mapper.Map<HomeworkResultViewModel>(viewHomRes) : null;
+        }
+
+        public async Task<HomeworkResultViewModel?> GetByStudentIdAndHomeworkId(int stuId, int homId)
+        {
+            var viewHomRes = await _unitOfWork.HomeworkResultRepositories.GetByStudentIdAndHomeworkIdNoTracking(stuId, homId);
             return viewHomRes != null ? _mapper.Map<HomeworkResultViewModel>(viewHomRes) : null;
         }
 
