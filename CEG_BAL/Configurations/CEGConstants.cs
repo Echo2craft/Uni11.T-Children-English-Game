@@ -204,7 +204,7 @@ namespace CEG_BAL.Configurations
         public readonly static string TRANSACTION_PAYER_LABEL = "Payer: ";
         public readonly static string TRANSACTION_USER_PARENT_NAME_LABEL = "Parent ";
         public readonly static string TRANSACTION_USER_SYSTEM_NAME_LABEL = "System";
-        public readonly static string TRANSACTION_USER_TEACHER_ID_LABEL = "Teacher id: ";
+        public readonly static string TRANSACTION_USER_TEACHER_ID_LABEL = "Teacher ID: ";
         public readonly static string TRANSACTION_USER_TEACHER_NAME_LABEL = "Teacher ";
         public readonly static string TRANSACTION_AMOUNT_LABEL = "Amount: ";
         public readonly static string TRANSACTION_RECEIVER_STUDENT_NAME_FOR_ENROLLMENT_LABEL = "Student for Enrollment: ";

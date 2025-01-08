@@ -129,6 +129,11 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetList());
         }
 
+        public async Task<List<ClassViewModel>> GetClassListHome()
+        {
+            return _mapper.Map<List<ClassViewModel>>(await _unitOfWork.ClassRepositories.GetListHome());
+        }
+
         public async Task<List<GetClassForTransaction>> GetOptionListByStatusOpen(string filterClassByStudentName = "")
         {
             return _mapper.Map<List<GetClassForTransaction>>(await _unitOfWork.ClassRepositories.GetOptionListByStatusOpen(filterClassByStudentName));
@@ -310,8 +315,6 @@ namespace CEG_BAL.Services.Implements
                     TransactionStatus = CEGConstants.TRANSACTION_STATUS_COMPLETED,
                     TransactionType = CEGConstants.TRANSACTION_TYPE_EARNING,
                     Description = CEGConstants.TRANSACTION_PAYER_LABEL + CEGConstants.TRANSACTION_USER_SYSTEM_NAME_LABEL + "," +
-                                CEGConstants.TRANSACTION_AMOUNT_LABEL + $"{amo}," +
-                                CEGConstants.TRANSACTION_TYPE_EARNING + "," +
                                 CEGConstants.TRANSACTION_METHOD_LABEL + CEGConstants.TRANSACTION_METHOD_SYSTEM_DEPOSIT + "," +
                                 CEGConstants.TRANSACTION_RECEIVER_LABEL +  CEGConstants.TRANSACTION_USER_TEACHER_NAME_LABEL + $"{tea.Account.Fullname}," +
                                 CEGConstants.TRANSACTION_USER_TEACHER_ID_LABEL + $"{cla.TeacherId}," +
@@ -355,11 +358,11 @@ namespace CEG_BAL.Services.Implements
             return await _unitOfWork.ClassRepositories.GetTotalAmount();
         }
 
-        public async Task<int> GetTotalAmountByTeacherAccountId(int id)
+        public async Task<int> GetTotalAmountByTeacherAccountIdAndClassStatus(int id, string? status = null)
         {
             var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
             if (teacherId == 0) return 0;
-            return await _unitOfWork.ClassRepositories.GetTotalAmountByTeacherId(teacherId);
+            return await _unitOfWork.ClassRepositories.GetTotalAmountByTeacherId(teacherId, status);
         }
 
         public async Task<bool> CheckClassFull(string className)

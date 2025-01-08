@@ -11,6 +11,7 @@ namespace CEG_DAL.Repositories.Interfaces
     public interface IClassRepositories : IRepositoryBase<Class>
     {
         Task<List<Class>> GetList();
+        Task<List<Class>> GetListHome();
         Task<List<Class>> GetOptionListByStatusOpen(string filterClassByStudentName = "");
         Task<List<Class>> GetClassListParent();
         /// <summary>
@@ -37,6 +38,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<Class?> GetByClassName(string className);
         Task<int> GetIdByClassId(int id);
         Task<int> GetTotalAmount();
-        Task<int> GetTotalAmountByTeacherId(int id);
+        Task<int> GetTotalAmountByTeacherId(int id, string? status = null);
     }
 }

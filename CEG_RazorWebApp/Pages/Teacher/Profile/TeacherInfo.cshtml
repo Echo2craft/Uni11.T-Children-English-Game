@@ -31,113 +31,6 @@
                         </ol>
                     </div>
                 </div>
-                <div id="alertContainer"></div>
-                <div class="row">
-                    <div class="col-12 customer-booking">
-                        <div class="row">
-                            <div class="card profile col-12 mb-4">
-                                <div class="card-header">
-                                    <h4 id="account-headerinfo">Account Information</h4>
-                                    <div class="edit-info" id="teacher-info-edit-toggle">
-                                        <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editTeacher"></i>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Account ID:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-id">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Username:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-username">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Full Name:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-fullname">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Gender:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-gender">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Email:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="teacher-account-email">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Phone Number:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="teacher-account-phonenumber">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Address:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="teacher-account-address">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Created Date:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-createddate">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Role:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-role">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Status:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-status">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <section>
                     <div class="card">
                         <div class="card-body">
@@ -157,16 +50,16 @@
                                         <div class="card-body">
                                             <div class="user-profile">
                                                 <div class="row">
-                                                    @* <div class="col-lg-4">
-                                                    <div class="profile-pic">
-                                                    <img src="@managerDetail.ImagePath" id="output" width="200" />
-                                                    <div class="upload">
-                                                    <button class="btn btn-warning" data-toggle="modal" data-target="#uploadImg">Details</button>
-                                                    <i class='bx bxs-camera-plus'></i>
+                                                    <div class="col-lg-4">
+                                                        <div class="profile-pic">
+                                                            <img src="" id="output" width="200" />
+                                                            <div class="upload">
+                                                                <button class="btn btn-warning" data-toggle="modal" data-target="#uploadImg">Details</button>
+                                                                <i class='bx bxs-camera-plus'></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-name" id="account-fullname"></div>
                                                     </div>
-                                                    </div>
-                                                    <div class="profile-name">@managerDetail.FullName</div>
-                                                    </div> *@
                                                     <div class="col-lg-8">
                                                         <div class="profile-content">
                                                             <div class="contact-infor">
@@ -174,66 +67,101 @@
                                                                     <h4>Personal Information</h4>
                                                                 </div>
                                                                 <div class="info-content">
-                                                                    @* <form asp-action="ManagerProfileUpdate" asp-controller="Manager" class="form-check">
-                                                                    <div class="row username-content">
-                                                                    <label class="contact-title col-md-5 col-sm-4 mt-3">Username: </label>
-
-                                                                    <input asp-for="@managerDetail.UserName" id="userName" type="text"
-                                                                    class="form-control col-md-5 col-sm-8 mt-2" readonly
-                                                                    value="@managerDetail.UserName">
-                                                                    <span asp-validation-for="@managerDetail.UserName" id="error_message"
-                                                                    class="error-message col-md-2 mt-3"></span>
-
+                                                                    <div class="table-responsive">
+                                                                        <table class="table table-borderless class-info-table">
+                                                                            <colgroup>
+                                                                                <col style="width: 30%;">
+                                                                                <col style="width: 70%;">
+                                                                            </colgroup>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Account ID:</th>
+                                                                                    <td id="account-id"></td>
+                                                                                </tr>
+                                                                                <tr class="status-info">
+                                                                                    <th class="text-md-right">Status:</th>
+                                                                                    <td id="account-status"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Username:</th>
+                                                                                    <td id="account-username"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Gender:</th>
+                                                                                    <td id="account-gender"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Total Amount:</th>
+                                                                                    <td id="account-total-amount"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Email:</th>
+                                                                                    <td id="teacher-account-email"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Phone Number:</th>
+                                                                                    <td id="teacher-account-phonenumber"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Address:</th>
+                                                                                    <td id="teacher-account-address"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Created Date:</th>
+                                                                                    <td id="account-createddate"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
                                                                     </div>
-                                                                    <div class="row fullname-content">
-                                                                    <label class="contact-title col-md-5 col-sm-4 mt-3">Full Name: </label>
+                                                                    @* <div class="row username-content">
+                                                                        <label class="contact-title col-md-5 col-sm-4 mt-3">Username: </label>
 
-                                                                    <input asp-for="@managerDetail.FullName" id="fullName" type="text"
-                                                                    class="form-control col-md-5 col-sm-8 mt-2" readonly
-                                                                    value="@managerDetail.FullName">
-                                                                    <span asp-validation-for="@managerDetail.FullName" id="error_message"
-                                                                    class="error-message col-md-2 mt-3"></span>
+                                                                    </div> *@
+                                                                    @* <div class="row fullname-content">
+                                                                        <label class="contact-title col-md-5 col-sm-4 mt-3">Full Name: </label>
+
+                                                                        <input asp-for="@managerDetail.FullName" id="fullName" type="text"
+                                                                               class="form-control col-md-5 col-sm-8 mt-2" readonly
+                                                                               value="@managerDetail.FullName">
+                                                                        <span asp-validation-for="@managerDetail.FullName" id="error_message"
+                                                                              class="error-message col-md-2 mt-3"></span>
 
                                                                     </div>
                                                                     <div class="row phone-content">
-                                                                    <label class="contact-title col-md-5 col-sm-4 mt-3">Phone Number: </label>
+                                                                        <label class="contact-title col-md-5 col-sm-4 mt-3">Phone Number: </label>
 
-                                                                    <input asp-for="@managerDetail.Phone" id="phone" type="tel" value="@managerDetail.Phone"
-                                                                    class="form-control col-md-5 col-sm-8 mt-2">
-                                                                    <span asp-validation-for="@managerDetail.Phone" id="error_message"
-                                                                    class="error-message col-md-2 mt-3"></span>
+                                                                        <input asp-for="@managerDetail.Phone" id="phone" type="tel" value="@managerDetail.Phone"
+                                                                               class="form-control col-md-5 col-sm-8 mt-2">
+                                                                        <span asp-validation-for="@managerDetail.Phone" id="error_message"
+                                                                              class="error-message col-md-2 mt-3"></span>
 
                                                                     </div>
                                                                     <div class="row address-content">
-                                                                    <label class="contact-title col-md-5 col-sm-4 mt-3">Address: </label>
+                                                                        <label class="contact-title col-md-5 col-sm-4 mt-3">Address: </label>
 
-                                                                    <input asp-for="@managerDetail.Address" type="text" value="@managerDetail.Address"
-                                                                    class="form-control col-md-5 col-sm-8 mt-2">
-                                                                    <span asp-validation-for="@managerDetail.Address" id="error_message"
-                                                                    class="error-message col-md-2 mt-3"></span>
+                                                                        <input asp-for="@managerDetail.Address" type="text" value="@managerDetail.Address"
+                                                                               class="form-control col-md-5 col-sm-8 mt-2">
+                                                                        <span asp-validation-for="@managerDetail.Address" id="error_message"
+                                                                              class="error-message col-md-2 mt-3"></span>
 
                                                                     </div>
                                                                     <div class="row email-content">
-                                                                    <label class="contact-title col-md-5 col-sm-4 mt-3">Email: </label>
+                                                                        <label class="contact-title col-md-5 col-sm-4 mt-3">Email: </label>
 
-                                                                    <input asp-for="@managerDetail.Email" id="email" type="email" value="@managerDetail.Email"
-                                                                    class="form-control col-md-5 col-sm-8 mt-2">
-                                                                    <span asp-validation-for="@managerDetail.Email" id="error_message"
-                                                                    class="error-message col-md-2 mt-3"></span>
+                                                                        <input asp-for="@managerDetail.Email" id="email" type="email" value="@managerDetail.Email"
+                                                                               class="form-control col-md-5 col-sm-8 mt-2">
+                                                                        <span asp-validation-for="@managerDetail.Email" id="error_message"
+                                                                              class="error-message col-md-2 mt-3"></span>
 
                                                                     </div>
                                                                     <div class="row gender-content">
-                                                                    <label class="contact-title col-md-5 col-sm-4 mt-3">Gender: </label>
-                                                                    <select class="form-control col-md-5 col-sm-8 mt-2" asp-for="@managerDetail.Gender" asp-items="@genders" class="custom-select" id="gender">
-                                                                    </select>
-                                                                    <span asp-validation-for="@managerDetail.Gender" id="error_message"
-                                                                    class="error-message col-md-2 mt-3"></span>
+                                                                        <label class="contact-title col-md-5 col-sm-4 mt-3">Gender: </label>
+                                                                        <select class="form-control col-md-5 col-sm-8 mt-2" asp-for="@managerDetail.Gender" asp-items="@genders" class="custom-select" id="gender">
+                                                                        </select>
+                                                                        <span asp-validation-for="@managerDetail.Gender" id="error_message"
+                                                                              class="error-message col-md-2 mt-3"></span>
                                                                     </div>
-                                                                    <input asp-for="@managerDetail.ImagePath" type="text" value="@managerDetail.ImagePath" hidden />
-                                                                    <div class="row pt-3 d-flex">
-                                                                    <button type="submit" class="offset-3 btn btn-success">Confirm Changes</button>
-                                                                    </div>
-                                                                    </form> *@
+                                                                    <input asp-for="@managerDetail.ImagePath" type="text" value="@managerDetail.ImagePath" hidden /> *@
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -294,6 +222,10 @@
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
         var id = sessionStorage.getItem('usrId');
+        const formatter = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
         $(document).ready(function () {
             callApiGetTeacherDetail();
         });
@@ -327,6 +259,7 @@
             $('#account-id').text(data.account.accountId);
             $('#account-username').text(data.account.username);
             $('#account-fullname').text(data.account.fullname);
+            $('#account-total-amount').text(formatter.format(data.account.totalAmount));
             $('#teacher-account-email').text(data.email);
             $('#teacher-account-phonenumber').text(data.phone);
             $('#teacher-account-address').text(data.address);
@@ -344,27 +277,6 @@
             });
 
             return html;
-        }
-        function formatDate(date) {
-            let d = new Date(date);
-
-            // Get day, month, year
-            let day = String(d.getDate()).padStart(2, '0');
-            let month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-            let year = d.getFullYear();
-
-            // Get hours, minutes
-            let hours = String(d.getHours()).padStart(2, '0');
-            let minutes = String(d.getMinutes()).padStart(2, '0');
-
-            // Optionally, get seconds
-            let seconds = String(d.getSeconds()).padStart(2, '0');
-
-            // Return the formatted date and time as `dd/mm/yyyy hh:mm`
-            return `${day}/${month}/${year} ${hours}:${minutes}`;
-
-            // If you want to include seconds as well, use this return:
-            // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         }
     </script>
 </body>
