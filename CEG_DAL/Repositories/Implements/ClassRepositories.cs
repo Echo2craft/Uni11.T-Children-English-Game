@@ -185,6 +185,59 @@ namespace CEG_DAL.Repositories.Implements
                 .ToList();
         }
 
+        public async Task<List<Class>> GetListHome()
+        {
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+            };
+
+            var classes = await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Where(c => c.Status == "Open" || c.Status == "Ongoing")
+                .Select(c => new Class
+                {
+                    ClassId = c.ClassId,
+                    ClassName = c.ClassName,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    MinimumStudents = c.MinimumStudents,
+                    MaximumStudents = c.MaximumStudents,
+                    NumberOfStudents = c.NumberOfStudents,
+                    EnrollmentFee = c.EnrollmentFee,
+                    TeacherId = c.TeacherId,
+                    CourseId = c.CourseId,
+                    Status = c.Status,
+                    Teacher = new Teacher // Create a new Teacher object
+                    {
+                        TeacherId = c.Teacher.TeacherId,
+                        Email = c.Teacher.Email,
+                        Phone = c.Teacher.Phone,
+                        Image = c.Teacher.Image,
+                        Account = new Account
+                        {
+                            Fullname = c.Teacher.Account.Fullname,
+                            Gender = c.Teacher.Account.Gender,
+                        }
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Course = new Course // Create a new Course object
+                    {
+                        CourseId = c.Course.CourseId,
+                        CourseName = c.Course.CourseName
+                        // Add other necessary properties here, but do NOT include Classes
+                    },
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
+                })
+                .ToListAsync();
+            return classes
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
+        }
+
         public async Task<List<Class>> GetOptionListByStatusOpen(string filterClassByStudentName = "")
         {
             // Base query for classes with status "Open"
@@ -337,9 +390,11 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.Classes.CountAsync();
         }
 
-        public async Task<int> GetTotalAmountByTeacherId(int id)
+        public async Task<int> GetTotalAmountByTeacherId(int id, string? status = null)
         {
-            return await _dbContext.Classes.Where(c => c.TeacherId == id && c.Status != "Draft").CountAsync();
+            var classes = await _dbContext.Classes
+                .Where(c => c.TeacherId == id && c.Status != "Draft").ToListAsync();
+            return status != null ? classes.Where(c => c.Status == status).Count() : classes.Count();
         }
 
         public async Task<List<Class>> GetListByStudentId(int studentId)

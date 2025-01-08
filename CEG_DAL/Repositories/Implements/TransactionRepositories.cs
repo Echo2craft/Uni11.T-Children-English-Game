@@ -74,6 +74,11 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.Transactions.CountAsync();
         }
 
+        public async Task<int> GetTotalAmountByAccountId(int id)
+        {
+            return await _dbContext.Transactions.Where(t => t.AccountId == id).CountAsync();
+        }
+
         public async Task<int> GetSumValue()
         {
             return await _dbContext.Transactions.SumAsync(t => t.TransactionAmount);
@@ -82,7 +87,7 @@ namespace CEG_DAL.Repositories.Implements
         private static bool CheckTeacherIdFromDescription(string? des, int? teaId)
         {
             if(des == null) return false;
-            string teaSec = des.Split(',')[5]; // Get Teacher section
+            string teaSec = des.Split(',')[3]; // Get Teacher section
             string teaIdLabel = "Teacher id: ";
             var teaDesId = Int32.Parse(teaSec.Substring(teaIdLabel.Length));
             return  teaDesId == teaId;

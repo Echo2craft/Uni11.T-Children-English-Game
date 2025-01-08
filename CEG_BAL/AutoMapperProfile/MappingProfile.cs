@@ -297,11 +297,12 @@ namespace CEG_BAL.AutoMapperProfile
                     {
                         var desStr = src.Description.Split(',').ToList();
                         dest.PayerFullname = desStr[0].Substring(CEGConstants.TRANSACTION_PAYER_LABEL.Length);
-                        dest.PaymentMethod = desStr[3].Substring(CEGConstants.TRANSACTION_METHOD_LABEL.Length);
-                        dest.ReceiverFullname = desStr[4].Substring(CEGConstants.TRANSACTION_RECEIVER_LABEL.Length);
-                        dest.ClassName = desStr[6].Substring(CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL.Length);
-                        dest.Description = desStr[5];
-                        desStr.RemoveRange(0, 7);
+                        dest.PaymentMethod = desStr[1].Substring(CEGConstants.TRANSACTION_METHOD_LABEL.Length);
+                        dest.ReceiverFullname = desStr[2].Substring(CEGConstants.TRANSACTION_RECEIVER_LABEL.Length);
+                        dest.ClassName = desStr[4].Substring(CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL.Length);
+                        // dest.Description = desStr[5];
+                        dest.Description = String.Empty;
+                        desStr.RemoveRange(0, 5);
                         foreach (var str in desStr)
                         {
                             dest.Description += "," + str;

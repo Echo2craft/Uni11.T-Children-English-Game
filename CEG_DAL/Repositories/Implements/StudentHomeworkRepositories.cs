@@ -54,6 +54,10 @@ namespace CEG_DAL.Repositories.Implements
                         TotalPoint = stuHom.StudentProgress.TotalPoint,
                         Playtime = stuHom.StudentProgress.Playtime,
                     },
+                    Homework = new Homework()
+                    {
+                        Title = stuHom.Homework.Title,
+                    }
                 })
                 .ToListAsync();
         }

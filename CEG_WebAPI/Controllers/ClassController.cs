@@ -264,16 +264,19 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpGet("{id}/All/Count")]
+        [HttpGet("{id}/All/{status}/Count")]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTotalClassAmountByTeacher([FromRoute] int id)
+        public async Task<IActionResult> GetTotalClassAmountByTeacher(
+            [FromRoute] int id,
+            [FromRoute] string status
+            )
         {
             try
             {
-                var result = await _classService.GetTotalAmountByTeacherAccountId(id);
+                var result = await _classService.GetTotalAmountByTeacherAccountIdAndClassStatus(id, status);
                 return Ok(new
                 {
                     Status = true,
