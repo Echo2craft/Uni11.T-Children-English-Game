@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-**APPLY_PLUGINS**
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -7,7 +7,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16+' // Assets/GoogleSignIn/Editor/GoogleSignInDependencies.xml:10
     implementation 'com.google.signin:google-signin-support:1.0.4' // Assets/GoogleSignIn/Editor/GoogleSignInSupportDependencies.xml:9
 // Android Resolver Dependencies End
-**DEPS**}
+    implementation(name: 'googlemobileads-unity', ext:'aar')
+}
 
 // Android Resolver Exclusions Start
 android {
@@ -22,10 +23,10 @@ android {
 }
 // Android Resolver Exclusions End
 android {
-    ndkPath "**NDKPATH**"
+    ndkPath "C:/Program Files/Unity/Hub/Editor/2022.3.27f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK"
 
-    compileSdkVersion **APIVERSION**
-    buildToolsVersion '**BUILDTOOLS**'
+    compileSdkVersion 34
+    buildToolsVersion '32.0.0'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -33,14 +34,12 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion **MINSDKVERSION**
-        targetSdkVersion **TARGETSDKVERSION**
+        minSdkVersion 22
+        targetSdkVersion 34
         ndk {
-            abiFilters **ABIFILTERS**
+            abiFilters 'armeabi-v7a'
         }
-        versionCode **VERSIONCODE**
-        versionName '**VERSIONNAME**'
-        consumerProguardFiles 'proguard-unity.txt'**USER_PROGUARD**
+        consumerProguardFiles 'proguard-unity.txt'
     }
 
     lintOptions {
@@ -48,10 +47,15 @@ android {
     }
 
     aaptOptions {
-        noCompress = **BUILTIN_NOCOMPRESS** + unityStreamingAssets.tokenize(', ')
+        noCompress = ['.unity3d', '.ress', '.resource', '.obb', '.bundle', '.unityexp'] + unityStreamingAssets.tokenize(', ')
         ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~"
-    }**PACKAGING_OPTIONS**
+    }
+    namespace 'com.unity3d.player'
+
+    packagingOptions {
+        doNotStrip '*/armeabi-v7a/*.so'
+    }
 }
-**IL_CPP_BUILD_SETUP**
-**SOURCE_BUILD_SETUP**
-**EXTERNAL_SOURCES**
+
+
+

@@ -14,7 +14,7 @@ public class SelectPuzzleButton : MonoBehaviour
     public static GameLevelData cloneLevelData;
     public Text categoryText;
     public Image progressBarFilling;
-    private AddCategory addCategory;
+    //private AddCategory addCategory;
 
     private string gameSceneName = "GameScene";
 
@@ -23,7 +23,7 @@ public class SelectPuzzleButton : MonoBehaviour
 
     private void Awake()
     {
-      addCategory = new AddCategory();
+      //addCategory = new AddCategory();
         
     }
     void Start()
@@ -67,7 +67,7 @@ public class SelectPuzzleButton : MonoBehaviour
             cloneGameData = gameData;
             cloneLevelData = levelData;
             //levelData.data.RemoveAt(levelData.data.Count - 1);
-            levelData = addCategory.ConfigurePrefab();
+            //levelData = addCategory.ConfigurePrefab();
             cloneLevelData = null;
             flag++;
         }
