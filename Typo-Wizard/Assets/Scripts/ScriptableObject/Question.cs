@@ -34,8 +34,15 @@ public class Question : ScriptableObject {
     public                      AnswerType  GetAnswerType   { get { return _answerType; } }
 
     [SerializeField] private    int         _addScore       = 10;
-    public                      int         AddScore        { get { return _addScore; } }
 
+    public                      int         AddScore        { get { return _addScore; } }
+    public int homeworkQuestionId;
+    public string question;
+    public object homeworkStatus;
+    public object courseStatus;
+    public int answersAmount;
+    public object homework;
+    public object[] homeworkAnswers;
     /// <summary>
     /// Function that is called to collect and return correct answers indexes.
     /// </summary>
