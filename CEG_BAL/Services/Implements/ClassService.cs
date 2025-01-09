@@ -209,13 +209,13 @@ namespace CEG_BAL.Services.Implements
             var cla = await _unitOfWork.ClassRepositories.GetByIdNoTracking(claId, includeSchedule: true)
                 ?? throw new KeyNotFoundException("Class not found.");
             // check is schedule date valid
-            var errorList = await _unitOfWork.ScheduleRepositories.IsListScheduleDateHasValidSequenceByClassId(claId);
+            /*var errorList = await _unitOfWork.ScheduleRepositories.IsListScheduleDateHasValidSequenceByClassId(claId);
             if (errorList.Count > 0)
             {
                 var errorMessage = "Class contain invalid schedule date: \n";
                 foreach (var error in errorList) errorMessage += error;
                 throw new ArgumentException(errorMessage);
-            }
+            }*/
             if (upClaStatus == CEGConstants.CLASS_STATUS_OPEN)
             {
                 foreach (var sche in cla.Schedules)
@@ -250,6 +250,8 @@ namespace CEG_BAL.Services.Implements
 
                 foreach (var enr in cla.Enrolls)
                 {
+                    bool isStuProExist = 
+                        cla.StudentProgresses.Any(stuPro => stuPro.ClassId == enr.ClassId && stuPro.StudentId == enr.StudentId);
                     // Add student progress
                     var stuPro = new StudentProgress()
                     {
@@ -258,15 +260,29 @@ namespace CEG_BAL.Services.Implements
                         StudentId = enr.StudentId,
                         ClassId = enr.ClassId,
                     };
-                    foreach(var sche in cla.Schedules)
+                    if (isStuProExist)
                     {
-                        // Add attendance
-                        sche.Attendances.Add(new Attendance()
+                        var stuProExist = cla.StudentProgresses
+                            .FirstOrDefault(stuPro => stuPro.ClassId == enr.ClassId && stuPro.StudentId == enr.StudentId);
+                        if(stuProExist != null)
+                            stuPro = await _unitOfWork.StudentProgressRepositories.GetByIdNoTracking(stuProExist.StudentProgressId);
+                    }
+
+                    foreach (var sche in cla.Schedules)
+                    {
+                        var att = new Attendance()
                         {
                             StudentId = enr.StudentId,
                             ScheduleId = sche.ScheduleId,
                             HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT,
-                        });
+                        };
+                        var scheExist = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(sche.ScheduleId);
+                        bool isScheAttExist = scheExist != null && scheExist.Attendances.Any(att => att.StudentId == enr.StudentId && att.ScheduleId == sche.ScheduleId);
+                        if (!isScheAttExist)
+                        {
+                            // Add attendance
+                            sche.Attendances.Add(att);
+                        }
 
                         enr.Student = null;
 
@@ -276,6 +292,7 @@ namespace CEG_BAL.Services.Implements
                             // Add student homework for each homework item in the list
                             foreach (var hom in homList)
                             {
+                                if(stuPro.StudentHomeworks.Any(stuHom => stuHom.HomeworkId == hom.HomeworkId)) continue;
                                 stuPro.StudentHomeworks.Add(new StudentHomework()
                                 {
                                     CorrectAnswers = 0,
@@ -287,7 +304,8 @@ namespace CEG_BAL.Services.Implements
                             }
                         }
                     }
-                    cla.StudentProgresses.Add(stuPro);
+                    if(!isStuProExist)
+                        cla.StudentProgresses.Add(stuPro);
                     // Add attendance without setting the Schedule navigation property
                     /*var attendance = new Attendance()
                     {

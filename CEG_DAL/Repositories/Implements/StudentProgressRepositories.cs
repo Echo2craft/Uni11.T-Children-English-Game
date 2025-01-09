@@ -20,7 +20,35 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<StudentProgress?> GetByIdNoTracking(int id)
         {
-            return await _dbContext.StudentProgresses.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(pro => pro.StudentProgressId == id);
+            return await _dbContext.StudentProgresses
+                .AsNoTrackingWithIdentityResolution()
+                .Where(pro => pro.StudentProgressId == id)
+                .Select(stuPro => new StudentProgress()
+                {
+                    StudentId = stuPro.StudentId,
+                    TotalPoint = stuPro.TotalPoint,
+                    Playtime = stuPro.Playtime,
+                    StudentHomeworks = stuPro.StudentHomeworks.Select(stuHom => new StudentHomework()
+                    {
+                        HomeworkId = stuHom.HomeworkId,
+                        Point = stuHom.Point,
+                        CorrectAnswers = stuHom.CorrectAnswers,
+                        Playtime = stuHom.Playtime,
+                        StudentAnswers = stuHom.StudentAnswers,
+                        HomeworkResult = stuHom.HomeworkResult,
+                        Homework = new Homework()
+                        {
+                            HomeworkId = stuHom.HomeworkId,
+                            Title = stuHom.Homework.Title,
+                        },
+                        Status = stuHom.Status,
+                        StudentProgress = new StudentProgress()
+                        {
+                            StudentId = stuPro.StudentId,
+                        },
+                    }).ToList()
+                })
+                .SingleOrDefaultAsync();
         }
 
         public async Task<List<StudentProgress>> GetList()
@@ -33,6 +61,31 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.StudentProgresses
                 .AsNoTrackingWithIdentityResolution()
                 .Where(stuPro => stuPro.StudentHomeworks.Any(stuHom => stuHom.HomeworkId == homId))
+                .Select(stuPro => new StudentProgress()
+                {
+                    StudentId = stuPro.StudentId,
+                    TotalPoint = stuPro.TotalPoint,
+                    Playtime = stuPro.Playtime,
+                    StudentHomeworks = stuPro.StudentHomeworks.Select(stuHom => new StudentHomework()
+                    {
+                        HomeworkId = stuHom.HomeworkId,
+                        Point = stuHom.Point,
+                        CorrectAnswers = stuHom.CorrectAnswers,
+                        Playtime = stuHom.Playtime,
+                        StudentAnswers = stuHom.StudentAnswers,
+                        HomeworkResult = stuHom.HomeworkResult,
+                        Homework = new Homework()
+                        {
+                            HomeworkId = stuHom.HomeworkId,
+                            Title = stuHom.Homework.Title,
+                        },
+                        Status = stuHom.Status,
+                        StudentProgress = new StudentProgress()
+                        {
+                            StudentId = stuPro.StudentId,
+                        },
+                    }).ToList()
+                })
                 .ToListAsync();
         }
 
