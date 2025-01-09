@@ -479,7 +479,7 @@ INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullna
 GO
 INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (2, 3, N'MinhDH2', N'pass123', N'Dang Hoang Minh', CAST(N'2024-09-12T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (3, 4, N'VinhBH3', N'pass123', N'Bui Huu Vinh', CAST(N'2024-09-12T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (3, 4, N'VinhBH3', N'pass123', N'Bui Huu Vinh', CAST(N'2024-09-12T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
 INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (4, 2, N'LinhNK4', N'pass123', N'Nguyen Khanh Linh', CAST(N'2024-09-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
@@ -495,7 +495,7 @@ INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullna
 GO
 INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (10, 4, N'NganLT10', N'pass123', N'Le Thu Ngan', CAST(N'2024-09-16T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (11, 2, N'DucPM11', N'pass123', N'Pham Minh Duc', CAST(N'2024-09-17T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (11, 2, N'DucPM11', N'pass123', N'Pham Minh Duc', CAST(N'2024-09-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
 INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (12, 3, N'ThongHH12', N'pass123', N'Ho Hieu Thong', CAST(N'2024-09-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
@@ -679,387 +679,419 @@ INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_at
 GO
 INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (33, 3, 1, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (34, 2, 2, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (34, 3, 2, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (35, 2, 3, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (35, 3, 3, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (36, 2, 4, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (36, 3, 4, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (37, 2, 5, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (37, 3, 5, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (38, 2, 6, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (38, 3, 6, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (39, 2, 7, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (39, 3, 7, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (40, 2, 8, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (40, 3, 8, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (41, 2, 9, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (41, 3, 9, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (42, 2, 10, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (42, 3, 10, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (43, 2, 11, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (43, 3, 11, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (44, 2, 12, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (44, 3, 12, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (45, 2, 13, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (45, 3, 13, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (46, 2, 14, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (46, 3, 14, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (47, 2, 15, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (47, 3, 15, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (48, 2, 16, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (48, 3, 16, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (49, 3, 1, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (49, 4, 1, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (50, 3, 2, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (50, 4, 2, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (51, 3, 3, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (51, 4, 3, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (52, 3, 4, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (52, 4, 4, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (53, 3, 5, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (53, 4, 5, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (54, 3, 6, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (54, 4, 6, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (55, 3, 7, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (55, 4, 7, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (56, 3, 8, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (56, 4, 8, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (57, 3, 9, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (57, 4, 9, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (58, 3, 10, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (58, 4, 10, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (59, 3, 11, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (59, 4, 11, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (60, 3, 12, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (60, 4, 12, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (61, 3, 13, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (61, 4, 13, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (62, 3, 14, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (62, 4, 14, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (63, 3, 15, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (63, 4, 15, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (64, 3, 16, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (64, 4, 16, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (65, 4, 1, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (65, 5, 1, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (66, 4, 2, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (66, 5, 2, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (67, 4, 3, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (67, 5, 3, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (68, 4, 4, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (68, 5, 4, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (69, 4, 5, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (69, 5, 5, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (70, 4, 6, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (70, 5, 6, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (71, 4, 7, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (71, 5, 7, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (72, 4, 8, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (72, 5, 8, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (73, 4, 9, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (73, 5, 9, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (74, 4, 10, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (74, 5, 10, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (75, 4, 11, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (75, 5, 11, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (76, 4, 12, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (76, 5, 12, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (77, 4, 13, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (77, 5, 13, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (78, 4, 14, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (78, 5, 14, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (79, 4, 15, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (79, 5, 15, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (80, 4, 16, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (80, 5, 16, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (81, 5, 1, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (81, 6, 1, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (82, 5, 2, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (82, 6, 2, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (83, 5, 3, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (83, 6, 3, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (84, 5, 4, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (84, 6, 4, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (85, 5, 5, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (85, 6, 5, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (86, 5, 6, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (86, 6, 6, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (87, 5, 7, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (87, 6, 7, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (88, 5, 8, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (88, 6, 8, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (89, 5, 9, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (89, 6, 9, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (90, 5, 10, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (90, 6, 10, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (91, 5, 11, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (91, 6, 11, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (92, 5, 12, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (92, 6, 12, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (93, 5, 13, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (93, 6, 13, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (94, 5, 14, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (94, 6, 14, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (95, 5, 15, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (95, 6, 15, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (96, 5, 16, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (96, 6, 16, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (97, 6, 1, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (97, 7, 1, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (98, 6, 2, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (98, 7, 2, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (99, 6, 3, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (99, 7, 3, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (100, 6, 4, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (100, 7, 4, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (101, 6, 5, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (101, 7, 5, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (102, 6, 6, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (102, 7, 6, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (103, 6, 7, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (103, 7, 7, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (104, 6, 8, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (104, 7, 8, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (105, 6, 9, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (105, 7, 9, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (106, 6, 10, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (106, 7, 10, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (107, 6, 11, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (107, 7, 11, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (108, 6, 12, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (108, 7, 12, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (109, 6, 13, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (109, 7, 13, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (110, 6, 14, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (110, 7, 14, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (111, 6, 15, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (111, 7, 15, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (112, 6, 16, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (112, 7, 16, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (113, 7, 1, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (113, 8, 1, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (114, 7, 2, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (114, 8, 2, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (115, 7, 3, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (115, 8, 3, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (116, 7, 4, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (116, 8, 4, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (117, 7, 5, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (117, 8, 5, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (118, 7, 6, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (118, 8, 6, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (119, 7, 7, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (119, 8, 7, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (120, 7, 8, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (120, 8, 8, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (121, 7, 9, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (121, 8, 9, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (122, 7, 10, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (122, 8, 10, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (123, 7, 11, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (123, 8, 11, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (124, 7, 12, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (124, 8, 12, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (125, 7, 13, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (125, 8, 13, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (126, 7, 14, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (126, 8, 14, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (127, 7, 15, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (127, 8, 15, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (128, 7, 16, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (128, 8, 16, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (129, 8, 1, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (129, 9, 1, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (130, 8, 2, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (130, 9, 2, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (131, 8, 3, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (131, 9, 3, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (132, 8, 4, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (132, 9, 4, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (133, 8, 5, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (133, 9, 5, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (134, 8, 6, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (134, 9, 6, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (135, 8, 7, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (135, 9, 7, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (136, 8, 8, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (136, 9, 8, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (137, 8, 9, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (137, 9, 9, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (138, 8, 10, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (138, 9, 10, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (139, 8, 11, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (139, 9, 11, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (140, 8, 12, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (140, 9, 12, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (141, 8, 13, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (141, 9, 13, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (142, 8, 14, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (142, 9, 14, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (143, 8, 15, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (143, 9, 15, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (144, 8, 16, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (144, 9, 16, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (145, 9, 1, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (145, 10, 1, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (146, 9, 2, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (146, 10, 2, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (147, 9, 3, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (147, 10, 3, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (148, 9, 4, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (148, 10, 4, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (149, 9, 5, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (149, 10, 5, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (150, 9, 6, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (150, 10, 6, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (151, 9, 7, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (151, 10, 7, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (152, 9, 8, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (152, 10, 8, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (153, 9, 9, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (153, 10, 9, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (154, 9, 10, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (154, 10, 10, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (155, 9, 11, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (155, 10, 11, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (156, 9, 12, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (156, 10, 12, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (157, 9, 13, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (157, 10, 13, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (158, 9, 14, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (158, 10, 14, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (159, 9, 15, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (159, 10, 15, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (160, 9, 16, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (160, 10, 16, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (161, 10, 1, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (161, 11, 1, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (162, 10, 2, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (162, 11, 2, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (163, 10, 3, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (163, 11, 3, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (164, 10, 4, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (164, 11, 4, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (165, 10, 5, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (165, 11, 5, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (166, 10, 6, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (166, 11, 6, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (167, 10, 7, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (167, 11, 7, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (168, 10, 8, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (168, 11, 8, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (169, 10, 9, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (169, 11, 9, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (170, 10, 10, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (170, 11, 10, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (171, 10, 11, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (171, 11, 11, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (172, 10, 12, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (172, 11, 12, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (173, 10, 13, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (173, 11, 13, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (174, 10, 14, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (174, 11, 14, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (175, 10, 15, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (175, 11, 15, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (176, 10, 16, N'Attended')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (176, 11, 16, N'Attended')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (177, 13, 17, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (177, 12, 17, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (178, 13, 18, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (178, 12, 18, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (179, 13, 19, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (179, 12, 19, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (180, 13, 20, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (180, 12, 20, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (181, 13, 21, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (181, 12, 21, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (182, 13, 22, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (182, 12, 22, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (183, 13, 23, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (183, 12, 23, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (184, 13, 24, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (184, 12, 24, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (185, 13, 25, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (185, 12, 25, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (186, 13, 26, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (186, 12, 26, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (187, 13, 27, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (187, 12, 27, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (188, 13, 28, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (188, 12, 28, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (189, 13, 29, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (189, 12, 29, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (190, 13, 30, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (190, 12, 30, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (191, 13, 31, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (191, 12, 31, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (192, 13, 32, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (192, 12, 32, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (193, 14, 17, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (193, 13, 17, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (194, 14, 18, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (194, 13, 18, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (195, 14, 19, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (195, 13, 19, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (196, 14, 20, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (196, 13, 20, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (197, 14, 21, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (197, 13, 21, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (198, 14, 22, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (198, 13, 22, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (199, 14, 23, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (199, 13, 23, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (200, 14, 24, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (200, 13, 24, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (201, 14, 25, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (201, 13, 25, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (202, 14, 26, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (202, 13, 26, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (203, 14, 27, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (203, 13, 27, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (204, 14, 28, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (204, 13, 28, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (205, 14, 29, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (205, 13, 29, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (206, 14, 30, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (206, 13, 30, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (207, 14, 31, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (207, 13, 31, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (208, 14, 32, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (208, 13, 32, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (209, 15, 17, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (209, 14, 17, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (210, 15, 18, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (210, 14, 18, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (211, 15, 19, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (211, 14, 19, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (212, 15, 20, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (212, 14, 20, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (213, 15, 21, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (213, 14, 21, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (214, 15, 22, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (214, 14, 22, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (215, 15, 23, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (215, 14, 23, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (216, 15, 24, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (216, 14, 24, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (217, 15, 25, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (217, 14, 25, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (218, 15, 26, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (218, 14, 26, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (219, 15, 27, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (219, 14, 27, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (220, 15, 28, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (220, 14, 28, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (221, 15, 29, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (221, 14, 29, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (222, 15, 30, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (222, 14, 30, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (223, 15, 31, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (223, 14, 31, N'Absent')
 GO
-INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (224, 15, 32, N'Absent')
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (224, 14, 32, N'Absent')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (225, 21, 1, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (226, 21, 2, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (227, 21, 3, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (228, 21, 4, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (229, 21, 5, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (230, 21, 6, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (231, 21, 7, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (232, 21, 8, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (233, 21, 9, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (234, 21, 10, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (235, 21, 11, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (236, 21, 12, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (237, 21, 13, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (238, 21, 14, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (239, 21, 15, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (240, 21, 16, N'Attended')
 GO
 SET IDENTITY_INSERT [dbo].[Attendance] OFF
 GO
@@ -1075,15 +1107,15 @@ INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [mini
 GO
 INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (5, 1, 5, N'PRO101', 5, 20, 16, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-28T00:00:00.000' AS DateTime), 1000000, N'Ended')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (6, 1, 6, N'PRO102', 5, 20, 16, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Ended')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (6, 2, 6, N'PRO102', 5, 20, 16, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Ended')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (7, 1, 7, N'GRAM103', 5, 20, 0, CAST(N'2024-10-01T00:00:00.000' AS DateTime), CAST(N'2024-10-28T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (7, 3, 7, N'GRAM103', 5, 20, 0, CAST(N'2024-10-01T00:00:00.000' AS DateTime), CAST(N'2024-10-28T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (8, 1, 8, N'PRO103', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (8, 4, 8, N'PRO103', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (9, 1, 9, N'VOC103', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (9, 2, 9, N'VOC103', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
-INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (10, 1, 1, N'GRAM201', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
+INSERT [dbo].[Class] ([class_id], [teacher_id], [course_id], [class_name], [minimum_students], [maximum_students], [number_of_students], [start_date], [end_date], [enrollment_fee], [status]) VALUES (10, 3, 1, N'GRAM201', 5, 20, 0, CAST(N'2024-09-30T00:00:00.000' AS DateTime), CAST(N'2024-12-30T00:00:00.000' AS DateTime), 1000000, N'Draft')
 GO
 SET IDENTITY_INSERT [dbo].[Class] OFF
 GO
@@ -1308,6 +1340,8 @@ INSERT [dbo].[Homework] ([homework_id], [session_id], [title], [description], [g
 GO
 INSERT [dbo].[Homework] ([homework_id], [session_id], [title], [description], [game_config_id], [start_date], [end_date], [hours], [type]) VALUES (2, 13, N'Standard Homework', N'Get used to English', NULL, CAST(N'2024-12-15T00:00:00.000' AS DateTime), CAST(N'2025-02-15T00:00:00.000' AS DateTime), 1, N'Vocabulary')
 GO
+INSERT [dbo].[Homework] ([homework_id], [session_id], [title], [description], [game_config_id], [start_date], [end_date], [hours], [type]) VALUES (3, 21, N'Starter Homework', N'Practice what you learned', NULL, CAST(N'2024-10-09T00:00:00.000' AS DateTime), CAST(N'2024-12-15T00:00:00.000' AS DateTime), 1, N'Grammar')
+GO
 SET IDENTITY_INSERT [dbo].[Homework] OFF
 GO
 SET IDENTITY_INSERT [dbo].[HomeworkAnswer] ON 
@@ -1472,6 +1506,167 @@ INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [an
 GO
 INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (80, 20, N'with', N'Incorrect')
 GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (81, 21, N'more', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (82, 21, N'top', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (83, 21, N'off', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (84, 21, N'with', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (85, 22, N'of', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (86, 22, N'with', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (87, 22, N'having', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (88, 22, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (89, 23, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (90, 23, N'there', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (91, 23, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (92, 23, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (93, 24, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (94, 24, N'along', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (95, 24, N'with', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (96, 24, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (97, 25, N'after', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (98, 25, N'off', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (99, 25, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (100, 25, N'the', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (101, 26, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (102, 26, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (103, 26, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (104, 26, N'in', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (105, 27, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (106, 27, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (107, 27, N'at', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (108, 27, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (109, 28, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (110, 28, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (111, 28, N'about', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (112, 28, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (113, 29, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (114, 29, N'on', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (115, 29, N'not', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (116, 29, N'the', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (117, 30, N'with', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (118, 30, N'off', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (119, 30, N'them', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (120, 30, N'of', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (121, 31, N'cause', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (122, 31, N'of', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (123, 31, N'doing', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (124, 31, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (125, 32, N'during', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (126, 32, N'with', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (127, 32, N'not', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (128, 32, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (129, 33, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (130, 33, N'with', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (131, 33, N'at', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (132, 33, N'in', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (133, 34, N'not', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (134, 34, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (135, 34, N'at', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (136, 34, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (137, 35, N'at', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (138, 35, N'not', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (139, 35, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (140, 35, N'in', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (141, 36, N'not', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (142, 36, N'until', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (143, 36, N'with', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (144, 36, N'of', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (145, 37, N'inside', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (1414, 37, N'on', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (147, 37, N'in', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (148, 37, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (149, 38, N'for', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (150, 38, N'about', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (151, 38, N'in', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (152, 38, N'from', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (153, 39, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (154, 39, N'about', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (155, 39, N'for', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (156, 39, N'in', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (157, 40, N'on', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (158, 40, N'to', N'Incorrect')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (159, 40, N'at', N'Correct')
+GO
+INSERT [dbo].[HomeworkAnswer] ([homework_answer_id], [homework_question_id], [answer], [type]) VALUES (160, 40, N'with', N'Incorrect')
+GO
+
 SET IDENTITY_INSERT [dbo].[HomeworkAnswer] OFF
 GO
 SET IDENTITY_INSERT [dbo].[HomeworkQuestion] ON 
@@ -1515,6 +1710,46 @@ GO
 INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (19, 2, N'We are familiar _ this software.')
 GO
 INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (20, 2, N'He is famous _ being an actor.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (21, 3, N'I want _ some ice cream.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (22, 3, N'She likes _ her coffee black.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (23, 3, N'He went _ the park yesterday.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (24, 3, N'They sang _ the radio.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (25, 3, N'We played soccer _ school.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (26, 3, N'She writes _ her diary every day.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (27, 3, N'He is good _ math.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (28, 3, N'I care _ my little brother.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (29, 3, N'The book is _ the table.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (30, 3, N'She is afraid _ spiders.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (31, 3, N'He’s busy _ his homework.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (32, 3, N'They went shopping _ the weekend.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (33, 3, N'I love pizza _ extra cheese.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (34, 3, N'He smiled _ his teacher.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (35, 3, N'She is interested _ learning music.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (36, 3, N'We stayed up late _ the movie ended.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (37, 3, N'He ran _ the house quickly.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (38, 3, N'I am tired _ all this work.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (39, 3, N'She was happy _ her success.')
+GO
+INSERT [dbo].[HomeworkQuestion] ([homework_question_id], [homework_id], [question]) VALUES (40, 3, N'They arrived _ the airport early.')
 GO
 SET IDENTITY_INSERT [dbo].[HomeworkQuestion] OFF
 GO
@@ -1583,6 +1818,38 @@ GO
 INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (31, 80, 8, CAST(N'00:16:18' AS Time))
 GO
 INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (32, 70, 7, CAST(N'00:05:37' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (33, 80, 8, CAST(N'00:29:21' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (34, 50, 5, CAST(N'00:21:55' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (35, 70, 7, CAST(N'00:22:21' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (36, 70, 7, CAST(N'00:28:21' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (37, 60, 6, CAST(N'00:21:57' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (38, 50, 5, CAST(N'00:22:41' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (39, 90, 9, CAST(N'00:15:23' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (40, 80, 8, CAST(N'00:18:55' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (41, 70, 7, CAST(N'00:23:03' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (42, 70, 7, CAST(N'00:28:05' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (43, 80, 8, CAST(N'00:22:10' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (44, 90, 9, CAST(N'00:11:29' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (45, 60, 6, CAST(N'00:22:31' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (46, 70, 7, CAST(N'00:24:01' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (47, 80, 8, CAST(N'00:13:18' AS Time))
+GO
+INSERT [dbo].[HomeworkResult] ([homework_result_id], [total_point], [total_correct_answers], [playtime]) VALUES (48, 70, 7, CAST(N'00:06:37' AS Time))
 GO
 SET IDENTITY_INSERT [dbo].[HomeworkResult] OFF
 GO
@@ -1898,13 +2165,13 @@ SET IDENTITY_INSERT [dbo].[Session] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Student] ON 
 GO
-INSERT [dbo].[Student] ([student_id], [parent_id], [account_id], [description], [cur_level], [age], [birthdate], [image]) VALUES (1, 1, 4, N'Dang Thuy Vi', 0, 13, CAST(N'2011-03-22T00:00:00.000' AS DateTime), NULL)
+INSERT [dbo].[Student] ([student_id], [parent_id], [account_id], [description], [cur_level], [age], [birthdate], [image]) VALUES (1, 1, 4, N'Bui Huu Vinh', 0, 13, CAST(N'2011-03-22T00:00:00.000' AS DateTime), NULL)
 GO
 INSERT [dbo].[Student] ([student_id], [parent_id], [account_id], [description], [cur_level], [age], [birthdate], [image]) VALUES (2, 2, 8, N'Pham Anh Khoa', 0, 14, CAST(N'2010-05-03T00:00:00.000' AS DateTime), NULL)
 GO
 INSERT [dbo].[Student] ([student_id], [parent_id], [account_id], [description], [cur_level], [age], [birthdate], [image]) VALUES (3, 3, 9, N'Dang Nguyen Minh Duy', 0, 13, CAST(N'2011-01-14T00:00:00.000' AS DateTime), NULL)
 GO
-INSERT [dbo].[Student] ([student_id], [parent_id], [account_id], [description], [cur_level], [age], [birthdate], [image]) VALUES (4, 4, 11, N'Le Thu Ngan', 0, 15, CAST(N'2009-02-14T00:00:00.000' AS DateTime), NULL)
+INSERT [dbo].[Student] ([student_id], [parent_id], [account_id], [description], [cur_level], [age], [birthdate], [image]) VALUES (4, 4, 11, N'Pham Minh Duc', 0, 15, CAST(N'2009-02-14T00:00:00.000' AS DateTime), NULL)
 GO
 INSERT [dbo].[Student] ([student_id], [parent_id], [account_id], [description], [cur_level], [age], [birthdate], [image]) VALUES (5, 5, 14, N'Mai Nhat Nam', 0, 13, CAST(N'2011-04-17T00:00:00.000' AS DateTime), NULL)
 GO
@@ -2060,6 +2327,38 @@ INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_p
 GO
 INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (32, 2, 32, 32, 70, CAST(N'00:05:37' AS Time), N'Submitted', 7)
 GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (33, 3, 33, 1, 80, CAST(N'00:27:21' AS Time), N'Submitted', 8)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (34, 3, 34, 2, 50, CAST(N'00:28:55' AS Time), N'Submitted', 5)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (35, 3, 35, 3, 70, CAST(N'00:25:21' AS Time), N'Submitted', 7)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (36, 3, 36, 4, 70, CAST(N'00:24:21' AS Time), N'Submitted', 7)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (37, 3, 37, 5, 60, CAST(N'00:28:57' AS Time), N'Submitted', 6)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (38, 3, 38, 6, 50, CAST(N'00:28:41' AS Time), N'Submitted', 5)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (39, 3, 39, 7, 90, CAST(N'00:10:23' AS Time), N'Submitted', 9)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (40, 3, 40, 8, 80, CAST(N'00:15:55' AS Time), N'Submitted', 8)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (41, 3, 41, 9, 70, CAST(N'00:20:03' AS Time), N'Submitted', 7)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (42, 3, 42, 10, 60, CAST(N'00:23:05' AS Time), N'Submitted', 6)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (43, 3, 43, 11, 80, CAST(N'00:20:10' AS Time), N'Submitted', 8)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (44, 3, 44, 12, 90, CAST(N'00:13:29' AS Time), N'Submitted', 9)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (45, 3, 45, 13, 80, CAST(N'00:25:31' AS Time), N'Submitted', 8)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (46, 3, 46, 14, 80, CAST(N'00:27:01' AS Time), N'Submitted', 8)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (47, 3, 47, 15, 60, CAST(N'00:16:18' AS Time), N'Submitted', 6)
+GO
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (48, 3, 48, 16, 60, CAST(N'00:05:37' AS Time), N'Submitted', 6)
+GO
 SET IDENTITY_INSERT [dbo].[StudentHomework] OFF
 GO
 SET IDENTITY_INSERT [dbo].[StudentProgress] ON 
@@ -2128,11 +2427,43 @@ INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id],
 GO
 INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (32, 32, 2, 70, CAST(N'00:05:37' AS Time))
 GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (33, 1, 3, 80, CAST(N'00:29:21' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (34, 2, 3, 50, CAST(N'00:21:55' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (35, 3, 3, 70, CAST(N'00:22:21' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (36, 4, 3, 70, CAST(N'00:28:21' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (37, 5, 3, 60, CAST(N'00:21:57' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (38, 6, 3, 50, CAST(N'00:22:41' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (39, 7, 3, 90, CAST(N'00:15:23' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (40, 8, 3, 80, CAST(N'00:18:55' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (41, 9, 3, 70, CAST(N'00:23:03' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (42, 10, 3, 70, CAST(N'00:28:05' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (43, 11, 3, 80, CAST(N'00:22:10' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (44, 12, 3, 90, CAST(N'00:11:29' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (45, 13, 3, 100, CAST(N'00:22:31' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (46, 14, 3, 70, CAST(N'00:24:01' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (47, 15, 3, 80, CAST(N'00:13:18' AS Time))
+GO
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (48, 16, 3, 70, CAST(N'00:06:37' AS Time))
+GO
 SET IDENTITY_INSERT [dbo].[StudentProgress] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Teacher] ON 
 GO
-INSERT [dbo].[Teacher] ([teacher_id], [account_id], [email], [phone], [certificate], [address], [image]) VALUES (1, 2, N'haint@gmail.com', N'0912868225', N'CertificatePlaceholder', N'District', N'ImagePlaceholder')
+INSERT [dbo].[Teacher] ([teacher_id], [account_id], [email], [phone], [certificate], [address], [image]) VALUES (1, 2, N'minhdh@gmail.com', N'0912868225', N'CertificatePlaceholder', N'District', N'ImagePlaceholder')
 GO
 INSERT [dbo].[Teacher] ([teacher_id], [account_id], [email], [phone], [certificate], [address], [image]) VALUES (2, 6, N'minhlt@gmail.com', N'0938833549', N'CertificatePlaceholder', N'District', N'ImagePlaceholder')
 GO
@@ -2331,6 +2662,12 @@ GO
 INSERT [dbo].[Transaction] ([transaction_id], [account_id], [vnpay_id], [transaction_amount], [transaction_date], [transaction_status], [transaction_type], [confirm_date], [description]) VALUES (93, 15, N'VNPAY93', 11200000, CAST(N'2025-01-07T00:30:00.000' AS DateTime), N'Completed', N'Enrollment Payment', CAST(N'2025-01-07T00:30:00.000' AS DateTime), NULL)
 GO
 INSERT [dbo].[Transaction] ([transaction_id], [account_id], [vnpay_id], [transaction_amount], [transaction_date], [transaction_status], [transaction_type], [confirm_date], [description]) VALUES (94, 15, N'VNPAY94', 11200000, CAST(N'2025-01-07T00:30:00.000' AS DateTime), N'Completed', N'Enrollment Payment', CAST(N'2025-01-07T00:30:00.000' AS DateTime), NULL)
+GO
+INSERT [dbo].[Transaction] ([transaction_id], [account_id], [vnpay_id], [transaction_amount], [transaction_date], [transaction_status], [transaction_type], [confirm_date], [description]) VALUES (95, 1, N'VNPAY95', 11200000, CAST(N'2025-01-07T00:30:00.000' AS DateTime), N'Completed', N'Teacher Salary', CAST(N'2025-01-07T00:30:00.000' AS DateTime), NULL)
+GO
+INSERT [dbo].[Transaction] ([transaction_id], [account_id], [vnpay_id], [transaction_amount], [transaction_date], [transaction_status], [transaction_type], [confirm_date], [description]) VALUES (96, 1, N'VNPAY96', 11200000, CAST(N'2025-01-07T00:30:00.000' AS DateTime), N'Completed', N'Teacher Salary', CAST(N'2025-01-07T00:30:00.000' AS DateTime), NULL)
+GO
+INSERT [dbo].[Transaction] ([transaction_id], [account_id], [vnpay_id], [transaction_amount], [transaction_date], [transaction_status], [transaction_type], [confirm_date], [description]) VALUES (97, 1, N'VNPAY97', 11200000, CAST(N'2025-01-07T00:30:00.000' AS DateTime), N'Completed', N'Teacher Salary', CAST(N'2025-01-07T00:30:00.000' AS DateTime), NULL)
 GO
 
 SET IDENTITY_INSERT [dbo].[Transaction] OFF

@@ -286,38 +286,6 @@
                                                 </table>
                                             </div>
                                         </div>
-                                        @* <div class="card-body" id="student_homework_list">
-                                        <div id="student-homework-table_wrapper" class="dataTables_wrapper no-footer">
-                                        <table id="student-homework-table"
-                                        class="table table-striped table-bordered dataTable no-footer compact"
-                                        aria-describedby="student-homework-table_info">
-                                        <thead>
-                                        <tr>
-                                        <th class="sorting sorting_asc" tabindex="0"
-                                        aria-controls="student-homework-table" rowspan="1"
-                                        colspan="1" aria-sort="ascending"
-                                        aria-label="Homework ID: activate to sort column ascending">
-                                        Homework ID
-                                        </th>
-                                        <th class="sorting sorting_asc" tabindex="0"
-                                        aria-controls="student-homework-table" rowspan="1"
-                                        colspan="1" aria-sort="ascending"
-                                        aria-label="Homework name: activate to sort column ascending">
-                                        Homework Name
-                                        </th>
-                                        <th class="sorting sorting_asc" tabindex="0"
-                                        aria-controls="student-homework-table" rowspan="1"
-                                        colspan="1" aria-sort="ascending"
-                                        aria-label="Score: activate to sort column ascending">
-                                        Score
-                                        </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                        </table>
-                                        </div>
-                                        </div> *@
                                     </div>
                                 </div>
                                 <!-- student_list_Tab -->
@@ -467,7 +435,7 @@
                 deferRender: false,
                 responsive: true,
                 columns: [
-                    { data: 'enrollId' },
+                    { data: 'studentId' },
                     { data: 'student.account.fullname' },
                     // { data: 'status' },
                     // { Add a select box in the last column
@@ -1128,6 +1096,7 @@
                         setClassDisplay(response.data);
                         // Check if homeworkAnswers is empty
                         if (response.data.enrolls && response.data.enrolls.length > 0) {
+                            console.log(response.data.enrolls);
                             enrollTable.clear().rows.add(response.data.enrolls).draw();
                         }
                         if (response.data.schedules && response.data.schedules.length > 0) {
