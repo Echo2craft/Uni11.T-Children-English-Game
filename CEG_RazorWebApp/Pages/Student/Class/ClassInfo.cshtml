@@ -20,10 +20,13 @@
                     <div class="offset-sm-6 col-sm-6  d-flex justify-content-sm-end p-md-0 mt-2 mt-sm-0 ">
                         <ol class="breadcrumb">
                             <li class="breadcrumd-item">
+                                <a href="#">Manage</a>
+                            </li>
+                            <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Student/Class/Info">Class</a>
+                                <a href="/Student/Class/Index">Class</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
@@ -458,7 +461,7 @@
                         setClassDisplay(response.data);
                         // Check if homeworkAnswers is empty
                         if (response.data.enrolls && response.data.enrolls.length > 0) {
-                            console.log(response.data.enrolls);
+                            // console.log(response.data.enrolls);
                             enrollTable.clear().rows.add(response.data.enrolls).draw();
                         }
                         if (response.data.schedules && response.data.schedules.length > 0) {
@@ -497,7 +500,7 @@
             var filteredEnrollList = data.enrolls.filter(function (enroll) {
                 return enroll.status === 'Enrolled';
             });
-            let statusText = '';
+            var statusText = '';
             switch (data.status) {
                 case 'Open':
                 case 'Ongoing':
@@ -512,29 +515,35 @@
                     statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
                     break;
             }
-
-            // var answerAddHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-            //     <div class="edit-info" id="question-add-answer">
-            //         <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createAnswer"></i>
-            //     </div>
-            //     ` : '';
+            if (data.status != 'Draft' && data.status != 'Postponed') {
+                let dadiv = $('div.dt-modal-toggle').parent();
+                dadiv.find('div.dt-modal-toggle').remove();
+            }
+            formatter = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+            });
+            // Display Class Info
+            $('#class-title-status').find('#class-class-status').remove();
             $('#class-status').empty();
-            $('select[id="updateClassStatus_Status"]').empty();
+            $('select#updateClassStatus_Status').empty();
             $('#class-status').append(statusText);
-            $('#class-id').text(data.classId);
-            $('#class-class-title').text('Class ' + data.className + ' Infomations');
-            $('#class-name').text(data.className);
+            $('#class-class-title').text('Class ' + data.className + ' Informations');
+            // $('#class-class-title').text(data.className);
+            // $('#class-name').text(data.className);
             $('#class-teacher').text(data.teacher.account.fullname);
-            //$('#class-teacher').attr('href', `/Admin/Teacher/${data.teacher.accountId}/Info`);
+            $('#class-teacher').attr('href', `/Admin/Teacher/${data.teacher.accountId}/Info`);
             $('#class-course').text(data.course.courseName);
-            //$('#class-course').attr('href', `/Admin/Course/${data.course.courseId}/Info`);
-            $('#class-start-date').text(formatDate(data.startDate));
-            $('#class-end-date').text(formatDate(data.endDate));
+            $('#class-course').attr('href', `/Admin/Course/${data.course.courseId}/Info`);
+            $('#class-start-date').text(formatDate(data.startDate, { ignoreHour: true }));
+            $('#class-start-date').data('stadate', data.startDate);
+            $('#class-end-date').text(formatDate(data.endDate, { ignoreHour: true }));
+            $('#class-end-date').data('enddate', data.endDate);
             $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
             $('#class-minimum-students-amount').text(data.minimumStudents);
             $('#class-maximum-students-amount').text(data.maximumStudents);
             $('#class-enroll-fee').text(formatter.format(data.enrollmentFee));
-            // $('#question-allow-add-answer').append(answerAddHtml);
+            $('#class-title-status').append(titleStatusHtml);
             $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
         }
     </script>
