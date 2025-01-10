@@ -696,6 +696,7 @@
             });
         }
         function setClassDisplay(data) {
+            console.log(data);
             var filteredEnrollList = data.enrolls.filter(function (enroll) {
                 return enroll.status === 'Enrolled';
             });
