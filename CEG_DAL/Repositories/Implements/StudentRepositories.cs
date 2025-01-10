@@ -342,5 +342,11 @@ namespace CEG_DAL.Repositories.Implements
 
             return studentWithPoints.Cast<object>().ToList();
         }
+
+        public async Task<int> GetStudentCountByTeacherId(int id)
+        {
+            var student = await _dbContext.Classes.Where(c => c.TeacherId == id).SumAsync(c => c.NumberOfStudents.Value);
+            return student;
+        }
     }
 }

@@ -126,6 +126,14 @@ namespace CEG_DAL.Repositories.Implements
                         },
                         Status = s.Status
                     }).ToList(),
+                    StudentProgresses = c.StudentProgresses.Select(s => new StudentProgress()
+                    {
+                        StudentProgressId = s.StudentProgressId,
+                        ClassId = s.ClassId,
+                        StudentId = s.StudentId,
+                        Playtime = s.Playtime,
+                        TotalPoint = s.TotalPoint,
+                    }).ToList(),
                 })
                 .SingleOrDefaultAsync();
         }

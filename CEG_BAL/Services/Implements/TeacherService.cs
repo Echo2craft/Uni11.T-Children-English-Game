@@ -151,15 +151,18 @@ namespace CEG_BAL.Services.Implements
                 {
                     stuAct.StudentProgress = matchingStuPro;
 
+                    var stuHomList = matchingStuPro.StudentHomeworks.Where(stuHom => homIds.Contains(stuHom.HomeworkId)).ToList();
+
                     // Calculate the current homework progress for the student
-                    stuAct.HomeworkCurrentProgress = matchingStuPro.StudentHomeworks
-                        .Count(stuHom => homIds.Contains(stuHom.HomeworkId) && stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED);
+                    stuAct.HomeworkCurrentProgress = stuHomList
+                        .Count(stuHom => stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED);
 
                     // Assign homework numbers if there are any student homeworks
-                    for (int i = 0; i < matchingStuPro.StudentHomeworks.Count; i++)
+                    for (int i = 0; i < stuHomList.Count; i++)
                     {
-                        matchingStuPro.StudentHomeworks[i].Homework.HomeworkNumber = i + 1;
+                        stuHomList[i].Homework.HomeworkNumber = i + 1;
                     }
+                    matchingStuPro.StudentHomeworks = stuHomList;
                 }
             }
             return stuActList;
