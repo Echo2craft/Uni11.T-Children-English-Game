@@ -540,6 +540,11 @@
 
                         // Only hide the table if no rows are selected
                         if (selectedRows === 0 && isTableVisible) {
+                            if (isHomeworkTableVisible) {
+                                $('#student_homework_list').stop(true, true).slideUp(300);
+                                homeworkTable.clear().draw();
+                                isHomeworkTableVisible = false;
+                            }
                             $('#student_list').stop(true, true).slideUp(300);
                             attendanceTable.clear().draw();
                             isTableVisible = false;
@@ -837,21 +842,21 @@
                         render: function (data, type, row, meta) {
                             // Get the data of the selected row
                             const selectedRowData = scheduleTable.rows({ selected: true }).data().toArray();
-
+                            // console.log(selectedRowData);
                             // Example condition for showing the button
-                            if (row.status && row.status === "NotSubmitted") {
+                            if (row.status && row.status === "Not Submitted") {
                                 // If you want the first selected row
-                                //if (selectedRowData.length > 0) {
-                                //    const firstRowData = selectedRowData[0].scheduleNumber;
-                                //    return `
-                                //            <button class="btn btn-primary btn-sm submit-button"
-                                //                data-homid="${row.homeworkId}"
-                                //                data-stuid="${row.studentProgress.studentId}"
-                                //                data-schid="${firstRowData}" >
-                                //                Remind Parent
-                                //            </button>
-                                //        `;
-                                //}
+                                if (selectedRowData.length > 0) {
+                                   const firstRowData = selectedRowData[0].scheduleNumber;
+                                   return `
+                                           <button class="btn btn-primary btn-sm submit-button"
+                                               data-homid="${row.homeworkId}"
+                                               data-stuid="${row.studentProgress.studentId}"
+                                               data-schid="${firstRowData}" >
+                                               Remind Parent
+                                           </button>
+                                       `;
+                                }
                                 return `
                                     <button class="btn btn-primary btn-sm submit-button"
                                         data-hom-id="${row.homeworkId}"
@@ -1096,7 +1101,7 @@
                         setClassDisplay(response.data);
                         // Check if homeworkAnswers is empty
                         if (response.data.enrolls && response.data.enrolls.length > 0) {
-                            console.log(response.data.enrolls);
+                            // console.log(response.data.enrolls);
                             enrollTable.clear().rows.add(response.data.enrolls).draw();
                         }
                         if (response.data.schedules && response.data.schedules.length > 0) {

@@ -11,15 +11,17 @@ using CEG_RazorWebApp.Libraries;
 
 namespace CEG_RazorWebApp.Services.HostedServices
 {
-    /*public class ChangeClassStatusService : IHostedService, IDisposable
+    public class ChangeClassStatusService : IHostedService, IDisposable
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<ChangeClassStatusService> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _config;
         private Timer _timer;
-        private readonly string MembershipAPI_URL = "/api/Member/All/Role/Member";
-        private readonly string MembershipUpdateAPI_URL = "/api/Member/Update/Status";
+        private string DefaultAPI_URL = "";
+        private readonly string getClassListAPI_URL = "Class/All";
+        private readonly string updateClassStatusAPI_URL_HEAD = "Class/Update/Status";
+        private readonly string updateClassStatusAPI_URL_TAIL = "Class/Update/Status";
         private readonly MediaTypeWithQualityHeaderValue contentType = new("application/json");
         private readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
         {
@@ -33,13 +35,14 @@ namespace CEG_RazorWebApp.Services.HostedServices
             _logger = logger;
             _httpClientFactory = httpClientFactory;
             _config = configuration;
+            DefaultAPI_URL = _config.GetSection(CEGConstants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Change Class Status Service is starting.");
 
-            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(5)); // Adjust the interval as needed
+            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromMinutes(1)); // Adjust the interval as needed
 
             return Task.CompletedTask;
         }
@@ -49,29 +52,29 @@ namespace CEG_RazorWebApp.Services.HostedServices
             {
                 var _systemLoginService = scope.ServiceProvider.GetRequiredService<ISystemLoginService>();
                 var today = DateTime.UtcNow;
-                int accStatusUpdateExpired = 0;
+                int claStatusUpdateExpired = 0;
 
                 var client = _httpClientFactory.CreateClient();
 
                 client.DefaultRequestHeaders.Accept.Add(contentType);
-                client.BaseAddress = new Uri(_config.GetSection("DefaultApiUrl:ConnectionString").Value);
+                client.BaseAddress = new Uri(_config.GetSection(CEGConstants.SYSTEM_DEFAULT_API_HTTPS_URL_CONFIG_PATH).Value);
 
                 string? accToken = await _systemLoginService.GetTokenAsync();
 
-                var listMembership = await methcall.CallMethodReturnObject<GetListMemberResponse>(
+                /*var claList = await methcall.CallMethodReturnObject<GetListMemberResponse>(
                                     _httpClient: client,
                                     options: jsonOptions,
                                     methodName: Library.Constants.GET_METHOD,
-                                    url: MembershipAPI_URL,
+                                    url: _config.GetSection(CEGConstants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value +,
                                     _logger: _logger,
                                     accessToken: accToken);
-                if (listMembership == null || !listMembership.Status)
+                if (claList == null || !claList.Status)
                 {
                     _logger.LogError("Failed to retrieving list of members");
                     return;
                 }
-                _logger.LogInformation("Succeed Retrieved list of {Count} members via API.", listMembership.Data.Count);
-                foreach (var membership in listMembership.Data)
+                _logger.LogInformation("Succeed Retrieved list of {Count} members via API.", claList.Data.Count);
+                foreach (var membership in claList.Data)
                 {
                     if (membership.ExpiryDate <= today && membership.Status.Equals(Library.Constants.MEMBER_STATUS_ACTIVE))
                     {
@@ -82,7 +85,7 @@ namespace CEG_RazorWebApp.Services.HostedServices
                                         _httpClient: client,
                                         options: jsonOptions,
                                         methodName: Library.Constants.PUT_METHOD,
-                                        url: MembershipUpdateAPI_URL,
+                                        url: updateClassStatusAPI_URL,
                                         inputType: membership,
                                         _logger: _logger,
                                         accessToken: accToken);
@@ -92,12 +95,12 @@ namespace CEG_RazorWebApp.Services.HostedServices
                         }
                         else
                         {
-                            accStatusUpdateExpired += 1;
+                            claStatusUpdateExpired += 1;
                             _logger.LogInformation("Succeed updating Member's membership status with ID: {MemberId} via API.", membership.MemberId);
                         }
                     }
                 }
-                _logger.LogInformation("Membership Expiry Service has updated {accStatusUpdateExpired} memberships to 'Expired' status.", accStatusUpdateExpired);
+                _logger.LogInformation("Membership Expiry Service has updated {accStatusUpdateExpired} memberships to 'Expired' status.", claStatusUpdateExpired);*/
             }
         }
 
@@ -114,5 +117,5 @@ namespace CEG_RazorWebApp.Services.HostedServices
             _timer?.Dispose();
             GC.SuppressFinalize(this);
         }
-    }*/
+    }
 }
