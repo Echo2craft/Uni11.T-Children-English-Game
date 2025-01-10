@@ -564,12 +564,12 @@
                 lengthMenu: [5, 10, 25, 50],
                 pageLength: 5,
                 columns: [
-                    { 
+                    {
                         data: 'studentId',
                         className: 'dt-head-left'
                     },
-                    { 
-                        data: 'student.account.fullname' 
+                    {
+                        data: 'student.account.fullname'
                     },
                     {
                         data: 'hasAttended', // Add an attendance column
@@ -819,8 +819,8 @@
                         data: 'status',
                         render: function (data, type, row, meta) {
                             // console.log(row);
-                            const submitted = data === 'Submitted' ? 
-                                '<span class="outcome" style="float: left;">Submitted</span>' : 
+                            const submitted = data === 'Submitted' ?
+                                '<span class="outcome" style="float: left;">Submitted</span>' :
                                 '<span class="destroy" style="float: left;">Not Submitted</span>';
                             return ` ${submitted} `;
                         },
@@ -858,9 +858,9 @@
                                        `;
                                 }
                                 return `
-                                    <button class="btn btn-primary btn-sm submit-button" 
-                                        data-hom-id="${row.homeworkId}" 
-                                        data-stu-id="${row.studentProgress.studentId}" 
+                                    <button class="btn btn-primary btn-sm submit-button"
+                                        data-hom-id="${row.homeworkId}"
+                                        data-stu-id="${row.studentProgress.studentId}"
                                         data-sch-id="0" >
                                         Remind Parent
                                     </button>
@@ -1199,7 +1199,7 @@
                 success: function (response) {
                     // Log the entire response to the console for debugging
                     // Check if the status is true
-                    if (response.status) { 
+                    if (response.status) {
                         showAlert('success', 'Remind homework email sent!');
                     } else {
                         showAlert('error', 'Failed to send email. Error: ' + response.errorMessage);
@@ -1408,9 +1408,10 @@
             $('#class-status').append(statusText);
             $('#class-id').text(data.classId);
             $('#class-class-title').text('Class ' + data.className + ' Infomations');
-            // $('#class-name').text(data.className);
+            $('#class-name').text(data.className);
+            $('#class-teacher').text(data.teacher.account.fullname);
             $('#class-course').text(data.course.courseName);
-            $('#class-course').attr('href', `/Teacher/Course/${data.course.courseId}/Info`);
+            //$('#class-course').attr('href', `/Teacher/Course/${data.course.courseId}/Info`);
             $('#class-start-date').text(formatDate(data.startDate, { ignoreHour: true }));
             $('#class-end-date').text(formatDate(data.endDate, { ignoreHour: true }));
             $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
