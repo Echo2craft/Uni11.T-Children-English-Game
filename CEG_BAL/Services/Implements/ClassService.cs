@@ -41,6 +41,7 @@ namespace CEG_BAL.Services.Implements
 
             var cla = new Class
             {
+                NumberOfStudents = 0,
                 Status = CEGConstants.CLASS_STATUS_DRAFT
             };
             _mapper.Map(newCla, cla);

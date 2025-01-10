@@ -186,5 +186,12 @@ namespace CEG_BAL.Services.Implements
             if (parentId == 0) throw new Exception("Parent not found.");
             return await _unitOfWork.StudentRepositories.GetTotalAmountByParent(parentId);
         }
+
+        public async Task<int> GetTotalAmountByTeacher(int id)
+        {
+            var teacherId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
+            if (teacherId == 0) throw new Exception("Teacher not found.");
+            return await _unitOfWork.StudentRepositories.GetStudentCountByTeacherId(teacherId);
+        }
     }
 }
