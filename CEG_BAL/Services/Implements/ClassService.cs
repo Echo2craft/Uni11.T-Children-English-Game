@@ -389,5 +389,10 @@ namespace CEG_BAL.Services.Implements
             if (cla.NumberOfStudents == cla.MaximumStudents) return true;
             return false;
         }
+
+        public async Task<bool> UpdateListStatusByDate()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -161,6 +161,40 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpPut("All/Date/Update/Status")]
+        [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateClassListByDate()
+        {
+            try
+            {
+                var result = await _classService.UpdateListStatusByDate();
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Class option list by status Open not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("Parent/All")]
         [Authorize(Roles = "Parent")]
         [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]

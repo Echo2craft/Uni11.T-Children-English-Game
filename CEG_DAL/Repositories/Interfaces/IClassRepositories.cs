@@ -11,6 +11,8 @@ namespace CEG_DAL.Repositories.Interfaces
     public interface IClassRepositories : IRepositoryBase<Class>
     {
         Task<List<Class>> GetList();
+        Task<List<Class>> GetListByStartDate(DateTime claStartDate);
+        Task<List<Class>> GetListByEndDate(DateTime claEndDate);
         Task<List<Class>> GetListHome();
         Task<List<Class>> GetOptionListByStatusOpen(string filterClassByStudentName = "");
         Task<List<Class>> GetClassListParent();

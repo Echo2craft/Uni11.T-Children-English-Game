@@ -37,7 +37,7 @@ namespace CEG_RazorWebApp.Services.Implements
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             client.BaseAddress = new Uri(config.GetSection(CEGConstants.SYSTEM_DEFAULT_API_HTTPS_URL_CONFIG_PATH).Value);
-            AuthenAPI_URL = "/api/User";
+            AuthenAPI_URL = _config.GetSection(CEGConstants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value + "Account";
         }
 
         public async Task<string?> GetTokenAsync()

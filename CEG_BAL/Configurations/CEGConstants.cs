@@ -154,7 +154,7 @@ namespace CEG_BAL.Configurations
 
         public readonly static string STUDENT_HOMEWORK_STATUS_SUBMITTED = "Submitted";
         public readonly static string STUDENT_HOMEWORK_STATUS_NAME_SUBMITTED = "Submitted";
-        public readonly static string STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED = "NotSubmitted";
+        public readonly static string STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED = "Not Submitted";
         public readonly static string STUDENT_HOMEWORK_STATUS_NAME_NOT_SUBMITTED = "Not Submitted";
 
         /*public readonly static string CLASS_SCHEDULE_MONDAY_THURSDAY = "Monday and Thursday each week";
