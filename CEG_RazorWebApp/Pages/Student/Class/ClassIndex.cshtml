@@ -129,29 +129,28 @@
                 return '';
             });
             callApiGetEnrollList();
-            // Search event handler
-            $('#search').on('keyup', function (event) {
-                // Get the search term
+            // Search event handler for all_enroll_Tab
+            $('#all_enroll_Tab #search').on('keyup', function (event) {
                 var searchTerm = $(this).val().toLowerCase();
-
-                // Filter the classes based on the search term
-                var filteredenrollList = enrollList.filter(function (enroll) {
-                    return enroll.class.className.toLowerCase().includes(searchTerm);
-                });
-
-                // Display the filtered classList
+                var filteredenrollList = enrollList.filter(enroll =>
+                    enroll.class.className.toLowerCase().includes(searchTerm)
+                    // enroll.student.account.fullName.toLowerCase().includes(searchTerm)
+                );
                 setEnrollDisplay(filteredenrollList);
             });
         });
-        // Function to call API for class list
+
         function callApiGetEnrollList() {
             $.ajax({
                 url: apiUrl + `Enroll/Student/${id}`, // API Endpoint
                 type: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + token // Include the JWT token
                 },
                 success: function (response) {
+                    // Log the entire response to the console for debugging
+
+                    // Check if the status is true
                     if (response.status) {
                         enrollList = response.data;
                         setEnrollDisplay(enrollList);
@@ -179,11 +178,11 @@
                 }
             });
         }
-
-        // Function to display class list
         function setEnrollDisplay(data) {
             var enrollList = $('#enrollList');
+            // Reference to the <enrollList> element
             enrollList.empty();
+            // Loop through the data array and append each class div
             $.each(data, function (index, enroll) {
                 var formattedStartDate = formatDate(enroll.class.startDate);
                 var formattedEndDate = formatDate(enroll.class.endDate);
