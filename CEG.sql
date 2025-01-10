@@ -1959,25 +1959,25 @@ INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date
 GO
 INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (30, 30, 3, CAST(N'2024-12-20T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (31, 31, 4, CAST(N'2024-09-10T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (31, 31, 4, CAST(N'2025-01-15T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (32, 32, 4, CAST(N'2024-09-15T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (32, 32, 4, CAST(N'2025-01-22T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (33, 33, 4, CAST(N'2024-09-19T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (33, 33, 4, CAST(N'2025-01-29T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (34, 34, 4, CAST(N'2024-10-01T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (34, 34, 4, CAST(N'2025-02-05T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (35, 35, 4, CAST(N'2024-10-06T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (35, 35, 4, CAST(N'2025-02-12T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (36, 36, 4, CAST(N'2024-10-13T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (36, 36, 4, CAST(N'2025-02-20T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (37, 37, 4, CAST(N'2024-10-21T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (37, 37, 4, CAST(N'2025-03-04T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (38, 38, 4, CAST(N'2024-10-26T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (38, 38, 4, CAST(N'2025-03-11T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (39, 39, 4, CAST(N'2024-11-01T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (39, 39, 4, CAST(N'2025-03-18T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (40, 40, 4, CAST(N'2024-11-10T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (40, 40, 4, CAST(N'2025-03-25T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
 SET IDENTITY_INSERT [dbo].[Schedule] OFF
 GO

@@ -540,6 +540,11 @@
 
                         // Only hide the table if no rows are selected
                         if (selectedRows === 0 && isTableVisible) {
+                            if (isHomeworkTableVisible) {
+                                $('#student_homework_list').stop(true, true).slideUp(300);
+                                homeworkTable.clear().draw();
+                                isHomeworkTableVisible = false;
+                            }
                             $('#student_list').stop(true, true).slideUp(300);
                             attendanceTable.clear().draw();
                             isTableVisible = false;
