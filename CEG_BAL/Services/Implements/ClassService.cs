@@ -210,13 +210,13 @@ namespace CEG_BAL.Services.Implements
             var cla = await _unitOfWork.ClassRepositories.GetByIdNoTracking(claId, includeSchedule: true)
                 ?? throw new KeyNotFoundException("Class not found.");
             // check is schedule date valid
-            /*var errorList = await _unitOfWork.ScheduleRepositories.IsListScheduleDateHasValidSequenceByClassId(claId);
+            var errorList = await _unitOfWork.ScheduleRepositories.IsListScheduleDateHasValidSequenceByClassId(claId);
             if (errorList.Count > 0)
             {
                 var errorMessage = "Class contain invalid schedule date: \n";
                 foreach (var error in errorList) errorMessage += error;
                 throw new ArgumentException(errorMessage);
-            }*/
+            }
             if (upClaStatus == CEGConstants.CLASS_STATUS_OPEN)
             {
                 foreach (var sche in cla.Schedules)
@@ -393,7 +393,130 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<bool> UpdateListStatusByDate()
         {
-            throw new NotImplementedException();
+            bool isOpenClassesUpdated = false;
+            bool isOngoingClassesUpdated = false;
+            // Fetch the existing record
+            var claforOpenToOngoing = await _unitOfWork.ClassRepositories.GetListByStartDate(DateTime.Now)
+                ?? throw new ("Open class list not found or empty.");
+            foreach(var clafor in claforOpenToOngoing)
+            {
+                // Extract distinct session IDs from the class's schedules
+
+                // - `cla.Schedules`: A collection of schedules associated with the class
+                // - `.Select(s => s.SessionId)`: Extracts the SessionId from each schedule
+                // - `.Distinct()`: Ensures each SessionId appears only once
+                var sessionIds = clafor.Schedules.Select(s => s.SessionId).Distinct();
+
+                // Fetch a dictionary mapping session IDs to their associated homework lists
+
+                // - `_unitOfWork.HomeworkRepositories.GetListBySessionIds(sessionIds)`:
+                //   Retrieves all homework items for the given session IDs from the database.
+                // - `.GroupBy(h => h.SessionId)`:
+                //   Groups the retrieved homework items by their SessionId.
+                // - `.ToDictionary(g => g.Key, g => g.ToList())`:
+                //   Converts the grouped items into a dictionary where:
+                //     - Key: SessionId (unique identifier for each session)
+                //     - Value: List of homework items associated with that SessionId
+                var homeworkDictionary = (await _unitOfWork.HomeworkRepositories.GetListBySessionIds(sessionIds.ToArray()))
+                    .GroupBy(h => h.SessionId)
+                    .ToDictionary(g => g.Key, g => g.ToList());
+
+                foreach (var enr in clafor.Enrolls)
+                {
+                    bool isStuProExist =
+                        clafor.StudentProgresses.Any(stuPro => stuPro.ClassId == enr.ClassId && stuPro.StudentId == enr.StudentId);
+                    // Add student progress
+                    var stuPro = new StudentProgress()
+                    {
+                        Playtime = TimeOnly.MinValue,
+                        TotalPoint = 0,
+                        StudentId = enr.StudentId,
+                        ClassId = enr.ClassId,
+                    };
+                    if (isStuProExist)
+                    {
+                        var stuProExist = clafor.StudentProgresses
+                            .FirstOrDefault(stuPro => stuPro.ClassId == enr.ClassId && stuPro.StudentId == enr.StudentId);
+                        if (stuProExist != null)
+                            stuPro = await _unitOfWork.StudentProgressRepositories.GetByIdNoTracking(stuProExist.StudentProgressId);
+                    }
+
+                    foreach (var sche in clafor.Schedules)
+                    {
+                        var att = new Attendance()
+                        {
+                            StudentId = enr.StudentId,
+                            ScheduleId = sche.ScheduleId,
+                            HasAttended = CEGConstants.ATTENDANCE_STATUS_ABSENT,
+                        };
+                        var scheExist = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(sche.ScheduleId);
+                        bool isScheAttExist = scheExist != null && scheExist.Attendances.Any(att => att.StudentId == enr.StudentId && att.ScheduleId == sche.ScheduleId);
+                        if (!isScheAttExist)
+                        {
+                            // Add attendance
+                            sche.Attendances.Add(att);
+                        }
+
+                        enr.Student = null;
+
+                        // Get homework list for the session using TryGetValue method
+                        if (homeworkDictionary.TryGetValue(sche.SessionId, out List<Homework> homList))
+                        {
+                            // Add student homework for each homework item in the list
+                            foreach (var hom in homList)
+                            {
+                                if (stuPro.StudentHomeworks.Any(stuHom => stuHom.HomeworkId == hom.HomeworkId)) continue;
+                                stuPro.StudentHomeworks.Add(new StudentHomework()
+                                {
+                                    CorrectAnswers = 0,
+                                    HomeworkId = hom.HomeworkId,
+                                    Playtime = TimeOnly.MinValue,
+                                    Point = 0,
+                                    Status = CEGConstants.STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED,
+                                });
+                            }
+                        }
+                    }
+                    if (!isStuProExist)
+                        clafor.StudentProgresses.Add(stuPro);
+                }
+                clafor.Status = CEGConstants.CLASS_STATUS_ONGOING;
+            }
+            if (claforOpenToOngoing.Count > 0 && claforOpenToOngoing.All(cla => cla.Status == CEGConstants.CLASS_STATUS_ONGOING)) 
+                isOpenClassesUpdated = true;
+
+            // Fetch the existing record
+            var claforOngoingToEnded = await _unitOfWork.ClassRepositories.GetListByStartDate(DateTime.Now)
+                ?? throw new("Ongoing class list not found or empty.");
+            foreach (var clafor in claforOngoingToEnded)
+            {
+                var adm = (await _unitOfWork.AccountRepositories.GetListByRole(CEGConstants.ACCOUNT_ROLE_ADMIN)).FirstOrDefault() ?? throw new KeyNotFoundException("Admin account not found for transaction.");
+                var tea = (await _unitOfWork.TeacherRepositories.GetByIdNoTracking(clafor.TeacherId)) ?? throw new KeyNotFoundException("Teacher account not found for transaction.");
+                int amo = clafor.EnrollmentFee * clafor.Enrolls.Count * 70 / 100; // Transaction Amount
+                var tra = new Transaction()
+                {
+                    VnpayId = null,
+                    AccountId = adm.AccountId,
+                    TransactionAmount = amo,
+                    TransactionDate = DateTime.UtcNow,
+                    ConfirmDate = DateTime.UtcNow,
+                    TransactionStatus = CEGConstants.TRANSACTION_STATUS_COMPLETED,
+                    TransactionType = CEGConstants.TRANSACTION_TYPE_EARNING,
+                    Description = CEGConstants.TRANSACTION_PAYER_LABEL + CEGConstants.TRANSACTION_USER_SYSTEM_NAME_LABEL + "," +
+                                CEGConstants.TRANSACTION_METHOD_LABEL + CEGConstants.TRANSACTION_METHOD_SYSTEM_DEPOSIT + "," +
+                                CEGConstants.TRANSACTION_RECEIVER_LABEL + CEGConstants.TRANSACTION_USER_TEACHER_NAME_LABEL + $"{tea.Account.Fullname}," +
+                                CEGConstants.TRANSACTION_USER_TEACHER_ID_LABEL + $"{clafor.TeacherId}," +
+                                CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL + $"{clafor.ClassName}",
+                };
+                _unitOfWork.TransactionRepositories.Create(tra);
+                clafor.Enrolls = null;
+                tea.Account.TotalAmount += amo;
+                _unitOfWork.TeacherRepositories.Update(tea);
+                clafor.Status = CEGConstants.CLASS_STATUS_ENDED;
+            }
+            if (claforOngoingToEnded.Count > 0 && claforOngoingToEnded.All(cla => cla.Status == CEGConstants.CLASS_STATUS_ENDED))
+                isOngoingClassesUpdated = true;
+            return isOpenClassesUpdated && isOngoingClassesUpdated;
         }
     }
 }
