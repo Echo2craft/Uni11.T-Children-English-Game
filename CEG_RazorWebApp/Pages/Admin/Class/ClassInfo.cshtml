@@ -436,7 +436,8 @@
                             <div class="row col-xl-4">
                                 <div class="form-group col-xl-12">
                                     <label class="col-form-label" asp-for="@createSchedule.ScheduleDate" ></label>
-                                    <input asp-for="@createSchedule.ScheduleDate" type="datetime-local" value="@createSchedule.ScheduleDate.Value.ToString("yyyy-MM-ddTHH:mm")" class="form-control" required>
+                                    <input asp-for="@createSchedule.ScheduleDate" type="datetime-local"
+                                           value="@createSchedule.ScheduleDate.Value.ToString("yyyy-MM-ddTHH:mm")" class="form-control" required>
                                     <span asp-validation-for="@createSchedule.ScheduleDate" id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-8 mt-2 field-validation-valid"></span>
                                 </div>
                             </div>
@@ -792,10 +793,14 @@
                     const dateValue = this.cell(rowIdx, 2).data();
                     const node = $(this.cell(rowIdx, 2).node());
 
+                    const staDate = $('#class-start-date').data('stadate');
+                    const endDate = $('#class-end-date').data('enddate');
+
                     // Change display to a select box if not already updated
                     if (!node.children('input[type=datetime-local]').length) {
                         node.html(`
-                        <input type="datetime-local" id="schedule-start-date-${rowIdx}" class="form-control" value=${dateValue} asp-format="{0:yyyy-MM-ddTHH:mm}"/>`);
+                        <input type="datetime-local" id="schedule-start-date-${rowIdx}" class="form-control" value=${dateValue}
+                                asp-format="{0:yyyy-MM-ddTHH:mm}" min="${staDate}" max="${endDate}"/>`);
 
                         // Add change event listener to the select element
                         node.find('input[type=datetime-local]').on('change', function () {
@@ -1221,7 +1226,9 @@
             $('#class-course').text(data.course.courseName);
             $('#class-course').attr('href', `/Admin/Course/${data.course.courseId}/Info`);
             $('#class-start-date').text(formatDate(data.startDate, { ignoreHour : true }));
+            $('#class-start-date').data('stadate', data.startDate);
             $('#class-end-date').text(formatDate(data.endDate, { ignoreHour: true }));
+            $('#class-end-date').data('enddate', data.endDate);
             $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
             $('#class-minimum-students-amount').text(data.minimumStudents);
             $('#class-maximum-students-amount').text(data.maximumStudents);
@@ -1246,6 +1253,9 @@
             $('#createSchedule_ClassId').val(data.classId);
             $('#createSchedule_ScheduleDate').attr('min', data.startDate);
             $('#createSchedule_ScheduleDate').attr('max', data.endDate);
+
+            // Update Schedule
+
         }
     </script>
 </body>

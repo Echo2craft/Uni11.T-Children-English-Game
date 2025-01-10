@@ -162,6 +162,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpPut("All/Date/Update/Status")]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -170,7 +171,7 @@ namespace CEG_WebAPI.Controllers
             try
             {
                 var result = await _classService.UpdateListStatusByDate();
-                if (result == null)
+                if (!result)
                 {
                     return NotFound(new
                     {
