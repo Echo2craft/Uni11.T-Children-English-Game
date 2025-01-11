@@ -481,6 +481,9 @@ namespace CEG_BAL.Services.Implements
                         clafor.StudentProgresses.Add(stuPro);
                 }
                 clafor.Status = CEGConstants.CLASS_STATUS_ONGOING;
+
+                // Reattach entity and mark it as modified
+                _unitOfWork.ClassRepositories.Update(clafor);
             }
             if (claforOpenToOngoing.Count > 0 && claforOpenToOngoing.All(cla => cla.Status == CEGConstants.CLASS_STATUS_ONGOING)) 
                 isOpenClassesUpdated = true;
@@ -513,9 +516,27 @@ namespace CEG_BAL.Services.Implements
                 tea.Account.TotalAmount += amo;
                 _unitOfWork.TeacherRepositories.Update(tea);
                 clafor.Status = CEGConstants.CLASS_STATUS_ENDED;
+
+                // Reattach entity and mark it as modified
+                _unitOfWork.ClassRepositories.Update(clafor);
             }
             if (claforOngoingToEnded.Count > 0 && claforOngoingToEnded.All(cla => cla.Status == CEGConstants.CLASS_STATUS_ENDED))
                 isOngoingClassesUpdated = true;
+            // Save changes
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating all classes.", ex);
+            }
             return isOpenClassesUpdated && isOngoingClassesUpdated;
         }
     }

@@ -217,7 +217,7 @@
             $('#parent-account-phonenumber').text(data.phone);
             $('#parent-account-address').text(data.address);
             $('#account-gender').text(data.account.gender);
-            $('#account-createddate').text(formatDate(data.account.createdDate)); // Format the date if needed
+            $('#account-createddate').text(formatDate(data.account.createdDate, { ignoreHour: true })); // Format the date if needed
             $('#account-role').text(data.account.role.roleName);
             $('#account-status').text(data.account.status);
         }
