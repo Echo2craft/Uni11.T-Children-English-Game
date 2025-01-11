@@ -477,7 +477,7 @@ namespace CEG_BAL.Services.Implements
                                     HomeworkResult = new HomeworkResult()
                                     {
                                         TotalCorrectAnswers = 0,
-                                        Playtime = TimeOnly.MinValue,
+                                        Playtime = TimeSpan.MinValue,
                                         TotalPoint = 0,
                                     }
                                 });
