@@ -256,7 +256,7 @@ namespace CEG_BAL.Services.Implements
                     // Add student progress
                     var stuPro = new StudentProgress()
                     {
-                        Playtime = TimeSpan.MinValue,
+                        Playtime = new TimeSpan(0,0,0),
                         TotalPoint = 0,
                         StudentId = enr.StudentId,
                         ClassId = enr.ClassId,
@@ -298,13 +298,13 @@ namespace CEG_BAL.Services.Implements
                                 {
                                     CorrectAnswers = 0,
                                     HomeworkId = hom.HomeworkId,
-                                    Playtime = TimeSpan.MinValue,
+                                    Playtime = new TimeSpan(0,0,0),
                                     Point = 0,
                                     Status = CEGConstants.STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED,
                                     HomeworkResult = new HomeworkResult()
                                     {
                                         TotalCorrectAnswers = 0,
-                                        Playtime = TimeSpan.MinValue,
+                                        Playtime = new TimeSpan(0,0,0),
                                         TotalPoint = 0,
                                     }
                                 });
@@ -434,7 +434,7 @@ namespace CEG_BAL.Services.Implements
                     // Add student progress
                     var stuPro = new StudentProgress()
                     {
-                        Playtime = TimeSpan.MinValue,
+                        Playtime = new TimeSpan(0,0,0),
                         TotalPoint = 0,
                         StudentId = enr.StudentId,
                         ClassId = enr.ClassId,
@@ -477,13 +477,13 @@ namespace CEG_BAL.Services.Implements
                                 {
                                     CorrectAnswers = 0,
                                     HomeworkId = hom.HomeworkId,
-                                    Playtime = TimeSpan.MinValue,
+                                    Playtime = new TimeSpan(0,0,0),
                                     Point = 0,
                                     Status = CEGConstants.STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED,
                                     HomeworkResult = new HomeworkResult()
                                     {
                                         TotalCorrectAnswers = 0,
-                                        Playtime = TimeSpan.MinValue,
+                                        Playtime = new TimeSpan(0,0,0),
                                         TotalPoint = 0,
                                     }
                                 });
