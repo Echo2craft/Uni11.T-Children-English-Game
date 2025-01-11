@@ -33,7 +33,58 @@ public class AccountManager : MonoBehaviour
         public string successMessage;
         public UserData data;
     }
+    [Serializable]
+    public class StudentAnswerRequest
+    {
+        public int game_id { get; set; }
+        public int student_homework_id { get; set; }
+        public string answer { get; set; } // Nullable
+        public string type { get; set; } // Not Nullable
+    }
+    [Serializable]
+    public class StudentHomeworkRequest
+    {
+        public int student_homework_id { get; set; }
+        public int homework_id { get; set; }
+        public int student_progress_id { get; set; }
+        public int homework_result_id { get; set; }
+        public int point { get; set; }
+        public string playtime { get; set; } // In "hh:mm:ss" format
+        public string status { get; set; } // E.g., "Completed", "Pending"
+        public int correct_answers { get; set; }
+    }
+    [Serializable]
+    public class HomeworkResultRequest
+    {
+        public int homework_result_id { get; set; }
+        public int total_point { get; set; }
+        public int total_correct_answers { get; set; }
+        public string playtime { get; set; } // Format: hh:mm:ss
+    }
+    [Serializable]
+    public class StudentProgressRequest
+    {
+        public int student_progress_id { get; set; }
+        public int student_id { get; set; }
+        public int class_id { get; set; }
+        public int total_point { get; set; }
+        public string playtime { get; set; } // Format: hh:mm:ss
+    }
+    [Serializable]
+    public class HomeworkQuestion
+    {
+        public int homework_question_id;
+        public string question;
+        public List<HomeworkAnswer> answers;
+    }
 
+    [Serializable]
+    public class HomeworkAnswer
+    {
+        public int homework_answer_id;
+        public string answer;
+        public string type;
+    }
     [System.Serializable]
     public class UserData
     {
@@ -44,6 +95,21 @@ public class AccountManager : MonoBehaviour
         public string imagePath;
         public string status;
     }
+    [Serializable]
+    public class UserLoginRS
+    {
+        public int userId;
+        public string username;
+        public string email;
+    }
+
+    private UserLoginRS _userLoginRS;
+    private string accessToken;
+    [HideInInspector]
+    public int currentIndex;
+    [HideInInspector]
+    public UserProgressResponse UserProgressResponse;
+
     [Header("Login")]
     public TMP_InputField nameLoginField;
     public TMP_InputField passwordLoginField;
@@ -67,7 +133,7 @@ public class AccountManager : MonoBehaviour
     public static string welcomeName = "";
     private const string loginKey = "IsLoggedIn";
     private const string usernameKey = "Username";
-
+    private readonly string _baseUrl = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net";
     private void Awake()
     {
         if (Instance == null)
@@ -148,7 +214,7 @@ private void SetUIForRole()
     }
     private IEnumerator Login(string _name, string _password)
     {
-        string url = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/Account/Login"; // Your API endpoint for login
+        string url = $"{_baseUrl}/api/Account/Login"; // Your API endpoint for login
 
         // Create JSON payload
         var formData = new LoginPayload
@@ -245,135 +311,178 @@ private void SetUIForRole()
             }
         }
     }
-    private UserObject LoadUserData(List<UserObject> scoreboard)
+    public async void SendStudentAnswer(int gameId, int studentHomeworkId, string answer, string type)
     {
-        try
+        // Create a new StudentAnswer object
+        var studentAnswerRequest = new StudentAnswerRequest()
         {
-            // Using LINQ FirstOrDefault
-            var user = scoreboard.FirstOrDefault(u => u.UserId == _user.UserId);
-            if (user == null)
+            game_id = gameId,
+            student_homework_id = studentHomeworkId,
+            answer = answer,
+            type = type
+        };
+
+        // Convert the object to JSON
+        string jsonRequestBody = JsonUtility.ToJson(studentAnswerRequest);
+        Debug.Log("Send StudentAnswer: " + jsonRequestBody);
+
+        // Define the URL for StudentAnswer API
+        string url = $"{_baseUrl}/api/StudentAnswer/Create";
+
+        await SendPostRequest(url, jsonRequestBody);
+    }
+    public async void SendStudentHomework(int studentHomeworkId, int homeworkId, int studentProgressId, int homeworkResultId, int point, TimeSpan playtime, string status, int correctAnswers)
+    {
+        // Create a new StudentHomework object
+        var studentHomeworkRequest = new StudentHomeworkRequest()
+        {
+            student_homework_id = studentHomeworkId,
+            homework_id = homeworkId,
+            student_progress_id = studentProgressId,
+            homework_result_id = homeworkResultId,
+            point = point,
+            playtime = playtime.ToString(@"hh\:mm\:ss"),
+            status = status,
+            correct_answers = correctAnswers
+        };
+
+        // Convert the object to JSON
+        string jsonRequestBody = JsonUtility.ToJson(studentHomeworkRequest);
+        Debug.Log("Send StudentHomework: " + jsonRequestBody);
+
+        // Define the URL for StudentHomework API
+        string url = $"{_baseUrl}/api/StudentHomework/Create";
+
+        await SendPostRequest(url, jsonRequestBody);
+    }
+    private async Task SendPostRequest(string url, string jsonRequestBody)
+    {
+        // Create a UnityWebRequest POST object
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+
+        // Set the request headers
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        // Attach the JSON data to the request
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonRequestBody);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        // Send the request
+        var operation = request.SendWebRequest();
+        while (!operation.isDone)
+        {
+            await Task.Yield();
+        }
+
+        // Check for errors
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError($"Error sending POST request to {url}: {request.error}");
+        }
+        else
+        {
+            Debug.Log($"POST request to {url} successful! Response: {request.downloadHandler.text}");
+        }
+    }
+    public async void SendHomeworkResult(int homeworkResultId, int totalPoint, int totalCorrectAnswers, TimeSpan playtime)
+    {
+        var homeworkResultRequest = new HomeworkResultRequest()
+        {
+            homework_result_id = homeworkResultId,
+            total_point = totalPoint,
+            total_correct_answers = totalCorrectAnswers,
+            playtime = playtime.ToString(@"hh\:mm\:ss")
+        };
+
+        string jsonRequestBody = JsonUtility.ToJson(homeworkResultRequest);
+        Debug.Log("Send HomeworkResult: " + jsonRequestBody);
+
+        string url = $"{_baseUrl}/api/HomeworkResult/Create";
+        await SendPostRequest(url, jsonRequestBody);
+    }
+    public async void SendStudentProgress(int studentProgressId, int studentId, int classId, int totalPoint, TimeSpan playtime)
+    {
+        var studentProgressRequest = new StudentProgressRequest()
+        {
+            student_progress_id = studentProgressId,
+            student_id = studentId,
+            class_id = classId,
+            total_point = totalPoint,
+            playtime = playtime.ToString(@"hh\:mm\:ss")
+        };
+
+        string jsonRequestBody = JsonUtility.ToJson(studentProgressRequest);
+        Debug.Log("Send StudentProgress: " + jsonRequestBody);
+
+        string url = $"{_baseUrl}/api/StudentProgress/Create";
+        await SendPostRequest(url, jsonRequestBody);
+    }
+    public async Task FetchHomeworkQuestions(int homeworkId)
+    {
+        // Define the API endpoint
+        string url = $"{_baseUrl}/api/Question/All";
+        Debug.Log($"Fetching questions from: {url}");
+
+        // Create a GET request
+        UnityWebRequest request = UnityWebRequest.Get(url);
+
+        // Send the request
+        var operation = request.SendWebRequest();
+        while (!operation.isDone)
+        {
+            await Task.Yield();
+        }
+
+        // Handle the response
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError($"Error fetching questions: {request.error}");
+        }
+        else
+        {
+            Debug.Log("Questions fetched successfully!");
+
+            // Parse the JSON response
+            string jsonResponse = request.downloadHandler.text;
+            List<HomeworkQuestion> questions = JsonUtilityHelper.FromJsonList<HomeworkQuestion>(jsonResponse);
+
+            // Log the questions and answers
+            foreach (var question in questions)
             {
-                StartCoroutine(InitialUserInfoToDatabase());
-                return new UserObject
+                Debug.Log($"Question ID: {question.homework_question_id}, Text: {question.question}");
+                foreach (var answer in question.answers)
                 {
-                    CategoryScore = new Dictionary<string, UserScoreObject>
-                    {
-                        {
-                            _gameData.Keys.First(), // Use LINQ to get the first key
-                            new UserScoreObject { LevelScore = new Dictionary<string, double> { { "1", 0 } } }
-                        }
-                    },
-                    UserId = _user.UserId,
-                    Username = _user.Username
-                };
+                    Debug.Log($"  Answer ID: {answer.homework_answer_id}, Text: {answer.answer}, Type: {answer.type}");
+                }
             }
-            return user;
-        }
-        catch (Exception)
-        {
-            throw;
         }
     }
 
-    private IEnumerator InitialUserInfoToDatabase()
+// Utility class for parsing JSON lists
+public static class JsonUtilityHelper
+{
+    public static List<T> FromJsonList<T>(string json)
     {
-        string url = $"https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/users/{_user.UserId}/initialize"; // API endpoint for user initialization
-
-        // Form data dictionary
-        var formData = new Dictionary<string, object>
-        {
-            { "username", _user.Username },
-            { "category", _gameData.Keys.First() },
-            { "level", "1" },
-            { "score", 0 }
-        };
-
-        // Serialize to JSON and convert to byte array
-        string jsonData = JsonUtility.ToJson(formData);
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
-
-        UnityWebRequest request = new UnityWebRequest(url, "PUT");
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
-
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.LogError("Failed to initialize user info: " + request.error);
-        }
+        string wrappedJson = $"{{\"list\":{json}}}";
+        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(wrappedJson);
+        return wrapper.list;
     }
 
-    public IEnumerator SendScore(string cate, string level, string score)
+    [Serializable]
+    private class Wrapper<T>
     {
-        string url = $"https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/{_user.UserId}/scores"; // API endpoint for sending score
-
-        // Form data dictionary
-        var formData = new Dictionary<string, string>
-        {
-            { "category", cate },
-            { "level", level },
-            { "score", score }
-        };
-
-        // Serialize to JSON and convert to byte array
-        string jsonData = JsonUtility.ToJson(formData);
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
-
-        UnityWebRequest request = new UnityWebRequest(url, "PUT");
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
-
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.LogError("Failed to send score: " + request.error);
-        }
-        else
-        {
-            Debug.Log("Score sent successfully");
-        }
+        public List<T> list;
+    }
+}
+public string GetAccessToken()
+    {
+        return accessToken;
     }
 
-    public IEnumerator LoadScoreBoard()
+    public void SetAccessToken(string token)
     {
-        string url = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/scoreboard"; // API endpoint for scoreboard data
-
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.LogError("Failed to load scoreboard: " + request.error);
-        }
-        else
-        {
-            // Parse the response (assuming JSON)
-            var jsonData = request.downloadHandler.text;
-            _scoreboard = JsonUtility.FromJson<List<UserObject>>(jsonData);
-        }
-    }
-
-    public IEnumerator LoadGameData()
-    {
-        string url = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/game-data"; // API endpoint for game data
-
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        yield return request.SendWebRequest();
-
-        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
-        {
-            Debug.LogError("Failed to load game data: " + request.error);
-        }
-        else
-        {
-            // Parse the response (assuming JSON)
-            var jsonData = request.downloadHandler.text;
-            _gameData = JsonUtility.FromJson<Dictionary<string, List<LevelObject>>>(jsonData);
-        }
+        accessToken = token;
     }
 
     public void Logout()

@@ -1606,6 +1606,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 552e5f1089749f64ab0cee097cd76e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentIndex: 0
+  UserProgressResponse:
+    userId: 0
+    levelId: 0
+    completed: 0
+    completionTime: 
   nameLoginField: {fileID: 42362584}
   passwordLoginField: {fileID: 635374168}
   warningLoginText: {fileID: 983582138}
@@ -10188,7 +10194,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 5c2d1fcea55170649a5e1b77c5181d67, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.462
   m_Pitch: 1
   Loop: 1
@@ -10489,7 +10495,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1705075940}
-  - component: {fileID: 1705075939}
+  - component: {fileID: 1705075941}
   m_Layer: 0
   m_Name: ApiClient
   m_TagString: Untagged
@@ -10497,26 +10503,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1705075939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1705075938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa325735ef696fc4781166adab6903c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameId: 0
-  difficultyId: 0
-  currentIndex: 0
-  UserProgressResponse:
-    userId: 0
-    levelId: 0
-    completed: 0
-    completionTime: 
 --- !u!4 &1705075940
 Transform:
   m_ObjectHideFlags: 0
@@ -10532,6 +10518,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1705075941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1705075938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 552e5f1089749f64ab0cee097cd76e06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentIndex: 0
+  UserProgressResponse:
+    userId: 0
+    levelId: 0
+    completed: 0
+    completionTime: 
+  nameLoginField: {fileID: 42362584}
+  passwordLoginField: {fileID: 635374168}
+  warningLoginText: {fileID: 1755362702}
+  canvasToActivate: {fileID: 1268401883}
+  LoginScreen: {fileID: 1817975767}
 --- !u!1 &1719200999
 GameObject:
   m_ObjectHideFlags: 0

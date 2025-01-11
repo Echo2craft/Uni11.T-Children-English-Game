@@ -85,7 +85,6 @@
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\ObjectInGame\LevelObject.cs" />
     <Compile Include="Assets\Main\Scripts\GameObjectScript.cs" />
     <Compile Include="Assets\Main\Scripts\Spawner.cs" />
-    <Compile Include="Assets\Scripts\ScriptableObject\Answer.cs" />
     <Compile Include="Assets\GoogleSignIn\Impl\BaseObject.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\ScriptableObjects\ObjectInGame\UserScoreObject.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\CountDownTimer.cs" />
