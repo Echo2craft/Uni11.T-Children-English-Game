@@ -301,6 +301,12 @@ namespace CEG_BAL.Services.Implements
                                     Playtime = TimeSpan.MinValue,
                                     Point = 0,
                                     Status = CEGConstants.STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED,
+                                    HomeworkResult = new HomeworkResult()
+                                    {
+                                        TotalCorrectAnswers = 0,
+                                        Playtime = TimeSpan.MinValue,
+                                        TotalPoint = 0,
+                                    }
                                 });
                             }
                         }
