@@ -8,9 +8,7 @@ namespace CEG_RazorWebApp.Pages.Parent.Class
 {
     public class ClassInfoModel : PageModel
     {
-        private readonly CEG_RAZOR_Library methcall = new();
-
-        public int? ClassID;
+        public int ClassID { get; set; }
 
         public CreateEnrollVM CreateEnrollInfo { get; set; } = new CreateEnrollVM();
         public void OnGet(

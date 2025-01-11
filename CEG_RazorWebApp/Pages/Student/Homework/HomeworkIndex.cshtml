@@ -77,6 +77,18 @@
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="homework-table" rowspan="1"
                                                         colspan="1" aria-sort="ascending"
+                                                        aria-label="Class Name: activate to sort column ascending">
+                                                        Class Name
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="homework-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Session Name: activate to sort column ascending">
+                                                        Session Name
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="homework-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
                                                         aria-label="Points: activate to sort column ascending">
                                                         Points
                                                     </th>
@@ -178,6 +190,12 @@
                         data: 'homework.title',
                     },
                     {
+                        data: 'studentProgress.class.className',
+                    },
+                    {
+                        data: 'homework.session.title',
+                    },
+                    {
                         data: 'point',
                     },
                     {
@@ -193,7 +211,9 @@
                     {
                         data: null,
                         render: function (data, type, row, meta) {
-                            if (row.status && row.status === "NotSubmitted") {
+                            // const selectedRowData = scheduleTable.rows({ selected: true }).data().toArray();
+                            console.log(row);
+                            if (row.status && row.status === "Not Submitted") {
                                 return `
                                     <button class="btn btn-primary btn-sm submit-button">
                                         Download Homework

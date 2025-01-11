@@ -3,6 +3,7 @@ using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_BAL.ViewModels.Student;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.EntityFrameworkCore;
@@ -88,6 +89,18 @@ namespace CEG_BAL.Services.Implements
                 // Log and rethrow unexpected exceptions
                 throw new Exception("An unexpected error occurred while updating the student progress.", ex);
             }
+        }
+
+        public async Task<StudentDashboard> GetByStudentAccountId(int id)
+        {
+            var studentId = await _unitOfWork.StudentRepositories.GetIdByAccountIdNoTracking(id);
+            if (studentId == null) return null;
+            var stuDash = new StudentDashboard
+            {
+                TotalPlaytime = await _unitOfWork.StudentProgressRepositories.GetTotalTimeByStudentId(studentId),
+                TotalPoints = await _unitOfWork.StudentProgressRepositories.GetTotalPointByStudentId(studentId),
+            };
+            return stuDash;
         }
     }
 }

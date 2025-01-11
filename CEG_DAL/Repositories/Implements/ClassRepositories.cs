@@ -126,6 +126,14 @@ namespace CEG_DAL.Repositories.Implements
                         },
                         Status = s.Status
                     }).ToList(),
+                    StudentProgresses = c.StudentProgresses.Select(s => new StudentProgress()
+                    {
+                        StudentProgressId = s.StudentProgressId,
+                        ClassId = s.ClassId,
+                        StudentId = s.StudentId,
+                        Playtime = s.Playtime,
+                        TotalPoint = s.TotalPoint,
+                    }).ToList(),
                 })
                 .SingleOrDefaultAsync();
         }
@@ -450,6 +458,55 @@ namespace CEG_DAL.Repositories.Implements
             return classes
                 .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
                 .ToList();
+        }
+
+        public async Task<List<Class>> GetListByStartDate(DateTime claStartDate)
+        {
+            return await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Where(c => c.Status == "Open" && c.StartDate.Value.Date <= claStartDate.Date)
+                .Select(c => new Class
+                {
+                    ClassId = c.ClassId,
+                    ClassName = c.ClassName,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    MinimumStudents = c.MinimumStudents,
+                    MaximumStudents = c.MaximumStudents,
+                    NumberOfStudents = c.NumberOfStudents,
+                    EnrollmentFee = c.EnrollmentFee,
+                    TeacherId = c.TeacherId,
+                    CourseId = c.CourseId,
+                    Status = c.Status,
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
+                    StudentProgresses = c.StudentProgresses
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<Class>> GetListByEndDate(DateTime claEndDate)
+        {
+            return await _dbContext.Classes
+                .AsNoTrackingWithIdentityResolution()
+                .Where(c => c.Status == "Ongoing" && c.EndDate.Value.Date <= claEndDate.Date)
+                .Select(c => new Class
+                {
+                    ClassId = c.ClassId,
+                    ClassName = c.ClassName,
+                    StartDate = c.StartDate,
+                    EndDate = c.EndDate,
+                    MinimumStudents = c.MinimumStudents,
+                    MaximumStudents = c.MaximumStudents,
+                    NumberOfStudents = c.NumberOfStudents,
+                    EnrollmentFee = c.EnrollmentFee,
+                    TeacherId = c.TeacherId,
+                    CourseId = c.CourseId,
+                    Status = c.Status,
+                    Schedules = c.Schedules,
+                    Enrolls = c.Enrolls,
+                })
+                .ToListAsync();
         }
     }
 }

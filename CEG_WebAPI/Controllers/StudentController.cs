@@ -232,6 +232,34 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/Count/ByTeacher/{id}")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetStudentAmountByTeacher(
+            [FromRoute] int id)
+        {
+            try
+            {
+                var result = await _studentService.GetTotalAmountByTeacher(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("All/Count/ByParent/{id}")]
         [Authorize(Roles = "Parent")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
@@ -332,7 +360,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
         [HttpGet("ByClass/{id}")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher, Parent")]
         [ProducesResponseType(typeof(List<StudentViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -341,7 +369,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _studentService.GetStudentByParentAccountId(id);
+                var result = await _studentService.GetStudentByClassId(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -368,7 +396,7 @@ namespace CEG_WebAPI.Controllers
         }
         [HttpPut("Account/{id}/Update")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(

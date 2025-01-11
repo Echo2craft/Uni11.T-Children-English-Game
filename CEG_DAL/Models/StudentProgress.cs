@@ -13,7 +13,7 @@ public partial class StudentProgress
 
     public int? TotalPoint { get; set; }
 
-    public TimeOnly? Playtime { get; set; }
+    public TimeSpan Playtime { get; set; }
 
     public virtual Class Class { get; set; } = null!;
 

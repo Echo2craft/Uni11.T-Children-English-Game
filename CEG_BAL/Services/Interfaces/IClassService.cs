@@ -16,6 +16,7 @@ namespace CEG_BAL.Services.Interfaces
         Task Create(CreateNewClass newCla);
         Task Update(int claId, UpdateClass upCla);
         Task UpdateStatus(int claId, string upClaStatus);
+        Task<bool> UpdateListStatusByDate();
         Task<List<ClassViewModel>> GetClassList();
         Task<List<ClassViewModel>> GetClassListHome();
         Task<List<GetClassForTransaction>> GetOptionListByStatusOpen(string filterClassByStudentName = "");
