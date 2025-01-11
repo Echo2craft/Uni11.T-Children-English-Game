@@ -1374,10 +1374,10 @@
                     statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
                     break;
             }
-            if (data.status != 'Draft' && data.status != 'Postponed') {
-                let dadiv = $('div.dt-modal-toggle').parent();
-                dadiv.find('div.dt-modal-toggle').remove();
-            }
+            // if (data.status != 'Draft' && data.status != 'Postponed') {
+            //     let dadiv = $('div.dt-modal-toggle').parent();
+            //     dadiv.find('div.dt-modal-toggle').remove();
+            // }
             formatter = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND',
@@ -1404,7 +1404,7 @@
             // Display Class Info
             // $('#class-title-status').find('#class-class-status').remove();
             $('#class-status').empty();
-            $('select[id="updateClassStatus_Status"]').empty();
+            // $('select[id="updateClassStatus_Status"]').empty();
             $('#class-status').append(statusText);
             $('#class-id').text(data.classId);
             $('#class-class-title').text('Class ' + data.className + ' Infomations');

@@ -204,7 +204,6 @@
        var token = sessionStorage.getItem('token');
         var id = sessionStorage.getItem('usrId');
         var apiUrl = sessionStorage.getItem('apiUrl');
-        var enrollTable;
         var attendanceTable;
         var homeworkTable;
         var scheduleTable;
@@ -273,37 +272,6 @@
                     return str;
                 };
             };
-            enrollTable = new DataTable('#enroll-table', {
-                data: [],
-                deferRender: false,
-                responsive: true,
-                columns: [
-                    { data: 'studentId' },
-                    { data: 'student.account.fullname' },
-                    // { data: 'status' },
-                    // { Add a select box in the last column
-                    //     data: 'status',
-                    //     render: function (data, type, row, meta) {
-                    //         return `
-                    //                     <select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">
-                    //                     `
-                    //             + getEnrollStatusOptions(data) +
-                    //             `
-                    //                     </select>
-                    //                     `;
-                    //     }
-                    // }
-                ],
-                layout: {
-                    topEnd: {
-                        search: {
-                            placeholder: 'Search enroll...'
-                        },
-                        searchIcon: {
-                        }
-                    }
-                }
-            });
             callApiGetClassDetail();
             scheduleTable = new DataTable('#schedule-table', {
                 data: [],
@@ -460,10 +428,6 @@
                     if (response.status) {
                         setClassDisplay(response.data);
                         // Check if homeworkAnswers is empty
-                        if (response.data.enrolls && response.data.enrolls.length > 0) {
-                            // console.log(response.data.enrolls);
-                            enrollTable.clear().rows.add(response.data.enrolls).draw();
-                        }
                         if (response.data.schedules && response.data.schedules.length > 0) {
                             selectedRow = getSelectedRowInfo();
                             scheduleTable.clear().rows.add(response.data.schedules).draw();
@@ -496,7 +460,6 @@
         }
 
         function setClassDisplay(data) {
-            console.log(data);
             var filteredEnrollList = data.enrolls.filter(function (enroll) {
                 return enroll.status === 'Enrolled';
             });
@@ -515,35 +478,31 @@
                     statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
                     break;
             }
-            if (data.status != 'Draft' && data.status != 'Postponed') {
-                let dadiv = $('div.dt-modal-toggle').parent();
-                dadiv.find('div.dt-modal-toggle').remove();
-            }
+            // if (data.status != 'Draft' && data.status != 'Postponed') {
+            //     let dadiv = $('div.dt-modal-toggle').parent();
+            //     dadiv.find('div.dt-modal-toggle').remove();
+            // }
             formatter = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
                 currency: 'VND',
             });
             // Display Class Info
-            $('#class-title-status').find('#class-class-status').remove();
+            // $('#class-title-status').find('#class-class-status').remove();
             $('#class-status').empty();
-            $('select#updateClassStatus_Status').empty();
+            // $('select[id="updateClassStatus_Status"]').empty();
             $('#class-status').append(statusText);
-            $('#class-class-title').text('Class ' + data.className + ' Informations');
-            // $('#class-class-title').text(data.className);
-            // $('#class-name').text(data.className);
+            $('#class-id').text(data.classId);
+            $('#class-class-title').text('Class ' + data.className + ' Infomations');
+            $('#class-name').text(data.className);
             $('#class-teacher').text(data.teacher.account.fullname);
-            $('#class-teacher').attr('href', `/Admin/Teacher/${data.teacher.accountId}/Info`);
             $('#class-course').text(data.course.courseName);
-            $('#class-course').attr('href', `/Admin/Course/${data.course.courseId}/Info`);
+            //$('#class-course').attr('href', `/Teacher/Course/${data.course.courseId}/Info`);
             $('#class-start-date').text(formatDate(data.startDate, { ignoreHour: true }));
-            $('#class-start-date').data('stadate', data.startDate);
             $('#class-end-date').text(formatDate(data.endDate, { ignoreHour: true }));
-            $('#class-end-date').data('enddate', data.endDate);
             $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
             $('#class-minimum-students-amount').text(data.minimumStudents);
             $('#class-maximum-students-amount').text(data.maximumStudents);
             $('#class-enroll-fee').text(formatter.format(data.enrollmentFee));
-            $('#class-title-status').append(titleStatusHtml);
             $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
         }
     </script>
