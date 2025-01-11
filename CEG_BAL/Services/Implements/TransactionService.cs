@@ -119,5 +119,12 @@ namespace CEG_BAL.Services.Implements
         {
             return await _unitOfWork.TransactionRepositories.GetSumValue();
         }
+
+        public async Task<int> GetSumByTeacherAccountId(int id)
+        {
+            var teaId = await _unitOfWork.TeacherRepositories.GetIdByAccountId(id);
+            if (teaId == 0) return 0;
+            return await _unitOfWork.TransactionRepositories.GetSumByTeacherId(teaId);
+        }
     }
 }
