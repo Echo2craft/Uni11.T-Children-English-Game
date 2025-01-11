@@ -180,12 +180,12 @@
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                     <label asp-for="@updateParent.Phone" class="col-md-4 col-form-label text-md-right"></label>
-                                    <select class="form-control col-md-8 custom-select" asp-for="@updateParent.Phone"></select>
+                                    <input asp-for="@updateParent.Phone" value="@updateParent.Phone" placeholder="Phone" required class="form-control col-md-8">
                                     <span asp-validation-for="@updateParent.Phone" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                     <label asp-for="@updateParent.Address" class="col-md-4 col-form-label text-md-right"></label>
-                                    <select class="form-control col-md-8 custom-select" asp-for="@updateParent.Address"></select>
+                                    <textarea asp-for="@updateParent.Address" value="@updateParent.Address" required class="form-control col-md-8"></textarea>
                                     <span asp-validation-for="@updateParent.Address" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                 </div>
@@ -358,7 +358,7 @@
 
             $('input[id="updateParent_Account_Fullname"]').val(data.account.fullname);
             $('select[id="updateParent_Account_Gender"]').append(getGenderOptions(data.account.gender));
-            $('textarea[id="updateParent_Phone"]').val(data.phone);
+            $('input[id="updateParent_Phone"]').val(data.phone);
             $('textarea[id="updateParent_Address"]').val(data.address);
 
             // Update Parent Status
@@ -382,7 +382,7 @@
                 },
                 type: 'PUT',
                 contentType: 'application/json',
-                data: JSON.stringify(studentData),
+                data: JSON.stringify(parentData),
                 success: function (response) {
                     // Log the entire response to the console for debugging
                     // Check if the status is true
@@ -417,7 +417,7 @@
         });
         function callApiPutUpdateParentStatus(newStatus) {
             $.ajax({
-                url: apiUrl + 'Account/@accountId/Update/Status', // Specify your Razor Page here
+                url: apiUrl + 'Account/@accountId/Update/Status',
                 type: 'PUT',
                 data: JSON.stringify(newStatus),
                 headers: {

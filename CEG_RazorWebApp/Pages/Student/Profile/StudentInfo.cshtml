@@ -104,16 +104,8 @@
                                                                                     <td id="student-account-description"></td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <th class="text-md-right">Total Playtime:</th>
-                                                                                    <td id="student-account-playtime"></td>
-                                                                                </tr>
-                                                                                <tr>
                                                                                     <th class="text-md-right">Current Level:</th>
                                                                                     <td id="student-account-curlevel"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <th class="text-md-right">Total Points:</th>
-                                                                                    <td id="student-account-points"></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <th class="text-md-right">Created Date:</th>
@@ -276,9 +268,7 @@
             $('#student-account-age').text(data.age);
             $('#student-account-birthdate').text(formatDate(data.birthdate, { ignoreHour : true }));
             $('#student-account-description').text(data.description);
-            $('#student-account-playtime').text(data.playtime);
             $('#student-account-curlevel').text(data.curLevel);
-            $('#student-account-points').text(data.points);
 
             $('#account-headerinfo').text(data.account.role.roleName + ' Account Information');
             $('#account-id').text(data.account.accountId);
