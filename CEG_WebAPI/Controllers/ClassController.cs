@@ -161,7 +161,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("All/Date/Update/Status")]
+        [HttpGet("All/Date/Update/Status")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -8,6 +8,7 @@ using System;
 using CEG_RazorWebApp.Services.Interfaces;
 using CEG_BAL.Configurations;
 using CEG_RazorWebApp.Libraries;
+using CEG_RazorWebApp.Libraries.Models;
 
 namespace CEG_RazorWebApp.Services.HostedServices
 {
@@ -19,9 +20,7 @@ namespace CEG_RazorWebApp.Services.HostedServices
         private readonly IConfiguration _config;
         private Timer _timer;
         private string DefaultAPI_URL = "";
-        private readonly string getClassListAPI_URL = "Class/All";
-        private readonly string updateClassStatusAPI_URL_HEAD = "Class/Update/Status";
-        private readonly string updateClassStatusAPI_URL_TAIL = "Class/Update/Status";
+        private readonly string updateClassStatusAPI_URL_TAIL = "Class/All/Date/Update/Status";
         private readonly MediaTypeWithQualityHeaderValue contentType = new("application/json");
         private readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
         {
@@ -61,45 +60,21 @@ namespace CEG_RazorWebApp.Services.HostedServices
 
                 string? accToken = await _systemLoginService.GetTokenAsync();
 
-                /*var claList = await methcall.CallMethodReturnObject<GetListMemberResponse>(
+                var claList = await methcall.CallMethodReturnObject<DefaultResponseModel<bool>>(
                                     _httpClient: client,
                                     options: jsonOptions,
-                                    methodName: Library.Constants.GET_METHOD,
-                                    url: _config.GetSection(CEGConstants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value +,
+                                    methodName: CEGConstants.GET_METHOD,
+                                    url: DefaultAPI_URL + updateClassStatusAPI_URL_TAIL,
                                     _logger: _logger,
                                     accessToken: accToken);
                 if (claList == null || !claList.Status)
                 {
-                    _logger.LogError("Failed to retrieving list of members");
+                    _logger.LogError(claList.ErrorMessage);
                     return;
                 }
-                _logger.LogInformation("Succeed Retrieved list of {Count} members via API.", claList.Data.Count);
-                foreach (var membership in claList.Data)
-                {
-                    if (membership.ExpiryDate <= today && membership.Status.Equals(Library.Constants.MEMBER_STATUS_ACTIVE))
-                    {
-                        membership.Status = Library.Constants.MEMBER_STATUS_EXPIRED;
-                        membership.ExpiryDate = null;
-                        // Call the API to update the membership status
-                        var memberStatusResponse = await methcall.CallMethodReturnObject<GetMemberStatusExpireResponse>(
-                                        _httpClient: client,
-                                        options: jsonOptions,
-                                        methodName: Library.Constants.PUT_METHOD,
-                                        url: updateClassStatusAPI_URL,
-                                        inputType: membership,
-                                        _logger: _logger,
-                                        accessToken: accToken);
-                        if (memberStatusResponse == null || !memberStatusResponse.Status || memberStatusResponse.Data == null)
-                        {
-                            _logger.LogError("Failed to update Member's membership status with ID: {MemberId} via API.", membership.MemberId);
-                        }
-                        else
-                        {
-                            claStatusUpdateExpired += 1;
-                            _logger.LogInformation("Succeed updating Member's membership status with ID: {MemberId} via API.", membership.MemberId);
-                        }
-                    }
-                }
+                _logger.LogInformation("Update classes response. {}", claList.Data);
+                /*_logger.LogInformation("Succeed Retrieved list of {Count} members via API.", claList.Data.Count);
+                
                 _logger.LogInformation("Membership Expiry Service has updated {accStatusUpdateExpired} memberships to 'Expired' status.", claStatusUpdateExpired);*/
             }
         }
