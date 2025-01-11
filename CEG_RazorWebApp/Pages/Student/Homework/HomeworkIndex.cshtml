@@ -213,6 +213,7 @@
                         render: function (data, type, row, meta) {
                             // const selectedRowData = scheduleTable.rows({ selected: true }).data().toArray();
                             console.log(row);
+
                             if (row.status && row.status === "Not Submitted") {
                                 return `
                                     <button class="btn btn-primary btn-sm submit-button">
