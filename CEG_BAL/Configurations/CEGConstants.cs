@@ -309,8 +309,8 @@ namespace CEG_BAL.Configurations
 
         public readonly static string TEMP_FILE_LOCATION_FOLDER = "wwwroot/tempFiles";
 
-        public readonly static string SYSTEM_DEFAULT_ACCOUNT_USR_NAME = "Authentication:DefaultSystemLogin:Username";
-        public readonly static string SYSTEM_DEFAULT_ACCOUNT_USR_PASSWORD = "Authentication:DefaultSystemLogin:Password";
+        public readonly static string SYSTEM_DEFAULT_ACCOUNT_USR_NAME = "DefaultSystemLogin:Username";
+        public readonly static string SYSTEM_DEFAULT_ACCOUNT_USR_PASSWORD = "DefaultSystemLogin:Password";
 
         public readonly static string SYSTEM_DEFAULT_AZURE_CONNECTION_STRING = "AzureStorage:BlobConnectionString";
         public readonly static string SYSTEM_DEFAULT_AZURE_DEFAULT_BLOB_FOLDER_URL = "AzureStorage:BlobDefaultFolderURL";
