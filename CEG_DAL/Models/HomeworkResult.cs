@@ -11,7 +11,7 @@ public partial class HomeworkResult
 
     public int? TotalCorrectAnswers { get; set; }
 
-    public TimeOnly? Playtime { get; set; }
+    public TimeSpan Playtime { get; set; }
 
     public virtual ICollection<StudentHomework> StudentHomeworks { get; set; } = new List<StudentHomework>();
 }

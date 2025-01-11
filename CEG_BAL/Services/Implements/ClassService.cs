@@ -256,7 +256,7 @@ namespace CEG_BAL.Services.Implements
                     // Add student progress
                     var stuPro = new StudentProgress()
                     {
-                        Playtime = TimeOnly.MinValue,
+                        Playtime = TimeSpan.MinValue,
                         TotalPoint = 0,
                         StudentId = enr.StudentId,
                         ClassId = enr.ClassId,
@@ -298,7 +298,7 @@ namespace CEG_BAL.Services.Implements
                                 {
                                     CorrectAnswers = 0,
                                     HomeworkId = hom.HomeworkId,
-                                    Playtime = TimeOnly.MinValue,
+                                    Playtime = TimeSpan.MinValue,
                                     Point = 0,
                                     Status = CEGConstants.STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED,
                                 });
@@ -428,7 +428,7 @@ namespace CEG_BAL.Services.Implements
                     // Add student progress
                     var stuPro = new StudentProgress()
                     {
-                        Playtime = TimeOnly.MinValue,
+                        Playtime = TimeSpan.MinValue,
                         TotalPoint = 0,
                         StudentId = enr.StudentId,
                         ClassId = enr.ClassId,
@@ -471,7 +471,7 @@ namespace CEG_BAL.Services.Implements
                                 {
                                     CorrectAnswers = 0,
                                     HomeworkId = hom.HomeworkId,
-                                    Playtime = TimeOnly.MinValue,
+                                    Playtime = TimeSpan.MinValue,
                                     Point = 0,
                                     Status = CEGConstants.STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED,
                                     HomeworkResult = new HomeworkResult()

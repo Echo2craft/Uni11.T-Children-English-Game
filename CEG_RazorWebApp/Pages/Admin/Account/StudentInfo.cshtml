@@ -125,37 +125,10 @@
                                     </div>
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Total Score:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-totalscore">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Play time:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-playtime">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
                                             <label class="col-form-label">Current level:</label>
                                         </div>
                                         <div class="col-md-7">
                                             <span id="student-account-curlevel">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Points:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-points">
                                             </span>
                                         </div>
                                     </div>
@@ -639,7 +612,7 @@
             $('textarea[id="updateStudent_Description"]').val(data.description);
             $('input[id="updateStudent_Birthdate"]').val(formatDate(data.birthdate, { inputDateFormat : true }));
 
-            // Update Class Status
+            // Update Student Status
             $('select[id="updateStudentStatus_Status"]').append(getStatusOptions(data.account.status));
 
             // Parent Url
