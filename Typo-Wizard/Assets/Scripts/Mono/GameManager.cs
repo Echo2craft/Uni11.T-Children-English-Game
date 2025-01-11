@@ -369,7 +369,7 @@ public class GameManager : MonoBehaviour {
     //private IEnumerator LoadQuestionsFromAPI()
     //{
     //    Debug.Log("Starting to load questions from API...");
-    //    string url = "https://localhost:7143/api/Question/All";
+    //    string url = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/Question/All";
     //    UnityWebRequest request = UnityWebRequest.Get(url);
 
     //    // Start the request

@@ -148,7 +148,7 @@ private void SetUIForRole()
     }
     private IEnumerator Login(string _name, string _password)
     {
-        string url = "https://localhost:7143/api/Account/Login"; // Your API endpoint for login
+        string url = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/Account/Login"; // Your API endpoint for login
 
         // Create JSON payload
         var formData = new LoginPayload
@@ -277,7 +277,7 @@ private void SetUIForRole()
 
     private IEnumerator InitialUserInfoToDatabase()
     {
-        string url = $"https://localhost:7143/api/users/{_user.UserId}/initialize"; // API endpoint for user initialization
+        string url = $"https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/users/{_user.UserId}/initialize"; // API endpoint for user initialization
 
         // Form data dictionary
         var formData = new Dictionary<string, object>
@@ -307,7 +307,7 @@ private void SetUIForRole()
 
     public IEnumerator SendScore(string cate, string level, string score)
     {
-        string url = $"https://localhost:7143/api/{_user.UserId}/scores"; // API endpoint for sending score
+        string url = $"https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/{_user.UserId}/scores"; // API endpoint for sending score
 
         // Form data dictionary
         var formData = new Dictionary<string, string>
@@ -340,7 +340,7 @@ private void SetUIForRole()
 
     public IEnumerator LoadScoreBoard()
     {
-        string url = "https://localhost:7143/api/scoreboard"; // API endpoint for scoreboard data
+        string url = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/scoreboard"; // API endpoint for scoreboard data
 
         UnityWebRequest request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
@@ -359,7 +359,7 @@ private void SetUIForRole()
 
     public IEnumerator LoadGameData()
     {
-        string url = "https://localhost:7143/api/game-data"; // API endpoint for game data
+        string url = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net/api/game-data"; // API endpoint for game data
 
         UnityWebRequest request = UnityWebRequest.Get(url);
         yield return request.SendWebRequest();
