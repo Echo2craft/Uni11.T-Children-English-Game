@@ -65,7 +65,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row card-content" id="enrollList">
+                                    <div class="row card-content" id="classList">
                                         <!-- dung vong for o day -->
                                     </div>
                                     <!-- end tapnet -->
@@ -83,82 +83,42 @@
         var id = sessionStorage.getItem('usrId');
         var enrollList = [];
         $(document).ready(function () {
-            // Registering the custom feature with DataTables
-            DataTable.feature.register('searchIcon', function (settings, opts) {
-                // Set default options
-                let options = Object.assign({
-                    iconClass: 'bx bx-search-alt question-search-icon',
-                    hideLabel: true // Hide search label
-                }, opts);
-
-                // Create a container for the icon
-                let container = document.createElement('div');
-                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
-
-                // Create the icon element
-                let icon = document.createElement('i');
-                icon.className = options.iconClass;
-
-                // Check if pagination is enabled
-                // if (settings.oFeatures.bFilter) {
-                //     console.log(settings.oFeatures.bFilter);
-                //     console.log('Pagination is enabled for this DataTable.');
-                // }
-
-                setTimeout(() => {
-                    // Find the .dt-search container inside the DataTable wrapper
-                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
-                    if (searchContainer.length) {
-                        searchContainer.append(icon);
-                    } else {
-                        // Append icon to container
-                        container.appendChild(icon);
-                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
-                        $(settings.nTableWrapper).prepend(container);
-                    }
-                    if (options.hideLabel) {
-                        // Find the .dt-search label container inside the DataTable wrapper
-                        let searchLabel = searchContainer.find('label');
-                        if (searchLabel.length) {
-                            searchLabel.text('');
-                        } else {
-                            console.log('Label of search div not found!');
-                        }
-                    }
-                }, 100);
-                return '';
-            });
-            callApiGetEnrollList();
-            // Search event handler for all_enroll_Tab
-            $('#all_enroll_Tab #search').on('keyup', function (event) {
+            callApiGetClassList();
+            // Search event handler
+            $('#search').on('keyup', function (event) {
+                // Get the search term
                 var searchTerm = $(this).val().toLowerCase();
-                var filteredenrollList = enrollList.filter(enroll =>
-                    enroll.class.className.toLowerCase().includes(searchTerm)
-                    // enroll.student.account.fullName.toLowerCase().includes(searchTerm)
-                );
-                setEnrollDisplay(filteredenrollList);
+
+                // Filter the classes based on the search term
+                var filteredclassList = classList.filter(function (classObject) {
+                    return classObject.className.toLowerCase().includes(searchTerm);
+                });
+
+                // Display the filtered classList
+                setClassDisplay(filteredclassList);
             });
         });
 
-        function callApiGetEnrollList() {
+        // Function to call API for class list
+        function callApiGetClassList() {
             $.ajax({
-                url: apiUrl + `Enroll/Student/${id}`, // API Endpoint
+                url: apiUrl + `Class/All/ByStudent/${id}`, // Use teacherId in the API URL
                 type: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + token // Include the JWT token
+                    'Authorization': 'Bearer ' + token
                 },
                 success: function (response) {
-                    // Log the entire response to the console for debugging
-
-                    // Check if the status is true
                     if (response.status) {
-                        enrollList = response.data;
-                        setEnrollDisplay(enrollList);
+                        classList = response.data;
+                        setClassDisplay(classList);
                     } else {
-                        console.error("API returned false status.");
+                        showAlert('error', "API returned false status.");
                     }
                 },
                 error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
                     // Extract the custom error message if it exists
                     var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
                     // Check if errorResponse.errors exists and is an object
@@ -172,44 +132,47 @@
                             }
                         }
                     }
-
                     // Display the error message using your custom showAlert function
-                    showAlert('error', "Error:" + errorMessage);
+                    showAlert('error', "Error: \n" + errorMessage);
                 }
             });
         }
-        function setEnrollDisplay(data) {
-            var enrollList = $('#enrollList');
-            // Reference to the <enrollList> element
-            enrollList.empty();
-            // Loop through the data array and append each class div
-            $.each(data, function (index, enroll) {
-                var formattedStartDate = formatDate(enroll.class.startDate);
-                var formattedEndDate = formatDate(enroll.class.endDate);
-                var filteredEnrollList = enroll.class.enrolls.filter(function (enroll) {
+
+        // Function to display class list
+        function setClassDisplay(data) {
+            var classList = $('#classList');
+            classList.empty();
+            $.each(data, function (index, classObj) {
+                var formattedStartDate = formatDate(classObj.startDate, { ignoreHour: true });
+                var formattedEndDate = formatDate(classObj.endDate, { ignoreHour: true });
+                var filteredEnrollList = classObj.enrolls.filter(function (enroll) {
                     return enroll.status === 'Enrolled';
                 });
                 var statusText = '';
-                switch (enroll.class.status) {
+                switch (classObj.status) {
                     case 'Open':
                     case 'Ongoing':
-                        statusText = `<span class="outcome" style="float: left;">Status: ${enroll.class.status}</span>`
+                        statusText = `<span class="outcome" style="float: left;">Status: ${classObj.status}</span>`
                         break;
                     case 'Draft':
                     case 'Postponed':
-                        statusText = `<span class="approval" style="float: left;">Status: ${enroll.class.status}</span>`
+                        statusText = `<span class="approval" style="float: left;">Status: ${classObj.status}</span>`
                         break;
                     case 'Ended':
                     case 'Cancelled':
-                        statusText = `<span class="destroy" style="float: left;">Status: ${enroll.class.status}</span>`
+                        statusText = `<span class="destroy" style="float: left;">Status: ${classObj.status}</span>`
                         break;
                 }
+                formatter = new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                });
                 // Construct card HTML
                 var cardHtml = `
                             <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
                                 <div class="card1 card-child">
                                     <div class="club-name">
-                                        Class Code: ${enroll.class.className}
+                                        Class Code: ${classObj.className}
                                         <div class="status">
                                             ${statusText}
                                         </div>
@@ -217,29 +180,26 @@
                                     <div class="card-body">
                                         <div class="club-title">
                                             <ul>
-                                                <li><h6>Course:</h6><span>${enroll.class.course.courseName}</span></li>
-                                                <li><h6>Teacher:</h6><span>${enroll.class.teacher.account.fullname}</span></li>
+                                                <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
+                                                <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
                                                 <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
                                                 <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
-                                                <li><h6>Minimum students amount:</h6><span>${enroll.class.minimumStudents}</span></li>
-                                                <li><h6>Maximum students amount:</h6><span>${enroll.class.maximumStudents}</span></li>
+                                                <li><h6>Enrollment Fee:</h6><span>${formatter.format(classObj.enrollmentFee)}</span></li>
+                                                <li><h6>Minimum students amount:</h6><span>${classObj.minimumStudents}</span></li>
+                                                <li><h6>Maximum students amount:</h6><span>${classObj.maximumStudents}</span></li>
                                                 <li><h6>Current students amount:</h6><span>${filteredEnrollList.length}</span></li>
-                                                <li><h6>Weekly scheduled sessions amount:</h6><span>${enroll.class.schedules.length}</span></li>
-                                                <li><h6>Current enrolls amount:</h6><span>${enroll.class.enrolls.length}</span></li>
+                                                <li><h6>Weekly scheduled sessions amount:</h6><span>${classObj.schedules.length}</span></li>
+                                                <li><h6>Current enrolls amount:</h6><span>${classObj.enrolls.length}</span></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="form-group mx-auto">
-                                        <a class="btn btn-primary clickable-row" href="/Student/Class/${enroll.class.classId}/Info" role="button">Details</a>
+                                        <a class="btn btn-primary clickable-row" href="/Student/Class/${classObj.classId}/Info" role="button">Details</a>
                                     </div>
                                 </div>
                             </div>
                         `;
-                // Append the constructed HTML to the enroll list container
-                // <form method="get" asp-route-id="${classObj.classId}">
-                //     <button class="btn btn-primary clickable-row" type="submit">See Detail</button>
-                // </form>
-                enrollList.append(cardHtml);
+                classList.append(cardHtml);
             });
         }
     </script>

@@ -12,6 +12,6 @@ namespace CEG_BAL.ViewModels.Admin.Create
 
         public int? TotalCorrectAnswers { get; set; }
 
-        public TimeOnly? Playtime { get; set; }
+        public TimeSpan Playtime { get; set; }
     }
 }

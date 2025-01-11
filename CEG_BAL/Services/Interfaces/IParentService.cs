@@ -1,6 +1,7 @@
 ﻿using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
 using CEG_BAL.ViewModels.Admin.Get;
+using CEG_BAL.ViewModels.Admin.Update;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,6 @@ namespace CEG_BAL.Services.Interfaces
         Task<bool> IsParentExistByEmail(string email);
         Task<bool> IsExistByFullname(string fullname);
         void Create(ParentViewModel parent, CreateNewParent newPar);
-        void Update(ParentViewModel parent);
+        void Update(ParentViewModel parent, UpdateParent parentNewInfo);
     }
 }

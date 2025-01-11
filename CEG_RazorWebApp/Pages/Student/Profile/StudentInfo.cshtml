@@ -33,330 +33,100 @@
                         </ol>
                     </div>
                 </div>
-                <div id="alertContainer"></div>
-                <div class="row">
-                    <div class="col-lg-7 customer-booking">
-                        <div class="row">
-                            <div class="card profile col-12 mb-4">
-                                <div class="card-header">
-                                    <h4 id="account-headerinfo">Account Information</h4>
-                                    <div class="edit-info" id="student-info-edit-toggle">
-                                        <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editStudent"></i>
-                                        <i class='bx bxs-lock bx-sm' data-toggle="modal" data-target="#changePassword"></i>
+                <section>
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="accordion">
+                                <!-- Thông tin cá nhân -->
+                                <div class="card mb-2">
+                                    <div class="card-header card-setting" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" data-toggle="collapse" data-target="#profile"
+                                                    aria-expanded="true" aria-controls="profile">
+                                                Student Profile <i class='bx bx-chevron-right'></i>
+                                            </button>
+                                        </h5>
                                     </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Account ID:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-id">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Username:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-username">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Full Name:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-fullname">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Gender:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-gender">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Age:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-age">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Date of Birth:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-birthdate">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Description:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-description">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Highscore:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-highscore">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Play time:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-playtime">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Current level:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-curlevel">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Points:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="student-account-points">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Created Date:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-createddate">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Role:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-role">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Status:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-status">
-                                            </span>
+                                    <div class="collapse show" id="profile" aria-labelledby="profile" data-parent="#accordion">
+                                        <div class="card-body">
+                                            <div class="user-profile">
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <div class="profile-pic">
+                                                            <img src="~/images/avatar2.png" id="output" width="200" />
+                                                            <div class="upload">
+                                                                <button class="btn btn-warning" data-toggle="modal" data-target="#uploadImg">Details</button>
+                                                                <i class='bx bxs-camera-plus'></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-name" id="account-fullname"></div>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <div class="profile-content">
+                                                            <div class="contact-infor">
+                                                                <div class="info-title">
+                                                                    <h4>Personal Information</h4>
+                                                                </div>
+                                                                <div class="info-content">
+                                                                    <div class="table-responsive">
+                                                                        <table class="table table-borderless class-info-table">
+                                                                            <colgroup>
+                                                                                <col style="width: 30%;">
+                                                                                <col style="width: 70%;">
+                                                                            </colgroup>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Account ID:</th>
+                                                                                    <td id="account-id"></td>
+                                                                                </tr>
+                                                                                <tr class="status-info">
+                                                                                    <th class="text-md-right">Status:</th>
+                                                                                    <td id="account-status"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Username:</th>
+                                                                                    <td id="account-username"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Gender:</th>
+                                                                                    <td id="account-gender"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Age:</th>
+                                                                                    <td id="student-account-age"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Date of Birth:</th>
+                                                                                    <td id="student-account-birthdate"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Description:</th>
+                                                                                    <td id="student-account-description"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Current Level:</th>
+                                                                                    <td id="student-account-curlevel"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Created Date:</th>
+                                                                                    <td id="account-createddate"></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="card profile col-12 mb-4">
-                                <div class="card-header">
-                                    <h4 id="account-headerinfo">Parent Account Information</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Account ID:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <a href="#" id="account-parent-id">
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Full Name:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-parent-fullname">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Gender:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-parent-gender">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Status:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="account-parent-status">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 cardFB">
-                            <div class="card profile col-12 mb-4">
-                                <div class="card-header">
-                                    <h4>Class Enrollment records</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div id="enroll-table_wrapper" class="dataTables_wrapper no-footer">
-                                        <table id="enroll-table"
-                                               class="table table-striped table-bordered dataTable no-footer"
-                                               aria-describedby="enroll-table_info">
-                                            <thead>
-                                                <tr>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="enroll-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Request ID: activate to sort column ascending">
-                                                        ID
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="enroll-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Class Name: activate to sort column ascending">
-                                                        Class Name
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="enroll-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Class Name: activate to sort column ascending">
-                                                        Registration <br /> Date
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="enroll-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Enroll Date: activate to sort column ascending">
-                                                        Enrollment <br /> Date
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="enroll-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Status: activate to sort column ascending">
-                                                        Status
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="editStudent" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-            <div class="modal-content modal-addRoom">
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit Student Account Infomations</h4>
-                </div>
-                <form method="post" id="updateStudentForm">
-                    <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@updateStudent.Account.Fullname" class="col-md-4 col-form-label text-md-right"></label>
-                                    <input asp-for="@updateStudent.Account.Fullname" type="text" placeholder="Full Name" required class="form-control col-md-8">
-                                    <span asp-validation-for="@updateStudent.Account.Fullname" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateStudent.Account.Gender" class="col-md-4 col-form-label text-md-right"></label>
-                                    <select class="form-control col-md-8 custom-select" asp-for="@updateStudent.Account.Gender"></select>
-                                    <span asp-validation-for="@updateStudent.Account.Gender" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateStudent.Description" class="col-md-4 col-form-label text-md-right"></label>
-                                    <textarea asp-for="@updateStudent.Description" value="@updateStudent.Description" required class="form-control col-md-8"></textarea>
-                                    <span asp-validation-for="@updateStudent.Description" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateStudent.ParentFullname" class="col-md-4 col-form-label text-md-right">Parent Fullname</label>
-                                    <div class="col-md-8 p-0">
-                                        <!-- search bar with dropdown list-->
-                                        <select id="select2-parent-fullname-dropdown" class="form-control custom-select" style="width: 100%;">
-                                        </select>
-                                    </div>
-                                    <span asp-validation-for="@updateStudent.ParentFullname" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateStudent.Birthdate" class="col-md-4 col-form-label text-md-right"></label>
-                                    <!--value="updateStudent.Birthdate.Value.ToString("yyyy-MM-ddTHH:mm")"-->
-                                    <input asp-for="@updateStudent.Birthdate" type="date" min="@DateTime.Now.AddYears(-16).ToString("yyyy-MM-dd")" required max="@DateTime.Now.AddYears(-12).ToString("yyyy-MM-dd")" asp-format="{0:yyyy-MM-dd}" required class="form-control col-md-8">
-                                    <span asp-validation-for="@updateStudent.Birthdate" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <button class="btn btn-success" type="submit">Save</button>
-                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div id="changePassword" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-            <div class="modal-content modal-addRoom">
-                <div class="modal-header">
-                    <h4 class="modal-title">Change Student Account Password</h4>
-                </div>
-                <form method="post" id="updateAccountPasswordForm">
-                    <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@updatePassword.Password" class="col-md-4 col-form-label mt-3 text-md-right"></label>
-                                    <input asp-for="@updatePassword.Password" value="@updatePassword.Password" type="password" placeholder="Password" class="form-control col-md-8 mt-3" required>
-                                    <span asp-validation-for="@updatePassword.Password" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updatePassword.ConfirmPassword" class="col-md-4 col-form-label mt-3 text-md-right"></label>
-                                    <input asp-for="@updatePassword.ConfirmPassword" value="@updatePassword.ConfirmPassword" type="password" placeholder="Confirm Password" class="form-control col-md-8 mt-3" required>
-                                    <span asp-validation-for="@updatePassword.ConfirmPassword" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <button class="btn btn-success" type="submit">Save</button>
-                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
+                </section>
             </div>
         </div>
     </div>
@@ -364,7 +134,6 @@
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
         var id = sessionStorage.getItem('usrId');
-        var enrollTable;
         $(document).ready(function () {
             // Registering the custom feature with DataTables
             DataTable.feature.register('searchIcon', function (settings, opts) {
@@ -411,38 +180,6 @@
                 }, 100);
                 return '';
             });
-            // Registering the custom feature with DataTables
-            DataTable.feature.register('toggle', function (settings, opts) {
-                // Set default options
-                let options = Object.assign({
-                    iconClass: 'bx bxs-add-to-queue bx-sm',
-                    modalId: 'createSchedule' // Modal ID that the icon will trigger
-                }, opts);
-
-                // Create a container for the icon
-                let container = document.createElement('div');
-                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
-
-                // Create the icon element
-                let icon = document.createElement('i');
-                icon.className = options.iconClass;
-                container.className = 'dt-modal-toggle';
-                icon.setAttribute('data-toggle', 'modal');
-                icon.setAttribute('data-target', `#${options.modalId}`);
-
-                // Append icon to container
-                container.appendChild(icon);
-
-                // Insert the container in the DataTable toolbar
-                $(settings.nTableWrapper).prepend(container);
-                return container;
-            });
-            $('#select2-parent-fullname-dropdown').select2({
-                placeholder: 'Select a parent fullname',
-                allowClear: true,
-                width: 'resolve',
-                theme: 'bootstrap4'
-            })
             enrollTable = new DataTable('#enroll-table', {
                 autoWidth: true,
                 data: [],
@@ -486,13 +223,6 @@
                 }
             });
             callApiGetStudentDetail();
-            $('#updateAccountStatusForm').submit(function (event) {
-                event.preventDefault(); // Prevent the form from submitting normally
-
-                //Make the AJAX request
-                callApiPutUpdateStudentStatus($('select[id="updateStudentStatus_Status"]').val());
-                $('#updateAccountStatusForm').trigger("reset");
-            });
         });
         function callApiGetStudentDetail() {
             $.ajax({
@@ -507,9 +237,7 @@
 
                     // Check if the status is true
                     if (response.status) {
-                        accountDetail = response.data;
-
-                        setAccountDisplay(accountDetail);
+                        setAccountDisplay(response.data);
                     } else {
                         console.error("API returned false status.");
                     }
@@ -537,35 +265,19 @@
             });
         }
         function setAccountDisplay(data) {
-            // Student info
-            $('#account-status').empty();
+            $('#student-account-age').text(data.age);
+            $('#student-account-birthdate').text(formatDate(data.birthdate, { ignoreHour : true }));
+            $('#student-account-description').text(data.description);
+            $('#student-account-curlevel').text(data.curLevel);
 
             $('#account-headerinfo').text(data.account.role.roleName + ' Account Information');
             $('#account-id').text(data.account.accountId);
             $('#account-username').text(data.account.username);
             $('#account-fullname').text(data.account.fullname);
-            $('#student-account-age').text(data.age);
-            $('#student-account-birthdate').text(formatDate(data.birthdate, { ignoreHour : true }));
-            $('#student-account-description').text(data.description);
-            $('#student-account-highscore').text(data.highscore);
-            $('#student-account-playtime').text(data.playtime);
-            $('#student-account-curlevel').text(data.curLevel);
-            $('#student-account-points').text(data.points);
             $('#account-gender').text(data.account.gender);
-            $('#account-createddate').text(formatDate(data.account.createdDate, { includeAmPm : true })); // Format the date if needed
+            $('#account-createddate').text(formatDate(data.account.createdDate, { ignoreHour: true })); // Format the date if needed
             $('#account-role').text(data.account.role.roleName);
-            $('#account-status').append(getStatusDisplay(data.account.status));
-
-            // Update Student Info
-            $('select[id="updateStudent_Account_Gender"]').empty();
-
-            $('input[id="updateStudent_Account_Fullname"]').val(data.account.fullname);
-            $('select[id="updateStudent_Account_Gender"]').append(getGenderOptions(data.account.gender));
-            $('textarea[id="updateStudent_Description"]').val(data.description);
-            $('input[id="updateStudent_Birthdate"]').val(formatDate(data.birthdate, { inputDateFormat : true }));
-
-            // Update Class Status
-            $('select[id="updateStudentStatus_Status"]').append(getStatusOptions(data.account.status));
+            $('#account-status').text(data.account.status);
         }
     </script>
 </body>

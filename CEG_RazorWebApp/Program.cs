@@ -103,7 +103,7 @@ namespace CEG_RazorWebApp
             services.AddScoped<IVnPayService, VnPayService>();
 
             // Add Hosted services
-            // services.AddHostedService<ChangeClassStatusService>();
+            services.AddHostedService<ChangeClassStatusService>();
         }
 
         private static void ConfigureMiddleware(WebApplication app)

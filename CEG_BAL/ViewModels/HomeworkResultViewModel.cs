@@ -13,7 +13,7 @@ namespace CEG_BAL.ViewModels
 
         public int? TotalCorrectAnswers { get; set; }
 
-        public TimeOnly? Playtime { get; set; }
+        public TimeSpan Playtime { get; set; }
 
         public List<StudentHomeworkViewModel> StudentHomeworks { get; set; } = new List<StudentHomeworkViewModel>();
     }

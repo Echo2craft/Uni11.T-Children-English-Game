@@ -196,82 +196,6 @@
                                                 </table>
                                             </div>
                                         </div>
-                                        <div class="card-body" id="student_list" style="display: none; overflow: hidden;">
-                                            <div id="student-table_wrapper" class="dataTables_wrapper no-footer">
-                                                <table id="student-table"
-                                                       class="table table-striped table-bordered dataTable no-footer compact"
-                                                       aria-describedby="student-table_info">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="sorting sorting_asc" tabindex="0"
-                                                                aria-controls="student-table" rowspan="1"
-                                                                colspan="1" aria-sort="ascending"
-                                                                aria-label="Student ID: activate to sort column ascending">
-                                                                Student ID
-                                                            </th>
-                                                            <th class="sorting sorting_asc" tabindex="0"
-                                                                aria-controls="student-table" rowspan="1"
-                                                                colspan="1" aria-sort="ascending"
-                                                                aria-label="Student Name: activate to sort column ascending">
-                                                                Student Name
-                                                            </th>
-                                                            <th class="sorting sorting_asc" tabindex="0"
-                                                                aria-controls="student-table" rowspan="1"
-                                                                colspan="1" aria-sort="ascending"
-                                                                aria-label="Attendance: activate to sort column ascending">
-                                                                Attendance
-                                                            </th>
-                                                            <th class="sorting sorting_asc" tabindex="0"
-                                                                aria-controls="student-table" rowspan="1"
-                                                                colspan="1" aria-sort="ascending"
-                                                                aria-label="Homework Progress: activate to sort column ascending">
-                                                                Homework Progress
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="card-body" id="student_homework_list" style="display: none; overflow: hidden;">
-                                            <div id="homework-table_wrapper" class="dataTables_wrapper no-footer">
-                                                <table id="homework-table"
-                                                       class="table table-striped table-bordered dataTable no-footer compact"
-                                                       aria-describedby="homework-table_info">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="sorting sorting_asc" tabindex="0"
-                                                                aria-controls="homework-table" rowspan="1"
-                                                                colspan="1" aria-sort="ascending"
-                                                                aria-label="Homework Number: activate to sort column ascending">
-                                                                Homework Number
-                                                            </th>
-                                                            <th class="sorting sorting_asc" tabindex="0"
-                                                                aria-controls="homework-table" rowspan="1"
-                                                                colspan="1" aria-sort="ascending"
-                                                                aria-label="Homework Name: activate to sort column ascending">
-                                                                Homework Name
-                                                            </th>
-                                                            <th class="sorting sorting_asc" tabindex="0"
-                                                                aria-controls="homework-table" rowspan="1"
-                                                                colspan="1" aria-sort="ascending"
-                                                                aria-label="Points: activate to sort column ascending">
-                                                                Points
-                                                            </th>
-                                                            <th class="sorting sorting_asc" tabindex="0"
-                                                                aria-controls="homework-table" rowspan="1"
-                                                                colspan="1" aria-sort="ascending"
-                                                                aria-label="Status: activate to sort column ascending">
-                                                                Status
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <!-- student_list_Tab -->
@@ -648,7 +572,7 @@
             $('select[id="updateClassStatus_Status"]').empty();
             $('#class-status').append(statusText);
             $('#class-id').text(data.classId);
-            $('#class-class-title').text('Class ' + data.className + ' Infomations');
+            $('#class-class-title').text('Class ' + data.className + ' Informations');
             $('#class-name').text(data.className);
             $('#class-teacher').text(data.teacher.account.fullname);
             //$('#class-teacher').attr('href', `/Admin/Teacher/${data.teacher.accountId}/Info`);

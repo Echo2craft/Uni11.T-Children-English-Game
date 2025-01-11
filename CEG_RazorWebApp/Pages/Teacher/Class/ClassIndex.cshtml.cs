@@ -34,9 +34,6 @@ namespace CEG_RazorWebApp.Pages.Teacher.Class
             IsEssential = true,
         };
         private readonly CEG_RAZOR_Library methcall = new();
-        [BindProperty]
-        public List<IndexClassInfoVM>? Classes { get; set; }
-        public string? LayoutUrl { get; set; } = Constants.TEACHER_LAYOUT_URL;
         //[BindProperty]
         //public CreateClassVM? CreateClass { get; set; } = new CreateClassVM();
         public ClassIndexModel(ILogger<ClassIndexModel> logger, IConfiguration config, IMapper mapper)
@@ -51,13 +48,18 @@ namespace CEG_RazorWebApp.Pages.Teacher.Class
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             TeacherAPI_URL = config.GetSection(Constants.SYSTEM_DEFAULT_API_URL_CONFIG_PATH).Value;
         }
-        public IActionResult OnGetInfo(
+        /*public IActionResult OnGetInfo(
             [Required] int ClassId,int TeacherId)
         {
             return Redirect("/Teacher" + TeacherId + "/Class/" + ClassId + "/Info");
+        }*/
+
+        public void OnGet()
+        {
+
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        /*public async Task<IActionResult> OnGetAsync()
         {
             methcall.InitTempData(this);
             TeacherAPI_URL += "Class/All";
@@ -87,22 +89,10 @@ namespace CEG_RazorWebApp.Pages.Teacher.Class
 
                 return Redirect("/Teacher/Index");
             }
-            /*TempData[Constants.ALERT_DEFAULT_SUCCESS_NAME] = ViewBag.Success = "Class List Get Successfully!";*/
+            *//*TempData[Constants.ALERT_DEFAULT_SUCCESS_NAME] = ViewBag.Success = "Class List Get Successfully!";*//*
             TempData[Constants.ALERT_DEFAULT_SUCCESS_NAME] = "Class List Get Successfully!";
 
             return Page();
-        }
-        public IActionResult OnGetLogout()
-        {
-            _httpClient.DefaultRequestHeaders.Authorization = null;
-            HttpContext.Session.Clear();
-            TempData.Clear();
-            SignOut();
-
-            // If using ASP.NET Identity, you may want to sign out the user
-            // Example: await SignInManager.SignOutAsync();
-
-            return RedirectToPage(Constants.LOGOUT_REDIRECT_URL);
-        }
+        }*/
     }
 }
