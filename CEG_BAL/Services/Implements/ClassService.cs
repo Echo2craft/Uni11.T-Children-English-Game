@@ -433,6 +433,7 @@ namespace CEG_BAL.Services.Implements
                         StudentId = enr.StudentId,
                         ClassId = enr.ClassId,
                     };
+
                     if (isStuProExist)
                     {
                         var stuProExist = clafor.StudentProgresses
@@ -473,6 +474,12 @@ namespace CEG_BAL.Services.Implements
                                     Playtime = TimeOnly.MinValue,
                                     Point = 0,
                                     Status = CEGConstants.STUDENT_HOMEWORK_STATUS_NOT_SUBMITTED,
+                                    HomeworkResult = new HomeworkResult()
+                                    {
+                                        TotalCorrectAnswers = 0,
+                                        Playtime = TimeOnly.MinValue,
+                                        TotalPoint = 0,
+                                    }
                                 });
                             }
                         }
@@ -492,11 +499,21 @@ namespace CEG_BAL.Services.Implements
             // Fetch the existing record
             var claforOngoingToEnded = await _unitOfWork.ClassRepositories.GetListByEndDate(DateTime.Now)
                 ?? throw new("Ongoing class list not found or empty.");
+
+            var adm = (await _unitOfWork.AccountRepositories.GetListByRole(CEGConstants.ACCOUNT_ROLE_ADMIN)).FirstOrDefault() ?? throw new KeyNotFoundException("Admin account not found for transaction.");
+
+            // key: teacherId, value: totalAmount
+            var teacherEaringForUpdates = new Dictionary<int, int>();
             foreach (var clafor in claforOngoingToEnded)
             {
-                var adm = (await _unitOfWork.AccountRepositories.GetListByRole(CEGConstants.ACCOUNT_ROLE_ADMIN)).FirstOrDefault() ?? throw new KeyNotFoundException("Admin account not found for transaction.");
-                var tea = (await _unitOfWork.TeacherRepositories.GetByIdNoTracking(clafor.TeacherId)) ?? throw new KeyNotFoundException("Teacher account not found for transaction.");
                 int amo = clafor.EnrollmentFee * clafor.Enrolls.Count * 70 / 100; // Transaction Amount
+
+                var tea = await _unitOfWork.TeacherRepositories.GetByIdNoTracking(clafor.TeacherId) ?? throw new KeyNotFoundException("Teacher account not found for transaction.");
+
+                // record teacher's new earning to dictionary
+                teacherEaringForUpdates[clafor.TeacherId] = teacherEaringForUpdates.ContainsKey(clafor.TeacherId)
+                                                    ? teacherEaringForUpdates[clafor.TeacherId] + amo
+                                                    : amo;
                 var tra = new Transaction()
                 {
                     VnpayId = null,
@@ -512,15 +529,23 @@ namespace CEG_BAL.Services.Implements
                                 CEGConstants.TRANSACTION_USER_TEACHER_ID_LABEL + $"{clafor.TeacherId}," +
                                 CEGConstants.TRANSACTION_DESCRIPTION_ASSIGNED_CLASS_NAME_LABEL + $"{clafor.ClassName}",
                 };
+
                 _unitOfWork.TransactionRepositories.Create(tra);
                 clafor.Enrolls = null;
-                tea.Account.TotalAmount += amo;
-                _unitOfWork.TeacherRepositories.Update(tea);
                 clafor.Status = CEGConstants.CLASS_STATUS_ENDED;
 
                 // Reattach entity and mark it as modified
                 _unitOfWork.ClassRepositories.Update(clafor);
             }
+
+            // Update teacher totals in bulk
+            foreach (var teacherUpdate in teacherEaringForUpdates)
+            {
+                var teacher = await _unitOfWork.TeacherRepositories.GetByIdNoTracking(teacherUpdate.Key) ?? throw new KeyNotFoundException("Teacher account not found for transaction.");
+                teacher.Account.TotalAmount += teacherUpdate.Value;
+                _unitOfWork.TeacherRepositories.Update(teacher);
+            }
+
             if (claforOngoingToEnded.Count > 0 && claforOngoingToEnded.All(cla => cla.Status == CEGConstants.CLASS_STATUS_ENDED))
                 isOngoingClassesUpdated = true;
             // Save changes

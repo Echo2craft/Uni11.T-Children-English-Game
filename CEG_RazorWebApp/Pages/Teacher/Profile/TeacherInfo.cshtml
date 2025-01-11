@@ -254,14 +254,15 @@
             });
         }
         function setAccountDisplay(data) {
+            $('#teacher-account-email').text(data.email);
+            $('#teacher-account-phonenumber').text(data.phone);
+            $('#teacher-account-address').text(data.address);
+
             $('#account-headerinfo').text(data.account.role.roleName + ' Account Information');
             $('#account-id').text(data.account.accountId);
             $('#account-username').text(data.account.username);
             $('#account-fullname').text(data.account.fullname);
             $('#account-total-amount').text(formatter.format(data.account.totalAmount));
-            $('#teacher-account-email').text(data.email);
-            $('#teacher-account-phonenumber').text(data.phone);
-            $('#teacher-account-address').text(data.address);
             $('#account-gender').text(data.account.gender);
             $('#account-createddate').text(formatDate(data.account.createdDate, { ignoreHour : true })); // Format the date if needed
             $('#account-role').text(data.account.role.roleName);
