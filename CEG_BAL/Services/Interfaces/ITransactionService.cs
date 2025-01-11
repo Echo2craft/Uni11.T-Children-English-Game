@@ -21,5 +21,6 @@ namespace CEG_BAL.Services.Interfaces
         Task<int> GetTotalAmount();
         Task<int> GetTotalAmountByAccountId(int id);
         Task<int> GetSumValue();
+        Task<int> GetSumByTeacherAccountId(int id);
     }
 }
