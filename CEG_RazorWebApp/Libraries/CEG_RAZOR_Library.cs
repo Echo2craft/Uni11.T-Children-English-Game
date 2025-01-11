@@ -66,14 +66,14 @@ namespace CEG_RazorWebApp.Libraries
                 }
             }
             string jsonResponse = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-            {
-                _logger.LogError("Error while processing your request!: " + response.StatusCode + "\t\nApi Url: " + url + "\t\nError Message: " + jsonResponse);
-                var error = JsonSerializer.Deserialize<T>(jsonResponse, options);
-                return error;
-            };
             if (IsDeserializable<T>(jsonResponse, options))
             {
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Error while processing your request!: " + response.StatusCode + "\t\nApi Url: " + url + "\t\nError Message: " + jsonResponse);
+                    var error = JsonSerializer.Deserialize<T>(jsonResponse, options);
+                    return error;
+                };
                 var result = JsonSerializer.Deserialize<T>(jsonResponse, options);
                 _logger.LogInformation("Processing your request Successfully!: " + response.StatusCode + "\t\nApi Url: " + url + "\t\nSuccess Message: " + jsonResponse);
                 return result;
