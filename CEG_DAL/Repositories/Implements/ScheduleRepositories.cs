@@ -44,6 +44,7 @@ namespace CEG_DAL.Repositories.Implements
                         Title = sch.Session.Title,
                         Description = sch.Session.Description,
                         Hours = sch.Session.Hours,
+                        CourseId = sch.Session.CourseId,
                     },
                     Class = new Class()
                     {

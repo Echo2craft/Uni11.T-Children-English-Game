@@ -122,6 +122,9 @@ namespace CEG_BAL.Services.Implements
             var sch = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(schId)
                 ?? throw new KeyNotFoundException("Schedule not found.");
 
+            sch.Class = null;
+            sch.Session = null;
+
             sch.Status = upSchStatus;
             // Reattach entity and mark it as modified
             _unitOfWork.ScheduleRepositories.Update(sch);
