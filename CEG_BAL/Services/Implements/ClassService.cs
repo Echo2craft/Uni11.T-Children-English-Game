@@ -480,6 +480,7 @@ namespace CEG_BAL.Services.Implements
                     if (!isStuProExist)
                         clafor.StudentProgresses.Add(stuPro);
                 }
+
                 clafor.Status = CEGConstants.CLASS_STATUS_ONGOING;
 
                 // Reattach entity and mark it as modified
@@ -489,7 +490,7 @@ namespace CEG_BAL.Services.Implements
                 isOpenClassesUpdated = true;
 
             // Fetch the existing record
-            var claforOngoingToEnded = await _unitOfWork.ClassRepositories.GetListByStartDate(DateTime.Now)
+            var claforOngoingToEnded = await _unitOfWork.ClassRepositories.GetListByEndDate(DateTime.Now)
                 ?? throw new("Ongoing class list not found or empty.");
             foreach (var clafor in claforOngoingToEnded)
             {

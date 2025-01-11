@@ -464,7 +464,7 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
-                .Where(c => c.Status == "Open" && c.StartDate.Value >= claStartDate)
+                .Where(c => c.Status == "Open" && c.StartDate.Value.Date <= claStartDate.Date)
                 .Select(c => new Class
                 {
                     ClassId = c.ClassId,
@@ -507,7 +507,7 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
-                .Where(c => c.Status == "Ongoing" && c.EndDate.Value >= claEndDate)
+                .Where(c => c.Status == "Ongoing" && c.EndDate.Value.Date <= claEndDate.Date)
                 .Select(c => new Class
                 {
                     ClassId = c.ClassId,

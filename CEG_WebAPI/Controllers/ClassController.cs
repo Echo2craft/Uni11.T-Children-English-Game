@@ -173,10 +173,10 @@ namespace CEG_WebAPI.Controllers
                 var result = await _classService.UpdateListStatusByDate();
                 if (!result)
                 {
-                    return NotFound(new
+                    return BadRequest(new
                     {
                         Status = false,
-                        ErrorMessage = "Class option list by status Open not found!"
+                        ErrorMessage = "No classes was updated."
                     });
                 }
                 return Ok(new
