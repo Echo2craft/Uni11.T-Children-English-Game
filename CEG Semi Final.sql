@@ -1,79 +1,10 @@
 USE [master]
 GO
-/****** Object:  Database [ChildrenEnglishGame]    Script Date: 01-Jan-25 11:59:08 ******/
+DROP DATABASE [ChildrenEnglishGame]
+GO
 CREATE DATABASE [ChildrenEnglishGame]
-
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET ANSI_NULL_DEFAULT OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET ANSI_NULLS OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET ANSI_PADDING OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET ANSI_WARNINGS OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET ARITHABORT OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET AUTO_CLOSE OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET AUTO_SHRINK OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET AUTO_UPDATE_STATISTICS ON 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET CURSOR_CLOSE_ON_COMMIT OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET CURSOR_DEFAULT  GLOBAL 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET CONCAT_NULL_YIELDS_NULL OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET NUMERIC_ROUNDABORT OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET QUOTED_IDENTIFIER OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET RECURSIVE_TRIGGERS OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET DISABLE_BROKER 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET DATE_CORRELATION_OPTIMIZATION OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET TRUSTWORTHY OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET ALLOW_SNAPSHOT_ISOLATION OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET PARAMETERIZATION SIMPLE 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET READ_COMMITTED_SNAPSHOT OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET HONOR_BROKER_PRIORITY OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET RECOVERY FULL 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET  MULTI_USER 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET PAGE_VERIFY CHECKSUM  
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET DB_CHAINING OFF 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET TARGET_RECOVERY_TIME = 60 SECONDS 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET DELAYED_DURABILITY = DISABLED 
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET ACCELERATED_DATABASE_RECOVERY = OFF  
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET QUERY_STORE = ON
-GO
-ALTER DATABASE [ChildrenEnglishGame] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
 GO
 USE [ChildrenEnglishGame]
-GO
-/****** Object:  Table [dbo].[Account]    Script Date: 01-Jan-25 11:59:08 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Account](
 	[account_id] [int] IDENTITY(1,1) NOT NULL,
@@ -284,7 +215,7 @@ CREATE TABLE [dbo].[HomeworkResult](
 	[homework_result_id] [int] IDENTITY(1,1) NOT NULL,
 	[total_point] [int] NULL,
 	[total_correct_answers] [int] NULL,
-	[playtime] [time](7) NULL,
+	[playtime] [time](7) NOT NULL,
  CONSTRAINT [PK_HomeworkResult] PRIMARY KEY CLUSTERED 
 (
 	[homework_result_id] ASC
@@ -407,7 +338,7 @@ CREATE TABLE [dbo].[StudentHomework](
 	[student_progress_id] [int] NOT NULL,
 	[homework_result_id] [int] NOT NULL,
 	[point] [int] NULL,
-	[playtime] [time](7) NULL,
+	[playtime] [time](7) NOT NULL,
 	[status] [nvarchar](50) NULL,
 	[correct_answers] [int] NULL,
  CONSTRAINT [PK_StudentHomework] PRIMARY KEY CLUSTERED 
@@ -426,7 +357,7 @@ CREATE TABLE [dbo].[StudentProgress](
 	[student_id] [int] NOT NULL,
 	[class_id] [int] NOT NULL,
 	[total_point] [int] NULL,
-	[playtime] [time](7) NULL,
+	[playtime] [time](7) NOT NULL,
  CONSTRAINT [PK_StudentProgress] PRIMARY KEY CLUSTERED 
 (
 	[student_progress_id] ASC
@@ -475,139 +406,139 @@ CREATE TABLE [dbo].[Transaction](
 GO
 SET IDENTITY_INSERT [dbo].[Account] ON 
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (1, 1, N'HoaDM1', N'pass123', N'Dao Minh Hoa', CAST(N'2024-09-10T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (1, 1, N'HoaDM1', N'pass12345', N'Dao Minh Hoa', CAST(N'2024-09-10T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (2, 3, N'MinhDH2', N'pass123', N'Dang Hoang Minh', CAST(N'2024-09-12T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (2, 3, N'MinhDH2', N'pass12345', N'Dang Hoang Minh', CAST(N'2024-09-12T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (3, 4, N'VinhBH3', N'pass123', N'Bui Huu Vinh', CAST(N'2024-09-12T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (3, 4, N'VinhBH3', N'pass12345', N'Bui Huu Vinh', CAST(N'2024-09-12T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (4, 2, N'LinhNK4', N'pass123', N'Nguyen Khanh Linh', CAST(N'2024-09-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (4, 2, N'LinhNK4', N'pass12345', N'Nguyen Khanh Linh', CAST(N'2024-09-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (5, 4, N'KhoaPA5', N'pass123', N'Pham Anh Khoa', CAST(N'2024-09-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (5, 4, N'KhoaPA5', N'pass12345', N'Pham Anh Khoa', CAST(N'2024-09-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (6, 3, N'MinhLT6', N'pass123', N'Lam The Minh', CAST(N'2024-09-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (6, 3, N'MinhLT6', N'pass12345', N'Lam The Minh', CAST(N'2024-09-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (7, 4, N'DuyDNM7', N'pass123', N'Dang Nguyen Minh Duy', CAST(N'2024-09-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (7, 4, N'DuyDNM7', N'pass12345', N'Dang Nguyen Minh Duy', CAST(N'2024-09-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (8, 2, N'NganVT8', N'pass123', N'Vo Thuy Ngan', CAST(N'2024-09-14T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (8, 2, N'NganVT8', N'pass12345', N'Vo Thuy Ngan', CAST(N'2024-09-14T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (9, 2, N'UyenDNM9', N'pass123', N'Do Ngoc My Uyen', CAST(N'2024-09-16T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (9, 2, N'UyenDNM9', N'pass12345', N'Do Ngoc My Uyen', CAST(N'2024-09-16T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (10, 4, N'NganLT10', N'pass123', N'Le Thu Ngan', CAST(N'2024-09-16T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (10, 4, N'NganLT10', N'pass12345', N'Le Thu Ngan', CAST(N'2024-09-16T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (11, 2, N'DucPM11', N'pass123', N'Pham Minh Duc', CAST(N'2024-09-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (11, 2, N'DucPM11', N'pass12345', N'Pham Minh Duc', CAST(N'2024-09-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (12, 3, N'ThongHH12', N'pass123', N'Ho Hieu Thong', CAST(N'2024-09-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (12, 3, N'ThongHH12', N'pass12345', N'Ho Hieu Thong', CAST(N'2024-09-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (13, 4, N'NamMN13', N'pass123', N'Mai Nhat Nam', CAST(N'2024-09-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (13, 4, N'NamMN13', N'pass12345', N'Mai Nhat Nam', CAST(N'2024-09-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (14, 2, N'TuMNT14', N'pass123', N'Mai Nguyen Tuan Tu', CAST(N'2024-09-19T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (14, 2, N'TuMNT14', N'pass12345', N'Mai Nguyen Tuan Tu', CAST(N'2024-09-19T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (15, 4, N'DuyBD15', N'pass123', N'Bui Duc Duy', CAST(N'2024-09-19T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (15, 4, N'DuyBD15', N'pass12345', N'Bui Duc Duy', CAST(N'2024-09-19T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (16, 3, N'MinhNN16', N'pass123', N'Nguyen Ngoc Minh', CAST(N'2024-09-19T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (16, 3, N'MinhNN16', N'pass12345', N'Nguyen Ngoc Minh', CAST(N'2024-09-19T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (17, 4, N'KhanhHN17', N'pass123', N'Ho Ngoc Khanh', CAST(N'2024-09-20T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (17, 4, N'KhanhHN17', N'pass12345', N'Ho Ngoc Khanh', CAST(N'2024-09-20T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (18, 2, N'MaiPTN18', N'pass123', N'Pham Thi Ngoc Mai', CAST(N'2024-09-21T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (18, 2, N'MaiPTN18', N'pass12345', N'Pham Thi Ngoc Mai', CAST(N'2024-09-21T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (19, 2, N'KimHN19', N'pass123', N'Ho Ngoc Kim', CAST(N'2024-09-23T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (19, 2, N'KimHN19', N'pass12345', N'Ho Ngoc Kim', CAST(N'2024-09-23T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (20, 4, N'KhoaBA20', N'pass123', N'Bui Anh Khoa', CAST(N'2024-09-24T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (20, 4, N'KhoaBA20', N'pass12345', N'Bui Anh Khoa', CAST(N'2024-09-24T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (21, 2, N'SonNT21', N'pass123', N'Nguyen Truc Son', CAST(N'2024-09-26T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (21, 2, N'SonNT21', N'pass12345', N'Nguyen Truc Son', CAST(N'2024-09-26T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (22, 1, N'DuyHTK22', N'pass123', N'Ho Tran Khanh Duy', CAST(N'2024-09-27T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (22, 1, N'DuyHTK22', N'pass12345', N'Ho Tran Khanh Duy', CAST(N'2024-09-27T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (23, 2, N'TuanHA23', N'pass123', N'Huynh Anh Tuan', CAST(N'2024-09-27T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (23, 2, N'TuanHA23', N'pass12345', N'Huynh Anh Tuan', CAST(N'2024-09-27T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (24, 2, N'TrinhLT24', N'pass123', N'Le Thi Trinh', CAST(N'2024-09-28T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (24, 2, N'TrinhLT24', N'pass12345', N'Le Thi Trinh', CAST(N'2024-09-28T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (25, 2, N'BaoPN25', N'pass123', N'Pham Nguyen Bao', CAST(N'2024-09-28T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (25, 2, N'BaoPN25', N'pass12345', N'Pham Nguyen Bao', CAST(N'2024-09-28T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (26, 2, N'MinhDL26', N'pass123', N'Do Le Minh', CAST(N'2024-09-29T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (26, 2, N'MinhDL26', N'pass12345', N'Do Le Minh', CAST(N'2024-09-29T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (27, 2, N'LanTT27', N'pass123', N'Tran Thi Lan', CAST(N'2024-09-29T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (27, 2, N'LanTT27', N'pass12345', N'Tran Thi Lan', CAST(N'2024-09-29T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (28, 2, N'CuongNV28', N'pass123', N'Nguyen Van Cuong', CAST(N'2024-09-30T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (28, 2, N'CuongNV28', N'pass12345', N'Nguyen Van Cuong', CAST(N'2024-09-30T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (29, 2, N'TrangTT29', N'pass123', N'Tran Thi Trang', CAST(N'2024-09-30T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (29, 2, N'TrangTT29', N'pass12345', N'Tran Thi Trang', CAST(N'2024-09-30T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (30, 2, N'KhanhND30', N'pass123', N'Nguyen Duc Khanh', CAST(N'2024-10-01T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (30, 2, N'KhanhND30', N'pass12345', N'Nguyen Duc Khanh', CAST(N'2024-10-01T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (31, 2, N'ThuVN31', N'pass123', N'Vu Ngoc Thu', CAST(N'2024-10-01T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (31, 2, N'ThuVN31', N'pass12345', N'Vu Ngoc Thu', CAST(N'2024-10-01T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (32, 2, N'PhongTT32', N'pass123', N'Tran Tuan Phong', CAST(N'2024-10-02T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (32, 2, N'PhongTT32', N'pass12345', N'Tran Tuan Phong', CAST(N'2024-10-02T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (33, 2, N'LinhNT33', N'pass123', N'Nguyen Thi Linh', CAST(N'2024-10-02T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (33, 2, N'LinhNT33', N'pass12345', N'Nguyen Thi Linh', CAST(N'2024-10-02T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (34, 2, N'TuanBT34', N'pass123', N'Bui Tuan Tu', CAST(N'2024-10-03T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (34, 2, N'TuanBT34', N'pass12345', N'Bui Tuan Tu', CAST(N'2024-10-03T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (35, 2, N'ThuyLT35', N'pass123', N'Le Thi Thuy', CAST(N'2024-10-03T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (35, 2, N'ThuyLT35', N'pass12345', N'Le Thi Thuy', CAST(N'2024-10-03T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (36, 2, N'KienPV36', N'pass123', N'Pham Van Kien', CAST(N'2024-10-04T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (36, 2, N'KienPV36', N'pass12345', N'Pham Van Kien', CAST(N'2024-10-04T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (37, 2, N'DuongTV37', N'pass123', N'Tran Van Duong', CAST(N'2024-10-04T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (37, 2, N'DuongTV37', N'pass12345', N'Tran Van Duong', CAST(N'2024-10-04T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (38, 2, N'HieuNL38', N'pass123', N'Nguyen Le Hieu', CAST(N'2024-10-05T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (38, 2, N'HieuNL38', N'pass12345', N'Nguyen Le Hieu', CAST(N'2024-10-05T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (39, 2, N'HoaTL39', N'pass123', N'Tran Lan Hoa', CAST(N'2024-10-05T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (39, 2, N'HoaTL39', N'pass12345', N'Tran Lan Hoa', CAST(N'2024-10-05T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (40, 2, N'ThanhPH40', N'pass123', N'Phan Huu Thanh', CAST(N'2024-10-06T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (40, 2, N'ThanhPH40', N'pass12345', N'Phan Huu Thanh', CAST(N'2024-10-06T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (41, 2, N'DiepNT41', N'pass123', N'Nguyen Thi Diep', CAST(N'2024-10-06T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (41, 2, N'DiepNT41', N'pass12345', N'Nguyen Thi Diep', CAST(N'2024-10-06T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (42, 2, N'TrungDN42', N'pass123', N'Dang Nguyen Trung', CAST(N'2024-10-07T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (42, 2, N'TrungDN42', N'pass12345', N'Dang Nguyen Trung', CAST(N'2024-10-07T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (43, 2, N'HangLH43', N'pass123', N'Le Hong Hang', CAST(N'2024-10-07T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (43, 2, N'HangLH43', N'pass12345', N'Le Hong Hang', CAST(N'2024-10-07T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (44, 2, N'ToanTB44', N'pass123', N'Tran Bao Toan', CAST(N'2024-10-08T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (44, 2, N'ToanTB44', N'pass12345', N'Tran Bao Toan', CAST(N'2024-10-08T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (45, 2, N'TrangLN45', N'pass123', N'Le Ngoc Trang', CAST(N'2024-10-08T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (45, 2, N'TrangLN45', N'pass12345', N'Le Ngoc Trang', CAST(N'2024-10-08T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (46, 2, N'KhanhBT46', N'pass123', N'Bui Thi Khanh', CAST(N'2024-10-09T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (46, 2, N'KhanhBT46', N'pass12345', N'Bui Thi Khanh', CAST(N'2024-10-09T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (47, 2, N'ThuyNT47', N'pass123', N'Nguyen Thi Thuy', CAST(N'2024-10-09T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (47, 2, N'ThuyNT47', N'pass12345', N'Nguyen Thi Thuy', CAST(N'2024-10-09T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (48, 2, N'TuanHV48', N'pass123', N'Hoang Van Tuan', CAST(N'2024-10-10T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (48, 2, N'TuanHV48', N'pass12345', N'Hoang Van Tuan', CAST(N'2024-10-10T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (49, 2, N'DuyenTD49', N'pass123', N'Tran Thi Duyen', CAST(N'2024-10-10T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (49, 2, N'DuyenTD49', N'pass12345', N'Tran Thi Duyen', CAST(N'2024-10-10T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (50, 2, N'HieuNV50', N'pass123', N'Nguyen Van Hieu', CAST(N'2024-10-11T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (50, 2, N'HieuNV50', N'pass12345', N'Nguyen Van Hieu', CAST(N'2024-10-11T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (51, 2, N'HoaLT51', N'pass123', N'Le Thi Hoa', CAST(N'2024-10-11T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (51, 2, N'HoaLT51', N'pass12345', N'Le Thi Hoa', CAST(N'2024-10-11T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (52, 2, N'ThanhTH52', N'pass123', N'Tran Huu Thanh', CAST(N'2024-10-12T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (52, 2, N'ThanhTH52', N'pass12345', N'Tran Huu Thanh', CAST(N'2024-10-12T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (53, 2, N'PhuongNN53', N'pass123', N'Nguyen Ngoc Phuong', CAST(N'2024-10-12T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (53, 2, N'PhuongNN53', N'pass12345', N'Nguyen Ngoc Phuong', CAST(N'2024-10-12T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (54, 2, N'CuongLB54', N'pass123', N'Le Bao Cuong', CAST(N'2024-10-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (54, 2, N'CuongLB54', N'pass12345', N'Le Bao Cuong', CAST(N'2024-10-13T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (55, 2, N'LinhNT55', N'pass123', N'Nguyen Thi Linh', CAST(N'2024-10-13T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (55, 2, N'LinhNT55', N'pass12345', N'Nguyen Thi Linh', CAST(N'2024-10-13T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (56, 2, N'HieuHN56', N'pass123', N'Hoang Ngoc Hieu', CAST(N'2024-10-14T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (56, 2, N'HieuHN56', N'pass12345', N'Hoang Ngoc Hieu', CAST(N'2024-10-14T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (57, 2, N'NgocLT57', N'pass123', N'Le Thanh Ngoc', CAST(N'2024-10-14T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (57, 2, N'NgocLT57', N'pass12345', N'Le Thanh Ngoc', CAST(N'2024-10-14T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (58, 2, N'HungVT58', N'pass123', N'Vo Thanh Hung', CAST(N'2024-10-15T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (58, 2, N'HungVT58', N'pass12345', N'Vo Thanh Hung', CAST(N'2024-10-15T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (59, 2, N'DucPV59', N'pass123', N'Pham Van Duc', CAST(N'2024-10-15T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (59, 2, N'DucPV59', N'pass12345', N'Pham Van Duc', CAST(N'2024-10-15T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (60, 2, N'KhoaLN60', N'pass123', N'Le Ngoc Khoa', CAST(N'2024-10-16T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (60, 2, N'KhoaLN60', N'pass12345', N'Le Ngoc Khoa', CAST(N'2024-10-16T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (61, 2, N'ThuyPT61', N'pass123', N'Pham Thanh Thuy', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (61, 2, N'ThuyPT61', N'pass12345', N'Pham Thanh Thuy', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (62, 4, N'HaiTA62', N'pass123', N'Tran Anh Hai', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (62, 4, N'HaiTA62', N'pass12345', N'Tran Anh Hai', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (63, 4, N'AnhNL63', N'pass123', N'Nguyen Lan Anh', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (63, 4, N'AnhNL63', N'pass12345', N'Nguyen Lan Anh', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Female', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (64, 4, N'ThienLH64', N'pass123', N'Le Ha Thien', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (64, 4, N'ThienLH64', N'pass12345', N'Le Ha Thien', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (65, 4, N'CuongVM65', N'pass123', N'Vu Manh Cuong', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (65, 4, N'CuongVM65', N'pass12345', N'Vu Manh Cuong', CAST(N'2024-10-17T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (66, 4, N'KhaiTV66', N'pass123', N'Tran Van Khai', CAST(N'2024-10-18T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (66, 4, N'KhaiTV66', N'pass12345', N'Tran Van Khai', CAST(N'2024-10-18T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
-INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (67, 4, N'ManhVV67', N'pass123', N'Vu Van Manh', CAST(N'2024-10-18T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
+INSERT [dbo].[Account] ([account_id], [role_id], [username], [password], [fullname], [created_date], [gender], [total_amount], [status]) VALUES (67, 4, N'ManhVV67', N'pass12345', N'Vu Van Manh', CAST(N'2024-10-18T00:00:00.000' AS DateTime), N'Male', 50000000, N'Active')
 GO
 SET IDENTITY_INSERT [dbo].[Account] OFF
 GO
@@ -1061,6 +992,38 @@ INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_at
 GO
 INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (224, 14, 32, N'Absent')
 GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (225, 21, 1, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (226, 21, 2, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (227, 21, 3, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (228, 21, 4, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (229, 21, 5, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (230, 21, 6, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (231, 21, 7, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (232, 21, 8, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (233, 21, 9, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (234, 21, 10, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (235, 21, 11, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (236, 21, 12, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (237, 21, 13, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (238, 21, 14, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (239, 21, 15, N'Attended')
+GO
+INSERT [dbo].[Attendance] ([attendance_id], [schedule_id], [student_id], [has_attended]) VALUES (240, 21, 16, N'Attended')
+GO
 SET IDENTITY_INSERT [dbo].[Attendance] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Class] ON 
@@ -1308,7 +1271,7 @@ INSERT [dbo].[Homework] ([homework_id], [session_id], [title], [description], [g
 GO
 INSERT [dbo].[Homework] ([homework_id], [session_id], [title], [description], [game_config_id], [start_date], [end_date], [hours], [type]) VALUES (2, 13, N'Standard Homework', N'Get used to English', NULL, CAST(N'2024-12-15T00:00:00.000' AS DateTime), CAST(N'2025-02-15T00:00:00.000' AS DateTime), 1, N'Vocabulary')
 GO
-INSERT [dbo].[Homework] ([homework_id], [session_id], [title], [description], [game_config_id], [start_date], [end_date], [hours], [type]) VALUES (3, 31, N'Starter Homework', N'Practice what you learned', NULL, CAST(N'2024-10-09T00:00:00.000' AS DateTime), CAST(N'2024-12-15T00:00:00.000' AS DateTime), 1, N'Grammar')
+INSERT [dbo].[Homework] ([homework_id], [session_id], [title], [description], [game_config_id], [start_date], [end_date], [hours], [type]) VALUES (3, 21, N'Starter Homework', N'Practice what you learned', NULL, CAST(N'2024-10-09T00:00:00.000' AS DateTime), CAST(N'2024-12-15T00:00:00.000' AS DateTime), 1, N'Grammar')
 GO
 SET IDENTITY_INSERT [dbo].[Homework] OFF
 GO
@@ -1927,25 +1890,25 @@ INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date
 GO
 INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (30, 30, 3, CAST(N'2024-12-20T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (31, 31, 4, CAST(N'2024-09-10T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (31, 31, 4, CAST(N'2025-01-15T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (32, 32, 4, CAST(N'2024-09-15T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (32, 32, 4, CAST(N'2025-01-22T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (33, 33, 4, CAST(N'2024-09-19T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (33, 33, 4, CAST(N'2025-01-29T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (34, 34, 4, CAST(N'2024-10-01T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (34, 34, 4, CAST(N'2025-02-05T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (35, 35, 4, CAST(N'2024-10-06T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (35, 35, 4, CAST(N'2025-02-12T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (36, 36, 4, CAST(N'2024-10-13T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (36, 36, 4, CAST(N'2025-02-20T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (37, 37, 4, CAST(N'2024-10-21T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (37, 37, 4, CAST(N'2025-03-04T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (38, 38, 4, CAST(N'2024-10-26T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (38, 38, 4, CAST(N'2025-03-11T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (39, 39, 4, CAST(N'2024-11-01T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (39, 39, 4, CAST(N'2025-03-18T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
-INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (40, 40, 4, CAST(N'2024-11-10T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Ended')
+INSERT [dbo].[Schedule] ([schedule_id], [session_id], [class_id], [schedule_date], [start_time], [end_time], [status]) VALUES (40, 40, 4, CAST(N'2025-03-25T00:00:00.000' AS DateTime), CAST(N'12:00:00' AS Time), CAST(N'14:00:00' AS Time), N'Upcoming')
 GO
 SET IDENTITY_INSERT [dbo].[Schedule] OFF
 GO
@@ -2295,37 +2258,37 @@ INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_p
 GO
 INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (32, 2, 32, 32, 70, CAST(N'00:05:37' AS Time), N'Submitted', 7)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (33, 3, 1, 1, 80, CAST(N'00:27:21' AS Time), N'Submitted', 8)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (33, 3, 33, 1, 80, CAST(N'00:27:21' AS Time), N'Submitted', 8)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (34, 3, 2, 2, 50, CAST(N'00:28:55' AS Time), N'Submitted', 5)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (34, 3, 34, 2, 50, CAST(N'00:28:55' AS Time), N'Submitted', 5)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (35, 3, 3, 3, 70, CAST(N'00:25:21' AS Time), N'Submitted', 7)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (35, 3, 35, 3, 70, CAST(N'00:25:21' AS Time), N'Submitted', 7)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (36, 3, 4, 4, 70, CAST(N'00:24:21' AS Time), N'Submitted', 7)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (36, 3, 36, 4, 70, CAST(N'00:24:21' AS Time), N'Submitted', 7)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (37, 3, 5, 5, 60, CAST(N'00:28:57' AS Time), N'Submitted', 6)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (37, 3, 37, 5, 60, CAST(N'00:28:57' AS Time), N'Submitted', 6)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (38, 3, 6, 6, 50, CAST(N'00:28:41' AS Time), N'Submitted', 5)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (38, 3, 38, 6, 50, CAST(N'00:28:41' AS Time), N'Submitted', 5)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (39, 3, 7, 7, 90, CAST(N'00:10:23' AS Time), N'Submitted', 9)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (39, 3, 39, 7, 90, CAST(N'00:10:23' AS Time), N'Submitted', 9)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (40, 3, 8, 8, 80, CAST(N'00:15:55' AS Time), N'Submitted', 8)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (40, 3, 40, 8, 80, CAST(N'00:15:55' AS Time), N'Submitted', 8)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (41, 3, 9, 9, 70, CAST(N'00:20:03' AS Time), N'Submitted', 7)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (41, 3, 41, 9, 70, CAST(N'00:20:03' AS Time), N'Submitted', 7)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (42, 3, 10, 10, 60, CAST(N'00:23:05' AS Time), N'Submitted', 6)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (42, 3, 42, 10, 60, CAST(N'00:23:05' AS Time), N'Submitted', 6)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (43, 3, 11, 11, 80, CAST(N'00:20:10' AS Time), N'Submitted', 8)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (43, 3, 43, 11, 80, CAST(N'00:20:10' AS Time), N'Submitted', 8)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (44, 3, 12, 12, 90, CAST(N'00:13:29' AS Time), N'Submitted', 9)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (44, 3, 44, 12, 90, CAST(N'00:13:29' AS Time), N'Submitted', 9)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (45, 3, 13, 13, 80, CAST(N'00:25:31' AS Time), N'Submitted', 8)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (45, 3, 45, 13, 80, CAST(N'00:25:31' AS Time), N'Submitted', 8)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (46, 3, 14, 14, 80, CAST(N'00:27:01' AS Time), N'Submitted', 8)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (46, 3, 46, 14, 80, CAST(N'00:27:01' AS Time), N'Submitted', 8)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (47, 3, 15, 15, 60, CAST(N'00:16:18' AS Time), N'Submitted', 6)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (47, 3, 47, 15, 60, CAST(N'00:16:18' AS Time), N'Submitted', 6)
 GO
-INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (48, 3, 16, 16, 60, CAST(N'00:05:37' AS Time), N'Submitted', 6)
+INSERT [dbo].[StudentHomework] ([student_homework_id], [homework_id], [student_progress_id], [homework_result_id], [point], [playtime], [status], [correct_answers]) VALUES (48, 3, 48, 16, 60, CAST(N'00:05:37' AS Time), N'Submitted', 6)
 GO
 SET IDENTITY_INSERT [dbo].[StudentHomework] OFF
 GO
@@ -2395,37 +2358,37 @@ INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id],
 GO
 INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (32, 32, 2, 70, CAST(N'00:05:37' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (33, 1, 4, 80, CAST(N'00:29:21' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (33, 1, 3, 80, CAST(N'00:29:21' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (34, 2, 4, 50, CAST(N'00:21:55' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (34, 2, 3, 50, CAST(N'00:21:55' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (35, 3, 4, 70, CAST(N'00:22:21' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (35, 3, 3, 70, CAST(N'00:22:21' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (36, 4, 4, 70, CAST(N'00:28:21' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (36, 4, 3, 70, CAST(N'00:28:21' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (37, 5, 4, 60, CAST(N'00:21:57' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (37, 5, 3, 60, CAST(N'00:21:57' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (38, 6, 4, 50, CAST(N'00:22:41' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (38, 6, 3, 50, CAST(N'00:22:41' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (39, 7, 4, 90, CAST(N'00:15:23' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (39, 7, 3, 90, CAST(N'00:15:23' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (40, 8, 4, 80, CAST(N'00:18:55' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (40, 8, 3, 80, CAST(N'00:18:55' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (41, 9, 4, 70, CAST(N'00:23:03' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (41, 9, 3, 70, CAST(N'00:23:03' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (42, 10, 4, 70, CAST(N'00:28:05' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (42, 10, 3, 70, CAST(N'00:28:05' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (43, 11, 4, 80, CAST(N'00:22:10' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (43, 11, 3, 80, CAST(N'00:22:10' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (44, 12, 4, 90, CAST(N'00:11:29' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (44, 12, 3, 90, CAST(N'00:11:29' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (45, 13, 4, 100, CAST(N'00:22:31' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (45, 13, 3, 100, CAST(N'00:22:31' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (46, 14, 4, 70, CAST(N'00:24:01' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (46, 14, 3, 70, CAST(N'00:24:01' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (47, 15, 4, 80, CAST(N'00:13:18' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (47, 15, 3, 80, CAST(N'00:13:18' AS Time))
 GO
-INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (48, 16, 4, 70, CAST(N'00:06:37' AS Time))
+INSERT [dbo].[StudentProgress] ([student_progress_id], [student_id], [class_id], [total_point], [playtime]) VALUES (48, 16, 3, 70, CAST(N'00:06:37' AS Time))
 GO
 SET IDENTITY_INSERT [dbo].[StudentProgress] OFF
 GO
