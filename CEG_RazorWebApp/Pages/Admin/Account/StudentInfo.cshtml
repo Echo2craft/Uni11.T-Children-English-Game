@@ -687,7 +687,7 @@
         });
         function callApiPutUpdateStudentStatus(newStatus) {
             $.ajax({
-                url: apiUrl + 'Account/@accountId/Update/Status', // Specify your Razor Page here
+                url: apiUrl + 'Account/@accountId/Update/Status',
                 type: 'PUT',
                 data: JSON.stringify(newStatus),
                 headers: {
