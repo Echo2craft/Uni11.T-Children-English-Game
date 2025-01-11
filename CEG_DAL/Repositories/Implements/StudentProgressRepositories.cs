@@ -122,6 +122,24 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
+        public async Task<TimeSpan> GetTotalTimeByStudentId(int? id)
+        {
+            var playtimeData = await _dbContext.StudentProgresses
+                .Where(sp => sp.StudentId == id)
+                .Select(sp => sp.Playtime) // Get the TimeSpan column directly
+                .ToListAsync();
+
+            // Sum the playtime in-memory after fetching it
+            var totalPlaytime = playtimeData.Aggregate(TimeSpan.Zero, (sum, current) => sum.Add(current));
+
+            return totalPlaytime;
+        }
+
+        public async Task<int> GetTotalPointByStudentId(int? id)
+        {
+            return (int)await _dbContext.StudentProgresses.Where(sp => sp.StudentId == id).SumAsync(sp => sp.TotalPoint);
+        }
+
         public async Task UpdateStudentProgressTotalPointsAsync()
         {
             var studentProgresses = await _dbContext.StudentProgresses

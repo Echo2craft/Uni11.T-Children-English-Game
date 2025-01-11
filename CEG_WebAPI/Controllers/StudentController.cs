@@ -396,7 +396,7 @@ namespace CEG_WebAPI.Controllers
         }
         [HttpPut("Account/{id}/Update")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(

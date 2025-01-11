@@ -32,7 +32,7 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<StudentHomework>> GetListByStudentId(int id)
+        public async Task<List<StudentHomework>> GetListByStudentId(int? id)
         {
             return await _dbContext.StudentHomeworks
                 .AsNoTrackingWithIdentityResolution()
@@ -50,13 +50,21 @@ namespace CEG_DAL.Repositories.Implements
                     StudentProgress = new StudentProgress()
                     {
                         StudentProgressId = stuHom.StudentProgressId,
-                        StudentId = id,
+                        //StudentId = (int)id,
                         TotalPoint = stuHom.StudentProgress.TotalPoint,
                         Playtime = stuHom.StudentProgress.Playtime,
+                        Class = new Class()
+                        {
+                            ClassName = stuHom.StudentProgress.Class.ClassName
+                        }
                     },
                     Homework = new Homework()
                     {
                         Title = stuHom.Homework.Title,
+                        Session = new Session()
+                        {
+                            Title = stuHom.Homework.Session.Title,
+                        }
                     }
                 })
                 .ToListAsync();

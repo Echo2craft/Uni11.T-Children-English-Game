@@ -13,7 +13,7 @@ namespace CEG_BAL.ViewModels
 
         public int StudentId { get; set; }
 
-        public TimeOnly? Playtime { get; set; }
+        public TimeSpan Playtime { get; set; }
 
         public ClassViewModel? Class { get; set; }
 
