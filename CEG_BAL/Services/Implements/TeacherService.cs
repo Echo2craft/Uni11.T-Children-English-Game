@@ -6,6 +6,7 @@ using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
 using CEG_BAL.ViewModels.Admin.Get;
+using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.AspNetCore.Http;
@@ -95,12 +96,19 @@ namespace CEG_BAL.Services.Implements
             }*/
         }
 
-
-
-        public void Update(TeacherViewModel teacher)
+        public void Update(TeacherViewModel teacher, UpdateTeacher teacherNewInfo)
         {
-            var acc = _mapper.Map<Teacher>(teacher);
-            _unitOfWork.TeacherRepositories.Update(acc);
+            var tea = _mapper.Map<Teacher>(teacher);
+            if (teacherNewInfo != null)
+            {
+                tea.TeacherId = _unitOfWork.TeacherRepositories.GetIdByAccountId(tea.Account.AccountId).Result;
+                tea.AccountId = tea.Account.AccountId;
+                tea.Account.Fullname = teacherNewInfo.Account.Fullname;
+                tea.Account.Gender = teacherNewInfo.Account.Gender;
+                tea.Phone = teacherNewInfo.Phone;
+                tea.Phone = teacherNewInfo.Address;
+            }
+            _unitOfWork.TeacherRepositories.Update(tea);
             _unitOfWork.Save();
         }
 
@@ -151,15 +159,18 @@ namespace CEG_BAL.Services.Implements
                 {
                     stuAct.StudentProgress = matchingStuPro;
 
+                    var stuHomList = matchingStuPro.StudentHomeworks.Where(stuHom => homIds.Contains(stuHom.HomeworkId)).ToList();
+
                     // Calculate the current homework progress for the student
-                    stuAct.HomeworkCurrentProgress = matchingStuPro.StudentHomeworks
-                        .Count(stuHom => homIds.Contains(stuHom.HomeworkId) && stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED);
+                    stuAct.HomeworkCurrentProgress = stuHomList
+                        .Count(stuHom => stuHom.Status == CEGConstants.STUDENT_HOMEWORK_STATUS_SUBMITTED);
 
                     // Assign homework numbers if there are any student homeworks
-                    for (int i = 0; i < matchingStuPro.StudentHomeworks.Count; i++)
+                    for (int i = 0; i < stuHomList.Count; i++)
                     {
-                        matchingStuPro.StudentHomeworks[i].Homework.HomeworkNumber = i + 1;
+                        stuHomList[i].Homework.HomeworkNumber = i + 1;
                     }
+                    matchingStuPro.StudentHomeworks = stuHomList;
                 }
             }
             return stuActList;

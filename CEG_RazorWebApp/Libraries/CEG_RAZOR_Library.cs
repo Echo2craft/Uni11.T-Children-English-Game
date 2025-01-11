@@ -66,15 +66,19 @@ namespace CEG_RazorWebApp.Libraries
                 }
             }
             string jsonResponse = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
+            if (IsDeserializable<T>(jsonResponse, options))
             {
-                _logger.LogError("Error while processing your request!: " + response.StatusCode + "\t\nApi Url: " + url + "\t\nError Message: " + jsonResponse);
-                var error = JsonSerializer.Deserialize<T>(jsonResponse, options);
-                return error;
-            };
-            var result = JsonSerializer.Deserialize<T>(jsonResponse, options);
-            _logger.LogInformation("Processing your request Successfully!: " + response.StatusCode + "\t\nApi Url: " + url + "\t\nSuccess Message: " + jsonResponse);
-            return result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Error while processing your request!: " + response.StatusCode + "\t\nApi Url: " + url + "\t\nError Message: " + jsonResponse);
+                    var error = JsonSerializer.Deserialize<T>(jsonResponse, options);
+                    return error;
+                };
+                var result = JsonSerializer.Deserialize<T>(jsonResponse, options);
+                _logger.LogInformation("Processing your request Successfully!: " + response.StatusCode + "\t\nApi Url: " + url + "\t\nSuccess Message: " + jsonResponse);
+                return result;
+            }
+            return null;
         }
 
         public void SetCookie(HttpResponse response, string key, object inputType, CookieOptions cookieOptions, JsonSerializerOptions jsonOptions, int? expireTime = null)
@@ -93,6 +97,26 @@ namespace CEG_RazorWebApp.Libraries
             }
             else
                 response.Cookies.Append(key, json, cookieOptions);
+        }
+
+        private bool IsDeserializable<T>(string jsonResponse, JsonSerializerOptions? options = null)
+        {
+            try
+            {
+                // Attempt to deserialize the JSON string
+                var result = JsonSerializer.Deserialize<T>(jsonResponse, options);
+                return true; // If successful, return true
+            }
+            catch (JsonException)
+            {
+                return false; // If a JSON-related exception occurs, return false
+            }
+            catch (Exception ex)
+            {
+                // Optionally, log or handle other exceptions
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task<T> GetCookie<T>(HttpRequest request, string key, JsonSerializerOptions jsonOptions) where T : class

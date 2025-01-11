@@ -6,6 +6,8 @@ using CEG_BAL.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
+using CEG_BAL.ViewModels.Student;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -67,6 +69,42 @@ namespace CEG_WebAPI.Controllers
             try
             {
                 var result = await _studentProgressService.GetById(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Student progress not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("Dashboard/{id}")]
+        [Authorize(Roles = "Student")]
+        [ProducesResponseType(typeof(StudentDashboard), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetStudentDashboard(
+            [FromRoute][Required] int id)
+        {
+            try
+            {
+                var result = await _studentProgressService.GetByStudentAccountId(id);
                 if (result == null)
                 {
                     return NotFound(new

@@ -77,8 +77,26 @@
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="homework-table" rowspan="1"
                                                         colspan="1" aria-sort="ascending"
+                                                        aria-label="Class Name: activate to sort column ascending">
+                                                        Class Name
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="homework-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Session Name: activate to sort column ascending">
+                                                        Session Name
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="homework-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
                                                         aria-label="Points: activate to sort column ascending">
                                                         Points
+                                                    </th>
+                                                    <th class="sorting sorting_asc" tabindex="0"
+                                                        aria-controls="homework-table" rowspan="1"
+                                                        colspan="1" aria-sort="ascending"
+                                                        aria-label="Total Playtime: activate to sort column ascending">
+                                                        Total Playtime
                                                     </th>
                                                     <th class="sorting sorting_asc" tabindex="0"
                                                         aria-controls="homework-table" rowspan="1"
@@ -178,7 +196,16 @@
                         data: 'homework.title',
                     },
                     {
+                        data: 'studentProgress.class.className',
+                    },
+                    {
+                        data: 'homework.session.title',
+                    },
+                    {
                         data: 'point',
+                    },
+                    {
+                        data: 'playtime',
                     },
                     {
                         data: 'status',
@@ -193,9 +220,12 @@
                     {
                         data: null,
                         render: function (data, type, row, meta) {
-                            if (row.status && row.status === "NotSubmitted") {
+                            // const selectedRowData = scheduleTable.rows({ selected: true }).data().toArray();
+                            console.log(row);
+
+                            if (row.status && row.status === "Not Submitted") {
                                 return `
-                                    <button class="btn btn-primary btn-sm submit-button">
+                                    <button class="btn btn-primary btn-sm submit-button" onclick="window.location.href='https://drive.google.com/drive/folders/1dTieQSVhXQ1ZECXMLTfinPU-_Rqyf4kA?usp=sharing'" target="_blank">
                                         Download Homework
                                     </button>
                                 `;

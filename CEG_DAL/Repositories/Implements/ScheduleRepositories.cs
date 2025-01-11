@@ -44,13 +44,21 @@ namespace CEG_DAL.Repositories.Implements
                         Title = sch.Session.Title,
                         Description = sch.Session.Description,
                         Hours = sch.Session.Hours,
+                        CourseId = sch.Session.CourseId,
                     },
                     Class = new Class()
                     {
                         ClassId = sch.ClassId,
                         ClassName = sch.Class.ClassName,
                         Status = sch.Class.Status,
-                    }
+                    },
+                    Attendances = sch.Attendances.Select(att => new Attendance()
+                    {
+                        AttendanceId = att.AttendanceId,
+                        ScheduleId = att.ScheduleId,
+                        StudentId = att.StudentId,
+                        HasAttended = att.HasAttended,
+                    }).ToList(),
                 })
                 .FirstOrDefaultAsync(s => s.ScheduleId == id);
         }

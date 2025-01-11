@@ -5,9 +5,7 @@
     ViewData["Title"] = "Teacher All Classes Page";
     string? search = string.Empty;
 
-    var classes = Model.Classes;
-
-    Layout = Model.LayoutUrl;
+    Layout = "~/Pages/Shared/_TLayout.cshtml";
 }
 <html lang="en">
 <head>
@@ -105,7 +103,7 @@
         // Function to call API for class list
         function callApiGetClassList() {
             $.ajax({
-                    url: apiUrl + `Class/${id}/All`, // Use teacherId in the API URL
+                url: apiUrl + `Class/${id}/All`, // Use teacherId in the API URL
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token

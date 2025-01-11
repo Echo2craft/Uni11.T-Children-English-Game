@@ -9,7 +9,7 @@ namespace CEG_RazorWebApp.Pages.Admin.Class
 {
     public class ClassInfoModel : PageModel
     {
-        public int? ClassID;
+        public int ClassID;
         public UpdateClassVM UpdateClassVM { get; set; } = new UpdateClassVM();
         public CreateScheduleVM CreateScheduleVM { get; set; } = new CreateScheduleVM();
         public void OnGet(
