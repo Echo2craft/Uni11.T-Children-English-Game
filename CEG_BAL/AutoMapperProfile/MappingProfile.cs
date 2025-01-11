@@ -226,10 +226,12 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<GameLevel, GameLevelViewModel>()
                 .ReverseMap();
+
             // Account
             CreateMap<CreateNewAccount, Account>();
             CreateMap<Account, AccountViewModel>()
                 .ReverseMap();
+
             // Teacher
             CreateMap<Teacher, TeacherViewModel>()
                 .ReverseMap();
@@ -246,6 +248,7 @@ namespace CEG_BAL.AutoMapperProfile
                 {
                     dest.TeacherName = src.Account.Fullname;
                 });
+
             // Parent
             CreateMap<Parent, ParentViewModel>()
                 .ReverseMap();

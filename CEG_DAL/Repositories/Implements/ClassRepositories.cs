@@ -464,7 +464,7 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
-                .Where(c => c.Status == "Open" && c.StartDate.Value >= claStartDate)
+                .Where(c => c.Status == "Open" && c.StartDate.Value.Date <= claStartDate.Date)
                 .Select(c => new Class
                 {
                     ClassId = c.ClassId,
@@ -478,27 +478,9 @@ namespace CEG_DAL.Repositories.Implements
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
                     Status = c.Status,
-                    Teacher = new Teacher // Create a new Teacher object
-                    {
-                        TeacherId = c.Teacher.TeacherId,
-                        Email = c.Teacher.Email,
-                        Phone = c.Teacher.Phone,
-                        Image = c.Teacher.Image,
-                        Account = new Account
-                        {
-                            Fullname = c.Teacher.Account.Fullname,
-                            Gender = c.Teacher.Account.Gender,
-                        }
-                        // Add other necessary properties here, but do NOT include Classes
-                    },
-                    Course = new Course // Create a new Course object
-                    {
-                        CourseId = c.Course.CourseId,
-                        CourseName = c.Course.CourseName
-                        // Add other necessary properties here, but do NOT include Classes
-                    },
                     Schedules = c.Schedules,
                     Enrolls = c.Enrolls,
+                    StudentProgresses = c.StudentProgresses
                 })
                 .ToListAsync();
         }
@@ -507,7 +489,7 @@ namespace CEG_DAL.Repositories.Implements
         {
             return await _dbContext.Classes
                 .AsNoTrackingWithIdentityResolution()
-                .Where(c => c.Status == "Ongoing" && c.EndDate.Value >= claEndDate)
+                .Where(c => c.Status == "Ongoing" && c.EndDate.Value.Date <= claEndDate.Date)
                 .Select(c => new Class
                 {
                     ClassId = c.ClassId,
@@ -521,25 +503,6 @@ namespace CEG_DAL.Repositories.Implements
                     TeacherId = c.TeacherId,
                     CourseId = c.CourseId,
                     Status = c.Status,
-                    Teacher = new Teacher // Create a new Teacher object
-                    {
-                        TeacherId = c.Teacher.TeacherId,
-                        Email = c.Teacher.Email,
-                        Phone = c.Teacher.Phone,
-                        Image = c.Teacher.Image,
-                        Account = new Account
-                        {
-                            Fullname = c.Teacher.Account.Fullname,
-                            Gender = c.Teacher.Account.Gender,
-                        }
-                        // Add other necessary properties here, but do NOT include Classes
-                    },
-                    Course = new Course // Create a new Course object
-                    {
-                        CourseId = c.Course.CourseId,
-                        CourseName = c.Course.CourseName
-                        // Add other necessary properties here, but do NOT include Classes
-                    },
                     Schedules = c.Schedules,
                     Enrolls = c.Enrolls,
                 })

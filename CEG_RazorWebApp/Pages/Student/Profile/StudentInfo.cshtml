@@ -37,9 +37,8 @@
                     <div class="card">
                         <div class="card-body">
                             <div id="accordion">
-                                <div id="alertContainer"></div>
                                 <!-- Thông tin cá nhân -->
-                                <div class="card mx-5 mb-2">
+                                <div class="card mb-2">
                                     <div class="card-header card-setting" id="headingOne">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link" data-toggle="collapse" data-target="#profile"
@@ -93,20 +92,28 @@
                                                                                     <td id="account-gender"></td>
                                                                                 </tr>
                                                                                 <tr>
+                                                                                    <th class="text-md-right">Age:</th>
+                                                                                    <td id="student-account-age"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Date of Birth:</th>
+                                                                                    <td id="student-account-birthdate"></td>
+                                                                                </tr>
+                                                                                <tr>
                                                                                     <th class="text-md-right">Description:</th>
                                                                                     <td id="student-account-description"></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="text-md-right">Total Playtime:</th>
+                                                                                    <td id="student-account-playtime"></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <th class="text-md-right">Current Level:</th>
                                                                                     <td id="student-account-curlevel"></td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <th class="text-md-right">Age:</th>
-                                                                                    <td id="student-account-age"></td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <th class="text-md-right">Birthdate:</th>
-                                                                                    <td id="student-account-birthdate"></td>
+                                                                                    <th class="text-md-right">Total Points:</th>
+                                                                                    <td id="student-account-points"></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <th class="text-md-right">Created Date:</th>
@@ -136,6 +143,93 @@
         var apiUrl = sessionStorage.getItem('apiUrl');
         var id = sessionStorage.getItem('usrId');
         $(document).ready(function () {
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('searchIcon', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bx-search-alt question-search-icon',
+                    hideLabel: true // Hide search label
+                }, opts);
+
+                // Create a container for the icon
+                let container = document.createElement('div');
+                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                // Create the icon element
+                let icon = document.createElement('i');
+                icon.className = options.iconClass;
+
+                // Check if pagination is enabled
+                // if (settings.oFeatures.bFilter) {
+                //     console.log(settings.oFeatures.bFilter);
+                //     console.log('Pagination is enabled for this DataTable.');
+                // }
+
+                setTimeout(() => {
+                    // Find the .dt-search container inside the DataTable wrapper
+                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                    if (searchContainer.length) {
+                        searchContainer.append(icon);
+                    } else {
+                        // Append icon to container
+                        container.appendChild(icon);
+                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                        $(settings.nTableWrapper).prepend(container);
+                    }
+                    if (options.hideLabel) {
+                        // Find the .dt-search label container inside the DataTable wrapper
+                        let searchLabel = searchContainer.find('label');
+                        if (searchLabel.length) {
+                            searchLabel.text('');
+                        } else {
+                            console.log('Label of search div not found!');
+                        }
+                    }
+                }, 100);
+                return '';
+            });
+            enrollTable = new DataTable('#enroll-table', {
+                autoWidth: true,
+                data: [],
+                deferRender: false,
+                responsive: true,
+                columns: [
+                    { data: 'enrollId' },
+                    {
+                        data: 'class.className',
+                    },
+                    {
+                        data: 'registrationDate',
+                        render: function (data, type, row, meta) {
+                            return '<span id="enroll-reg-date">' + formatDate(data, { addDayOfWeek : true , includeAmPm : true, lineBreak : true }) + '</span >';
+                        }
+                    },
+                    {
+                        data: 'enrolledDate',
+                        render: function (data, type, row, meta) {
+                            return '<span id="enroll-date">' + formatDate(data, { addDayOfWeek : true, includeAmPm : true, lineBreak : true }) + '</span >';
+                        }
+                    },
+                    {
+                        data: 'status',
+                        width: '25%',
+                        render: function (data, type, row, meta) {
+                            return `<select class="custom-select form-control enroll-status" data-enrollid="${row.enrollId}">`
+                                + getEnrollStatusOptions(data) +
+                                `</select>`;
+                        }
+                    }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'Search enroll...'
+                        },
+                        searchIcon: {
+                        }
+                    }
+                }
+            });
             callApiGetStudentDetail();
         });
         function callApiGetStudentDetail() {
@@ -151,9 +245,7 @@
 
                     // Check if the status is true
                     if (response.status) {
-                        accountDetail = response.data;
-
-                        setAccountDisplay(accountDetail);
+                        setAccountDisplay(response.data);
                     } else {
                         console.error("API returned false status.");
                     }
@@ -181,19 +273,19 @@
             });
         }
         function setAccountDisplay(data) {
+            $('#student-account-age').text(data.age);
+            $('#student-account-birthdate').text(formatDate(data.birthdate, { ignoreHour : true }));
+            $('#student-account-description').text(data.description);
+            $('#student-account-playtime').text(data.playtime);
+            $('#student-account-curlevel').text(data.curLevel);
+            $('#student-account-points').text(data.points);
+
             $('#account-headerinfo').text(data.account.role.roleName + ' Account Information');
             $('#account-id').text(data.account.accountId);
             $('#account-username').text(data.account.username);
             $('#account-fullname').text(data.account.fullname);
-            $('#student-account-age').text(data.age);
-            $('#student-account-birthdate').text(formatDate(data.birthdate, { ignoreHour : true }));
-            $('#student-account-description').text(data.description);
-            $('#student-account-highscore').text(data.totalscore);
-            $('#student-account-playtime').text(data.playtime);
-            $('#student-account-curlevel').text(data.curLevel);
-            $('#student-account-points').text(data.points);
             $('#account-gender').text(data.account.gender);
-            $('#account-createddate').text(formatDate(data.account.createdDate)); // Format the date if needed
+            $('#account-createddate').text(formatDate(data.account.createdDate, { ignoreHour: true })); // Format the date if needed
             $('#account-role').text(data.account.role.roleName);
             $('#account-status').text(data.account.status);
         }
