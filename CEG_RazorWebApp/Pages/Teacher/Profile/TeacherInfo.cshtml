@@ -54,6 +54,15 @@
                                                             <img src="~/images/avatar2.png" id="output" width="200" />
                                                         </div>
                                                         <div class="profile-name" id="account-fullname"></div>
+
+                                                        <div>
+                                                            <img src="~/images/avatar2.png" id="teacher-certificate" width="200" />
+                                                            @* <div class="upload">
+                                                                <button class="btn btn-warning" data-toggle="modal" data-target="#uploadImg">Details</button>
+                                                                <i class='bx bxs-camera-plus'></i>
+                                                            </div> *@
+                                                        </div>
+                                                        <div class="profile-name">Certificate</div>
                                                     </div>
                                                     <div class="col-lg-8">
                                                         <div class="profile-content">
@@ -253,6 +262,7 @@
             $('#teacher-account-email').text(data.email);
             $('#teacher-account-phonenumber').text(data.phone);
             $('#teacher-account-address').text(data.address);
+            $('#teacher-certificate').attr("src", data.certificate)
 
             $('#account-headerinfo').text(data.account.role.roleName + ' Account Information');
             $('#account-id').text(data.account.accountId);
