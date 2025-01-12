@@ -52,6 +52,7 @@ namespace CEG_BAL.Services.Implements
                 acc.Account.Password = newStu.Account.Password;
                 acc.Account.RoleId = 2;
                 acc.Description = newStu.Description;
+                acc.CurLevel = 0;
                 //acc.TotalPoint = newStu.TotalPoints;
                 acc.Birthdate = newStu.Birthdate;
                 acc.Age = CalculateAge(acc.Birthdate.Value);

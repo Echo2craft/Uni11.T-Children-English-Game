@@ -3,6 +3,7 @@ using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -258,25 +259,16 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id, 
-            [FromBody][Required] CourseViewModel course
+            [FromBody][Required] UpdateCourse course
             )
         {
             try
             {
-                var result = await _courseService.GetCourseById(id);
-                if (result == null)
-                {
-                    return NotFound(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Course Does Not Exist!"
-                    });
-                }
-                course.CourseId = id;
+                /*course.CourseId = id;
                 course.Status = result.Status;
-                course.TotalHours = result.TotalHours;
-                _courseService.Update(course);
-                result = await _courseService.GetCourseById(course.CourseId.Value);
+                course.TotalHours = result.TotalHours;*/
+                await _courseService.Update(id, course);
+                var result = await _courseService.GetCourseById(id);
                 return Ok(new
                 {
                     Status = true,
