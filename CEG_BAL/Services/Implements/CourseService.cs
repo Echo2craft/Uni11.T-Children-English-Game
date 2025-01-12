@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using CEG_DAL.Models;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.Configurations;
+using Microsoft.EntityFrameworkCore;
+using CEG_BAL.ViewModels.Admin.Update;
 
 namespace CEG_BAL.Services.Implements
 {
@@ -54,14 +56,9 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<CourseViewModel?> GetCourseById(int id)
         {
-            _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(id);
-            var user = await _unitOfWork.CourseRepositories.GetByIdNoTracking(id, true, true ,true);
-            if (user != null)
-            {
-                var urs = _mapper.Map<CourseViewModel>(user);
-                return urs;
-            }
-            return null;
+            await _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(id);
+            var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(id, true, true ,true);
+            return cou != null ? _mapper.Map<CourseViewModel>(cou) : null;
         }
 
         public async Task<List<CourseViewModel>> GetCourseList()
@@ -83,11 +80,36 @@ namespace CEG_BAL.Services.Implements
             return await _unitOfWork.CourseRepositories.GetNameListByStatus(status);
         }
 
-        public void Update(CourseViewModel course)
+        public async Task Update(int couId, UpdateCourse upCou)
         {
-            var cou = _mapper.Map<Course>(course);
+            if (upCou == null)
+                throw new ArgumentNullException(nameof(upCou), "update course info cannot be null.");
+
+            // Fetch the existing record
+            var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(couId)
+                ?? throw new KeyNotFoundException("Course not found.");
+
+            // Map changes from the update model to the entity
+            _mapper.Map(upCou, cou);
+
+            // Reattach entity and mark it as modified
             _unitOfWork.CourseRepositories.Update(cou);
-            _unitOfWork.Save();
+
+            // Save changes
+            try
+            {
+                _unitOfWork.Save();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating the course.", ex);
+            }
         }
 
         public void UpdateStatus(int courseId, string courseStatus)
