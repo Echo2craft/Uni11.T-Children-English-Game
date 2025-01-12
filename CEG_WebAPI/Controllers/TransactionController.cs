@@ -223,6 +223,33 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/Sum/ByTeacher/{id}")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSumTransactionByTeacherAccountId(
+            [FromRoute][Required] int id)
+        {
+            try
+            {
+                var result = await _transactionService.GetSumByTeacherAccountId(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("ByParent/{id}")]
         [Authorize(Roles = "Parent")]
         [ProducesResponseType(typeof(List<TransactionViewModel>), StatusCodes.Status200OK)]
@@ -333,7 +360,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpPost("Create")]
-        [Authorize(Roles = "Admin,Parent")]
+        [Authorize(Roles = "Admin, Parent")]
         [ProducesResponseType(typeof(TransactionViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -64,6 +64,16 @@ namespace CEG_DAL.Repositories.Implements
                 .ToList();
         }
 
+        public async Task<int> GetSumByTeacherId(int? teacherId)
+        {
+            var transactions = await _dbContext.Transactions
+                .Where(t => t.Description != null && t.TransactionType.Equals("Earning"))
+                .ToListAsync();
+            return transactions
+                .Where(t => CheckTeacherIdFromDescription(t.Description, teacherId))
+                .Sum(t => t.TransactionAmount);
+        }
+
         public async Task<Transaction?> GetByVnpayId(string? vnpayId)
         {
             return await _dbContext.Transactions.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(t => t.VnpayId == vnpayId);
