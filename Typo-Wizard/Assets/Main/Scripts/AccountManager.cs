@@ -418,10 +418,10 @@ private void SetUIForRole()
         string url = $"{_baseUrl}/api/StudentProgress/Create";
         await SendPostRequest(url, jsonRequestBody);
     }
-    public async Task FetchHomeworkQuestions(int homeworkId)
+    public async Task FetchHomeworkQuestions(int sessionId)
     {
         // Define the API endpoint
-        string url = $"{_baseUrl}/api/Question/All";
+        string url = $"{_baseUrl}/api/Question/All/BySession/{sessionId}";
         Debug.Log($"Fetching questions from: {url}");
 
         // Create a GET request
