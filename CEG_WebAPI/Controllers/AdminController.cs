@@ -323,7 +323,7 @@ namespace CEG_WebAPI.Controllers
                 {
                     Data = true,
                     Status = true,
-                    SuccessMessage = "Teacher Account Create successfully !",
+                    SuccessMessage = "Teacher Certificate upload successfully !",
                 });
             }
             catch (Exception ex)

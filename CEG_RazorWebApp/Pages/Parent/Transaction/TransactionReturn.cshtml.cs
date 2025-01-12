@@ -1,3 +1,4 @@
+using CEG_BAL.Configurations;
 using CEG_BAL.ViewModels;
 using CEG_RazorWebApp.Libraries;
 using CEG_RazorWebApp.Models.Transaction.Response;
@@ -32,7 +33,7 @@ namespace CEG_RazorWebApp.Pages.Parent.Transaction
                 // Call the API to create the transaction in the database
                 var transactionData = new TransactionViewModel
                 {
-                    ParentFullname = ExtractValue(orderDetails, Constants.VNPAY_PARENT_NAME_LABEL),
+                    ParentFullname = ExtractValue(orderDetails, CEGConstants.TRANSACTION_PAYER_LABEL + CEGConstants.TRANSACTION_USER_PARENT_NAME_LABEL),
                     TransactionAmount = (int)TransactionResponse.Value / 100,
                     TransactionDate = DateTime.Now,
                     TransactionStatus = "Completed",
@@ -43,8 +44,8 @@ namespace CEG_RazorWebApp.Pages.Parent.Transaction
 
                 if (transactionData.TransactionType == "Enrollment")
                 {
-                    transactionData.StudentFullname = ExtractValue(orderDetails, Constants.VNPAY_STUDENT_NAME_LABEL);
-                    transactionData.ClassName = ExtractValue(orderDetails, Constants.VNPAY_CLASS_NAME_LABEL);
+                    transactionData.StudentFullname = ExtractValue(orderDetails, CEGConstants.TRANSACTION_RECEIVER_STUDENT_NAME_FOR_ENROLLMENT_LABEL);
+                    transactionData.ClassName = ExtractValue(orderDetails, CEGConstants.TRANSACTION_DESCRIPTION_ENROLLING_CLASS_NAME_LABEL);
                 }
 
                 CreateTransactionVM = transactionData;
