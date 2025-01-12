@@ -28,6 +28,7 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<Course?> GetByIdNoTracking(int id, bool includeSessions = false, bool includeClasses = false, bool includeHomeworks = false)
         {
             var query = _dbContext.Courses
+                        .AsNoTrackingWithIdentityResolution()
                         .Select(c => new Course
                         {
                             CourseId = c.CourseId,
@@ -54,9 +55,9 @@ namespace CEG_DAL.Repositories.Implements
                             }).ToList() : null,
                             // Include Classes only if requested
                             Classes = includeClasses ? c.Classes.ToList() : null
-                        }).AsNoTrackingWithIdentityResolution();
+                        });
 
-            return await query.SingleOrDefaultAsync(cou => cou.CourseId == id);
+            return await query.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(cou => cou.CourseId == id);
         }
 
         public async Task<List<Course>> GetList()
@@ -179,26 +180,47 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.Courses.CountAsync();
         }
 
-        public void UpdateTotalHoursByIdThroughSessionsSum(int id)
+        public async Task UpdateTotalHoursByIdThroughSessionsSum(int id)
         {
-            var selectedCourse = _dbContext.Courses.Where(cour => cour.CourseId.Equals(id)).Select(c => new Course()
-            {
-                CourseId = c.CourseId,
-                CourseName = c.CourseName,
-                CourseType = c.CourseType,
-                Description = c.Description,
-                Difficulty = c.Difficulty,
-                Category = c.Category,
-                Image = c.Image,
-                RequiredAge = c.RequiredAge,
-                TotalHours = c.TotalHours,
-                Status = c.Status,
-                Sessions = c.Sessions
-            }).SingleOrDefault();
-            if(selectedCourse == null) { return; }
+            var selectedCourse = await _dbContext.Courses
+                .AsNoTrackingWithIdentityResolution()
+                .Where(cour => cour.CourseId.Equals(id))
+                .Select(c => new Course(){
+                    CourseId = c.CourseId,
+                    CourseName = c.CourseName,
+                    CourseType = c.CourseType,
+                    Description = c.Description,
+                    Difficulty = c.Difficulty,
+                    Image = c.Image,
+                    RequiredAge = c.RequiredAge,
+                    Status = c.Status,
+                    Category = c.Category,
+                    TotalHours = c.TotalHours,
+                    Sessions = c.Sessions
+                })
+                .SingleOrDefaultAsync();
+
+            if (selectedCourse == null) return;
             selectedCourse.TotalHours = selectedCourse.Sessions.Sum(ses => ses.Hours);
+
+            // Reattach entity and mark it as modified
             _dbContext.Courses.Update(selectedCourse);
-            _dbContext.SaveChanges();
+
+            // Save changes
+            try
+            {
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating course total hours.", ex);
+            }
         }
     }
 }
