@@ -12,6 +12,8 @@ namespace CEG_BAL.ViewModels.Admin.Create
 
         public int? TotalPoint { get; set; }
 
-        public TimeOnly? Playtime { get; set; }
+        public int ClassId { get; set; }
+
+        public TimeSpan? Playtime { get; set; }
     }
 }
