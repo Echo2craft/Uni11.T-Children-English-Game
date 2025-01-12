@@ -843,28 +843,31 @@
                             // Get the data of the selected row
                             const selectedRowData = scheduleTable.rows({ selected: true }).data().toArray();
                             // console.log(selectedRowData);
-                            // Example condition for showing the button
-                            if (row.status && row.status === "Not Submitted") {
-                                // If you want the first selected row
-                                if (selectedRowData.length > 0) {
-                                   const firstRowData = selectedRowData[0].scheduleNumber;
-                                   return `
-                                           <button class="btn btn-primary btn-sm submit-button"
-                                               data-homid="${row.homeworkId}"
-                                               data-stuid="${row.studentProgress.studentId}"
-                                               data-schid="${firstRowData}" >
-                                               Remind Parent
-                                           </button>
-                                       `;
+                            if (selectedRowData.length > 0) {
+                                const schid = selectedRowData[0].scheduleNumber;
+                                const schStatus = selectedRowData[0].status;
+                                // Example condition for showing the button
+                                if (row.status && row.status === "Not Submitted" && schStatus !== "Ended") {
+                                    // If you want the first selected row
+                                    if (schid) {
+                                        return `
+                                                    <button class="btn btn-primary btn-sm submit-button"
+                                                        data-homid="${row.homeworkId}"
+                                                        data-stuid="${row.studentProgress.studentId}"
+                                                                data-schid="${schid}" >
+                                                        Remind Parent
+                                                    </button>
+                                                `;
+                                    }
+                                    return `
+                                            <button class="btn btn-primary btn-sm submit-button"
+                                                data-homid="${row.homeworkId}"
+                                                data-stuid="${row.studentProgress.studentId}"
+                                                data-schid="0" >
+                                                Remind Parent
+                                            </button>
+                                        `;
                                 }
-                                return `
-                                    <button class="btn btn-primary btn-sm submit-button"
-                                        data-homid="${row.homeworkId}"
-                                        data-stuid="${row.studentProgress.studentId}"
-                                        data-schid="0" >
-                                        Remind Parent
-                                    </button>
-                                `;
                             }
                             return `<span>No Action Required</span>`;
                         },

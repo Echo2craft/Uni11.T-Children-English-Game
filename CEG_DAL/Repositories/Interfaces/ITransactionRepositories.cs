@@ -18,5 +18,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<int> GetTotalAmount();
         Task<int> GetTotalAmountByAccountId(int id);
         Task<int> GetSumValue();
+        Task<int> GetSumByTeacherId(int? teacherId);
     }
 }
