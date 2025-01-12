@@ -259,8 +259,29 @@
                 return '';
             });
 
-            $('#select2-parent-fullname-enrollment-dropdown').select2({
-                placeholder: 'Select a parent',
+            // $('#select2-parent-fullname-enrollment-dropdown').select2({
+            //     placeholder: 'Select a parent',
+            //     allowClear: true,
+            //     width: 'resolve',
+            //     theme: 'bootstrap4'
+            // })
+            // .on('change', function () {
+            //     var data = $(this).select2('data');
+            //     Manually trigger select2:select
+            //     $(this).trigger({
+            //         type: 'select2:select',
+            //         params: { data: data }
+            //     });
+            // })
+            // .off('select2:select') Remove previous bindings
+            // .on('select2:select', function (e) {
+            //     var text = $(this).select2('data')[0].text;
+            //     callApiGetStudentNameList(text);
+            //     callApiGetStudentNameList();
+            // });
+
+            $('#select2-student-fullname-dropdown').select2({
+                placeholder: 'Select a student to enroll',
                 allowClear: true,
                 width: 'resolve',
                 theme: 'bootstrap4'
@@ -275,17 +296,9 @@
             })
             .off('select2:select') // Remove previous bindings
             .on('select2:select', function (e) {
-                //var text = $(this).select2('data')[0].text;
-                //callApiGetStudentNameList(text);
-                callApiGetStudentNameList();
-            });
-
-            $('#select2-student-fullname-dropdown').select2({
-                placeholder: 'Select a student to enroll',
-                allowClear: true,
-                width: 'resolve',
-                theme: 'bootstrap4'
-            });
+                var text = $(this).select2('data')[0].text;
+                callApiGetClassNameList(text);
+            })
 
             $('#select2-class-name-dropdown').select2({
                 placeholder: 'Select a class for enrollment',
@@ -305,11 +318,12 @@
             .off('select2:select') // Remove previous bindings
             .on('select2:select', function (e) {
                 var selectedData = $(this).select2('data');
-                if (selectedData.length > 0) {
-                    var value = selectedData[0].value;
-                        console.log('Selected:', value);
+                if (selectedData.length > 0 && selectedData[0].text != "No classes available") {
+                    var value = selectedData[0].id;
+                    enrollAmount.set(value);
                 }
-            });
+            })
+            ;
 
             transactionTable = new DataTable('#transaction-table', {
                 data: [],
@@ -537,7 +551,7 @@
                 }
             });
         }
-        function addParentOptions(id, callback) {
+        function addParentOptions(callback) {
             $.ajax({
                 url: apiUrl + 'Parent/Account/' + id, // API endpoint
                 type: 'GET',
@@ -547,8 +561,9 @@
                 success: function (response) {
                     // Check if the status is true
                     if (response.status) {
-                        const parentFullName = response.data.account.fullname;
-                        if (callback) {
+                        const parentFullName = response.data?.account?.fullname || "Unknown Name";
+                        console.log(parentFullName);
+                        if (typeof callback === 'function') {
                             callback(parentFullName);
                         }
                     } else {
@@ -635,7 +650,7 @@
                     // Check if the status is true
                     if (response.status) {
                         transactionList = response.data;
-                        console.log(transactionList);
+                        // console.log(transactionList);
                         transactionTable.clear().rows.add(transactionList).draw();
                         callApiGetStudentNameList();
                         // setClassDisplay(classList);
