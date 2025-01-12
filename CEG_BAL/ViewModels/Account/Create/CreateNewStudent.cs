@@ -15,6 +15,7 @@ namespace CEG_BAL.ViewModels.Account.Create
         }
         public string Description { get; set; } = null!;
         public int TotalPoints { get; set; }
+
         public DateTime Birthdate { get; set; }
         public string ParentFullname { get; set; } = null!;
         public CreateNewAccount Account { get; set; } = new CreateNewAccount();

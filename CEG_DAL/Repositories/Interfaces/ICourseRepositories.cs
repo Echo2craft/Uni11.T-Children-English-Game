@@ -14,7 +14,7 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<List<Course>?> GetListByStatus(string status);
         Task<List<string>?> GetNameList();
         Task<int> GetTotalAmount();
-        void UpdateTotalHoursByIdThroughSessionsSum(int id);
+        Task UpdateTotalHoursByIdThroughSessionsSum(int id);
         Task<List<string>?> GetNameListByStatus(string status);
         Task<Course?> GetByIdNoTracking(int id);
         Task<string?> GetStatusByCourseIdNoTracking(int courseId);

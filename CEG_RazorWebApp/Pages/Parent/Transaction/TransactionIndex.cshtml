@@ -140,6 +140,11 @@
                                 <div class="row p-4">
                                     <div class="col-12">
                                         <div class="row form-group">
+                                            <label asp-for="@createTransaction.ParentFullname" class="col-md-4 col-form-label text-md-right">Parent Fullname</label>
+                                            <div class="col-md-8">
+                                                <input asp-for="@createTransaction.ParentFullname" type="text" class="form-control" id="ParentFullname" required readonly>
+                                            </div>
+
                                             <label asp-for="@createTransaction.StudentFullname" class="col-md-4 col-form-label text-md-right">Student Fullname</label>
                                             <div class="col-md-8 p-0">
                                                 <select id="select2-student-fullname-dropdown" class="form-control custom-select" style="width: 100%;"></select>
@@ -254,8 +259,29 @@
                 return '';
             });
 
-            $('#select2-parent-fullname-enrollment-dropdown').select2({
-                placeholder: 'Select a parent',
+            // $('#select2-parent-fullname-enrollment-dropdown').select2({
+            //     placeholder: 'Select a parent',
+            //     allowClear: true,
+            //     width: 'resolve',
+            //     theme: 'bootstrap4'
+            // })
+            // .on('change', function () {
+            //     var data = $(this).select2('data');
+            //     Manually trigger select2:select
+            //     $(this).trigger({
+            //         type: 'select2:select',
+            //         params: { data: data }
+            //     });
+            // })
+            // .off('select2:select') Remove previous bindings
+            // .on('select2:select', function (e) {
+            //     var text = $(this).select2('data')[0].text;
+            //     callApiGetStudentNameList(text);
+            //     callApiGetStudentNameList();
+            // });
+
+            $('#select2-student-fullname-dropdown').select2({
+                placeholder: 'Select a student to enroll',
                 allowClear: true,
                 width: 'resolve',
                 theme: 'bootstrap4'
@@ -270,17 +296,9 @@
             })
             .off('select2:select') // Remove previous bindings
             .on('select2:select', function (e) {
-                //var text = $(this).select2('data')[0].text;
-                //callApiGetStudentNameList(text);
-                callApiGetStudentNameList();
-            });
-
-            $('#select2-student-fullname-dropdown').select2({
-                placeholder: 'Select a student to enroll',
-                allowClear: true,
-                width: 'resolve',
-                theme: 'bootstrap4'
-            });
+                var text = $(this).select2('data')[0].text;
+                callApiGetClassNameList(text);
+            })
 
             $('#select2-class-name-dropdown').select2({
                 placeholder: 'Select a class for enrollment',
@@ -300,11 +318,12 @@
             .off('select2:select') // Remove previous bindings
             .on('select2:select', function (e) {
                 var selectedData = $(this).select2('data');
-                if (selectedData.length > 0) {
-                    var value = selectedData[0].value;
-                        console.log('Selected:', value);
+                if (selectedData.length > 0 && selectedData[0].text != "No classes available") {
+                    var value = selectedData[0].id;
+                    enrollAmount.set(value);
                 }
-            });
+            })
+            ;
 
             transactionTable = new DataTable('#transaction-table', {
                 data: [],
@@ -355,6 +374,7 @@
                     style: 'single'
                 }
             });
+            autofillParentFullName();
             callApiGetTransactionList();
         });
         const enrollAmount = new AutoNumeric('#createEnrollmentTransactionForm #createTransaction_TransactionAmount', {
@@ -376,56 +396,87 @@
         $('#createEnrollmentTransactionForm').submit(function (event) {
             event.preventDefault(); // Prevent the form from submitting normally
 
-            // Fetch ParentFullName before submitting the form
-            addParentOptions(id, function (parentFullName) {
-                const formData = {
-                    ParentFullName: parentFullName,
-                    StudentFullname: $('#select2-student-fullname-dropdown').select2('data')[0].text,
-                    Classname: $('#select2-class-name-dropdown').select2('data')[0].text,
-                    TransactionAmount: enrollAmount.getNumber(),
-                    TransactionType: $('#createTransaction_TransactionType').val(),
-                };
-                // Send AJAX request
-                $.ajax({
-                    url: apiUrl + 'Transaction/GenerateUrl',
-                    type: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + token// Include the JWT token
-                    },
-                    contentType: 'application/json',
-                    data: JSON.stringify(formData),
-                    success: function (response) {
-                        if (response.status) {
-                            window.location.href = response.data; // Redirect to VNPay
-                        } else {
-                            showAlert('error', "Error: \n" + (response.errorMessage || "Failed to create transaction."));
-                            // alert(response.message || "Failed to create transaction.");
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        // Attempt to parse the response text if it is available
-                        var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+            const formData = {
+                ParentFullName: $('#ParentFullname').val(),
+                StudentFullname: $('#select2-student-fullname-dropdown').select2('data')[0].text,
+                Classname: $('#select2-class-name-dropdown').select2('data')[0].text,
+                TransactionAmount: enrollAmount.getNumber(),
+                TransactionType: $('#createTransaction_TransactionType').val(),
+            };
+            // Send AJAX request
+            $.ajax({
+                url: apiUrl + 'Transaction/GenerateUrl',
+                type: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + token// Include the JWT token
+                },
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    if (response.status) {
+                        window.location.href = response.data; // Redirect to VNPay
+                    } else {
+                        showAlert('error', "Error: \n" + (response.errorMessage || "Failed to create transaction."));
+                        // alert(response.message || "Failed to create transaction.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
 
-                        // Extract the custom error message if it exists
-                        var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
-                        // Check if errorResponse.errors exists and is an object
-                        if (errorResponse.errors && typeof errorResponse.errors === 'object') {
-                            // Loop through each field in the errors object and append to the errorMessage
-                            for (var field in errorResponse.errors) {
-                                if (errorResponse.errors.hasOwnProperty(field)) {
-                                    // Add each error message for the field, joining multiple messages if they exist
-                                    var fieldErrors = errorResponse.errors[field].join(", ");
-                                    errorMessage += `\n${field}: ${fieldErrors}`;
-                                }
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
                             }
                         }
-                        // Display the error message using your custom showAlert function
-                        showAlert('error', "Error: \n" + errorMessage);
                     }
-                });
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
             });
         });
+        function autofillParentFullName() {
+            $.ajax({
+                url: apiUrl + 'Parent/Account/' + id, // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token// Include the JWT token
+                },
+                success: function (response) {
+                    if (response.status) {
+                        // Autofill the ParentFullname input field
+                         $('#ParentFullname').val(response.data.account.fullname);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
 
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
         function callApiGetStudentNameList(){
             // Call API to get the list of student names
             $.ajax({
@@ -500,7 +551,7 @@
                 }
             });
         }
-        function addParentOptions(id, callback) {
+        function addParentOptions(callback) {
             $.ajax({
                 url: apiUrl + 'Parent/Account/' + id, // API endpoint
                 type: 'GET',
@@ -510,8 +561,9 @@
                 success: function (response) {
                     // Check if the status is true
                     if (response.status) {
-                        const parentFullName = response.data.account.fullname;
-                        if (callback) {
+                        const parentFullName = response.data?.account?.fullname || "Unknown Name";
+                        console.log(parentFullName);
+                        if (typeof callback === 'function') {
                             callback(parentFullName);
                         }
                     } else {
@@ -598,7 +650,7 @@
                     // Check if the status is true
                     if (response.status) {
                         transactionList = response.data;
-                        console.log(transactionList);
+                        // console.log(transactionList);
                         transactionTable.clear().rows.add(transactionList).draw();
                         callApiGetStudentNameList();
                         // setClassDisplay(classList);

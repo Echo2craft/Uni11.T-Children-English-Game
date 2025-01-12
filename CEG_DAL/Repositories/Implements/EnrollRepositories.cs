@@ -80,6 +80,8 @@ namespace CEG_DAL.Repositories.Implements
                             CourseName = e.Class.Course.CourseName
                             // Add other necessary properties here, but do NOT include Classes
                         },
+                        Schedules = e.Class.Schedules,
+                        Enrolls = e.Class.Enrolls,
                     },
                 })
                 .ToListAsync();
