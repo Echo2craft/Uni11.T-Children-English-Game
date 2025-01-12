@@ -36,10 +36,12 @@ public class AccountManager : MonoBehaviour
     [Serializable]
     public class StudentAnswerRequest
     {
+        public int student_answer_id { get; set; }
         public int game_id { get; set; }
         public int student_homework_id { get; set; }
         public string answer { get; set; } // Nullable
         public string type { get; set; } // Not Nullable
+        
     }
     [Serializable]
     public class StudentHomeworkRequest
@@ -316,7 +318,7 @@ private void SetUIForRole()
         // Create a new StudentAnswer object
         var studentAnswerRequest = new StudentAnswerRequest()
         {
-            game_id = gameId,
+            game_id = 1,
             student_homework_id = studentHomeworkId,
             answer = answer,
             type = type

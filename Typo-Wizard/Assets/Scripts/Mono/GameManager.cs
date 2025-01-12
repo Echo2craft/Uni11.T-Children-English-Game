@@ -2,15 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using static AccountManager;
 
 public class GameManager : MonoBehaviour {
 
     #region Variables
-
+    private DateTime gameStartTime;
     private             Question[]          _questions              = null;
     public              Question[]          Questions               { get { return _questions; } }
 
@@ -72,7 +74,7 @@ public class GameManager : MonoBehaviour {
     void Start()
     {
         Debug.Log("GameManager Start method called.");
-
+        gameStartTime = DateTime.Now;
         events.StartupHighscore = PlayerPrefs.GetInt(GameUtility2.SavePrefKey);
 
         timerDefaultColor = timerText.color;
@@ -103,7 +105,7 @@ public class GameManager : MonoBehaviour {
     //}
 
     #endregion
-
+    private readonly string _baseUrl = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net";
     /// <summary>
     /// Function that is called to update new selected answer.
     /// </summary>
@@ -178,23 +180,58 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// Function that is called to accept picked answers and check/display the result.
     /// </summary>
+    //public void Accept()
+    //{
+    //    UpdateTimer(false);
+    //    bool isCorrect = CheckAnswers();
+    //    FinishedQuestions.Add(currentQuestion);
+
+    //    UpdateScore((isCorrect) ? Questions[currentQuestion].AddScore : -Questions[currentQuestion].AddScore);
+
+    //    if (IsFinished)
+    //    {
+    //        SetHighscore();
+    //    }
+
+    //    var type 
+    //        = (IsFinished) 
+    //        ? UIManager2.ResolutionScreenType.Finish 
+    //        : (isCorrect) ? UIManager2.ResolutionScreenType.Correct 
+    //        : UIManager2.ResolutionScreenType.Incorrect;
+
+    //    if (events.DisplayResolutionScreen != null)
+    //    {
+    //        events.DisplayResolutionScreen(type, Questions[currentQuestion].AddScore);
+    //    }
+
+    //    AudioManager.Instance.PlaySound((isCorrect) ? "CorrectSFX" : "IncorrectSFX");
+
+    //    if (type != UIManager2.ResolutionScreenType.Finish)
+    //    {
+    //        if (IE_WaitTillNextRound != null)
+    //        {
+    //            StopCoroutine(IE_WaitTillNextRound);
+    //        }
+    //        IE_WaitTillNextRound = WaitTillNextRound();
+    //        StartCoroutine(IE_WaitTillNextRound);
+    //    }
+    //}
     public void Accept()
     {
-        UpdateTimer(false);
-        bool isCorrect = CheckAnswers();
-        FinishedQuestions.Add(currentQuestion);
+        UpdateTimer(false); // Stop the timer
+        bool isCorrect = CheckAnswers(); // Check if the answer is correct
+        FinishedQuestions.Add(currentQuestion); // Mark the question as finished
 
-        UpdateScore((isCorrect) ? Questions[currentQuestion].AddScore : -Questions[currentQuestion].AddScore);
-
-        if (IsFinished)
+        // Update score only if the answer is correct
+        if (isCorrect)
         {
-            SetHighscore();
+            UpdateScore(Questions[currentQuestion].AddScore);
         }
 
-        var type 
-            = (IsFinished) 
-            ? UIManager2.ResolutionScreenType.Finish 
-            : (isCorrect) ? UIManager2.ResolutionScreenType.Correct 
+        // Display the resolution screen based on correctness or finish
+        var type = (IsFinished)
+            ? UIManager2.ResolutionScreenType.Finish
+            : (isCorrect) ? UIManager2.ResolutionScreenType.Correct
             : UIManager2.ResolutionScreenType.Incorrect;
 
         if (events.DisplayResolutionScreen != null)
@@ -202,8 +239,9 @@ public class GameManager : MonoBehaviour {
             events.DisplayResolutionScreen(type, Questions[currentQuestion].AddScore);
         }
 
-        AudioManager.Instance.PlaySound((isCorrect) ? "CorrectSFX" : "IncorrectSFX");
+        AudioManager.Instance.PlaySound(isCorrect ? "CorrectSFX" : "IncorrectSFX");
 
+        // Wait for the next round if not finished
         if (type != UIManager2.ResolutionScreenType.Finish)
         {
             if (IE_WaitTillNextRound != null)
@@ -214,7 +252,6 @@ public class GameManager : MonoBehaviour {
             StartCoroutine(IE_WaitTillNextRound);
         }
     }
-
     #region Timer Methods
 
     //void UpdateTimer(bool state)
@@ -482,9 +519,9 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void QuitGame(string sceneName)
     {
+        QuitGamePressed();
         SceneManager.LoadScene(sceneName); ;
     }
-
     /// <summary>
     /// Function that is called to set new highscore if game score is higher.
     /// </summary>
@@ -531,6 +568,135 @@ public class GameManager : MonoBehaviour {
             } while (FinishedQuestions.Contains(random) || random == currentQuestion);
         }
         return random;
+    }
+    public async void SendStudentAnswer(int studentanswerId, int gameId, int studentHomeworkId, string answer, string type)
+    {
+        // Create a new StudentAnswer object
+        var studentAnswerRequest = new StudentAnswerRequest()
+        {
+            student_answer_id = studentanswerId,
+            game_id = 1,
+            student_homework_id = studentHomeworkId,
+            answer = answer,
+            type = type
+        };
+
+        // Convert the object to JSON
+        string jsonRequestBody = JsonUtility.ToJson(studentAnswerRequest);
+        Debug.Log("Send StudentAnswer: " + jsonRequestBody);
+
+        // Define the URL for StudentAnswer API
+        string url = $"{_baseUrl}/api/StudentAnswer/Create";
+
+        await SendPostRequest(url, jsonRequestBody);
+    }
+    public async void SendStudentHomework(int studentHomeworkId, int homeworkId, int studentProgressId, int homeworkResultId, int point, TimeSpan playtime, string status, int correctAnswers)
+    {
+        // Create a new StudentHomework object
+        var studentHomeworkRequest = new StudentHomeworkRequest()
+        {
+            student_homework_id = studentHomeworkId,
+            homework_id = homeworkId,
+            student_progress_id = studentProgressId,
+            homework_result_id = homeworkResultId,
+            point = point,
+            playtime = playtime.ToString(@"hh\:mm\:ss"),
+            status = status,
+            correct_answers = correctAnswers
+        };
+
+        // Convert the object to JSON
+        string jsonRequestBody = JsonUtility.ToJson(studentHomeworkRequest);
+        Debug.Log("Send StudentHomework: " + jsonRequestBody);
+
+        // Define the URL for StudentHomework API
+        string url = $"{_baseUrl}/api/StudentHomework/Create";
+
+        await SendPostRequest(url, jsonRequestBody);
+    }
+    private async Task SendPostRequest(string url, string jsonRequestBody)
+    {
+        // Create a UnityWebRequest POST object
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+
+        // Set the request headers
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        // Attach the JSON data to the request
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonRequestBody);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        // Send the request
+        var operation = request.SendWebRequest();
+        while (!operation.isDone)
+        {
+            await Task.Yield();
+        }
+
+        // Check for errors
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError($"Error sending POST request to {url}: {request.error}");
+        }
+        else
+        {
+            Debug.Log($"POST request to {url} successful! Response: {request.downloadHandler.text}");
+        }
+    }
+    public async void SendHomeworkResult(int homeworkResultId, int totalPoint, int totalCorrectAnswers, TimeSpan playtime)
+    {
+        var homeworkResultRequest = new HomeworkResultRequest()
+        {
+            homework_result_id = homeworkResultId,
+            total_point = totalPoint,
+            total_correct_answers = totalCorrectAnswers,
+            playtime = playtime.ToString(@"hh\:mm\:ss")
+        };
+
+        string jsonRequestBody = JsonUtility.ToJson(homeworkResultRequest);
+        Debug.Log("Send HomeworkResult: " + jsonRequestBody);
+
+        string url = $"{_baseUrl}/api/HomeworkResult/Create";
+        await SendPostRequest(url, jsonRequestBody);
+    }
+    public async void SendStudentProgress(int studentProgressId, int studentId, int classId, int totalPoint, TimeSpan playtime)
+    {
+        var studentProgressRequest = new StudentProgressRequest()
+        {
+            student_progress_id = studentProgressId,
+            student_id = studentId,
+            class_id = classId,
+            total_point = totalPoint,
+            playtime = playtime.ToString(@"hh\:mm\:ss")
+        };
+
+        string jsonRequestBody = JsonUtility.ToJson(studentProgressRequest);
+        Debug.Log("Send StudentProgress: " + jsonRequestBody);
+
+        string url = $"{_baseUrl}/api/StudentProgress/Create";
+        await SendPostRequest(url, jsonRequestBody);
+    }
+    public void QuitGamePressed()
+    {
+        TimeSpan playtime = DateTime.Now - gameStartTime;
+        string formattedPlaytime = playtime.ToString(@"hh\:mm\:ss\.fffffff");
+        SendStudentProgress(90, 1, 1, 80, playtime);
+        SendStudentHomework(69, 1, 90, 1, 80, playtime, "Submitted", 8);
+        SendStudentAnswer(22, 1, 1, "to", "Correct");
+        SendStudentAnswer(23, 1, 1, "at", "Correct");
+        SendStudentAnswer(24, 1, 1, "of", "Correct");
+        SendStudentAnswer(25, 1, 1, "in", "Correct");
+        SendStudentAnswer(26, 1, 1, "of", "Correct");
+        SendStudentAnswer(27, 1, 1, "about", "Correct");
+        SendStudentAnswer(28, 1, 1, "for", "Correct");
+        SendStudentAnswer(29, 1, 1, "for", "Correct");
+        SendStudentAnswer(30, 1, 1, "to", "Incorrect");
+        SendStudentAnswer(31, 1, 1, "off", "Incorrect");
+        
+        
+        SendHomeworkResult(55, 80, 8, playtime);
+        
     }
     //Question GetRandomQuestion()
     //{
