@@ -20,7 +20,7 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<CourseViewModel>?> GetListByStatus(string status);
         Task<List<string>> GetCourseNameList();
         Task<List<string>> GetCourseNameByStatusList(string status);
-        Task<CourseViewModel?> GetCourseById(int id);
+        Task<CourseViewModel?> GetByIdNoTracking(int id);
         Task<bool> IsExistByName(string name);
         Task<bool> IsAvailableByName(string name);
         Task<bool> IsExistById(int id);

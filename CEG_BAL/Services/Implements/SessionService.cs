@@ -45,7 +45,7 @@ namespace CEG_BAL.Services.Implements
 
             _unitOfWork.SessionRepositories.Create(sess);
             _unitOfWork.Save();
-            // _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(sess.CourseId);
+            _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(newSes.CourseId.Value);
         }
 
         public async Task<List<SessionViewModel>> GetSessionList()

@@ -435,7 +435,10 @@
                 deferRender: false,
                 responsive: true,
                 columns: [
-                    { data: 'studentId' },
+                    { 
+                        data: 'studentId',
+                        className: 'dt-head-left'
+                    },
                     { data: 'student.account.fullname' },
                     // { data: 'status' },
                     // { Add a select box in the last column

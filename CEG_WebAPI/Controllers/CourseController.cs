@@ -195,7 +195,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _courseService.GetCourseById(id);
+                var result = await _courseService.GetByIdNoTracking(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -268,7 +268,7 @@ namespace CEG_WebAPI.Controllers
                 course.Status = result.Status;
                 course.TotalHours = result.TotalHours;*/
                 await _courseService.Update(id, course);
-                var result = await _courseService.GetCourseById(id);
+                var result = await _courseService.GetByIdNoTracking(id);
                 return Ok(new
                 {
                     Status = true,
@@ -297,7 +297,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _courseService.GetCourseById(id);
+                var result = await _courseService.GetByIdNoTracking(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -310,7 +310,7 @@ namespace CEG_WebAPI.Controllers
                 if (isValid)
                 {
                     _courseService.UpdateStatus(id, status);
-                    result = await _courseService.GetCourseById(id);
+                    result = await _courseService.GetByIdNoTracking(id);
                     return Ok(new
                     {
                         Status = true,
