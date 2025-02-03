@@ -432,6 +432,8 @@
             };
             enrollTable = new DataTable('#enroll-table', {
                 data: [],
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
                 deferRender: false,
                 responsive: true,
                 columns: [
@@ -467,8 +469,8 @@
             callApiGetClassDetail();
             scheduleTable = new DataTable('#schedule-table', {
                 data: [],
-                lengthMenu: [5, 10, 25, 50],
-                pageLength: 5,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
                 deferRender: false,
                 responsive: true,
                 columns: [
@@ -564,8 +566,8 @@
                 data: [],
                 deferRender: false,
                 responsive: true,
-                lengthMenu: [5, 10, 25, 50],
-                pageLength: 5,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
                 columns: [
                     {
                         data: 'studentId',
@@ -789,8 +791,8 @@
                 data: [],
                 deferRender: false,
                 responsive: true,
-                lengthMenu: [5, 10, 25, 50],
-                pageLength: 5,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
                 columns: [
                     {
                         data: 'homework.homeworkNumber',

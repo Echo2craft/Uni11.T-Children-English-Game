@@ -76,8 +76,8 @@
                                             <div class="table-responsive">
                                                 <table class="table table-borderless class-info-table">
                                                     <colgroup>
-                                                        <col style="width: 30%;">
-                                                        <col style="width: 70%;">
+                                                        <col style="width: 40%;">
+                                                        <col style="width: 60%;">
                                                     </colgroup>
                                                     <tbody>
                                                         <tr class="status-info">
@@ -136,8 +136,8 @@
                                         <div class="card-header" id="class-allow-add-schedule">
                                             <h4>Session List</h4>
                                         </div>
+                                        <!-- session_list_Tab -->
                                         <div class="card-body" id="schedule_list">
-                                            @* <h5>No scheduled session found</h5> *@
                                             <div id="session-table_wrapper" class="dataTables_wrapper no-footer">
                                                 <table id="session-table"
                                                        class="table table-striped table-bordered dataTable no-footer compact"
@@ -175,7 +175,7 @@
                                                                 Homeworks amount
                                                             </th>
                                                             <th class="sorting sorting_asc" tabindex="0"
-                                                                aria-controls="homework-table" rowspan="1"
+                                                                aria-controls="session-table" rowspan="1"
                                                                 colspan="1" aria-sort="ascending"
                                                                 aria-label="Options: activate to sort column ascending">
                                                                 Options
@@ -193,25 +193,96 @@
                                                 </table>
                                             </div>
                                         </div>
+                                        <!-- homework_list_Tab -->
+                                        <div class="card-body" id="homework_list" style="display: none; overflow: hidden;">
+                                            <div id="homework-table_wrapper" class="dataTables_wrapper no-footer">
+                                                <table id="homework-table"
+                                                       class="table table-striped table-bordered dataTable no-footer compact"
+                                                       aria-describedby="homework-table_info">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="homework-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Homework ID: activate to sort column ascending">
+                                                                Homework ID
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="homework-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Homework Name: activate to sort column ascending">
+                                                                Homework Name
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="homework-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Questions: activate to sort column ascending">
+                                                                Questions
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="homework-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Homework Progress: activate to sort column ascending">
+                                                                Homework Progress
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- question_list_Tab -->
+                                        <div class="card-body" id="question_list" style="display: none; overflow: hidden;">
+                                            <div id="question-table_wrapper" class="dataTables_wrapper no-footer">
+                                                <table id="question-table"
+                                                       class="table table-striped table-bordered dataTable no-footer compact"
+                                                       aria-describedby="question-table_info">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="question-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Homework Number: activate to sort column ascending">
+                                                                Homework Number
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="question-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Homework Name: activate to sort column ascending">
+                                                                Homework Name
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="question-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Points: activate to sort column ascending">
+                                                                Points
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="question-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Status: activate to sort column ascending">
+                                                                Status
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="question-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Options: activate to sort column ascending">
+                                                                Options
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
-                @* <div class="row">
-                    <div class="col-12 customer-booking">
-                        <div class="row">
-                            <div class="card profile col-12 mb-4">
-                                <div class="card-header" id="course-allow-add-session">
-                                    <h4>Course's Session List</h4>
-                                </div>
-                                <div class="card-body" id="session_list">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> *@
             </div>
         </div>
     </div>
@@ -326,7 +397,7 @@
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                     <label asp-for="@createSession.Hours" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <input asp-for="@createSession.Hours" value="@createSession.Hours" type="number" class="form-control col-md-7 mt-3" required>
+                                    <input asp-for="@createSession.Hours" value="@createSession.Hours" type="number" min="0" class="form-control col-md-7 mt-3" required>
                                     <span asp-validation-for="@createSession.Hours" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -439,19 +510,69 @@
             };
             sessionTable = new DataTable('#session-table', {
                 data: [],
-                lengthMenu: [5, 10, 25, 50],
-                pageLength: 5,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
+                rowReorder: {
+                    dataSrc: 'sessionNumber'
+                },
+                autoWidth: false,
                 deferRender: false,
                 responsive: true,
                 columns: [
                     {
-                        data: 'sessionNumber'
+                        data: 'sessionNumber',
+                        className: 'dt-head-left',
+                        width: '2%'
+                        // render: function(data, type, row, meta){
+                        //     const currentStatus = $('td#course-status').text().trim(); Current status
+                        //     if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                        //         const dateValue = this.cell(rowIdx, 2).data();
+                        //         const node = $(this.cell(rowIdx, 2).node());
+
+                        //         const staDate = $('#class-start-date').data('stadate');
+                        //         const endDate = $('#class-end-date').data('enddate');
+
+                        //         Change display to a select box if not already updated
+                        //         if (!node.children('input[type=datetime-local]').length) {
+                        //             node.html(`
+                        //         <input type="datetime-local" id="schedule-start-date-${rowIdx}" class="form-control" value=${dateValue}
+                        //                 asp-format="{0:yyyy-MM-ddTHH:mm}" min="${staDate}" max="${endDate}"/>`);
+
+                        //             Add change event listener to the select element
+                        //             node.find('input[type=datetime-local]').on('change', function () {
+                        //                 const newStatus = $(this).val();
+                        //                 let formData = {
+                        //                     scheduleDate: $('input#schedule-start-date-' + rowIdx).val()
+                        //                 };
+                        //                 callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 7).data());
+                        //             });
+                        //         }
+                        //         return '<input type="number" class="form-control" value="' + data + '" />'
+                        //     }
+                        //     return data;
+                        // }
                     },
                     {
-                        data: 'title'
+                        data: 'title',
+                        width: '15%',
+                        render: function(data, type, row, meta){
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
                     },
                     {
                         data: 'description',
+                        width: '20%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
                         // render: function (data, type, row, meta) {
                         //     '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
                         //     return '<span id="schedule-start-date">' + formatDate(data, { ignoreHour : true , addDayOfWeek : true }) + '</span >';
@@ -459,13 +580,24 @@
                     },
                     {
                         data: 'hours',
+                        width: '2%',
                         // render: function (data, type, row, meta) {
                         //     return '<span id="schedule-start-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
-                        // },
-                        render: DataTable.render.time({ includeId: "session-hours" })
+                        // },<input type="time" id="timeInput" name="timeInput">
+                        // render: DataTable.render.time({ includeId: "session-hours" })
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            var str = moment(data, "HH:mm:ss");
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<input type="time" class="form-control" value="' + str.format("hh:mm") + '">';
+                            }
+                            return str.format("hh:mm");
+                            // return DataTable.render.time({ includeId: "session-hours" });
+                        }
                     },
                     {
                         data: 'homeworks.length',
+                        width: '15%',
                         defaultContent: 'No homeworks',
                         render: function (data, type, row, meta) {
                             if (data !== 0) return data + ' homework(s)';
@@ -474,7 +606,9 @@
                     },
                     {
                         data: null,
+                        width: '5%',
                         defaultContent: '<i>Actions</i>',
+                        orderable: false,
                         render: function (data, type, row, meta) {
                             // setTimeout(function () {
                             //     const statusText = $('td#class-status').text().trim(); Adjust the delay if needed
@@ -489,9 +623,14 @@
                         }
                     },
                     {
-                        data: 'sessionId'
+                        data: 'sessionId',
+                        width: '5%'
                     }
                 ],
+                select: {
+                    style: 'single',
+                    selector: 'tbody td:nth-child(5)'
+                },
                 layout: {
                     topEnd: {
                         search: {
@@ -505,6 +644,8 @@
                 },
             }).on('draw', function (e, settings) {
                 sessionTable.column(6).visible(false, false);
+                const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                if (statusText !== 'Draft' && statusText !== 'Postponed') sessionTable.column(5).visible(false, false);
                 // updateScheduleTable();
                 // scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 //     var data = this.cell(rowIdx, 2).data();
@@ -534,7 +675,12 @@
                 //         });
                 //     }
                 // });
-            });
+            }).on('row-reorder', function (e, diff, edit) {
+                for (var i = 0, ien = diff.length; i < ien; i++) {
+                    console.log(diff[i].node);
+                    $(diff[i].node).addClass('reordered');
+                }
+            });;
             callApiGetCourseDetail();
             $('#EditCourseForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
@@ -570,7 +716,7 @@
                 event.preventDefault(); // Prevent the form from submitting normally
 
                 var formData = {
-                    number: $('#createSession_Number').val(),
+                    sessionNumber: $('#createSession_Number').val(),
                     title: $('#createSession_Title').val(),
                     description: $('#createSession_Description').val(),
                     hours: $('#createSession_Hours').val(),
@@ -777,7 +923,7 @@
                         if (response.data.sessions && response.data.sessions.length > 0) {
                             // Clear any existing sessions
                             $('#session_list').empty();
-
+                            console.log(response.data.sessions);
                             sessionTable.clear().rows.add(response.data.sessions).draw();
 
                             // sessionList = response.data.sessions;
@@ -999,16 +1145,11 @@
         }
         function setCourseDisplay(data) {
             var titleStatusHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-                                                        <div class="edit-info" id="course-course-status">
-                                                            <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeCourseStatus"></i>
-                                                            <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editCourse"></i>
-                                                        </div>
-                                                        ` : '';
-            // var sessionAddHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-            //                                             <div class="edit-info" id="course-add-session">
-            //                                                 <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createSession"></i>
-            //                                             </div>
-            //                                             ` : '';
+                <div class="edit-info" id="course-course-status">
+                    <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeCourseStatus"></i>
+                    <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editCourse"></i>
+                </div>
+                ` : '';
             var statusText = '';
             switch (data.status) {
                 case 'Available':
@@ -1052,7 +1193,8 @@
             $('#course-sessions-amount').text(data.sessions.length + ' Session(s)');
             $('#course-classes-amount').text(data.classes.length + ' Class(es)');
 
-            $('#createSession_CourseName').val(data.courseName);
+            $('#createSession_Number').val(data.sessions.length + 1 );
+            // $('#createSession_CourseName').val(data.courseName);
 
 
             $('input[id="updateCourse_CourseName"]').val(data.courseName);

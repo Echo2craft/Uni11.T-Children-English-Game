@@ -204,8 +204,6 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Student, StudentViewModel>()
                 .ReverseMap();
-            CreateMap<Session, SessionViewModel>()
-                .ReverseMap();
             CreateMap<Homework, HomeworkViewModel>()
                 .AfterMap((src, dest) =>
                 {
@@ -229,6 +227,11 @@ namespace CEG_BAL.AutoMapperProfile
             CreateMap<Course, CourseViewModel>()
                 .ReverseMap();
             CreateMap<UpdateCourse, Course>();
+
+            // Session
+            CreateMapforDefaultViewCreateUpdateModel<Session, SessionViewModel, CreateNewSession, UpdateSession>();
+            CreateMap<Session, SessionViewModel>()
+                .ReverseMap();
 
             // Account
             CreateMap<CreateNewAccount, Account>();

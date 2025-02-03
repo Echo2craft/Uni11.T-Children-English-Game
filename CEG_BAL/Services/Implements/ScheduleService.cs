@@ -34,7 +34,15 @@ namespace CEG_BAL.Services.Implements
                 Status = CEGConstants.SCHEDULE_STATUS_DRAFT
             };
             _mapper.Map(newSch, sch);
-            sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(newSch.SessionId)).Hours.Value);
+
+            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(newSch.SessionId);
+
+            if (ses == null)
+                throw new ArgumentNullException(nameof(newSch), "The new schedule info contains invalid session: session info is null.");
+            if (ses.Hours == null)
+                throw new ArgumentNullException(nameof(newSch), "The new schedule info contains invalid session: session hours is null.");
+
+            sch.EndTime = sch.StartTime.Value.AddHours(ses.Hours.Value);
 
             // Save to the database
             try
@@ -80,13 +88,13 @@ namespace CEG_BAL.Services.Implements
             return schLis;
         }
 
-        public async Task Update(int schId, UpdateSchedule upSch)
+        public async Task Update(int upSchId, UpdateSchedule upSch)
         {
             if (upSch == null)
-                throw new ArgumentNullException(nameof(upSch), "New schedule cannot be null.");
+                throw new ArgumentNullException(nameof(upSch), "New schedule info for updating cannot be null.");
 
             // Fetch the existing record
-            var sch = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(schId)
+            var sch = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(upSchId)
                 ?? throw new KeyNotFoundException("Schedule not found.");
 
             // Map changes from the update model to the entity
