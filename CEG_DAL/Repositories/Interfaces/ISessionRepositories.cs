@@ -11,9 +11,10 @@ namespace CEG_DAL.Repositories.Interfaces
     public interface ISessionRepositories : IRepositoryBase<Session>
     {
         Task<List<Session>> GetSessionList();
-        Task<Session?> GetByIdNoTracking(int id);
+        Task<Session?> GetByIdNoTracking(int id, bool includeCourse = false, bool includeHomeworks = false, bool includeQuestions = false);
         Task<Session?> GetByTitle(string name);
         Task<int> GetIdByTitle(string name);
         Task<List<Session>> GetSessionListByCourseId(int courseId);
+        Task<bool> DetachSession(Session ses);
     }
 }

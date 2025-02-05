@@ -646,6 +646,7 @@
                 sessionTable.column(6).visible(false, false);
                 const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
                 if (statusText !== 'Draft' && statusText !== 'Postponed') sessionTable.column(5).visible(false, false);
+                sessionTableMainFeatures();
                 // updateScheduleTable();
                 // scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 //     var data = this.cell(rowIdx, 2).data();
@@ -680,7 +681,7 @@
                     console.log(diff[i].node);
                     $(diff[i].node).addClass('reordered');
                 }
-            });;
+            });
             callApiGetCourseDetail();
             $('#EditCourseForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
@@ -746,6 +747,76 @@
                 //$(this).trigger("reset");
             });
         });
+        function sessionTableMainFeatures() {
+            $('#session-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
+                let row = sessionTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                if (confirm(`Delete session "${rowData.title}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Session/' + rowData.sessionId + '/Delete',
+                        type: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Session deleted successfully.');
+                                callApiGetCourseDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+            // scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            //     const currentStatus = $('td#class-status').text().trim(); Current status
+            //     if (currentStatus === "Draft" || currentStatus === "Postponed") {
+            //         const dateValue = this.cell(rowIdx, 2).data();
+            //         const node = $(this.cell(rowIdx, 2).node());
+
+            //         const staDate = $('#class-start-date').data('stadate');
+            //         const endDate = $('#class-end-date').data('enddate');
+
+            //         Change display to a select box if not already updated
+            //         if (!node.children('input[type=datetime-local]').length) {
+            //             node.html(`
+            //                     <input type="datetime-local" id="schedule-start-date-${rowIdx}" class="form-control" value=${dateValue}
+            //                             asp-format="{0:yyyy-MM-ddTHH:mm}" min="${staDate}" max="${endDate}"/>`);
+
+            //             Add change event listener to the select element
+            //             node.find('input[type=datetime-local]').on('change', function () {
+            //                 const newStatus = $(this).val();
+            //                 let formData = {
+            //                     scheduleDate: $('input#schedule-start-date-' + rowIdx).val()
+            //                 };
+            //                 console.log(scheduleTable.cell(rowIdx, 8).data());
+            //                 callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 8).data());
+            //             });
+            //         }
+            //     }
+            // });
+        }
         function callApiPutUpdateCourse(formData) {
             $.ajax({
                 url: apiUrl + 'Course/' + @Model.CourseID + '/Update', // Specify your Razor Page here

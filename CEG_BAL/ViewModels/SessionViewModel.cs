@@ -23,6 +23,7 @@ namespace CEG_BAL.ViewModels
 
         public int? SessionNumber {  get; set; }
 
+        public int? CourseId { get; set; }
 
         public CourseViewModel? Course { get; set; } = null;
 

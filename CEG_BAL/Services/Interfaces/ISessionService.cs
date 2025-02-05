@@ -14,7 +14,7 @@ namespace CEG_BAL.Services.Interfaces
         Task Create(CreateNewSession newSes);
         Task Update(int upSesId, UpdateSession upSes);
         Task Delete(int delSesId);
-        void Update(SessionViewModel model);
+        /*void Update(SessionViewModel model);*/
         Task<List<SessionViewModel>> GetSessionList();
         Task<SessionViewModel?> GetSessionById(int id);
         Task<bool> IsSessionExistByTitle(string title);

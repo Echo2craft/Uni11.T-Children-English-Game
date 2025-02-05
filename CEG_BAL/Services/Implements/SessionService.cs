@@ -6,7 +6,10 @@ using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,47 +23,41 @@ namespace CEG_BAL.Services.Implements
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _serviceProvider;
 
         public SessionService(
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IServiceProvider serviceProvider)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _configuration = configuration;
+            _serviceProvider = serviceProvider;
         }
         public async Task Create(CreateNewSession newSes)
         {
             if (newSes == null)
                 throw new ArgumentNullException(nameof(newSes), "The new session info cannot be null.");
 
-            var ses = new Session();
-            _mapper.Map(newSes, ses);
+            var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(newSes.CourseId) 
+                ?? throw new ArgumentNullException(nameof(newSes), "The new session info contains invalid course id: course not found.");
 
-            var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(newSes.CourseId, includeSessions: true);
-            if (cou == null) 
-                throw new ArgumentNullException(nameof(cou), "The new session info contains invalid course id: course not found.");
+            if (cou.Status == null)
+                throw new ArgumentNullException("Failed to fetch course status from given session.");
+            if (!cou.Status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+                throw new ArgumentException("Cannot create new session for course in used.");
 
-            // ses.SessionNumber = cou.Sessions.Count + 1;
-            // var sess = _mapper.Map<Session>(model);
-            //sess.Status = "Draft";
-
-            /*if (newSes != null)
-            {
-                sess.Title = newSes.Title;
-                sess.Description = newSes.Description;
-                sess.Hours = newSes.Hours;
-                sess.SessionNumber = newSes.Number;
-                sess.CourseId = newSes.CourseId.Value;
-                sess.Course = null;
-            }*/
+            var ses = _mapper.Map<Session>(newSes);
 
             // Save to the database
             try
             {
                 _unitOfWork.SessionRepositories.Create(ses);
-                // _unitOfWork.Save();
+                // This ensures the session is created first
+                _unitOfWork.Save();
+
                 await _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(ses.CourseId);
             }
             catch (Exception ex)
@@ -77,12 +74,12 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<SessionViewModel?> GetSessionById(int id)
         {
-            var user = await _unitOfWork.SessionRepositories.GetByIdNoTracking(id);
-            if (user != null)
+            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(id);
+            if (ses != null)
             {
-                var urs = _mapper.Map<SessionViewModel>(user);
-                urs.CourseStatus = await _unitOfWork.CourseRepositories.GetStatusBySessionIdNoTracking(id);
-                return urs;
+                var sesVM = _mapper.Map<SessionViewModel>(ses);
+                sesVM.CourseStatus = await _unitOfWork.CourseRepositories.GetStatusBySessionIdNoTracking(id);
+                return sesVM;
             }
             return null;
         }
@@ -93,29 +90,37 @@ namespace CEG_BAL.Services.Implements
                 throw new ArgumentNullException(nameof(upSes), "New session info for updating cannot be null.");
 
             // Fetch the existing record
-            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(upSesId)
+            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(upSesId, includeCourse: true)
                 ?? throw new KeyNotFoundException("Session not found.");
-            
-            // Map changes from the update model to the entity
-            _mapper.Map(upSes, ses);
 
-            _unitOfWork.SessionRepositories.Update(ses);
+            var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(ses.CourseId)
+                ?? throw new ArgumentNullException(nameof(ses), "The new session info contains invalid course id: course not found.");
+
+            if (cou.Status == null)
+                throw new ArgumentNullException("Failed to fetch course status from given session.");
+            if (!cou.Status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+                throw new ArgumentException("Cannot update session for course in used.");
+
+            // Map changes from the update model to the entity
+            ses = _mapper.Map<Session>(upSes);
 
             // Save to the database
             try
             {
-                // _unitOfWork.Save();
-                // this function already contains Save method.
+                _unitOfWork.SessionRepositories.Update(ses);
+                // This ensures the session is updated first
+                _unitOfWork.Save();
+
                 await _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(ses.CourseId);
             }
             catch (Exception ex)
             {
                 // Log exception (if logging is configured)
-                throw new Exception("An error occurred while creating the session.", ex);
+                throw new Exception("An error occurred while updating the session.", ex);
             }
         }
 
-        public void Update(SessionViewModel model)
+        /*public void Update(SessionViewModel model)
         {
             var sess = _unitOfWork.SessionRepositories.GetByIdNoTracking(model.SessionId.Value).Result;
             if(model != null)
@@ -128,36 +133,38 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.SessionRepositories.Update(sess);
             _unitOfWork.Save();
             _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(sess.CourseId);
-        }
+        }*/
 
         public async Task Delete(int delSesId)
         {
             // Fetch the existing record
-            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(delSesId)
+            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(delSesId, includeCourse: true)
                 ?? throw new KeyNotFoundException("Session not found.");
-
-            _unitOfWork.SessionRepositories.Delete(ses);
+            if(ses.Course.Status == null) 
+                throw new ArgumentNullException("Failed to fetch course status from given session.");
+            if (!ses.Course.Status.Equals(CEGConstants.COURSE_STATUS_DRAFT)) 
+                throw new ArgumentException("Cannot delete session in used.");
 
             // Save to the database
             try
             {
+                _unitOfWork.SessionRepositories.Delete(ses);
+                // This ensures the session is deleted first
                 _unitOfWork.Save();
-                // _unitOfWork.Save();
-                // this function already contains Save method.
+
                 await _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(ses.CourseId);
             }
             catch (Exception ex)
             {
                 // Log exception (if logging is configured)
-                throw new Exception("An error occurred while creating the session.", ex);
+                throw new Exception("An error occurred while deleting the session.", ex);
             }
         }
 
         public async Task<bool> IsSessionExistByTitle(string title)
         {
             var ses = await _unitOfWork.SessionRepositories.GetByTitle(title);
-            if (ses != null) return true;
-            return false;
+            return ses != null;
         }
 
         public async Task<List<SessionViewModel>> GetSessionListByCourseId(int courseId)

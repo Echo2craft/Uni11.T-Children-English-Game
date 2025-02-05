@@ -1,4 +1,5 @@
-﻿using CEG_BAL.Services.Implements;
+﻿using CEG_BAL.Configurations;
+using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
@@ -205,7 +206,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}/Delete")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -216,8 +217,8 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _sessionService.GetSessionById(id);
-                if (result == null)
+                var ses = await _sessionService.GetSessionById(id);
+                if (ses == null)
                 {
                     return NotFound(new
                     {
@@ -225,11 +226,31 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "session with given id does not exist."
                     });
                 }
+                /*var result = await _courseService.GetByIdNoTracking(ses.CourseId.Value);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Course Does Not Exist!"
+                    });
+                }
+                bool isValid = CEG_BAL_Library.IsCourseNewStatusValid(result.Status, status) && result.Classes?.Count == 0;
+                if (isValid)
+                {
+                    _courseService.UpdateStatus(id, status);
+                    result = await _courseService.GetByIdNoTracking(id);
+                    return Ok(new
+                    {
+                        Status = true,
+                        Data = result
+                    });
+                }*/
                 await _sessionService.Delete(id);
                 return Ok(new
                 {
                     Status = true,
-                    Data = result
+                    Data = ses
                 });
             }
             catch (Exception ex)

@@ -891,7 +891,8 @@
                             let formData = {
                                 scheduleDate: $('input#schedule-start-date-' + rowIdx).val()
                             };
-                            callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 7).data());
+                            // console.log(scheduleTable.cell(rowIdx, 8).data());
+                            callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 8).data());
                         });
                     }
                 }

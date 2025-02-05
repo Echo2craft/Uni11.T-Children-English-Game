@@ -51,10 +51,10 @@ namespace CEG_DAL.Repositories.Implements
                                 SessionNumber = s.SessionNumber,
                                 //Status = s.Status,
                                 // Include Homeworks only if requested
-                                Homeworks = includeHomeworks ? s.Homeworks.ToList() : null
-                            }).ToList() : null,
+                                Homeworks = includeHomeworks ? s.Homeworks.ToList() : new List<Homework>()
+                            }).ToList() : new List<Session>(),
                             // Include Classes only if requested
-                            Classes = includeClasses ? c.Classes.ToList() : null
+                            Classes = includeClasses ? c.Classes.ToList() : new List<Class>()
                         });
 
             return await query.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(cou => cou.CourseId == id);
@@ -182,7 +182,7 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task UpdateTotalHoursByIdThroughSessionsSum(int id)
         {
-            var selectedCourse = await _dbContext.Courses
+            /*var selectedCourse = await _dbContext.Courses
                 .AsNoTrackingWithIdentityResolution()
                 .Where(cour => cour.CourseId.Equals(id))
                 .Select(c => new Course(){
@@ -196,20 +196,32 @@ namespace CEG_DAL.Repositories.Implements
                     Status = c.Status,
                     Category = c.Category,
                     TotalHours = c.TotalHours,
-                    Sessions = c.Sessions
+                    Sessions = c.Sessions.Select(ses => new Session()
+                    {
+                        Title = ses.Title,
+                        Hours = ses.Hours,
+                    }).ToList()
                 })
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync();*/
+            int totalHours = await _dbContext.Sessions
+                                .Where(ses => ses.CourseId == id)
+                                .SumAsync(ses => ses.Hours.Value);
 
-            if (selectedCourse == null) return;
+            /*if (selectedCourse == null) return;
             selectedCourse.TotalHours = selectedCourse.Sessions.Sum(ses => ses.Hours);
-
-            // Reattach entity and mark it as modified
-            _dbContext.Courses.Update(selectedCourse);
+            selectedCourse.Sessions = new List<Session>();*/
 
             // Save changes
             try
             {
-                _dbContext.SaveChanges();
+                /*// Reattach entity and mark it as modified
+                _dbContext.Courses.Attach(selectedCourse);
+                _dbContext.Entry(selectedCourse).Property(c => c.TotalHours).IsModified = true;
+                await _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();*/
+                await _dbContext.Courses
+                .Where(c => c.CourseId == id)
+                .ExecuteUpdateAsync(setters => setters.SetProperty(c => c.TotalHours, totalHours));
             }
             catch (DbUpdateConcurrencyException ex)
             {
