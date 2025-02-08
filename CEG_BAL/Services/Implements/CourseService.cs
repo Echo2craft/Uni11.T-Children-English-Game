@@ -34,24 +34,45 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public void Create(CourseViewModel course, CreateNewCourse newCourse)
+        public async Task Create(CreateNewCourse newCou)
         {
-            var cou = _mapper.Map<Course>(course);
+            if (newCou == null)
+                throw new ArgumentNullException(nameof(newCou), "The new course info cannot be null.");
+            var cou = new Course
+            {
+                Image = "Placeholder Image",
+                Status = CEGConstants.COURSE_STATUS_DRAFT
+            };
+            _mapper.Map(newCou, cou);
+
+            // Save to the database
+            try
+            {
+                _unitOfWork.CourseRepositories.Create(cou);
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating new course.", ex);
+            }
+
+            /*var cou = _mapper.Map<Course>(course);
             cou.Status = "Draft";
             cou.Image = "Image";
-            if(newCourse != null)
+            if(newCou != null)
             {
-                cou.CourseName = newCourse.CourseName;
-                cou.CourseType = newCourse.CourseType;
-                cou.Description = newCourse.Description;
-                cou.Image = newCourse.Image;
-                cou.TotalHours = newCourse.TotalHours;
-                cou.RequiredAge = newCourse.RequiredAge;
-                cou.Difficulty = newCourse.Difficulty;
-                cou.Category = newCourse.Category;
+                cou.CourseName = newCou.CourseName;
+                cou.CourseType = newCou.CourseType;
+                cou.Description = newCou.Description;
+                cou.Image = newCou.Image;
+                cou.TotalHours = newCou.TotalHours;
+                cou.RequiredAge = newCou.RequiredAge;
+                cou.Difficulty = newCou.Difficulty;
+                cou.Category = newCou.Category;
             }
             _unitOfWork.CourseRepositories.Create(cou);
-            _unitOfWork.Save();
+            _unitOfWork.Save();*/
         }
 
         public async Task<CourseViewModel?> GetByIdNoTracking(int id)
@@ -92,12 +113,11 @@ namespace CEG_BAL.Services.Implements
             // Map changes from the update model to the entity
             _mapper.Map(upCou, cou);
 
-            // Reattach entity and mark it as modified
-            _unitOfWork.CourseRepositories.Update(cou);
-
-            // Save changes
             try
             {
+                // Reattach entity and mark it as modified
+                _unitOfWork.CourseRepositories.Update(cou);
+                // Save changes
                 _unitOfWork.Save();
             }
             catch (DbUpdateConcurrencyException ex)

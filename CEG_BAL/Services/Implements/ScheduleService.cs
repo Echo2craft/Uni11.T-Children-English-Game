@@ -41,13 +41,15 @@ namespace CEG_BAL.Services.Implements
                 throw new ArgumentNullException(nameof(newSch), "The new schedule info contains invalid session: session info is null.");
             if (ses.Hours == null)
                 throw new ArgumentNullException(nameof(newSch), "The new schedule info contains invalid session: session hours is null.");
+            if (sch.StartTime == null)
+                throw new ArgumentNullException(nameof(newSch), "The new schedule info contains invalid data: schedule start time is null.");
 
             sch.EndTime = sch.StartTime.Value.AddHours(ses.Hours.Value);
 
-            // Save to the database
             try
             {
                 _unitOfWork.ScheduleRepositories.Create(sch);
+                // Save to the database
                 _unitOfWork.Save();
             }
             catch (Exception ex)
@@ -57,15 +59,34 @@ namespace CEG_BAL.Services.Implements
             }
         }
 
+        public async Task Delete(int delSchId)
+        {
+            // Fetch the existing record
+            var sch = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(delSchId)
+                ?? throw new KeyNotFoundException("Schedule not found.");
+            if (sch.Class.Status == null)
+                throw new ArgumentNullException("Failed to fetch class status from given scheduled session.");
+            if (!sch.Class.Status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+                throw new ArgumentException("Cannot delete scheduled session in used.");
+
+            // Save to the database
+            try
+            {
+                _unitOfWork.ScheduleRepositories.Delete(sch);
+                // This ensures the session is deleted first
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while deleting scheduled session.", ex);
+            }
+        }
+
         public async Task<ScheduleViewModel?> GetById(int id)
         {
             var sche = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(id);
             return sche != null ? _mapper.Map<ScheduleViewModel>(sche) : null;
-        }
-
-        public Task<ScheduleViewModel?> GetByIdAdmin(int id)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<List<ScheduleViewModel>> GetList()
@@ -99,17 +120,28 @@ namespace CEG_BAL.Services.Implements
 
             // Map changes from the update model to the entity
             _mapper.Map(upSch, sch);
-            sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(sch.SessionId)).Hours.Value);
+            if (sch.StartTime == null)
+                throw new ArgumentNullException(nameof(upSch), "The new schedule info contains invalid data: schedule start time is null.");
+            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(sch.SessionId);
+
+            if (ses == null)
+                throw new ArgumentNullException(nameof(upSch), "(Update) The new schedule info contains invalid session: session info is null.");
+            if (ses.Hours == null)
+                throw new ArgumentNullException(nameof(upSch), "(Update) The new schedule info contains invalid session: session hours is null.");
+            if (sch.StartTime == null)
+                throw new ArgumentNullException(nameof(upSch), "(Update) The new schedule info contains invalid data: schedule start time is null.");
+
+            sch.EndTime = sch.StartTime.Value.AddHours(ses.Hours.Value);
+            /*sch.EndTime = sch.StartTime.Value.AddHours((await _unitOfWork.SessionRepositories.GetByIdNoTracking(sch.SessionId)).Hours.Value);*/
 
             sch.Class = null;
             sch.Session = null;
 
-            // Reattach entity and mark it as modified
-            _unitOfWork.ScheduleRepositories.Update(sch);
-
-            // Save changes
             try
             {
+                // Reattach entity and mark it as modified
+                _unitOfWork.ScheduleRepositories.Update(sch);
+                // Save changes
                 _unitOfWork.Save();
             }
             catch (DbUpdateConcurrencyException ex)

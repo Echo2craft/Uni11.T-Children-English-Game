@@ -232,8 +232,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                CourseViewModel course = new CourseViewModel();
-                _courseService.Create(course, newCourse);
+                await _courseService.Create(newCourse);
                 return Ok(new
                 {
                     Data = true,

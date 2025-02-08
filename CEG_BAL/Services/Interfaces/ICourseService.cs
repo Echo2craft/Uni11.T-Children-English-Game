@@ -12,7 +12,7 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface ICourseService
     {
-        void Create(CourseViewModel course, CreateNewCourse newCourse);
+        Task Create(CreateNewCourse newCourse);
         Task Update(int couId, UpdateCourse upCou);
         void UpdateStatus(int courseId, string courseStatus);
         Task<List<CourseViewModel>> GetCourseList();

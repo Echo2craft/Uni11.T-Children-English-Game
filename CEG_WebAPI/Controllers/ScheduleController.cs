@@ -298,5 +298,42 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
+        [HttpDelete("{id}/Delete")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(
+            [FromRoute][Required] int id
+            )
+        {
+            try
+            {
+                var sch = await _scheduleService.GetById(id);
+                if (sch == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "schedule with given id does not exist."
+                    });
+                }
+                await _scheduleService.Delete(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = sch
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
     }
 }
