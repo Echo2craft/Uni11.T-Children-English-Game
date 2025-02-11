@@ -120,21 +120,6 @@ namespace CEG_BAL.Services.Implements
             }
         }
 
-        /*public void Update(SessionViewModel model)
-        {
-            var sess = _unitOfWork.SessionRepositories.GetByIdNoTracking(model.SessionId.Value).Result;
-            if(model != null)
-            {
-                sess.Title = model.Title;
-                sess.Description = model.Description;
-                sess.SessionNumber = model.SessionNumber;
-                sess.Hours = model.Hours;
-            }
-            _unitOfWork.SessionRepositories.Update(sess);
-            _unitOfWork.Save();
-            _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(sess.CourseId);
-        }*/
-
         public async Task Delete(int delSesId)
         {
             // Fetch the existing record

@@ -159,20 +159,13 @@ namespace CEG_BAL.Services.Implements
         public async Task UpdateStatus(int schId, string upSchStatus)
         {
             // Fetch the existing record
-            var sch = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(schId)
+            _ = await _unitOfWork.ScheduleRepositories.GetByIdNoTracking(schId)
                 ?? throw new KeyNotFoundException("Schedule not found.");
-
-            sch.Class = null;
-            sch.Session = null;
-
-            sch.Status = upSchStatus;
-            // Reattach entity and mark it as modified
-            _unitOfWork.ScheduleRepositories.Update(sch);
 
             // Save changes
             try
             {
-                _unitOfWork.Save();
+                await _unitOfWork.ScheduleRepositories.UpdateStatusAsync(schId, upSchStatus);
             }
             catch (DbUpdateConcurrencyException ex)
             {

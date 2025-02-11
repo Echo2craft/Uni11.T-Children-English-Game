@@ -308,7 +308,7 @@ namespace CEG_WebAPI.Controllers
                 bool isValid = CEG_BAL_Library.IsCourseNewStatusValid(result.Status,status) && result.Classes?.Count == 0;
                 if (isValid)
                 {
-                    _courseService.UpdateStatus(id, status);
+                    await _courseService.UpdateStatus(id, status);
                     result = await _courseService.GetByIdNoTracking(id);
                     return Ok(new
                     {

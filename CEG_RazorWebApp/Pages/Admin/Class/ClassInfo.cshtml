@@ -870,6 +870,47 @@
             defaultValueOverride: "0"
         });
         function updateScheduleTable() {
+            $('#schedule-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
+                let row = scheduleTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                if (confirm(`Delete schedule "${rowData.session.title}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Schedule/' + rowData.scheduleId + '/Delete',
+                        type: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Schedule deleted successfully.');
+                                callApiGetClassDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
             scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 const currentStatus = $('td#class-status').text().trim(); // Current status
                 if (currentStatus === "Draft" || currentStatus === "Postponed") {

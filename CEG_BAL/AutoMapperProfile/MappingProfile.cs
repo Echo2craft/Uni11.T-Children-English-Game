@@ -224,8 +224,8 @@ namespace CEG_BAL.AutoMapperProfile
 
             // Session
             CreateMapforDefaultViewCreateUpdateModel<Session, SessionViewModel, CreateNewSession, UpdateSession>();
-            CreateMap<Session, SessionViewModel>()
-                .ReverseMap();
+            /*CreateMap<Session, SessionViewModel>()
+                .ReverseMap();*/
 
             // Homework
             CreateMap<HomeworkQuestion, HomeworkQuestionViewModel>()

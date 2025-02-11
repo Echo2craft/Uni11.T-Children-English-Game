@@ -13,6 +13,7 @@ using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.Configurations;
 using Microsoft.EntityFrameworkCore;
 using CEG_BAL.ViewModels.Admin.Update;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CEG_BAL.Services.Implements
 {
@@ -38,6 +39,7 @@ namespace CEG_BAL.Services.Implements
         {
             if (newCou == null)
                 throw new ArgumentNullException(nameof(newCou), "The new course info cannot be null.");
+
             var cou = new Course
             {
                 Image = "Placeholder Image",
@@ -56,23 +58,6 @@ namespace CEG_BAL.Services.Implements
                 // Log exception (if logging is configured)
                 throw new Exception("An error occurred while creating new course.", ex);
             }
-
-            /*var cou = _mapper.Map<Course>(course);
-            cou.Status = "Draft";
-            cou.Image = "Image";
-            if(newCou != null)
-            {
-                cou.CourseName = newCou.CourseName;
-                cou.CourseType = newCou.CourseType;
-                cou.Description = newCou.Description;
-                cou.Image = newCou.Image;
-                cou.TotalHours = newCou.TotalHours;
-                cou.RequiredAge = newCou.RequiredAge;
-                cou.Difficulty = newCou.Difficulty;
-                cou.Category = newCou.Category;
-            }
-            _unitOfWork.CourseRepositories.Create(cou);
-            _unitOfWork.Save();*/
         }
 
         public async Task<CourseViewModel?> GetByIdNoTracking(int id)
@@ -132,13 +117,30 @@ namespace CEG_BAL.Services.Implements
             }
         }
 
-        public void UpdateStatus(int courseId, string courseStatus)
+        public async Task UpdateStatus(int couId, string courseStatus)
         {
-            var cou = _unitOfWork.CourseRepositories.GetByIdNoTracking(courseId, includeClasses: true).Result;
-            if (cou == null) return;
-            cou.Status = courseStatus;
-            _unitOfWork.CourseRepositories.Update(cou);
-            _unitOfWork.Save();
+            if (courseStatus.IsNullOrEmpty())
+                throw new ArgumentNullException(nameof(courseStatus), "update course status text cannot be null.");
+
+            // Fetch the existing record
+            _ = await _unitOfWork.CourseRepositories.GetByIdNoTracking(couId)
+                ?? throw new KeyNotFoundException("Course not found.");
+
+            try
+            {
+                // Save changes
+                await _unitOfWork.CourseRepositories.UpdateStatusAsync(couId, courseStatus);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating course status.", ex);
+            }
         }
 
         public async Task<bool> IsExistByName(string name)

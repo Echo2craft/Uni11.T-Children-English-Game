@@ -15,5 +15,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<Schedule?> GetByIdNoTracking(int id);
         Task<bool> IsListScheduleDateValidByClassId(int claId);
         Task<List<string>> IsListScheduleDateHasValidSequenceByClassId(int claId);
+        Task UpdateStatusAsync(int id, string status);
     }
 }
