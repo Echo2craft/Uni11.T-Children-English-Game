@@ -475,6 +475,7 @@
                                     <select class="form-control col-md-7 custom-select" asp-for="@createHomework.Type"></select>
                                     <span asp-validation-for="@createHomework.Type" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                    <input id="createHomework_SessionId" type="text" required hidden readonly>
                                 </div>
                             </div>
                         </div>
@@ -743,6 +744,7 @@
                     let rowSesId = selectedSession.sessionId;
                     console.log(selectedSession);
                     homeworkTable.clear().rows.add(selectedSession.homeworks).draw();
+                    $('#createHomework_SessionId').val(rowSesId);
                     // callApiGetAttendanceList(rowSesId);
 
                     // Ensure the target table is visible
@@ -773,6 +775,9 @@
             });
             homeworkTable = new DataTable('#homework-table', {
                 data: [],
+                rowReorder: {
+                    dataSrc: 'homeworkNumber'
+                },
                 deferRender: false,
                 responsive: true,
                 lengthMenu: [8, 10, 25, 50],
@@ -927,6 +932,18 @@
                 // });
             });
             callApiGetCourseDetail();
+            $('#AddHomeworkForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                var formData = {
+                    title: $('#createHomework_Title').val(),
+                    description: $('#createHomework_Description').val(),
+                    hours: $('#createHomework_Hours').val(),
+                    type: $('#createHomework_Type').val(),
+                    sessionId: $('#createHomework_SessionId').val()
+                };
+                callApiPostCreateHomework(formData);
+            });
             $('#EditCourseForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
 
@@ -943,7 +960,6 @@
 
                 //Make the AJAX request
                 callApiPutUpdateCourse(formData);
-                $('#EditCourseForm').trigger("reset");
             });
             $('#updateCourseStatusForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
@@ -1071,6 +1087,43 @@
 
             return html;
         }
+        function callApiPostCreateHomework(formData) {
+            $.ajax({
+                url: apiUrl + 'Homework/Create', // Specify your Razor Page here
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Homework create successfully");
+                        callApiGetCourseDetail();
+                        $('#AddHomeworkForm').trigger("reset");
+
+                    } else {
+                        showAlert('error', response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (xhr.errors && typeof xhr.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in xhr.errors) {
+                            if (xhr.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = xhr.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+        }
         function callApiPutUpdateCourse(formData) {
             $.ajax({
                 url: apiUrl + 'Course/' + @Model.CourseID + '/Update', // Specify your Razor Page here
@@ -1085,6 +1138,7 @@
                     if (response.status) {
                         showAlert('success', "Course update successfully");
                         callApiGetCourseDetail();
+                        $('#EditCourseForm').trigger("reset");
                     } else {
                         showAlert('error', response.errorMessage);
                     }
@@ -1126,6 +1180,7 @@
                     if (response.status) {
                         showAlert('success', "Course Status update successfully");
                         callApiGetCourseDetail();
+                        $('#updateCourseStatusForm').trigger("reset");
                     } else {
                         showAlert('error', response.errorMessage);
                     }
@@ -1235,6 +1290,16 @@
                 }
             });
         }
+        // Function to get the currently selected row's data and index
+        function getSelectedRowInfo() {
+            const selectedRows = sessionTable.rows({ selected: true });
+            if (selectedRows.count() > 0) {
+                const rowIndex = selectedRows.indexes()[0]; // Get the index of the first selected row
+                const rowData = selectedRows.data()[0]; // Get the data of the first selected row
+                return { rowIndex, rowData };
+            }
+            return null; // No row is selected
+        }
         function callApiGetCourseDetail() {
             $.ajax({
                 url: apiUrl + 'Course/' + @Model.CourseID , // API endpoint
@@ -1246,11 +1311,13 @@
                         setCourseDisplay(response.data);
                         // Check if sessions is empty
                         if (response.data.sessions && response.data.sessions.length > 0) {
-                            // Clear any existing sessions
-                            $('#session_list').empty();
-                            // console.log(response.data.sessions);
+
+                            selectedRow = getSelectedRowInfo();
                             sessionTable.clear().rows.add(response.data.sessions).draw();
 
+                            if (selectedRow != null)
+                                sessionTable.row(selectedRow.rowIndex).select();
+                            // getScheduleDateBasedOnTodayOrDefault(selectedRow != null ? selectedRow.rowIndex : 1);
                             // sessionList = response.data.sessions;
                             // Loop through each sessions and generate the HTML
                             // response.data.sessions.forEach(function (session) {

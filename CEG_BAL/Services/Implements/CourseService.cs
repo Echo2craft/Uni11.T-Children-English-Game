@@ -64,7 +64,19 @@ namespace CEG_BAL.Services.Implements
         {
             // await _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(id);
             var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(id, true, true ,true);
-            return cou != null ? _mapper.Map<CourseViewModel>(cou) : null;
+            if (cou != null)
+            {
+                var couVM = _mapper.Map<CourseViewModel>(cou);
+                foreach(var sesVM in couVM.Sessions)
+                {
+                    for(int i = 0; i < sesVM.Homeworks.Count; i++)
+                    {
+                        sesVM.Homeworks[i].HomeworkNumber = i + 1;
+                    }
+                }
+                return couVM;
+            }
+            return null;
         }
 
         public async Task<List<CourseViewModel>> GetCourseList()

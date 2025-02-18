@@ -27,8 +27,8 @@ namespace CEG_BAL.ViewModels
 
         public CourseViewModel? Course { get; set; } = null;
 
-        public List<HomeworkViewModel>? Homeworks { get; set; } = new List<HomeworkViewModel>();
+        public List<HomeworkViewModel> Homeworks { get; set; } = new List<HomeworkViewModel>();
 
-        public List<ScheduleViewModel>? Schedules { get; set; } = new List<ScheduleViewModel>();
+        public List<ScheduleViewModel> Schedules { get; set; } = new List<ScheduleViewModel>();
     }
 }
