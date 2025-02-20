@@ -59,7 +59,7 @@ namespace CEG_BAL.Services.Implements
             catch (Exception ex)
             {
                 // Log exception (if logging is configured)
-                throw new Exception("An error occurred while creating the class info.", ex);
+                throw new Exception("An error occurred while creating new class.", ex);
             }
         }
         /// <summary>

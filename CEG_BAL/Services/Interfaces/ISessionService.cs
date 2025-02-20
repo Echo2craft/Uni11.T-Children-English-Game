@@ -1,5 +1,6 @@
 ﻿using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface ISessionService
     {
-        void Create(SessionViewModel model, CreateNewSession newSes);
-        void Update(SessionViewModel model);
+        Task Create(CreateNewSession newSes);
+        Task Update(int upSesId, UpdateSession upSes);
+        Task Delete(int delSesId);
         Task<List<SessionViewModel>> GetSessionList();
         Task<SessionViewModel?> GetSessionById(int id);
         Task<bool> IsSessionExistByTitle(string title);

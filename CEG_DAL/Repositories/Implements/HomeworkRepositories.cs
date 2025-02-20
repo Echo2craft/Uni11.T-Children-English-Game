@@ -18,13 +18,50 @@ namespace CEG_DAL.Repositories.Implements
             _dbContext = dbContext;
         }
 
-        public async Task<Homework?> GetByIdNoTracking(int id)
+        public async Task<Homework?> GetByIdNoTracking(int id, bool includeSession = false, bool includeCourse = false, bool includeQuestions = false, bool includeAnswers = false)
         {
             return await _dbContext.Homeworks
-                .Include(h => h.HomeworkQuestions)
-                .ThenInclude(s => s.HomeworkAnswers)
                 .AsNoTrackingWithIdentityResolution()
-                .SingleOrDefaultAsync(home => home.HomeworkId == id);
+                .Where(h => h.HomeworkId == id)
+                .Select(hom =>  new Homework()
+                {
+                    HomeworkId = hom.HomeworkId,
+                    Title = hom.Title,
+                    Description = hom.Description,
+                    Hours = hom.Hours,
+                    Type = hom.Type,
+                    GameConfigId = hom.GameConfigId,
+                    SessionId = hom.SessionId,
+                    StartDate = hom.StartDate,
+                    EndDate = hom.EndDate,
+                    // Include Session only if requested
+                    Session = new Session()
+                    {
+                        SessionId = includeSession ? hom.Session.SessionId : 0,
+                        CourseId = includeSession ? hom.Session.CourseId : 0,
+                        SessionNumber = includeSession ? hom.Session.SessionNumber : 0,
+                        Title = includeSession ? hom.Session.Title : "",
+                        Description = includeSession ? hom.Session.Description : "",
+                        Hours = includeSession ? hom.Session.Hours : 0,
+
+                        Course = includeCourse ? hom.Session.Course : new Course()
+                    },
+                    GameConfig = hom.GameConfig,
+                    HomeworkQuestions = includeQuestions ? hom.HomeworkQuestions.Select(que => new HomeworkQuestion()
+                    {
+                        HomeworkQuestionId = que.HomeworkQuestionId,
+                        Question = que.Question,
+                        HomeworkId = que.HomeworkId,
+                        HomeworkAnswers = includeAnswers ? que.HomeworkAnswers.Select(ans => new HomeworkAnswer()
+                        {
+                            HomeworkAnswerId = ans.HomeworkAnswerId,
+                            Answer = ans.Answer,
+                            Type = ans.Type,
+                            HomeworkQuestionId = ans.HomeworkQuestionId
+                        }).ToList() : new List<HomeworkAnswer>()
+                    }).ToList() : new List<HomeworkQuestion>()
+                })
+                .SingleOrDefaultAsync();
         }
 
         public async Task<List<Homework>> GetHomeworksList()

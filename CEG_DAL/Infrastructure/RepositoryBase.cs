@@ -17,7 +17,7 @@ namespace CEG_DAL.Infrastructure
             _dbSet = context.Set<T>();
         }
 
-        public T GetById(int id)
+        public T? GetById(int id)
         {
             return _dbSet.Find(id);
         }

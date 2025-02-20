@@ -18,13 +18,37 @@ namespace CEG_DAL.Repositories.Implements
             _dbContext = dbContext;
         }
 
-        public async Task<Session?> GetByIdNoTracking(int id)
+        public async Task<Session?> GetByIdNoTracking(int id, bool includeCourse = false, bool includeHomeworks = false, bool includeQuestions = false)
         {
             return await _dbContext.Sessions
-                .Include(s => s.Homeworks)
-                .ThenInclude(s => s.HomeworkQuestions)
-                .AsNoTrackingWithIdentityResolution()
-                .SingleOrDefaultAsync(sess => sess.SessionId == id);
+                        .AsNoTrackingWithIdentityResolution()
+                        .Where(s => s.SessionId == id)
+                        .Select(ses => new Session
+                        {
+                            SessionId = ses.SessionId,
+                            Title = ses.Title,
+                            Hours = ses.Hours,
+                            Description = ses.Description,
+                            SessionNumber = ses.SessionNumber,
+                            CourseId = ses.CourseId,
+                            // Include Course only if requested
+                            Course = includeCourse ? ses.Course : new Course(),
+                            // Include Homeworks only if requested
+                            Homeworks = includeHomeworks ? ses.Homeworks.Select(hom => new Homework
+                            {
+                                HomeworkId = hom.HomeworkId,
+                                Title = hom.Title,
+                                Description = hom.Description,
+                                Type = hom.Type,
+                                StartDate = hom.StartDate,
+                                EndDate = hom.EndDate,
+                                Hours = hom.Hours,
+                                SessionId = hom.SessionId,
+                                // Include Questions only if requested
+                                HomeworkQuestions = includeQuestions ? hom.HomeworkQuestions : new List<HomeworkQuestion>()
+                            }).ToList() : new List<Homework>()
+                        })
+                        .SingleOrDefaultAsync();
         }
 
         public async Task<List<Session>> GetSessionList()
@@ -47,6 +71,15 @@ namespace CEG_DAL.Repositories.Implements
         public async Task<List<Session>> GetSessionListByCourseId(int courseId)
         {
             return await _dbContext.Sessions.AsNoTrackingWithIdentityResolution().Where(sess => sess.CourseId == courseId).ToListAsync();
+        }
+
+        public Task<bool> DetachSession(Session ses)
+        {
+            _dbContext.Sessions.Entry(ses).State = EntityState.Detached;
+            _dbContext.Courses.Entry(ses.Course).State = EntityState.Detached;
+            return Task.FromResult(
+                _dbContext.Sessions.Entry(ses).State == EntityState.Detached
+                );
         }
     }
 }

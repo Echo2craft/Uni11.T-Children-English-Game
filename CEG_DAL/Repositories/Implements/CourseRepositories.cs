@@ -51,10 +51,10 @@ namespace CEG_DAL.Repositories.Implements
                                 SessionNumber = s.SessionNumber,
                                 //Status = s.Status,
                                 // Include Homeworks only if requested
-                                Homeworks = includeHomeworks ? s.Homeworks.ToList() : null
-                            }).ToList() : null,
+                                Homeworks = includeHomeworks ? s.Homeworks.ToList() : new List<Homework>()
+                            }).ToList() : new List<Session>(),
                             // Include Classes only if requested
-                            Classes = includeClasses ? c.Classes.ToList() : null
+                            Classes = includeClasses ? c.Classes.ToList() : new List<Class>()
                         });
 
             return await query.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(cou => cou.CourseId == id);
@@ -116,13 +116,13 @@ namespace CEG_DAL.Repositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<List<string>?> GetNameList()
+        public async Task<List<string>> GetNameList()
         {
             return await _dbContext.Courses
                 .Select(c => c.CourseName)
                 .ToListAsync();
         }
-        public async Task<List<string>?> GetNameListByStatus(string status)
+        public async Task<List<string>> GetNameListByStatus(string status)
         {
             return await _dbContext.Courses
                 .Where(c => c.Status == status)
@@ -137,8 +137,10 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<int> GetIdByName(string name)
         {
-            var result = await _dbContext.Courses.Where(c => c.CourseName == name).Select(c => c.CourseId).FirstOrDefaultAsync();
-            return result;
+            return await _dbContext.Courses
+                .Where(c => c.CourseName == name)
+                .Select(c => c.CourseId)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<string?> GetStatusByHomeworkIdNoTracking(int homeworkId)
@@ -180,36 +182,25 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.Courses.CountAsync();
         }
 
+
+
         public async Task UpdateTotalHoursByIdThroughSessionsSum(int id)
         {
-            var selectedCourse = await _dbContext.Courses
-                .AsNoTrackingWithIdentityResolution()
-                .Where(cour => cour.CourseId.Equals(id))
-                .Select(c => new Course(){
-                    CourseId = c.CourseId,
-                    CourseName = c.CourseName,
-                    CourseType = c.CourseType,
-                    Description = c.Description,
-                    Difficulty = c.Difficulty,
-                    Image = c.Image,
-                    RequiredAge = c.RequiredAge,
-                    Status = c.Status,
-                    Category = c.Category,
-                    TotalHours = c.TotalHours,
-                    Sessions = c.Sessions
-                })
-                .SingleOrDefaultAsync();
-
-            if (selectedCourse == null) return;
-            selectedCourse.TotalHours = selectedCourse.Sessions.Sum(ses => ses.Hours);
-
-            // Reattach entity and mark it as modified
-            _dbContext.Courses.Update(selectedCourse);
+            int totalHours = await _dbContext.Sessions
+                                .Where(ses => ses.CourseId == id)
+                                .SumAsync(ses => ses.Hours != null ? ses.Hours.Value : 0);
 
             // Save changes
             try
             {
-                _dbContext.SaveChanges();
+                /*// Reattach entity and mark it as modified
+                _dbContext.Courses.Attach(selectedCourse);
+                _dbContext.Entry(selectedCourse).Property(c => c.TotalHours).IsModified = true;
+                await _dbContext.SaveChangesAsync();
+                _dbContext.SaveChanges();*/
+                await _dbContext.Courses
+                    .Where(c => c.CourseId == id)
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(c => c.TotalHours, totalHours));
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -220,6 +211,27 @@ namespace CEG_DAL.Repositories.Implements
             {
                 // Log and rethrow unexpected exceptions
                 throw new Exception("An unexpected error occurred while updating course total hours.", ex);
+            }
+        }
+
+        public async Task UpdateStatusAsync(int id, string status)
+        {
+            try
+            {
+                // Save changes
+                await _dbContext.Courses
+                    .Where(c => c.CourseId == id)
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(c => c.Status, status));
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating course status.", ex);
             }
         }
     }

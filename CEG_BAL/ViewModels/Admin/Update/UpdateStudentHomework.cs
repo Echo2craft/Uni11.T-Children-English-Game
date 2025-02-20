@@ -16,7 +16,7 @@ namespace CEG_BAL.ViewModels.Admin.Update
 
         public int Point { get; set; }
 
-        public TimeOnly? Playtime { get; set; }
+        public TimeSpan? Playtime { get; set; }
 
         public string? Status { get; set; }
 

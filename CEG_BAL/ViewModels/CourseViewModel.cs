@@ -30,8 +30,8 @@ namespace CEG_BAL.ViewModels
         public string? Status { get; set; }
 
 
-        public List<ClassViewModel>? Classes { get; set; } = new List<ClassViewModel>();
+        public List<ClassViewModel> Classes { get; set; } = new List<ClassViewModel>();
 
-        public List<SessionViewModel>? Sessions { get; set; } = new List<SessionViewModel>();
+        public List<SessionViewModel> Sessions { get; set; } = new List<SessionViewModel>();
     }
 }

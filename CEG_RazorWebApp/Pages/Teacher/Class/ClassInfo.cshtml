@@ -139,8 +139,8 @@
                                         <div class="card-header" id="class-allow-add-schedule">
                                             <h4>Scheduled Session List</h4>
                                         </div>
+                                        <!-- scheduled_session_index -->
                                         <div class="card-body" id="schedule_list">
-                                            @* <h5>No scheduled session found</h5> *@
                                             <div id="schedule-table_wrapper" class="dataTables_wrapper no-footer">
                                                 <table id="schedule-table"
                                                        class="table table-striped table-bordered dataTable no-footer compact"
@@ -202,8 +202,8 @@
                                                 </table>
                                             </div>
                                         </div>
+                                        <!-- student/attendance_index -->
                                         <div class="card-body" id="student_list" style="display: none; overflow: hidden;">
-                                            @* <h5>No scheduled session found</h5> *@
                                             <div id="student-table_wrapper" class="dataTables_wrapper no-footer">
                                                 <table id="student-table"
                                                        class="table table-striped table-bordered dataTable no-footer compact"
@@ -241,8 +241,8 @@
                                                 </table>
                                             </div>
                                         </div>
+                                        <!-- homework_index -->
                                         <div class="card-body" id="student_homework_list" style="display: none; overflow: hidden;">
-                                            @* <h5>No scheduled session found</h5> *@
                                             <div id="homework-table_wrapper" class="dataTables_wrapper no-footer">
                                                 <table id="homework-table"
                                                        class="table table-striped table-bordered dataTable no-footer compact"
@@ -432,10 +432,15 @@
             };
             enrollTable = new DataTable('#enroll-table', {
                 data: [],
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
                 deferRender: false,
                 responsive: true,
                 columns: [
-                    { data: 'studentId' },
+                    { 
+                        data: 'studentId',
+                        className: 'dt-head-left'
+                    },
                     { data: 'student.account.fullname' },
                     // { data: 'status' },
                     // { Add a select box in the last column
@@ -464,8 +469,8 @@
             callApiGetClassDetail();
             scheduleTable = new DataTable('#schedule-table', {
                 data: [],
-                lengthMenu: [5, 10, 25, 50],
-                pageLength: 5,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
                 deferRender: false,
                 responsive: true,
                 columns: [
@@ -561,8 +566,8 @@
                 data: [],
                 deferRender: false,
                 responsive: true,
-                lengthMenu: [5, 10, 25, 50],
-                pageLength: 5,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
                 columns: [
                     {
                         data: 'studentId',
@@ -786,8 +791,8 @@
                 data: [],
                 deferRender: false,
                 responsive: true,
-                lengthMenu: [5, 10, 25, 50],
-                pageLength: 5,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
                 columns: [
                     {
                         data: 'homework.homeworkNumber',

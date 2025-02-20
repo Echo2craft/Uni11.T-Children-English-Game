@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.Configurations;
 
 namespace CEG_BAL.Services.Implements
 {
@@ -31,21 +32,32 @@ namespace CEG_BAL.Services.Implements
             _jwtService = jwtServices;
             _configuration = configuration;
         }
-        public void Create(HomeworkViewModel model, CreateNewHomework newHw)
+        public async Task Create(CreateNewHomework newHom)
         {
-            var hw = _mapper.Map<Homework>(model);
-            //hw.Status = "Draft";
-            if (newHw != null)
+            if (newHom == null)
+                throw new ArgumentNullException(nameof(newHom), "The new homework info cannot be null.");
+
+            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(newHom.SessionId, includeCourse: true)
+                ?? throw new ArgumentNullException(nameof(newHom), "The new homework info contains invalid session id: session not found.");
+            if (ses.Course.Status == null)
+                throw new ArgumentNullException("Failed to fetch course status from given homework with given session ID.");
+            if (!ses.Course.Status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+                throw new ArgumentException("Cannot create new homework for course in used.");
+
+            var hom = _mapper.Map<Homework>(newHom);
+
+            // Save to the database
+            try
             {
-                hw.Title = newHw.Title;
-                hw.Description = newHw.Description;
-                hw.Hours = newHw.Hours;
-                hw.Type = newHw.Type;
-                // hw.SessionId = _unitOfWork.SessionRepositories.GetIdByTitle(newHw.SessionTitle).Result;
-                hw.SessionId = newHw.SessionId.Value;
+                _unitOfWork.HomeworkRepositories.Create(hom);
+                // This ensures the session is created first
+                _unitOfWork.Save();
             }
-            _unitOfWork.HomeworkRepositories.Create(hw);
-            _unitOfWork.Save();
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating the homework.", ex);
+            }
         }
 
         public async Task<List<HomeworkViewModel>> GetHomeworkList()
@@ -77,9 +89,31 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<bool> IsHomeworkExistByTitle(string title)
         {
-            var home = await _unitOfWork.HomeworkRepositories.GetByTitle(title);
-            if (home != null) return true;
-            return false;
+            return (await _unitOfWork.HomeworkRepositories.GetByTitle(title)) != null;
+        }
+
+        public async Task Delete(int delHomId)
+        {
+            // Fetch the existing record
+            var hom = await _unitOfWork.HomeworkRepositories.GetByIdNoTracking(delHomId, includeCourse: true)
+                ?? throw new KeyNotFoundException("Homework not found.");
+            if (hom.Session.Course.Status == null)
+                throw new ArgumentNullException("Failed to fetch course status from given homework.");
+            if (!hom.Session.Course.Status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+                throw new ArgumentException("Cannot delete homework in used.");
+            // Save to the database
+            try
+            {
+                hom.Session = null;
+                _unitOfWork.HomeworkRepositories.Delete(hom);
+                // This ensures the session is deleted first
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while deleting the homework.", ex);
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿using CEG_BAL.Services.Implements;
+﻿using CEG_BAL.Configurations;
+using CEG_BAL.Services.Implements;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -136,22 +138,21 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var resultCourseName = await _courseService.GetCourseById(newSes.CourseId.Value);
-                if (resultCourseName == null)
+                var isCourseExist = await _courseService.GetByIdNoTracking(newSes.CourseId);
+                if (isCourseExist == null)
                 {
                     return BadRequest(new
                     {
                         Status = false,
-                        ErrorMessage = "Course Not Found!"
+                        ErrorMessage = "Course not found!"
                     });
                 }
-                SessionViewModel sess = new SessionViewModel();
-                _sessionService.Create(sess, newSes);
+                await _sessionService.Create(newSes);
                 return Ok(new
                 {
                     Data = true,
                     Status = true,
-                    SuccessMessage = "Session Create Successfully!"
+                    SuccessMessage = "Session create successfully!"
                 });
             }
             catch (Exception ex)
@@ -165,19 +166,19 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/Update")]
+        [HttpPut("{sesId}/Update")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
-            [FromRoute][Required] int id, 
-            [FromBody][Required] SessionViewModel session
+            [FromRoute][Required] int sesId, 
+            [FromBody][Required] UpdateSession ses
             )
         {
             try
             {
-                var result = await _sessionService.GetSessionById(id);
+                var result = await _sessionService.GetSessionById(sesId);
                 if (result == null)
                 {
                     return NotFound(new
@@ -186,13 +187,70 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Session Does Not Exist"
                     });
                 }
-                session.SessionId = id;
-                _sessionService.Update(session);
-                result = await _sessionService.GetSessionById(session.SessionId.Value);
+                await _sessionService.Update(sesId, ses);
+                result = await _sessionService.GetSessionById(sesId);
                 return Ok(new
                 {
                     Status = true,
                     Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpDelete("{id}/Delete")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(
+            [FromRoute][Required] int id
+            )
+        {
+            try
+            {
+                var ses = await _sessionService.GetSessionById(id);
+                if (ses == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "session with given id does not exist."
+                    });
+                }
+                /*var result = await _courseService.GetByIdNoTracking(ses.CourseId.Value);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Course Does Not Exist!"
+                    });
+                }
+                bool isValid = CEG_BAL_Library.IsCourseNewStatusValid(result.Status, status) && result.Classes?.Count == 0;
+                if (isValid)
+                {
+                    _courseService.UpdateStatus(id, status);
+                    result = await _courseService.GetByIdNoTracking(id);
+                    return Ok(new
+                    {
+                        Status = true,
+                        Data = result
+                    });
+                }*/
+                await _sessionService.Delete(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = ses
                 });
             }
             catch (Exception ex)
