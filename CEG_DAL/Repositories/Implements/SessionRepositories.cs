@@ -33,7 +33,7 @@ namespace CEG_DAL.Repositories.Implements
                             CourseId = ses.CourseId,
                             // Include Course only if requested
                             Course = includeCourse ? ses.Course : new Course(),
-                            // Include Sessions only if requested
+                            // Include Homeworks only if requested
                             Homeworks = includeHomeworks ? ses.Homeworks.Select(hom => new Homework
                             {
                                 HomeworkId = hom.HomeworkId,

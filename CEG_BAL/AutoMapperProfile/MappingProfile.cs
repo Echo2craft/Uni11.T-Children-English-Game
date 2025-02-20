@@ -204,12 +204,6 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Student, StudentViewModel>()
                 .ReverseMap();
-            CreateMap<Homework, HomeworkViewModel>()
-                .AfterMap((src, dest) =>
-                {
-                    dest.QuestionsAmount = src.HomeworkQuestions != null ? src.HomeworkQuestions.Count : 0;
-                })
-                .ReverseMap();
             CreateMap<HomeworkAnswer, HomeworkAnswerViewModel>()
                 .ReverseMap();
             CreateMap<Game, GameViewModel>()
@@ -228,6 +222,16 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();*/
 
             // Homework
+            CreateMap<Homework, HomeworkViewModel>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.QuestionsAmount = src.HomeworkQuestions != null ? src.HomeworkQuestions.Count : 0;
+                })
+                .ReverseMap();
+            CreateMap<CreateNewHomework, Homework>();
+            //CreateMapforDefaultViewCreateUpdateModel<Homework, HomeworkViewModel, CreateNewHomework, UpdateHomework>();
+
+            // Homework Question
             CreateMap<HomeworkQuestion, HomeworkQuestionViewModel>()
                 .AfterMap((src, dest) =>
                 {
