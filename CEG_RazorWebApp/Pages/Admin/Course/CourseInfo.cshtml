@@ -289,26 +289,26 @@
                                                                 <th class="sorting sorting_asc" tabindex="0"
                                                                     aria-controls="question-table" rowspan="1"
                                                                     colspan="1" aria-sort="ascending"
-                                                                    aria-label="Homework Number: activate to sort column ascending">
-                                                                    Homework Number
+                                                                    aria-label="Question Number: activate to sort column ascending">
+                                                                    Question Number
                                                                 </th>
                                                                 <th class="sorting sorting_asc" tabindex="0"
                                                                     aria-controls="question-table" rowspan="1"
                                                                     colspan="1" aria-sort="ascending"
-                                                                    aria-label="Homework Name: activate to sort column ascending">
-                                                                    Homework Name
+                                                                    aria-label="Question: activate to sort column ascending">
+                                                                    Question
                                                                 </th>
-                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                @* <th class="sorting sorting_asc" tabindex="0"
                                                                     aria-controls="question-table" rowspan="1"
                                                                     colspan="1" aria-sort="ascending"
                                                                     aria-label="Points: activate to sort column ascending">
                                                                     Points
-                                                                </th>
+                                                                </th> *@
                                                                 <th class="sorting sorting_asc" tabindex="0"
                                                                     aria-controls="question-table" rowspan="1"
                                                                     colspan="1" aria-sort="ascending"
-                                                                    aria-label="Status: activate to sort column ascending">
-                                                                    Status
+                                                                    aria-label="Answers: activate to sort column ascending">
+                                                                    Answers
                                                                 </th>
                                                                 <th class="sorting sorting_asc" tabindex="0"
                                                                     aria-controls="question-table" rowspan="1"
@@ -509,13 +509,20 @@
         var apiUrl = sessionStorage.getItem('apiUrl');
         var sessionTable;
         var homeworkTable;
+        var questionTable;
         // var questionList = [];
         let isTableDataEmpty = false; // To track if response data is empty
-        let isHomeworkTableDataEmpty = false; // To track if response data is empty
+        // let isHomeworkTableDataEmpty = false; // To track if response data is empty
+        let isQuestionTableDataEmpty = false; // To track if response data is empty
+
         let hideTableTimer = null; // Timer to handle delayed table hiding
-        let hideAttendanceTableTimer = null; // Timer to handle delayed table hiding
+        // let hideHomeworkTableTimer = null; // Timer to handle delayed table hiding
+        let hideQuestionTableTimer = null; // Timer to handle delayed table hiding
+
         let isTableVisible = false; // Track the table visibility status
         let isHomeworkTableVisible = false; // Track the table visibility status
+        let isQuestionTableVisible = false; // Track the table visibility status
+
         $(document).ready(function () {
             // Registering the custom feature with DataTables
             DataTable.feature.register('searchIcon', function (settings, opts) {
@@ -767,8 +774,16 @@
                     }
                     let selectedSession = dt.row(indexes[0]).data();
                     let rowSesId = selectedSession.sessionId;
-                    console.log(selectedSession);
+
+                    // console.log(selectedSession);
                     homeworkTable.clear().rows.add(selectedSession.homeworks).draw();
+
+                    if (isQuestionTableVisible) {
+                        $('#question_list').stop(true, true).slideUp(350);
+                        questionTable.clear().draw();
+                        isQuestionTableVisible = false;
+                    }
+
                     $('#createHomework_SessionId').val(rowSesId);
                     // callApiGetAttendanceList(rowSesId);
 
@@ -786,10 +801,10 @@
 
                         // Only hide the table if no rows are selected
                         if (selectedRows === 0 && isTableVisible) {
-                            if (isHomeworkTableVisible) {
+                            if (isQuestionTableVisible) {
                                 $('#question_list').stop(true, true).slideUp(350);
                                 // homeworkTable.clear().draw();
-                                isHomeworkTableVisible = false;
+                                isQuestionTableVisible = false;
                             }
                             $('#homework_list').stop(true, true).slideUp(350);
                             homeworkTable.clear().draw();
@@ -814,7 +829,15 @@
                         width: '5%',
                     },
                     {
-                        data: 'title'
+                        data: 'title',
+                        width: '15%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
                     },
                     // {
                     //     data: 'hasAttended', Add an attendance column
@@ -835,14 +858,30 @@
                     //     searchable: false Prevent searching on this column
                     // },
                     {
-                        data: 'description'
+                        data: 'description',
+                        width: '20%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
                     },
                     {
-                        data: 'type'
+                        data: 'type',
+                        width: '10%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
                     },
                     {
                         data: 'hours',
-                        width: '7%',
+                        width: '9%',
                         // render: function (data, type, row, meta) {
                         //     return '<span id="schedule-start-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
                         // },<input type="time" id="timeInput" name="timeInput">
@@ -1002,6 +1041,124 @@
                 // $('#student-table').on('click', '.attendance-checkbox-label', function (e) {
                 //     e.stopPropagation(); Prevent the click event from bubbling up to the row
                 // });
+            }).on('row-reorder', function (e, diff, edit) {
+                for (var i = 0, ien = diff.length; i < ien; i++) {
+                    console.log(diff[i].node);
+                    $(diff[i].node).addClass('reordered');
+                }
+            }).on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    // Clear any pending hide action
+                    if (hideQuestionTableTimer) {
+                        clearTimeout(hideQuestionTableTimer);
+                        hideQuestionTableTimer = null;
+                    }
+                    let selectedHomework = dt.row(indexes[0]).data();
+                    let rowHomId = selectedHomework.homeworkId;
+
+                    callApiGetQuestionList(rowHomId);
+                    // console.log(selectedSession);
+                    // homeworkTable.clear().rows.add(selectedSession.homeworks).draw();
+
+                    // $('#createHomework_SessionId').val(rowSesId);
+                    // callApiGetAttendanceList(rowSesId);
+
+                    // Ensure the target table is visible
+                    if (!isQuestionTableVisible) {
+                        $('#question_list').stop(true, true).slideDown(350);
+                        isQuestionTableVisible = true;
+                    }
+                }
+            }).on('deselect', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    // Set a short timer to delay hiding the table
+                    hideQuestionTableTimer = setTimeout(() => {
+                        const selectedRows = dt.rows({ selected: true }).count();
+
+                        // Only hide the table if no rows are selected
+                        if (selectedRows === 0 && isQuestionTableVisible) {
+                            // if (isQuestionTableVisible) {
+                            //     $('#question_list').stop(true, true).slideUp(350);
+                            //     homeworkTable.clear().draw();
+                            //     isQuestionTableVisible = false;
+                            // }
+                            $('#question_list').stop(true, true).slideUp(350);
+                            questionTable.clear().draw();
+                            isQuestionTableVisible = false;
+                        }
+                    }, 50);
+                }
+            });
+            questionTable = new DataTable('#question-table', {
+                data: [],
+                rowReorder: {
+                    dataSrc: 'questionNumber'
+                },
+                deferRender: false,
+                responsive: true,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
+                columns: [
+                    {
+                        data: 'questionNumber',
+                        className: 'dt-head-left',
+                        width: '5%',
+                    },
+                    {
+                        data: 'question',
+                        width: '15%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'answersAmount',
+                        width: '15%',
+                        defaultContent: 'No answer provided',
+                        render: function (data, type, row, meta) {
+                            if (data !== 0) return data + ' answer(s)';
+                            else return 'No answer provided';
+                        }
+                    },
+                    {
+                        data: null,
+                        width: '5%',
+                        defaultContent: '<i>Actions</i>',
+                        orderable: false,
+                        render: function (data, type, row, meta) {
+                            const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                            if (statusText == 'Draft' || statusText == 'Postponed')
+                                return '<button class="btn btn-danger">Delete</button>';
+                            else return '';
+                        }
+                    },
+                    {
+                        data: 'homeworkQuestionId',
+                        width: '5%'
+                    }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'Search question...'
+                        },
+                        searchIcon: {
+                        },
+                        toggle: {
+                            modalId: 'createQuestion'
+                        }
+                    }
+                },
+                select: {
+                    style: 'single',
+                    selector: 'tbody td:nth-child(2)'
+                },
+            }).on('draw', function (e, settings) {
+                questionTable.column(4).visible(false, false);
             }).on('row-reorder', function (e, diff, edit) {
                 for (var i = 0, ien = diff.length; i < ien; i++) {
                     console.log(diff[i].node);
@@ -1386,6 +1543,53 @@
                         callApiGetCourseDetail();
                     } else {
                         showAlert('error', response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiGetQuestionList(homId) {
+            $.ajax({
+                url: apiUrl + 'Question/All/ByHomework/' + homId, // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+                    // Check if the status is true
+                    if (response.status) {
+                        if (response.data && response.data.length > 0) {
+                            isQuestionTableDataEmpty = false;
+                            // console.log(response.data);
+                            questionTable.clear().rows.add(response.data).draw();
+                        }
+                        else {
+                            isQuestionTableDataEmpty = true;
+                            questionTable.clear().draw();
+                        }
+                        // showAlert('success', 'Schedule status updated');
+                    } else {
+                        showAlert('error', 'Failed to fetch question list. Error: ' + response.errorMessage);
                     }
                 },
                 error: function (xhr, status, error) {

@@ -39,7 +39,7 @@ namespace CEG_DAL.Repositories.Implements
             return 0;
         }
 
-        public async Task<List<HomeworkQuestion>?> GetListByHomeworkId(int homeworkId)
+        public async Task<List<HomeworkQuestion>> GetListByHomeworkId(int homeworkId)
         {
             return await _dbContext.HomeworkQuestions
                 .AsNoTrackingWithIdentityResolution()

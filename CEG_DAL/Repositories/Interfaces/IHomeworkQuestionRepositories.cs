@@ -15,7 +15,7 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<HomeworkQuestion?> GetByIdNoTracking(int id);
         Task<HomeworkQuestion?> GetByQuestion(string question);
         Task<int?> GetIdByQuestion(string question);
-        Task<List<HomeworkQuestion>?> GetListByHomeworkId(int homeworkId);
+        Task<List<HomeworkQuestion>> GetListByHomeworkId(int homeworkId);
         Task<List<HomeworkQuestion>?> GetListBySessionId(int sessionId);
         Task<List<HomeworkQuestion>?> GetListByCourseId(int courseId);
         Task<int> GetCountByHomeworkId(int homId);

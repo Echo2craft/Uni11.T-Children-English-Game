@@ -95,6 +95,16 @@ namespace CEG_BAL.Services.Implements
         {
             return _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetListBySessionId(sessionId));
         }
+        public async Task<List<HomeworkQuestionViewModel>> GetListByHomeworkId(int homId)
+        {
+            var homList = _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetListByHomeworkId(homId));
+            for (int i = 0; i < homList.Count; i++)
+            {
+                homList[i].QuestionNumber = i + 1;
+                homList[i].AnswersAmount = homList[i].HomeworkAnswers.Count;
+            }
+            return homList;
+        }
 
         public void Update(HomeworkQuestionViewModel model)
         {
