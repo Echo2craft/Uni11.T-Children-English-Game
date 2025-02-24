@@ -18,5 +18,6 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<List<HomeworkQuestion>?> GetListByHomeworkId(int homeworkId);
         Task<List<HomeworkQuestion>?> GetListBySessionId(int sessionId);
         Task<List<HomeworkQuestion>?> GetListByCourseId(int courseId);
+        Task<int> GetCountByHomeworkId(int homId);
     }
 }

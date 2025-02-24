@@ -25,7 +25,12 @@ namespace CEG_DAL.Repositories.Implements
                 .SingleOrDefaultAsync(cou => cou.CourseId == id);
         }
 
-        public async Task<Course?> GetByIdNoTracking(int id, bool includeSessions = false, bool includeClasses = false, bool includeHomeworks = false)
+        public async Task<Course?> GetByIdNoTracking(
+            int id, 
+            bool includeSessions = false, 
+            bool includeClasses = false, 
+            bool includeHomeworks = false
+            )
         {
             var query = _dbContext.Courses
                         .AsNoTrackingWithIdentityResolution()
@@ -51,7 +56,17 @@ namespace CEG_DAL.Repositories.Implements
                                 SessionNumber = s.SessionNumber,
                                 //Status = s.Status,
                                 // Include Homeworks only if requested
-                                Homeworks = includeHomeworks ? s.Homeworks.ToList() : new List<Homework>()
+                                Homeworks = includeHomeworks ? s.Homeworks.Select(h => new Homework
+                                {
+                                    HomeworkId = h.HomeworkId,
+                                    Title = h.Title,
+                                    Description = h.Description,
+                                    Type = h.Type,
+                                    StartDate = h.StartDate,
+                                    EndDate = h.EndDate,
+                                    Hours = h.Hours,
+                                    SessionId = h.SessionId
+                                }).ToList() : new List<Homework>()
                             }).ToList() : new List<Session>(),
                             // Include Classes only if requested
                             Classes = includeClasses ? c.Classes.ToList() : new List<Class>()

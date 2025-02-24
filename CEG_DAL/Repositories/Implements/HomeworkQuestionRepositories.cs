@@ -84,5 +84,12 @@ namespace CEG_DAL.Repositories.Implements
 
             return orderedQuestions;
         }
+
+        public async Task<int> GetCountByHomeworkId(int homId)
+        {
+            return await _dbContext.HomeworkQuestions
+                .AsNoTrackingWithIdentityResolution()
+                .CountAsync(ques => ques.HomeworkId == homId);
+        }
     }
 }

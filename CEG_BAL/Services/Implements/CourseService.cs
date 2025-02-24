@@ -69,8 +69,11 @@ namespace CEG_BAL.Services.Implements
                 var couVM = _mapper.Map<CourseViewModel>(cou);
                 foreach(var sesVM in couVM.Sessions)
                 {
-                    for(int i = 0; i < sesVM.Homeworks.Count; i++)
+                    for (int i = 0; i < sesVM.Homeworks.Count; i++)
                     {
+                        if (sesVM.Homeworks[i].HomeworkId != null)
+                            sesVM.Homeworks[i].QuestionsAmount = 
+                                await _unitOfWork.HomeworkQuestionRepositories.GetCountByHomeworkId(sesVM.Homeworks[i].HomeworkId.Value);
                         sesVM.Homeworks[i].HomeworkNumber = i + 1;
                     }
                 }
