@@ -19,12 +19,19 @@ namespace CEG_DAL.Repositories.Implements
             _dbContext = context;
         }
 
-        public async Task<HomeworkQuestion?> GetByIdNoTracking(int id)
+        public async Task<HomeworkQuestion?> GetByIdNoTracking(int queId)
         {
             return await _dbContext.HomeworkQuestions
-                .Include(h => h.HomeworkAnswers)
                 .AsNoTrackingWithIdentityResolution()
-                .SingleOrDefaultAsync(ques => ques.HomeworkQuestionId == id);
+                .Where(ques => ques.HomeworkQuestionId == queId)
+                .Select(que => new HomeworkQuestion()
+                {
+                    HomeworkQuestionId = que.HomeworkQuestionId,
+                    HomeworkId = que.HomeworkId,
+                    Question = que.Question,
+                    HomeworkAnswers = que.HomeworkAnswers
+                })
+                .SingleOrDefaultAsync();
         }
 
         public async Task<HomeworkQuestion?> GetByQuestion(string question)
@@ -44,7 +51,43 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.HomeworkQuestions
                 .AsNoTrackingWithIdentityResolution()
                 .Where(ques => ques.HomeworkId == homeworkId)
+                .Select(que => new HomeworkQuestion()
+                {
+                    HomeworkQuestionId = que.HomeworkQuestionId,
+                    HomeworkId = homeworkId,
+                    Question = que.Question,
+                    HomeworkAnswers = que.HomeworkAnswers
+                })
                 .ToListAsync();
+        }
+
+        public async Task<List<HomeworkQuestion>> GetExcludedListByHomeworkId(int homeworkId)
+        {
+            var questions = await _dbContext.HomeworkQuestions
+                .AsNoTrackingWithIdentityResolution()
+                .Where(ques => ques.HomeworkId != homeworkId)
+                .Select(que => new HomeworkQuestion()
+                {
+                    HomeworkQuestionId = que.HomeworkQuestionId,
+                    HomeworkId = homeworkId,
+                    Question = que.Question,
+                    HomeworkAnswers = que.HomeworkAnswers
+                })
+                .ToListAsync();
+
+            if(questions == null) return new List<HomeworkQuestion>();
+
+            var orderedQuestions = questions
+                .GroupBy(q => q.Question) // Group by the Question string
+                .Select(g => g
+                    .OrderBy(q => q.HomeworkId == null ? 0 : 1) // Prioritize null HomeworkId values first
+                    .ThenBy(q => q.HomeworkQuestionId) // Then order by HomeworkQuestionId
+                    .FirstOrDefault()
+                )
+                .OrderBy(q => q.Question) // Order by the Question string
+                .ToList();
+
+            return orderedQuestions;
         }
 
         public async Task<List<HomeworkQuestion>?> GetListBySessionId(int sessionId)

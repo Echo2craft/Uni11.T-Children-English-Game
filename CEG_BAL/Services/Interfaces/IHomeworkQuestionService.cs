@@ -16,6 +16,7 @@ namespace CEG_BAL.Services.Interfaces
         void UpdateWithHomeworkId(int questionId, int homeworkId);
         Task<List<HomeworkQuestionViewModel>> GetList();
         Task<List<HomeworkQuestionViewModel>> GetListByHomeworkId(int homId);
+        Task<List<HomeworkQuestionViewModel>> GetExcludedListByHomeworkId(int homId);
         Task<List<HomeworkQuestionViewModel>> GetListByCourseId(int courseId);
         Task<List<HomeworkQuestionViewModel>> GetListBySessionId(int sessionId);
         Task<List<HomeworkQuestionViewModel>?> GetOrderedList();

@@ -163,6 +163,43 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("All/Exclude/ByHomework/{homId}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(List<HomeworkQuestionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetQuestionListExcludedByHomeworkId(
+            [FromRoute][Required] int homId
+            )
+        {
+            try
+            {
+                var result = await _questionService.GetExcludedListByHomeworkId(homId);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Excluded question list based on homework Id not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("All/Ordered")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(List<HomeworkQuestionViewModel>), StatusCodes.Status200OK)]

@@ -105,6 +105,15 @@ namespace CEG_BAL.Services.Implements
             }
             return homList;
         }
+        public async Task<List<HomeworkQuestionViewModel>> GetExcludedListByHomeworkId(int homId)
+        {
+            var homList = _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetExcludedListByHomeworkId(homId));
+            for (int i = 0; i < homList.Count; i++)
+            {
+                homList[i].AnswersAmount = homList[i].HomeworkAnswers.Count;
+            }
+            return homList;
+        }
 
         public void Update(HomeworkQuestionViewModel model)
         {

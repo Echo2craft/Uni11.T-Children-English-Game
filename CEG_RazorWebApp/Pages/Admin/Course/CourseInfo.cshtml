@@ -6,6 +6,7 @@
     var updateCourse = Model.UpdateCourseInfo;
     var createSession = Model.CreateSession;
     var createHomework = Model.CreateHomework;
+    var addQuestion = Model.AddQuestion;
     Layout = "~/Pages/Shared/_ALayout.cshtml";
 }
 <html lang="en">
@@ -498,6 +499,47 @@
                     </div>
                     <div class="modal-footer justify-content-center">
                         <button class="btn btn-success" type="submit" name="action" value="createHomework">Create</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="addQuestion" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content modal-addRoom">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add question for Homework</h4>
+                </div>
+                <form method="post" id="AddQuestionForm">
+                    <div class="modal-body">
+                        <div class="row p-4">
+                            <div class="col-12">
+                                <div class="row form-group">
+                                    <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Selected Question</label>
+                                    <div class="col-md-8 p-0">
+                                        <select id="select2-question-dropdown" class="form-control custom-select" style="width: 100%;"></select>
+                                    </div>
+                                    <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                    @* <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Select an existing Question or type in a new Question</label>
+                                    <div class="col-md-8">
+                                        <!-- search bar with dropdown list-->
+                                        <div class="position-relative">
+                                            <input data-questionid="0" type="text" id="search-question-dropdown" class="form-control text-md-left" placeholder="Search a particular question...">
+                                            <ul class="search-question-results dropdown-menu" id="search-question-results"></ul>
+                                        </div>
+                                    </div> *@
+
+                                    @* <select class="form-control custom-select" asp-for="@addQuestion.HomeworkQuestionId" style="width: 100%"></select> *@
+                                    @* <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-success" type="submit" name="action" value="addQuestion">Create</button>
                         <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -1057,7 +1099,8 @@
                     let rowHomId = selectedHomework.homeworkId;
 
                     callApiGetQuestionList(rowHomId);
-                    // console.log(selectedSession);
+                    callApiGetQuestionOptionList(rowHomId);
+                    // console.log(selectedHomework);
                     // homeworkTable.clear().rows.add(selectedSession.homeworks).draw();
 
                     // $('#createHomework_SessionId').val(rowSesId);
@@ -1149,13 +1192,13 @@
                         searchIcon: {
                         },
                         toggle: {
-                            modalId: 'createQuestion'
+                            modalId: 'addQuestion'
                         }
                     }
                 },
                 select: {
                     style: 'single',
-                    selector: 'tbody td:nth-child(2)'
+                    selector: 'tbody td:nth-child(3)'
                 },
             }).on('draw', function (e, settings) {
                 questionTable.column(4).visible(false, false);
@@ -1166,6 +1209,25 @@
                 }
             });
             callApiGetCourseDetail();
+            $('#select2-question-dropdown').select2({
+                placeholder: 'Select a question to be added to this homework',
+                allowClear: true,
+                width: 'resolve',
+                theme: 'bootstrap4'
+            })
+            .on('change', function () {
+                var data = $(this).select2('data');
+                // Manually trigger select2:select
+                $(this).trigger({
+                    type: 'select2:select',
+                    params: { data: data }
+                });
+            })
+            .off('select2:select') // Remove previous bindings
+            .on('select2:select', function (e) {
+                var text = $(this).select2('data')[0].text;
+                // callApiGetStudentNameList(text);
+            });
             $('#AddHomeworkForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
 
@@ -1241,6 +1303,19 @@
                 //$(this).trigger("reset");
             });
         });
+        function addQuestionOptions(data) {
+            $('#select2-question-dropdown').empty();
+            data.forEach(item => {
+                // Add each item as an option
+
+                let newOption = new Option(item.question, item.question, false, false);
+                $('#select2-question-dropdown').append(newOption);
+            });
+            // Refresh the Select2 dropdown to show new options
+            $('#select2-question-dropdown').trigger('change'); // Ensure Select2 is updated
+            // Set up Student list based on the first data
+            // callApiGetStudentNameList(data[0].parentName);
+        }
         function sessionTableMainFeatures() {
             $('#session-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
                 let row = sessionTable.row($(this).closest('tr'));
@@ -1580,7 +1655,7 @@
                     if (response.status) {
                         if (response.data && response.data.length > 0) {
                             isQuestionTableDataEmpty = false;
-                            // console.log(response.data);
+                            console.log(response.data);
                             questionTable.clear().rows.add(response.data).draw();
                         }
                         else {
@@ -1654,6 +1729,60 @@
                         }
                     } else {
                         showAlert('error', "Error: \n" + "API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiGetQuestionOptionList(homId) {
+            $.ajax({
+                url: apiUrl + 'Question/All/Exclude/ByHomework/' + homId, // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token // Include the JWT token
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+                    // Check if the status is true
+                    if (response.status) {
+                        // console.log(questionTable.data());
+                        // questionList = response.data.filter(function (questionItem) {
+                        //     Check if the current question's id is NOT present in homeworkQuestionList
+                        //     return !questionTable.data().some(function (homeworkQuestion) {
+                        //         return homeworkQuestion.question === questionItem.question; Assuming both arrays have an 'id' field
+                        //     });
+                        //     $('#addQuestion_HomeworkQuestionId').select2({
+                        //         placeholder: 'Select a question',
+                        //         data: questionList.map(function (question) {
+                        //             return { id: question.homeworkQuestionId, text: question.question };
+                        //         }),  Use the processed array of objects
+                        //         allowClear: true,
+                        //     dropdownAutoWidth: true
+                        //     });
+                        //     $('#addQuestion_Question').append(getQuestionOptions(questionList));
+                        // })
+                        addQuestionOptions(response.data);
+                    } else {
+                        console.error("API returned false status.");
                     }
                 },
                 error: function (xhr, status, error) {
