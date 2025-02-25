@@ -536,7 +536,7 @@
                                             </div>
                                             <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                            <input id="selected-homework-id" type="number" required hidden>
+                                            <input id="selected-homework-id-for-adding" type="number" required hidden>
                                         </div>
                                     </div>
                                 </div>
@@ -559,10 +559,11 @@
                                             </div>
                                             <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
-                                            @* <label asp-for="@createTransaction.TransactionAmount" class="col-md-4 col-form-label text-md-right">Amount</label>
-                                            <input asp-for="@createTransaction.TransactionAmount" type="text" required class="form-control col-md-8">
-                                            <span asp-validation-for="@createTransaction.TransactionAmount" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                            <label class="col-md-4 col-form-label text-md-right">Question</label>
+                                            <input id="createQuestion_Question" type="text" required class="form-control col-md-8">
+                                            <span id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                            <input id="selected-homework-id-for-creating" type="number" required hidden>
                                         </div>
                                     </div>
                                 </div>
@@ -1131,7 +1132,8 @@
 
                     callApiGetQuestionList(rowHomId);
                     callApiGetQuestionOptionList(rowHomId);
-                    $('#selected-homework-id').val(rowHomId);
+                    $('#selected-homework-id-for-adding').val(rowHomId);
+                    $('#selected-homework-id-for-creating').val(rowHomId);
                     // console.log(selectedHomework);
                     // homeworkTable.clear().rows.add(selectedSession.homeworks).draw();
 
@@ -1319,41 +1321,24 @@
             });
             $('#AddQuestionForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
-                // console.log($('#select2-question-dropdown').select2('data')[0]);
                 var questionId = $('#select2-question-dropdown').select2('data')[0].id;
+                var homeworkId = $('#selected-homework-id-for-adding').val();
+                callApiPostChooseQuestion(questionId, homeworkId);
+                $('#AddQuestionForm').trigger("reset");
+            });
+            $('#CreateQuestionForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+                // console.log($('#select2-question-dropdown').select2('data')[0]);
+                // var questionId = $('#select2-question-dropdown').select2('data')[0].id;
                 // console.log(questionId);
                 // var question = $('input[id="search-question-dropdown"]').val();
-                var homeworkId = $('#selected-homework-id').val();
-                // console.log(homeworkId);
-                callApiPostChooseQuestion(questionId, homeworkId);
-                // var homeworkId = $('#homework-id').text();
-                // if (questionId == 0) {
-                //     Check if any question in the questionList contains a similar question text
-                //     var isSimilarQuestionFound = questionList.some(function (questionItem) {
-                //         Check if questionItem's question text is somewhat similar to 'question'
-                //         var isTextSimilar = questionItem.question.toLowerCase().includes(question.trim().toLowerCase());
-                //         if (isTextSimilar) {
-                //             console.log(isTextSimilar);
-                //             questionId = questionItem.homeworkQuestionId; Store the homeworkQuestionId when found
-                //         }
-                //         return isTextSimilar;
-                //     });
-                //     if (isSimilarQuestionFound) {
-                //         console.log(isSimilarQuestionFound);
-                //         Make the AJAX request
-                //         callApiPostChooseQuestion(questionId, homeworkId);
-                //     } else {
-                //         var formData = {
-                //             question: question
-                //         };
-                //         console.log(formData);
-                //         callApiPostCreateQuestion(formData, homeworkId);
-                //     }
-                // }
-                // else {
-                //     Make the AJAX request
-                //     callApiPostChooseQuestion(questionId, homeworkId);
-                // }
+                var homeworkId = $('#selected-homework-id-for-creating').val();
+                var formData = {
+                    question: $('#createQuestion_Question').val()
+                };
+                console.log(formData);
+                callApiPostCreateQuestion(formData, homeworkId);
+                $('#CreateQuestionForm').trigger("reset");
                 $('#AddQuestionForm').trigger("reset");
             });
             $(document).on('submit', 'form[id^="editSessionForm_"]', function (event) {
@@ -1779,6 +1764,47 @@
                         callApiGetQuestionList(rowHomId);
                         callApiGetQuestionOptionList(rowHomId);
                         // callApiGetCourseDetail();
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiPostCreateQuestion(formData, homeworkId) {
+            $.ajax({
+                url: apiUrl + 'Question/Create/HomeworkId/' + homeworkId, // Specify your Razor Page here
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Question create successfully");
+
+                        let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                        let rowHomId = selectedHomTableRow.rowData.homeworkId
+                        callApiGetQuestionList(rowHomId);
+                        callApiGetQuestionOptionList(rowHomId);
                     } else {
                         console.error("API returned false status.");
                     }
