@@ -63,9 +63,15 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<HomeworkQuestion>> GetExcludedListByHomeworkId(int homeworkId)
         {
+            var existingQuestionList = await _dbContext.HomeworkQuestions
+                .AsNoTrackingWithIdentityResolution()
+                .Where(ques => ques.HomeworkId == homeworkId)
+                .Select(que => que.Question)
+                .ToListAsync();
+
             var questions = await _dbContext.HomeworkQuestions
                 .AsNoTrackingWithIdentityResolution()
-                .Where(ques => ques.HomeworkId != homeworkId)
+                .Where(ques => ques.HomeworkId != homeworkId && !existingQuestionList.Contains(ques.Question))
                 .Select(que => new HomeworkQuestion()
                 {
                     HomeworkQuestionId = que.HomeworkQuestionId,
@@ -75,7 +81,7 @@ namespace CEG_DAL.Repositories.Implements
                 })
                 .ToListAsync();
 
-            if(questions == null) return new List<HomeworkQuestion>();
+            if (questions == null || !questions.Any()) return new List<HomeworkQuestion>();
 
             var orderedQuestions = questions
                 .GroupBy(q => q.Question) // Group by the Question string

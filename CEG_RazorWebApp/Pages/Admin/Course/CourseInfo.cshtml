@@ -511,38 +511,69 @@
                 <div class="modal-header">
                     <h4 class="modal-title">Add question for Homework</h4>
                 </div>
-                <form method="post" id="AddQuestionForm">
-                    <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Selected Question</label>
-                                    <div class="col-md-8 p-0">
-                                        <select id="select2-question-dropdown" class="form-control custom-select" style="width: 100%;"></select>
-                                    </div>
-                                    <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                    @* <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Select an existing Question or type in a new Question</label>
-                                    <div class="col-md-8">
-                                        <!-- search bar with dropdown list-->
-                                        <div class="position-relative">
-                                            <input data-questionid="0" type="text" id="search-question-dropdown" class="form-control text-md-left" placeholder="Search a particular question...">
-                                            <ul class="search-question-results dropdown-menu" id="search-question-results"></ul>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active align-items-center d-flex w-auto" data-toggle="tab" href="#add_question_Tab" role="tab" aria-controls="add" aria-selected="true">
+                            <span>Add Existing</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link align-items-center d-flex w-auto" data-toggle="tab" href="#create_question_Tab" role="tab" aria-controls="create" aria-selected="false">
+                            <span>Create New</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="add_question_Tab" class="tab-pane fade show active">
+                        <form method="post" id="AddQuestionForm">
+                            <div class="modal-body">
+                                <div class="row p-4">
+                                    <div class="col-12">
+                                        <div class="row form-group">
+                                            <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Selected Question</label>
+                                            <div class="col-md-8 p-0">
+                                                <select id="select2-question-dropdown" class="form-control custom-select" style="width: 100%;"></select>
+                                            </div>
+                                            <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                            <input id="selected-homework-id" type="number" required hidden>
                                         </div>
-                                    </div> *@
-
-                                    @* <select class="form-control custom-select" asp-for="@addQuestion.HomeworkQuestionId" style="width: 100%"></select> *@
-                                    @* <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="modal-footer justify-content-center">
+                                <button class="btn btn-success" type="submit">Add</button>
+                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="modal-footer justify-content-center">
-                        <button class="btn btn-success" type="submit" name="action" value="addQuestion">Create</button>
-                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                    <div id="create_question_Tab" class="tab-pane fade">
+                        <form method="post" id="CreateQuestionForm">
+                            <div class="modal-body">
+                                <div class="row p-4">
+                                    <div class="col-12">
+                                        <div class="row form-group">
+                                            @* <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Selected Question</label>
+                                            <div class="col-md-8 p-0">
+                                                <select id="select2-question-dropdown" class="form-control custom-select" style="width: 100%;"></select>
+                                            </div>
+                                            <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                            @* <label asp-for="@createTransaction.TransactionAmount" class="col-md-4 col-form-label text-md-right">Amount</label>
+                                            <input asp-for="@createTransaction.TransactionAmount" type="text" required class="form-control col-md-8">
+                                            <span asp-validation-for="@createTransaction.TransactionAmount" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button class="btn btn-success" type="submit">Create</button>
+                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -1100,6 +1131,7 @@
 
                     callApiGetQuestionList(rowHomId);
                     callApiGetQuestionOptionList(rowHomId);
+                    $('#selected-homework-id').val(rowHomId);
                     // console.log(selectedHomework);
                     // homeworkTable.clear().rows.add(selectedSession.homeworks).draw();
 
@@ -1127,6 +1159,8 @@
                             // }
                             $('#question_list').stop(true, true).slideUp(350);
                             questionTable.clear().draw();
+                            $('#selected-homework-id').val(0);
+                            $('#select2-question-dropdown').empty().trigger('change');
                             isQuestionTableVisible = false;
                         }
                     }, 50);
@@ -1279,9 +1313,48 @@
                     hours: $('#createSession_Hours').val(),
                     courseId: $('#course-id').text()
                 };
-                console.log(formData);
+                // console.log(formData);
                 callApiPostCreateSession(formData);
                 $('#AddSessionForm').trigger("reset");
+            });
+            $('#AddQuestionForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+                // console.log($('#select2-question-dropdown').select2('data')[0]);
+                var questionId = $('#select2-question-dropdown').select2('data')[0].id;
+                // console.log(questionId);
+                // var question = $('input[id="search-question-dropdown"]').val();
+                var homeworkId = $('#selected-homework-id').val();
+                // console.log(homeworkId);
+                callApiPostChooseQuestion(questionId, homeworkId);
+                // var homeworkId = $('#homework-id').text();
+                // if (questionId == 0) {
+                //     Check if any question in the questionList contains a similar question text
+                //     var isSimilarQuestionFound = questionList.some(function (questionItem) {
+                //         Check if questionItem's question text is somewhat similar to 'question'
+                //         var isTextSimilar = questionItem.question.toLowerCase().includes(question.trim().toLowerCase());
+                //         if (isTextSimilar) {
+                //             console.log(isTextSimilar);
+                //             questionId = questionItem.homeworkQuestionId; Store the homeworkQuestionId when found
+                //         }
+                //         return isTextSimilar;
+                //     });
+                //     if (isSimilarQuestionFound) {
+                //         console.log(isSimilarQuestionFound);
+                //         Make the AJAX request
+                //         callApiPostChooseQuestion(questionId, homeworkId);
+                //     } else {
+                //         var formData = {
+                //             question: question
+                //         };
+                //         console.log(formData);
+                //         callApiPostCreateQuestion(formData, homeworkId);
+                //     }
+                // }
+                // else {
+                //     Make the AJAX request
+                //     callApiPostChooseQuestion(questionId, homeworkId);
+                // }
+                $('#AddQuestionForm').trigger("reset");
             });
             $(document).on('submit', 'form[id^="editSessionForm_"]', function (event) {
                 event.preventDefault();
@@ -1307,8 +1380,8 @@
             $('#select2-question-dropdown').empty();
             data.forEach(item => {
                 // Add each item as an option
-
-                let newOption = new Option(item.question, item.question, false, false);
+                // console.log(item);
+                let newOption = new Option(item.question, item.homeworkQuestionId, false, false);
                 $('#select2-question-dropdown').append(newOption);
             });
             // Refresh the Select2 dropdown to show new options
@@ -1451,7 +1524,6 @@
                         showAlert('success', "Homework create successfully");
                         callApiGetCourseDetail();
                         $('#AddHomeworkForm').trigger("reset");
-
                     } else {
                         showAlert('error', response.errorMessage);
                     }
@@ -1655,7 +1727,7 @@
                     if (response.status) {
                         if (response.data && response.data.length > 0) {
                             isQuestionTableDataEmpty = false;
-                            console.log(response.data);
+                            // console.log(response.data);
                             questionTable.clear().rows.add(response.data).draw();
                         }
                         else {
@@ -1689,9 +1761,63 @@
                 }
             });
         }
+        function callApiPostChooseQuestion(questionId, homeworkId) {
+            $.ajax({
+                url: apiUrl + 'Question/' + questionId + '/Update/HomeworkId/' + homeworkId, // Specify your Razor Page here
+                type: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Question update successfully");
+
+                        let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                        let rowHomId = selectedHomTableRow.rowData.homeworkId
+                        callApiGetQuestionList(rowHomId);
+                        callApiGetQuestionOptionList(rowHomId);
+                        // callApiGetCourseDetail();
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
         // Function to get the currently selected row's data and index
-        function getSelectedRowInfo() {
+        function getSelectedSessionTableRowInfo() {
             const selectedRows = sessionTable.rows({ selected: true });
+            if (selectedRows.count() > 0) {
+                const rowIndex = selectedRows.indexes()[0]; // Get the index of the first selected row
+                const rowData = selectedRows.data()[0]; // Get the data of the first selected row
+                return { rowIndex, rowData };
+            }
+            return null; // No row is selected
+        }
+        // Function to get the currently selected row's data and index
+        function getSelectedHomeworkTableRowInfo() {
+            const selectedRows = homeworkTable.rows({ selected: true });
             if (selectedRows.count() > 0) {
                 const rowIndex = selectedRows.indexes()[0]; // Get the index of the first selected row
                 const rowData = selectedRows.data()[0]; // Get the data of the first selected row
@@ -1711,7 +1837,7 @@
                         // Check if sessions is empty
                         if (response.data.sessions && response.data.sessions.length > 0) {
 
-                            selectedRow = getSelectedRowInfo();
+                            selectedRow = getSelectedSessionTableRowInfo();
                             sessionTable.clear().rows.add(response.data.sessions).draw();
 
                             if (selectedRow != null)
