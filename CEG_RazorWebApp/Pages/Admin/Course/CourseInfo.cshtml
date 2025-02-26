@@ -628,18 +628,20 @@
         var sessionTable;
         var homeworkTable;
         var questionTable;
-        // var questionList = [];
-        let isTableDataEmpty = false; // To track if response data is empty
-        // let isHomeworkTableDataEmpty = false; // To track if response data is empty
+        var answerTable;
+        // let isTableDataEmpty = false; // To track if response data is empty
+        let isHomeworkTableDataEmpty = false; // To track if response data is empty
         let isQuestionTableDataEmpty = false; // To track if response data is empty
+        let isAnswerTableDataEmpty = false; // To track if response data is empty
 
-        let hideTableTimer = null; // Timer to handle delayed table hiding
-        // let hideHomeworkTableTimer = null; // Timer to handle delayed table hiding
+        let hideHomeworkTableTimer = null; // Timer to handle delayed table hiding
         let hideQuestionTableTimer = null; // Timer to handle delayed table hiding
+        let hideAnswerTableTimer = null; // Timer to handle delayed table hiding
 
         let isTableVisible = false; // Track the table visibility status
         let isHomeworkTableVisible = false; // Track the table visibility status
         let isQuestionTableVisible = false; // Track the table visibility status
+        let isAnswerTableVisible = false; // Track the table visibility status
 
         $(document).ready(function () {
             // Registering the custom feature with DataTables
@@ -886,9 +888,9 @@
             }).on('select', function (e, dt, type, indexes) {
                 if (type === 'row') {
                     // Clear any pending hide action
-                    if (hideTableTimer) {
-                        clearTimeout(hideTableTimer);
-                        hideTableTimer = null;
+                    if (hideHomeworkTableTimer) {
+                        clearTimeout(hideHomeworkTableTimer);
+                        hideHomeworkTableTimer = null;
                     }
                     let selectedSession = dt.row(indexes[0]).data();
                     let rowSesId = selectedSession.sessionId;
@@ -896,37 +898,47 @@
                     // console.log(selectedSession);
                     homeworkTable.clear().rows.add(selectedSession.homeworks).draw();
 
-                    if (isQuestionTableVisible) {
-                        $('#question_list').stop(true, true).slideUp(350);
-                        questionTable.clear().draw();
-                        isQuestionTableVisible = false;
-                    }
+                    // if (isAnswerTableVisible) {
+                    //     $('#answer_list').stop(true, true).slideUp(350);
+                    //     answerTable.clear().draw();
+                    //     isAnswerTableVisible = false;
+                    // }
+                    // if (isQuestionTableVisible) {
+                    //     $('#question_list').stop(true, true).slideUp(350);
+                    //     questionTable.clear().draw();
+                    //     isQuestionTableVisible = false;
+                    // }
 
                     $('#createHomework_SessionId').val(rowSesId);
                     // callApiGetAttendanceList(rowSesId);
 
                     // Ensure the target table is visible
-                    if (!isTableVisible) {
+                    if (!isHomeworkTableVisible) {
                         $('#homework_list').stop(true, true).slideDown(350);
-                        isTableVisible = true;
+                        isHomeworkTableVisible = true;
                     }
                 }
             }).on('deselect', function (e, dt, type, indexes) {
                 if (type === 'row') {
+                    if (isAnswerTableVisible) {
+                        $('#answer_list').stop(true, true).slideUp(350);
+                        answerTable.clear().draw();
+                        isAnswerTableVisible = false;
+                    }
+                    if (isQuestionTableVisible) {
+                        $('#question_list').stop(true, true).slideUp(350);
+                        questionTable.clear().draw();
+                        isQuestionTableVisible = false;
+                    }
                     // Set a short timer to delay hiding the table
-                    hideTableTimer = setTimeout(() => {
+                    hideHomeworkTableTimer = setTimeout(() => {
                         const selectedRows = dt.rows({ selected: true }).count();
 
                         // Only hide the table if no rows are selected
-                        if (selectedRows === 0 && isTableVisible) {
-                            if (isQuestionTableVisible) {
-                                $('#question_list').stop(true, true).slideUp(350);
-                                // homeworkTable.clear().draw();
-                                isQuestionTableVisible = false;
-                            }
+                        if (selectedRows === 0 && isHomeworkTableVisible) {
                             $('#homework_list').stop(true, true).slideUp(350);
                             homeworkTable.clear().draw();
-                            isTableVisible = false;
+                            isHomeworkTableVisible = false;
                         }
                     }, 50);
                 }
@@ -1174,6 +1186,12 @@
                     let selectedHomework = dt.row(indexes[0]).data();
                     let rowHomId = selectedHomework.homeworkId;
 
+                    // if (isAnswerTableVisible) {
+                    //     $('#answer_list').stop(true, true).slideUp(350);
+                    //     answerTable.clear().draw();
+                    //     isAnswerTableVisible = false;
+                    // }
+
                     callApiGetQuestionList(rowHomId);
                     callApiGetQuestionOptionList(rowHomId);
                     $('#homId_adding').val(rowHomId);
@@ -1192,17 +1210,17 @@
                 }
             }).on('deselect', function (e, dt, type, indexes) {
                 if (type === 'row') {
+                    if (isAnswerTableVisible) {
+                        $('#answer_list').stop(true, true).slideUp(350);
+                        answerTable.clear().draw();
+                        isAnswerTableVisible = false;
+                    }
                     // Set a short timer to delay hiding the table
                     hideQuestionTableTimer = setTimeout(() => {
                         const selectedRows = dt.rows({ selected: true }).count();
 
                         // Only hide the table if no rows are selected
                         if (selectedRows === 0 && isQuestionTableVisible) {
-                            // if (isQuestionTableVisible) {
-                            //     $('#question_list').stop(true, true).slideUp(350);
-                            //     homeworkTable.clear().draw();
-                            //     isQuestionTableVisible = false;
-                            // }
                             $('#question_list').stop(true, true).slideUp(350);
                             questionTable.clear().draw();
                             $('#selected-homework-id').val(0);
@@ -1287,6 +1305,121 @@
                     console.log(diff[i].node);
                     $(diff[i].node).addClass('reordered');
                 }
+            }).on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    // Clear any pending hide action
+                    if (hideAnswerTableTimer) {
+                        clearTimeout(hideAnswerTableTimer);
+                        hideAnswerTableTimer = null;
+
+                    }
+                    let selectedQuestion = dt.row(indexes[0]).data();
+                    let rowHomId = selectedQuestion.homeworkQuestionId;
+
+                    // callApiGetQuestionList(rowHomId);
+                    // callApiGetQuestionOptionList(rowHomId);
+                    // $('#homId_adding').val(rowHomId);
+                    // $('#homId_creating').val(rowHomId);
+                    // console.log(selectedHomework);
+                    // console.log(selectedQuestion);
+                    answerTable.clear().rows.add(selectedQuestion.homeworkAnswers).draw();
+
+                    // $('#createHomework_SessionId').val(rowSesId);
+                    // callApiGetAttendanceList(rowSesId);
+
+                    // Ensure the target table is visible
+                    if (!isAnswerTableVisible) {
+                        $('#answer_list').stop(true, true).slideDown(350);
+                        isAnswerTableVisible = true;
+                    }
+                }
+            }).on('deselect', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    // Set a short timer to delay hiding the table
+                    hideAnswerTableTimer = setTimeout(() => {
+                        const selectedRows = dt.rows({ selected: true }).count();
+
+                        // Only hide the table if no rows are selected
+                        if (selectedRows === 0 && isAnswerTableVisible) {
+                            // if (isQuestionTableVisible) {
+                            //     $('#question_list').stop(true, true).slideUp(350);
+                            //     homeworkTable.clear().draw();
+                            //     isQuestionTableVisible = false;
+                            // }
+                            $('#answer_list').stop(true, true).slideUp(350);
+                            answerTable.clear().draw();
+                            // $('#selected-homework-id').val(0);
+                            // $('#select2-question-dropdown').empty().trigger('change');
+                            isAnswerTableVisible = false;
+                        }
+                    }, 50);
+                }
+            });
+            answerTable = new DataTable('#answer-table', {
+                data: [],
+                deferRender: false,
+                responsive: true,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
+                columns: [
+                    {
+                        data: 'answerNumber',
+                        className: 'dt-head-left',
+                        width: '5%',
+                    },
+                    {
+                        data: 'answer',
+                        width: '15%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'type',
+                        width: '15%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: null,
+                        width: '5%',
+                        defaultContent: '<i>Actions</i>',
+                        orderable: false,
+                        render: function (data, type, row, meta) {
+                            const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                            if (statusText == 'Draft' || statusText == 'Postponed')
+                                return '<button class="btn btn-danger">Delete</button>';
+                            else return '';
+                        }
+                    },
+                    {
+                        data: 'homeworkAnswerId',
+                        width: '5%'
+                    }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'Search answer...'
+                        },
+                        searchIcon: {
+                        },
+                        toggle: {
+                            modalId: 'addAnswer'
+                        }
+                    }
+                },
+            }).on('draw', function (e, settings) {
+                answerTable.column(4).visible(false, false);
             });
             callApiGetCourseDetail();
             $('#select2-question-dropdown').select2({
@@ -1305,7 +1438,7 @@
             })
             .off('select2:select') // Remove previous bindings
             .on('select2:select', function (e) {
-                var text = $(this).select2('data')[0].text;
+                // var text = $(this).select2('data')[0].text;
                 // callApiGetStudentNameList(text);
             });
             $('#AddHomeworkForm').submit(function (event) {

@@ -102,6 +102,10 @@ namespace CEG_BAL.Services.Implements
             {
                 homList[i].QuestionNumber = i + 1;
                 homList[i].AnswersAmount = homList[i].HomeworkAnswers.Count;
+                for(int j = 0; j < homList[i].HomeworkAnswers.Count; j++)
+                {
+                    homList[i].HomeworkAnswers[j].AnswerNumber = j + 1;
+                }
             }
             return homList;
         }
