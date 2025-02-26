@@ -19,7 +19,7 @@ namespace CEG_DAL.Repositories.Implements
             _dbContext = context;
         }
 
-        public async Task<HomeworkQuestion?> GetByIdNoTracking(int queId)
+        public async Task<HomeworkQuestion?> GetByIdNoTracking(int queId, bool includeHomework = false)
         {
             return await _dbContext.HomeworkQuestions
                 .AsNoTrackingWithIdentityResolution()
@@ -29,7 +29,24 @@ namespace CEG_DAL.Repositories.Implements
                     HomeworkQuestionId = que.HomeworkQuestionId,
                     HomeworkId = que.HomeworkId,
                     Question = que.Question,
-                    HomeworkAnswers = que.HomeworkAnswers
+                    HomeworkAnswers = que.HomeworkAnswers,
+                    Homework = includeHomework ? que.Homework : null
+                })
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<HomeworkQuestion?> GetByIdNoTracking(int queId, int homId, bool includeHomework = false)
+        {
+            return await _dbContext.HomeworkQuestions
+                .AsNoTrackingWithIdentityResolution()
+                .Where(ques => ques.HomeworkQuestionId == queId && ques.HomeworkId == homId)
+                .Select(que => new HomeworkQuestion()
+                {
+                    HomeworkQuestionId = que.HomeworkQuestionId,
+                    HomeworkId = que.HomeworkId,
+                    Question = que.Question,
+                    HomeworkAnswers = que.HomeworkAnswers,
+                    Homework = includeHomework ? que.Homework : null
                 })
                 .SingleOrDefaultAsync();
         }

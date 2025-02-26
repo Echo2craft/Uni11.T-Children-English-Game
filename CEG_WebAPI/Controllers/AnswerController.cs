@@ -4,6 +4,7 @@ using CEG_BAL.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using CEG_BAL.Services.Implements;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -296,6 +297,43 @@ namespace CEG_WebAPI.Controllers
                 {
                     Status = true,
                     Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+        [HttpDelete("{id}/Delete")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(HomeworkQuestionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(
+            [FromRoute][Required] int id
+            )
+        {
+            try
+            {
+                var ses = await _answerService.GetById(id);
+                if (ses == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "answer with given id does not exist."
+                    });
+                }
+                await _answerService.Delete(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = ses
                 });
             }
             catch (Exception ex)

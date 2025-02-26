@@ -496,5 +496,52 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
+        [HttpDelete("{id}/Homework/{homId}/Delete")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(HomeworkQuestionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(
+            [FromRoute][Required] int id,
+            [FromRoute][Required] int homId
+            )
+        {
+            try
+            {
+                var hom = await _homeworkService.GetHomeworkById(homId);
+                if (hom == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "homework with given Id does not exist."
+                    });
+                }
+                var ses = await _questionService.GetById(id, homId);
+                if (ses == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "question with given id does not exist."
+                    });
+                }
+                await _questionService.Delete(id, homId);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = ses
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
     }
 }

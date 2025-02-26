@@ -171,7 +171,7 @@ namespace CEG_WebAPI.Controllers
         }
         [HttpDelete("{id}/Delete")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(

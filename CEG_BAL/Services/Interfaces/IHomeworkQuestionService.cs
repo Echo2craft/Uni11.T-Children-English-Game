@@ -14,12 +14,13 @@ namespace CEG_BAL.Services.Interfaces
         void CreateWithHomeworkId(HomeworkQuestionViewModel model, CreateNewQuestion newQues, int homeworkId);
         void Update(HomeworkQuestionViewModel model);
         void UpdateWithHomeworkId(int questionId, int homeworkId);
+        Task Delete(int delQueId, int homId);
         Task<List<HomeworkQuestionViewModel>> GetList();
         Task<List<HomeworkQuestionViewModel>> GetListByHomeworkId(int homId);
         Task<List<HomeworkQuestionViewModel>> GetExcludedListByHomeworkId(int homId);
         Task<List<HomeworkQuestionViewModel>> GetListByCourseId(int courseId);
         Task<List<HomeworkQuestionViewModel>> GetListBySessionId(int sessionId);
         Task<List<HomeworkQuestionViewModel>?> GetOrderedList();
-        Task<HomeworkQuestionViewModel?> GetById(int id);
+        Task<HomeworkQuestionViewModel?> GetById(int id, int homId = 0);
     }
 }

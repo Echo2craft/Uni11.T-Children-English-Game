@@ -1338,6 +1338,7 @@
                 },
             }).on('draw', function (e, settings) {
                 questionTable.column(4).visible(false, false);
+                questionTableMainFeatures();
             }).on('row-reorder', function (e, diff, edit) {
                 for (var i = 0, ien = diff.length; i < ien; i++) {
                     console.log(diff[i].node);
@@ -1458,6 +1459,7 @@
                 },
             }).on('draw', function (e, settings) {
                 answerTable.column(4).visible(false, false);
+                answerTableMainFeatures()
             });
             callApiGetCourseDetail();
             $('#select2-question-dropdown').select2({
@@ -1561,17 +1563,17 @@
                     questionid: $('input[id="queId_creating"]').val()
                 };
 
-                let selectedQueTableRow = getSelectedQuestionTableRowInfo();
+                // let selectedQueTableRow = getSelectedQuestionTableRowInfo();
 
                 // Make the AJAX request
                 callApiPostCreateAnswer(formData);
                 $('#createAnswerForm').trigger("reset");
 
-                let rowQueId = selectedQueTableRow.rowData.homeworkQuestionId;
-                $('#queId_creating').val(rowQueId);
+                // let rowQueId = selectedQueTableRow.rowData.homeworkQuestionId;
+                // $('#queId_creating').val(rowQueId);
 
                 // console.log(selectedQueTableRow.rowIndex);
-                questionTable.row(selectedQueTableRow.rowIndex).select();
+                // questionTable.row(selectedQueTableRow.rowIndex).select();
                 // setTimeout(() => {
                 //     questionTable.row(selectedQueTableRow.rowIndex).select();
                 // }, 200);
@@ -1694,6 +1696,112 @@
                                 // row.remove().draw();
                                 showAlert('success', 'Homework deleted successfully.');
                                 callApiGetCourseDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+        }
+        function questionTableMainFeatures() {
+            $('#question-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
+                let row = questionTable.row($(this).closest('tr'));
+                let homId = $('#homId_creating').val();
+                let rowData = row.data();
+
+                if (confirm(`Delete question "${rowData.question}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Question/' + rowData.homeworkQuestionId + '/Homework/' + homId + '/Delete',
+                        type: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        success: function (response) {
+                            if (response.status) {
+                                showAlert('success', 'Question deleted successfully.');
+
+                                let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                                let rowHomId = selectedHomTableRow.rowData.homeworkId;
+                                $('#homId_adding').val(rowHomId);
+                                callApiGetQuestionList(rowHomId);
+                                callApiGetQuestionOptionList(rowHomId);
+                                homeworkTable.row(selectedHomTableRow.rowIndex).select();
+
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+        }
+        function answerTableMainFeatures() {
+            $('#answer-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
+                let row = answerTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                if (confirm(`Delete answer "${rowData.answer}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Answer/' + rowData.homeworkAnswerId + '/Delete',
+                        type: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Answer deleted successfully.');
+                                let selectedQueTableRow = getSelectedQuestionTableRowInfo();
+
+                                let rowQueId = selectedQueTableRow.rowData.homeworkQuestionId;
+                                $('#queId_creating').val(rowQueId);
+
+                                let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                                let rowHomId = selectedHomTableRow.rowData.homeworkId;
+                                $('#homId_creating').val(rowHomId);
+                                callApiGetQuestionList(rowHomId);
+                                callApiGetQuestionOptionList(rowHomId);
+
+                                // console.log(selectedQueTableRow.rowIndex);
+                                questionTable.row(selectedQueTableRow.rowIndex).select();
+                                // callApiGetCourseDetail();
                             } else {
                                 showAlert('error', 'Error: ' + response.errorMessage);
                             }
@@ -2085,11 +2193,19 @@
                     if (response.status) {
                         showAlert('success', "Answer create successfully");
 
+                        let selectedQueTableRow = getSelectedQuestionTableRowInfo();
+
+                        let rowQueId = selectedQueTableRow.rowData.homeworkQuestionId;
+                        $('#queId_creating').val(rowQueId);
+
                         let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
                         let rowHomId = selectedHomTableRow.rowData.homeworkId;
                         $('#homId_creating').val(rowHomId);
                         callApiGetQuestionList(rowHomId);
                         callApiGetQuestionOptionList(rowHomId);
+
+                        // console.log(selectedQueTableRow.rowIndex);
+                        questionTable.row(selectedQueTableRow.rowIndex).select();
                     } else {
                         console.error("API returned false status.");
                     }
