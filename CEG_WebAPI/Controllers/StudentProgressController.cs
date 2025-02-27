@@ -134,7 +134,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateStudentAnswer(
+        public async Task<IActionResult> CreateStudentProgress(
             [FromBody][Required] CreateNewStudentProgress newStuPro
             )
         {

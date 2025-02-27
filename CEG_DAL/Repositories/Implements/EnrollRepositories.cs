@@ -34,7 +34,16 @@ namespace CEG_DAL.Repositories.Implements
 
         public async Task<List<Enroll>> GetEnrollByParentId(int? parentId)
         {
-            return await _dbContext.Enrolls
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 }
+            };
+
+            var enrolls = await _dbContext.Enrolls
                 .AsNoTrackingWithIdentityResolution()
                 .Where(e => e.Student.ParentId == parentId)
                 .Select(e => new Enroll
@@ -85,11 +94,23 @@ namespace CEG_DAL.Repositories.Implements
                     },
                 })
                 .ToListAsync();
+            return enrolls
+                .OrderBy(e => statusOrder.ContainsKey(e.Class.Status) ? statusOrder[e.Class.Status] : int.MaxValue)
+                .ToList();
         }
 
         public async Task<List<Enroll>> GetEnrollByStudentId(int? studentId)
         {
-            return await _dbContext.Enrolls
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Open", 1 },
+                { "Ongoing", 2 },
+                { "Ended", 3 },
+                { "Cancelled", 4 }
+            };
+
+            var enrolls = await _dbContext.Enrolls
                 .AsNoTrackingWithIdentityResolution()
                 .Where(e => e.StudentId == studentId)
                 .Select(e => new Enroll
@@ -132,10 +153,15 @@ namespace CEG_DAL.Repositories.Implements
                         {
                             CourseId = e.Class.Course.CourseId,
                             CourseName = e.Class.Course.CourseName
-                        }
+                        },
+                        Schedules = e.Class.Schedules,
+                        Enrolls = e.Class.Enrolls,
                     }
                 })
                 .ToListAsync();
+            return enrolls
+                .OrderBy(e => statusOrder.ContainsKey(e.Class.Status) ? statusOrder[e.Class.Status] : int.MaxValue)
+                .ToList();
         }
 
         public async Task<Enroll?> GetByStudentFullnameAndClassName(string stuFullName, string claName)
