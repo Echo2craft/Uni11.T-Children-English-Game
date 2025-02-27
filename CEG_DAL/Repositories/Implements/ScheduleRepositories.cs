@@ -154,5 +154,26 @@ namespace CEG_DAL.Repositories.Implements
 
             return errorList;
         }
+
+        public async Task UpdateStatusAsync(int id, string status)
+        {
+            try
+            {
+                // Save changes
+                await _dbContext.Schedules
+                    .Where(c => c.ScheduleId == id)
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(c => c.Status, status));
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency issues (e.g., row modified by another user)
+                throw new InvalidOperationException("Update failed due to a concurrency conflict.", ex);
+            }
+            catch (Exception ex)
+            {
+                // Log and rethrow unexpected exceptions
+                throw new Exception("An unexpected error occurred while updating schedule status.", ex);
+            }
+        }
     }
 }

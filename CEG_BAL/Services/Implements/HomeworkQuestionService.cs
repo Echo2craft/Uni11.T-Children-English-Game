@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
@@ -64,9 +65,11 @@ namespace CEG_BAL.Services.Implements
             return _mapper.Map<List<HomeworkQuestionViewModel>?>(await _unitOfWork.HomeworkQuestionRepositories.GetOrderedQuestionList());
         }
 
-        public async Task<HomeworkQuestionViewModel?> GetById(int id)
+        public async Task<HomeworkQuestionViewModel?> GetById(int id, int homId = 0)
         {
-            var ques = await _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(id);
+            var ques = homId != 0 ? 
+                await _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(id,homId) : 
+                await _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(id);
             if (ques != null)
             {
                 var quesvm = _mapper.Map<HomeworkQuestionViewModel>(ques);
@@ -94,6 +97,29 @@ namespace CEG_BAL.Services.Implements
         public async Task<List<HomeworkQuestionViewModel>> GetListBySessionId(int sessionId)
         {
             return _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetListBySessionId(sessionId));
+        }
+        public async Task<List<HomeworkQuestionViewModel>> GetListByHomeworkId(int homId)
+        {
+            var homList = _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetListByHomeworkId(homId));
+            for (int i = 0; i < homList.Count; i++)
+            {
+                homList[i].QuestionNumber = i + 1;
+                homList[i].AnswersAmount = homList[i].HomeworkAnswers.Count;
+                for(int j = 0; j < homList[i].HomeworkAnswers.Count; j++)
+                {
+                    homList[i].HomeworkAnswers[j].AnswerNumber = j + 1;
+                }
+            }
+            return homList;
+        }
+        public async Task<List<HomeworkQuestionViewModel>> GetExcludedListByHomeworkId(int homId)
+        {
+            var homList = _mapper.Map<List<HomeworkQuestionViewModel>>(await _unitOfWork.HomeworkQuestionRepositories.GetExcludedListByHomeworkId(homId));
+            for (int i = 0; i < homList.Count; i++)
+            {
+                homList[i].AnswersAmount = homList[i].HomeworkAnswers.Count;
+            }
+            return homList;
         }
 
         public void Update(HomeworkQuestionViewModel model)
@@ -137,6 +163,35 @@ namespace CEG_BAL.Services.Implements
                 questionDefault.HomeworkId = homeworkId;
                 _unitOfWork.HomeworkQuestionRepositories.Update(questionDefault);
                 _unitOfWork.Save();
+            }
+        }
+
+        public async Task Delete(int delQueId,int homId)
+        {
+            // Fetch the existing record
+            var que = await _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(delQueId,homId)
+                ?? throw new KeyNotFoundException("Question not found.");
+            if (homId == 0) 
+                throw new KeyNotFoundException("Homework Id cannot be zero.");
+            var status = await _unitOfWork.CourseRepositories.GetStatusByQuestionIdNoTracking(delQueId)
+                ?? throw new ArgumentNullException("Failed to fetch course status from given question.");
+            if (!status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+                throw new ArgumentException("Cannot delete question in used.");
+            // Save to the database
+            try
+            {
+                foreach(var answer in que.HomeworkAnswers)
+                {
+                    _unitOfWork.HomeworkAnswerRepositories.Delete(answer);
+                }
+                _unitOfWork.HomeworkQuestionRepositories.Delete(que);
+                // This ensures the session is deleted first
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while deleting the question.", ex);
             }
         }
     }

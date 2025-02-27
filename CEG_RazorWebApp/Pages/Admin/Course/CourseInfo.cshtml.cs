@@ -6,6 +6,9 @@ using CEG_RazorWebApp.Libraries;
 using CEG_RazorWebApp.Models.Admin.Response;
 using CEG_RazorWebApp.Models.Course.Get;
 using CEG_RazorWebApp.Models.Course.Update;
+using CEG_RazorWebApp.Models.Homework.Create;
+using CEG_RazorWebApp.Models.HomeworkAnswer.Create;
+using CEG_RazorWebApp.Models.HomeworkQuestion.Update;
 using CEG_RazorWebApp.Models.Session.Create;
 using CEG_RazorWebApp.Models.Session.Get;
 using CEG_RazorWebApp.Models.Session.Update;
@@ -42,10 +45,12 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
         public string? LayoutUrl { get; set; } = Constants.ADMIN_LAYOUT_URL;
 
         public int CourseID { get; set; }
-        public CourseInfoVM? CourseInfo { get; set; } = new CourseInfoVM();
-        public UpdateCourseVM? UpdateCourseInfo { get; set; } = new UpdateCourseVM();
-        public CreateSessionVM? CreateSession { get; set; } = new CreateSessionVM();
-
+        public CourseInfoVM CourseInfo { get; set; } = new CourseInfoVM();
+        public UpdateCourseVM UpdateCourseInfo { get; set; } = new UpdateCourseVM();
+        public CreateSessionVM CreateSession { get; set; } = new CreateSessionVM();
+        public CreateHomeworkVM CreateHomework {  get; set; } = new CreateHomeworkVM();
+        public UpdateQuestionVM AddQuestion { get; set; } = new UpdateQuestionVM();
+        public CreateAnswerVM CreateAnswer { get; set; } = new CreateAnswerVM();
         public CourseInfoModel(ILogger<CourseInfoModel> logger, IConfiguration config, IMapper mapper)
         {
             _logger = logger;

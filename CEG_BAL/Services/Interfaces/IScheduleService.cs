@@ -14,10 +14,10 @@ namespace CEG_BAL.Services.Interfaces
         Task Create(CreateNewSchedule newSch);
         Task Update(int upSchId, UpdateSchedule upSch);
         Task UpdateStatus(int schId, string upSchStatus);
+        Task Delete(int delSchId);
         Task<List<ScheduleViewModel>> GetList();
         Task<List<ScheduleViewModel>> GetListAdmin();
         Task<List<ScheduleViewModel>> GetListByClassId(int id);
         Task<ScheduleViewModel?> GetById(int id);
-        Task<ScheduleViewModel?> GetByIdAdmin(int id);
     }
 }

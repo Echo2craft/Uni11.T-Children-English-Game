@@ -157,12 +157,6 @@
                                                 <th class="sorting sorting_asc" tabindex="0"
                                                     aria-controls="session-table" rowspan="1"
                                                     colspan="1" aria-sort="ascending"
-                                                    aria-label="Session Number: activate to sort column ascending">
-                                                    Session Number
-                                                </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="session-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
                                                     aria-label="Title: activate to sort column ascending">
                                                     Session Title
                                                 </th>
@@ -284,7 +278,6 @@
                         orderable: false,
                         render: DataTable.render.select()
                     },
-                    { data: 'sessionNumber' },
                     { data: 'title' },
                     {
                         data: 'hours',
@@ -330,7 +323,7 @@
                 if (type === 'row') {
                     indexes.forEach(function (rowIdx) {
                         var data = dt.row(rowIdx).data();
-                        var dateCell = $(dt.cell(rowIdx, 4).node()).find('input');
+                        var dateCell = $(dt.cell(rowIdx, 3).node()).find('input');
 
                         // If not selected, add to selected set
                         selectedSessionIds.set(rowIdx, data.sessionId);
@@ -341,7 +334,7 @@
                             var endDateTime = new Date(dateCell.val());
                             endDateTime.setHours(endDateTime.getHours() + data.hours);
 
-                            var endTimeCell = $(dt.cell(rowIdx, 5).node()).find('#schedule-end-date');
+                            var endTimeCell = $(dt.cell(rowIdx, 4).node()).find('#schedule-end-date');
                             endTimeCell.text(moment(endDateTime).format("MM/DD/YYYY hh:mm A"));
                         });
                     });
@@ -350,7 +343,7 @@
                 if (type === 'row') {
                     indexes.forEach(function (rowIdx) {
                         // var data = dt.row(rowIdx).data();
-                        var dateCell = $(dt.cell(rowIdx, 4).node()).find('input');
+                        var dateCell = $(dt.cell(rowIdx, 3).node()).find('input');
 
                         // If already selected, unselect and remove from scheduleTable
                         selectedSessionIds.delete(rowIdx);

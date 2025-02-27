@@ -195,7 +195,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _courseService.GetCourseById(id);
+                var result = await _courseService.GetByIdNoTracking(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -232,8 +232,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                CourseViewModel course = new CourseViewModel();
-                _courseService.Create(course, newCourse);
+                await _courseService.Create(newCourse);
                 return Ok(new
                 {
                     Data = true,
@@ -268,7 +267,7 @@ namespace CEG_WebAPI.Controllers
                 course.Status = result.Status;
                 course.TotalHours = result.TotalHours;*/
                 await _courseService.Update(id, course);
-                var result = await _courseService.GetCourseById(id);
+                var result = await _courseService.GetByIdNoTracking(id);
                 return Ok(new
                 {
                     Status = true,
@@ -297,7 +296,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _courseService.GetCourseById(id);
+                var result = await _courseService.GetByIdNoTracking(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -309,8 +308,8 @@ namespace CEG_WebAPI.Controllers
                 bool isValid = CEG_BAL_Library.IsCourseNewStatusValid(result.Status,status) && result.Classes?.Count == 0;
                 if (isValid)
                 {
-                    _courseService.UpdateStatus(id, status);
-                    result = await _courseService.GetCourseById(id);
+                    await _courseService.UpdateStatus(id, status);
+                    result = await _courseService.GetByIdNoTracking(id);
                     return Ok(new
                     {
                         Status = true,
