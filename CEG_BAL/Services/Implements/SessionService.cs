@@ -90,19 +90,16 @@ namespace CEG_BAL.Services.Implements
                 throw new ArgumentNullException(nameof(upSes), "New session info for updating cannot be null.");
 
             // Fetch the existing record
-            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(upSesId, includeCourse: true)
+            var ses = await _unitOfWork.SessionRepositories.GetByIdNoTracking(upSesId)
                 ?? throw new KeyNotFoundException("Session not found.");
-
-            var cou = await _unitOfWork.CourseRepositories.GetByIdNoTracking(ses.CourseId)
-                ?? throw new ArgumentNullException(nameof(ses), "The new session info contains invalid course id: course not found.");
-
-            if (cou.Status == null)
-                throw new ArgumentNullException("Failed to fetch course status from given session.");
-            if (!cou.Status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+            
+            string? status = await _unitOfWork.CourseRepositories.GetStatusBySessionIdNoTracking(upSesId)
+                ?? throw new ArgumentNullException("Failed to fetch course status from given session.");
+            if (!status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
                 throw new ArgumentException("Cannot update session for course in used.");
 
             // Map changes from the update model to the entity
-            ses = _mapper.Map<Session>(upSes);
+            _mapper.Map(upSes, ses);
 
             // Save to the database
             try

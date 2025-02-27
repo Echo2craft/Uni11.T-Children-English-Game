@@ -819,7 +819,7 @@
                         render: function(data, type, row, meta){
                             const currentStatus = $('td#course-status').text().trim(); // Current status
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
-                                return '<textarea required class="form-control">' + data + '</textarea>'
+                                return '<textarea id="updateSession_' + row.sessionId + '_Title" required class="form-control">' + data + '</textarea>'
                             }
                             return data;
                         }
@@ -830,7 +830,7 @@
                         render: function (data, type, row, meta) {
                             const currentStatus = $('td#course-status').text().trim(); // Current status
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
-                                return '<textarea required class="form-control">' + data + '</textarea>'
+                                return '<textarea id="updateSession_' + row.sessionId + '_Description" required class="form-control">' + data + '</textarea>'
                             }
                             return data;
                         }
@@ -849,11 +849,12 @@
                         render: function (data, type, row, meta) {
                             const currentStatus = $('td#course-status').text().trim(); // Current status
                             var str = moment(data, "HH:mm:ss");
+                            // console.log(row);
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
 
                                 return `
                                     <div class="input-group">
-                                        <input type="number" min="0" max="8" class="form-control" value="` + data + `" aria-describedby="hours-addon">
+                                                <input type="number" min="0" max="8" id="updateSession_` + row.sessionId + `_Hours" class="form-control" value="` + data + `" aria-describedby="hours-addon">
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="hours-addon">hour(s)</span>
                                         </div>
@@ -867,7 +868,7 @@
                     },
                     {
                         data: 'homeworks.length',
-                        width: '15%',
+                        width: '10%',
                         defaultContent: 'No homeworks',
                         render: function (data, type, row, meta) {
                             if (data !== 0) return data + ' homework(s)';
@@ -876,7 +877,7 @@
                     },
                     {
                         data: null,
-                        width: '5%',
+                        width: '10%',
                         defaultContent: '<i>Actions</i>',
                         orderable: false,
                         render: function (data, type, row, meta) {
@@ -888,7 +889,7 @@
                             // }, 500);
                             const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
                             if (statusText == 'Draft' || statusText == 'Postponed')
-                                return '<button class="btn btn-danger">Delete</button>';
+                                return '<button class="btn btn-primary">Update</button> <button class="btn btn-danger">Delete</button>';
                             else return '';
                         }
                     },
@@ -970,10 +971,10 @@
                     }
                     // Set a short timer to delay hiding the table
                     hideHomeworkTableTimer = setTimeout(() => {
-                        const selectedRows = dt.rows({ selected: true }).count();
+                        const selectedHomRows = dt.rows({ selected: true }).count();
 
                         // Only hide the table if no rows are selected
-                        if (selectedRows === 0 && isHomeworkTableVisible) {
+                        if (selectedHomRows === 0 && isHomeworkTableVisible) {
                             $('#homework_list').stop(true, true).slideUp(350);
                             homeworkTable.clear().draw();
                             isHomeworkTableVisible = false;
@@ -1255,13 +1256,14 @@
                     }
                     // Set a short timer to delay hiding the table
                     hideQuestionTableTimer = setTimeout(() => {
-                        const selectedRows = dt.rows({ selected: true }).count();
+                        const selectedQueRows = dt.rows({ selected: true }).count();
 
                         // Only hide the table if no rows are selected
-                        if (selectedRows === 0 && isQuestionTableVisible) {
+                        if (selectedQueRows === 0 && isQuestionTableVisible) {
                             $('#question_list').stop(true, true).slideUp(350);
                             questionTable.clear().draw();
-                            $('#selected-homework-id').val(0);
+                            $('#homId_adding').val(0);
+                            $('#homId_creating').val(0);
                             $('#select2-question-dropdown').empty().trigger('change');
                             isQuestionTableVisible = false;
                         }
@@ -1376,10 +1378,10 @@
                 if (type === 'row') {
                     // Set a short timer to delay hiding the table
                     hideAnswerTableTimer = setTimeout(() => {
-                        const selectedRows = dt.rows({ selected: true }).count();
+                        const selectedAnsRows = dt.rows({ selected: true }).count();
 
                         // Only hide the table if no rows are selected
-                        if (selectedRows === 0 && isAnswerTableVisible) {
+                        if (selectedAnsRows === 0 && isAnswerTableVisible) {
                             // if (isQuestionTableVisible) {
                             //     $('#question_list').stop(true, true).slideUp(350);
                             //     homeworkTable.clear().draw();
@@ -1653,6 +1655,63 @@
                     });
                 }
             });
+            $('#session-table tbody').off('click', '.btn-primary').on('click', '.btn-primary', function () {
+                let row = sessionTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                // console.log(rowData);
+
+                // Collect form data
+                let formData = {
+                    // sessionNumber: $('#updateSession_' + rowData.sessionId + '_Number').val(),
+                    title: $('#updateSession_' + rowData.sessionId + '_Title').val(),
+                    description: $('#updateSession_' + rowData.sessionId + '_Description').val(),
+                    hours: $('#updateSession_' + rowData.sessionId + '_Hours').val(),
+                };
+
+                console.log(formData);
+
+                if (confirm(`Update session "${rowData.title}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Session/' + rowData.sessionId + '/Update',
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'Bearer ' + token, // Token for authentication
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Session updated successfully.');
+                                callApiGetCourseDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
             // scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
             //     const currentStatus = $('td#class-status').text().trim(); Current status
             //     if (currentStatus === "Draft" || currentStatus === "Postponed") {
@@ -1740,11 +1799,13 @@
                                 showAlert('success', 'Question deleted successfully.');
 
                                 let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
-                                let rowHomId = selectedHomTableRow.rowData.homeworkId;
+                                let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                                callApiGetCourseDetail();
                                 $('#homId_adding').val(rowHomId);
+
                                 callApiGetQuestionList(rowHomId);
                                 callApiGetQuestionOptionList(rowHomId);
-                                homeworkTable.row(selectedHomTableRow.rowIndex).select();
+                                homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
 
                             } else {
                                 showAlert('error', 'Error: ' + response.errorMessage);
@@ -1790,17 +1851,17 @@
                                 showAlert('success', 'Answer deleted successfully.');
                                 let selectedQueTableRow = getSelectedQuestionTableRowInfo();
 
-                                let rowQueId = selectedQueTableRow.rowData.homeworkQuestionId;
+                                let rowQueId = selectedQueTableRow.rowQueData.homeworkQuestionId;
                                 $('#queId_creating').val(rowQueId);
 
                                 let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
-                                let rowHomId = selectedHomTableRow.rowData.homeworkId;
+                                let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
                                 $('#homId_creating').val(rowHomId);
                                 callApiGetQuestionList(rowHomId);
                                 callApiGetQuestionOptionList(rowHomId);
 
                                 // console.log(selectedQueTableRow.rowIndex);
-                                questionTable.row(selectedQueTableRow.rowIndex).select();
+                                questionTable.row(selectedQueTableRow.rowQueIndex).select();
                                 // callApiGetCourseDetail();
                             } else {
                                 showAlert('error', 'Error: ' + response.errorMessage);
@@ -2057,7 +2118,6 @@
                             isQuestionTableDataEmpty = false;
                             // console.log(response.data);
                             questionTable.clear().rows.add(response.data).draw();
-
                         }
                         else {
                             isQuestionTableDataEmpty = true;
@@ -2104,12 +2164,13 @@
                         showAlert('success', "Question update successfully");
 
                         let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
-                        let rowHomId = selectedHomTableRow.rowData.homeworkId;
+                        let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                        callApiGetCourseDetail();
+                        console.log(selectedHomTableRow.rowHomIndex);
+                        homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
                         $('#homId_adding').val(rowHomId);
                         callApiGetQuestionList(rowHomId);
                         callApiGetQuestionOptionList(rowHomId);
-                        homeworkTable.row(selectedHomTableRow.rowIndex).select();
-                        // callApiGetCourseDetail();
                     } else {
                         console.error("API returned false status.");
                     }
@@ -2148,11 +2209,12 @@
                         showAlert('success', "Question create successfully");
 
                         let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
-                        let rowHomId = selectedHomTableRow.rowData.homeworkId;
+                        let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                        callApiGetCourseDetail();
+                        homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
                         $('#homId_creating').val(rowHomId);
                         callApiGetQuestionList(rowHomId);
                         callApiGetQuestionOptionList(rowHomId);
-                        // homeworkTable.row(selectedHomTableRow.rowIndex).select();
                     } else {
                         console.error("API returned false status.");
                     }
@@ -2195,17 +2257,18 @@
 
                         let selectedQueTableRow = getSelectedQuestionTableRowInfo();
 
-                        let rowQueId = selectedQueTableRow.rowData.homeworkQuestionId;
+                        let rowQueId = selectedQueTableRow.rowQueData.homeworkQuestionId;
+                        callApiGetCourseDetail();
                         $('#queId_creating').val(rowQueId);
 
                         let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
-                        let rowHomId = selectedHomTableRow.rowData.homeworkId;
+                        let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
                         $('#homId_creating').val(rowHomId);
                         callApiGetQuestionList(rowHomId);
+                        questionTable.row(selectedQueTableRow.rowQueIndex).select();
                         callApiGetQuestionOptionList(rowHomId);
 
                         // console.log(selectedQueTableRow.rowIndex);
-                        questionTable.row(selectedQueTableRow.rowIndex).select();
                     } else {
                         console.error("API returned false status.");
                     }
@@ -2234,30 +2297,30 @@
         }
         // Function to get the currently selected row's data and index
         function getSelectedSessionTableRowInfo() {
-            const selectedRows = sessionTable.rows({ selected: true });
-            if (selectedRows.count() > 0) {
-                const rowIndex = selectedRows.indexes()[0]; // Get the index of the first selected row
-                const rowData = selectedRows.data()[0]; // Get the data of the first selected row
-                return { rowIndex, rowData };
+            const selectedSesRows = sessionTable.rows({ selected: true });
+            if (selectedSesRows.count() > 0) {
+                const rowSesIndex = selectedSesRows.indexes()[0]; // Get the index of the first selected row
+                const rowSesData = selectedSesRows.data()[0]; // Get the data of the first selected row
+                return { rowSesIndex, rowSesData };
             }
             return null; // No row is selected
         }
         // Function to get the currently selected row's data and index
         function getSelectedHomeworkTableRowInfo() {
-            const selectedRows = homeworkTable.rows({ selected: true });
-            if (selectedRows.count() > 0) {
-                const rowIndex = selectedRows.indexes()[0]; // Get the index of the first selected row
-                const rowData = selectedRows.data()[0]; // Get the data of the first selected row
-                return { rowIndex, rowData };
+            const selectedHomRows = homeworkTable.rows({ selected: true });
+            if (selectedHomRows.count() > 0) {
+                const rowHomIndex = selectedHomRows.indexes()[0]; // Get the index of the first selected row
+                const rowHomData = selectedHomRows.data()[0]; // Get the data of the first selected row
+                return { rowHomIndex, rowHomData };
             }
             return null; // No row is selected
         }
         function getSelectedQuestionTableRowInfo() {
-            const selectedRows = questionTable.rows({ selected: true });
-            if (selectedRows.count() > 0) {
-                const rowIndex = selectedRows.indexes()[0]; // Get the index of the first selected row
-                const rowData = selectedRows.data()[0]; // Get the data of the first selected row
-                return { rowIndex, rowData };
+            const selectedQueRows = questionTable.rows({ selected: true });
+            if (selectedQueRows.count() > 0) {
+                const rowQueIndex = selectedQueRows.indexes()[0]; // Get the index of the first selected row
+                const rowQueData = selectedQueRows.data()[0]; // Get the data of the first selected row
+                return { rowQueIndex, rowQueData };
             }
             return null; // No row is selected
         }
@@ -2273,11 +2336,16 @@
                         // Check if sessions is empty
                         if (response.data.sessions && response.data.sessions.length > 0) {
 
-                            selectedRow = getSelectedSessionTableRowInfo();
+                            let selectedRow = getSelectedSessionTableRowInfo();
                             sessionTable.clear().rows.add(response.data.sessions).draw();
 
                             if (selectedRow != null)
-                                sessionTable.row(selectedRow.rowIndex).select();
+                                sessionTable.row(selectedRow.rowSesIndex).select();
+
+                            // let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                            // if (selectedHomTableRow != null)
+                            //     homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
+
                             // getScheduleDateBasedOnTodayOrDefault(selectedRow != null ? selectedRow.rowIndex : 1);
                             // sessionList = response.data.sessions;
                             // Loop through each sessions and generate the HTML
