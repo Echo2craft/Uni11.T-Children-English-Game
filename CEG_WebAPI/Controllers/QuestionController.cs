@@ -4,6 +4,7 @@ using CEG_BAL.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using CEG_BAL.ViewModels.Admin.Update;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -424,7 +425,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] HomeworkQuestionViewModel question
+            [FromBody][Required] UpdateQuestion upQue
             )
         {
             try
@@ -438,9 +439,9 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Question Does Not Exist"
                     });
                 }
-                question.HomeworkQuestionId = id;
-                _questionService.Update(question);
-                result = await _questionService.GetById(question.HomeworkQuestionId.Value);
+                // question.HomeworkQuestionId = id;
+                await _questionService.Update(id, upQue);
+                result = await _questionService.GetById(id);
                 return Ok(new
                 {
                     Status = true,
