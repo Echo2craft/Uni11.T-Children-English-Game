@@ -474,7 +474,7 @@
                             homeworkList = response.data.homeworks;
                             // Loop through each answer and generate the HTML
                             response.data.homeworks.forEach(function (homework) {
-                                console.log(homework);;
+                                // console.log(homework);
                                 let homeworkHtml = generateHomeworkHtml(homework, response.data.courseStatus); // Assuming both homeworkInfo and updateAnswer are the same structure
                                 $('#homework_list').append(homeworkHtml);
                             });

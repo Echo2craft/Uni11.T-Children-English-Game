@@ -12,6 +12,7 @@ namespace CEG_BAL.Services.Interfaces
     {
         void Create(HomeworkAnswerViewModel model, CreateNewAnswer newAnsw);
         void Update(HomeworkAnswerViewModel model);
+        Task Delete(int delAnsId);
         Task<List<HomeworkAnswerViewModel>> GetList();
         Task<List<HomeworkAnswerViewModel>?> GetListByQuestionId(int questionId);
         Task<List<HomeworkAnswerViewModel>?> GetListBySessionId(int sessionId);

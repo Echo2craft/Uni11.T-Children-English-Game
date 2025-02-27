@@ -204,20 +204,6 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
             CreateMap<Student, StudentViewModel>()
                 .ReverseMap();
-            CreateMap<Session, SessionViewModel>()
-                .ReverseMap();
-            CreateMap<Homework, HomeworkViewModel>()
-                .AfterMap((src, dest) =>
-                {
-                    dest.QuestionsAmount = src.HomeworkQuestions != null ? src.HomeworkQuestions.Count : 0;
-                })
-                .ReverseMap();
-            CreateMap<HomeworkQuestion, HomeworkQuestionViewModel>()
-                .AfterMap((src, dest) =>
-                {
-                    dest.AnswersAmount = src.HomeworkAnswers != null ? src.HomeworkAnswers.Count : 0;
-                })
-                .ReverseMap();
             CreateMap<HomeworkAnswer, HomeworkAnswerViewModel>()
                 .ReverseMap();
             CreateMap<Game, GameViewModel>()
@@ -226,9 +212,32 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
 
             // Course
-            CreateMap<Course, CourseViewModel>()
+            /*CreateMap<Course, CourseViewModel>()
+                .ReverseMap();*/
+            CreateMapforDefaultViewCreateUpdateModel<Course, CourseViewModel, CreateNewCourse, UpdateCourse>();
+
+            // Session
+            CreateMapforDefaultViewCreateUpdateModel<Session, SessionViewModel, CreateNewSession, UpdateSession>();
+            /*CreateMap<Session, SessionViewModel>()
+                .ReverseMap();*/
+
+            // Homework
+            CreateMap<Homework, HomeworkViewModel>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.QuestionsAmount = src.HomeworkQuestions != null ? src.HomeworkQuestions.Count : 0;
+                })
                 .ReverseMap();
-            CreateMap<UpdateCourse, Course>();
+            CreateMap<CreateNewHomework, Homework>();
+            //CreateMapforDefaultViewCreateUpdateModel<Homework, HomeworkViewModel, CreateNewHomework, UpdateHomework>();
+
+            // Homework Question
+            CreateMap<HomeworkQuestion, HomeworkQuestionViewModel>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.AnswersAmount = src.HomeworkAnswers != null ? src.HomeworkAnswers.Count : 0;
+                })
+                .ReverseMap();
 
             // Account
             CreateMap<CreateNewAccount, Account>();

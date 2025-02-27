@@ -11,7 +11,7 @@ namespace CEG_BAL.ViewModels
     {
         public int? HomeworkId { get; set; }
 
-        public int? HomeworkNumber { get; set; }
+        public int HomeworkNumber { get; set; }
 
         public string? Title { get; set; }
 
@@ -21,21 +21,21 @@ namespace CEG_BAL.ViewModels
 
         public DateTime? EndDate { get; set; }
 
-        public int? Hours { get; set; }
+        public int Hours { get; set; }
 
         public string? Type { get; set; }
 
         public string? CourseStatus { get; set; }
 
-        public int? QuestionsAmount { get; set; }
+        public int QuestionsAmount { get; set; }
 
-        public GameConfigViewModel? GameConfig { get; set; }
+        public GameConfigViewModel? GameConfig { get; set; } = new GameConfigViewModel();
 
         public List<HomeworkQuestionViewModel>? HomeworkQuestions { get; set; } = new List<HomeworkQuestionViewModel>();
 
         public List<HomeworkResultViewModel>? HomeworkResults { get; set; } = new List<HomeworkResultViewModel>();
 
-        public SessionViewModel? Session { get; set; }
+        public SessionViewModel? Session { get; set; } = new SessionViewModel();
 
         public List<StudentHomeworkViewModel>? StudentHomeworks { get; set; } = new List<StudentHomeworkViewModel>();
     }

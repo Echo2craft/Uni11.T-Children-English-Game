@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
@@ -38,15 +39,35 @@ namespace CEG_BAL.Services.Implements
             _unitOfWork.Save();
         }
 
+        public async Task Delete(int delAnsId)
+        {
+            // Fetch the existing record
+            var ans = await _unitOfWork.HomeworkAnswerRepositories.GetByIdNoTracking(delAnsId)
+                ?? throw new KeyNotFoundException("Answer not found.");
+            if (ans.HomeworkQuestionId == 0)
+                throw new KeyNotFoundException("Homework question Id cannot be zero.");
+            var status = await _unitOfWork.CourseRepositories.GetStatusByQuestionIdNoTracking(ans.HomeworkQuestionId)
+                ?? throw new ArgumentNullException("Failed to fetch course status from given answer.");
+            if (!status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+                throw new ArgumentException("Cannot delete answer in used.");
+            // Save to the database
+            try
+            {
+                _unitOfWork.HomeworkAnswerRepositories.Delete(ans);
+                // This ensures the session is deleted first
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while deleting the answer.", ex);
+            }
+        }
+
         public async Task<HomeworkAnswerViewModel?> GetById(int id)
         {
-            var answ = await _unitOfWork.HomeworkAnswerRepositories.GetByIdNoTracking(id);
-            if (answ != null)
-            {
-                var answvm = _mapper.Map<HomeworkAnswerViewModel>(answ);
-                return answvm;
-            }
-            return null;
+            var ans = await _unitOfWork.HomeworkAnswerRepositories.GetByIdNoTracking(id);
+            return ans != null ? _mapper.Map<HomeworkAnswerViewModel>(ans) : null;
         }
 
         public async Task<List<HomeworkAnswerViewModel>> GetList()

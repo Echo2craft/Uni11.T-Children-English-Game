@@ -5,6 +5,15 @@ namespace CEG_DAL.Models;
 
 public partial class Course
 {
+    public Course()
+    {
+        /*CourseName = "Default Course Name";
+        CourseType = "General";
+        Description = "No description provided.";*/
+        CourseName = "";
+        CourseType = "";
+        Description = "";
+    }
     public int CourseId { get; set; }
 
     public string CourseName { get; set; } = null!;

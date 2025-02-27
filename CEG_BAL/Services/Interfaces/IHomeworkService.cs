@@ -10,8 +10,9 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface IHomeworkService
     {
-        void Create(HomeworkViewModel model, CreateNewHomework newHw);
+        Task Create(CreateNewHomework newHw);
         void Update(HomeworkViewModel model);
+        Task Delete(int delHomId);
         Task<List<HomeworkViewModel>> GetHomeworkList();
         Task<bool> IsHomeworkExistByTitle(string title);
         Task<HomeworkViewModel?> GetHomeworkById(int id);

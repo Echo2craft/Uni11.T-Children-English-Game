@@ -15,6 +15,8 @@ namespace CEG_BAL.ViewModels
 
         public TimeSpan Playtime { get; set; }
 
+        public int ClassId { get; set; }
+
         public ClassViewModel? Class { get; set; }
 
         public List<HomeworkResultViewModel> HomeworkResults { get; set; } = new List<HomeworkResultViewModel>();
