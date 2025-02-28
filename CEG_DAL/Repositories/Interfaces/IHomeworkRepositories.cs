@@ -11,7 +11,7 @@ namespace CEG_DAL.Repositories.Interfaces
     public interface IHomeworkRepositories : IRepositoryBase <Homework>
     {
         Task<List<Homework>> GetHomeworksList();
-        Task<Homework?> GetByIdNoTracking(int id);
+        Task<Homework?> GetByIdNoTracking(int id, bool includeSession = false, bool includeCourse = false, bool includeQuestions = false, bool includeAnswers = false);
         Task<Homework?> GetByTitle(string name);
         Task<int> GetIdByTitle(string name);
         Task<List<Homework>?> GetListBySessionId(int sesId);

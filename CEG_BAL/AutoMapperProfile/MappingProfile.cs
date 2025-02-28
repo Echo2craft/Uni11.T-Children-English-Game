@@ -46,8 +46,6 @@ namespace CEG_BAL.AutoMapperProfile
                     dest.UserDetail.ImagePath = src.ImagePath;
                 })
                 ;
-            CreateMap<Member, GetMemberStatus>().ReverseMap();
-            CreateMap<Member, GetMembershipExpire>().ReverseMap();
             CreateMap<MeetingParticipant, GetEventParticipation>()
                 .AfterMap((src, dest) =>
                 {
@@ -161,26 +159,6 @@ namespace CEG_BAL.AutoMapperProfile
                     }
                     dest.MemberDetail.FullName = src.MemberName;
                 });
-            CreateMap<Meeting, MeetingViewModel>()
-                .ReverseMap();
-            CreateMap<MeetingMedia, MeetingMediaViewModel>()
-                .ReverseMap();
-            CreateMap<FieldTrip, FieldTripViewModel>()
-                .ReverseMap();
-            CreateMap<FieldtripDaybyDay, FieldtripDaybyDayViewModel>()
-                .ReverseMap();
-            CreateMap<FieldtripInclusion, FieldtripInclusionViewModel>()
-                .ReverseMap();
-            CreateMap<FieldtripGettingThere, FieldtripGettingThereViewModel>()
-                .ReverseMap();
-            CreateMap<FieldtripAdditionalDetail, FieldTripAdditionalDetailViewModel>()
-                .ReverseMap();
-            CreateMap<FieldtripMedia, FieldtripMediaViewModel>()
-                .ReverseMap();
-            CreateMap<Contest, ContestViewModel>()
-                .ReverseMap();
-            CreateMap<ContestMedia, ContestMediaViewModel>()
-                .ReverseMap();
             CreateMap<Location, LocationViewModel>()
                 .AfterMap((src, dest) =>
                 {
@@ -194,31 +172,10 @@ namespace CEG_BAL.AutoMapperProfile
                 .AfterMap((src, dest) =>
                 {
                     dest.LocationName = src.AreaNumber + "," + src.Street + "," + src.District + "," + src.City;
-                });
-            CreateMap<Transaction, TransactionViewModel>()
-                .ReverseMap();
-            CreateMap<Bird, BirdViewModel>().ReverseMap();
-            CreateMap<Notification, NotificationViewModel>().ReverseMap();
-            CreateMap<Feedback, FeedbackViewModel>().ReverseMap();*/
+                });*/
             CreateMap<Role, RoleViewModel>()
                 .ReverseMap();
             CreateMap<Student, StudentViewModel>()
-                .ReverseMap();
-            CreateMap<Session, SessionViewModel>()
-                .ReverseMap();
-            CreateMap<Homework, HomeworkViewModel>()
-                .AfterMap((src, dest) =>
-                {
-                    dest.QuestionsAmount = src.HomeworkQuestions != null ? src.HomeworkQuestions.Count : 0;
-                })
-                .ReverseMap();
-            CreateMap<HomeworkQuestion, HomeworkQuestionViewModel>()
-                .AfterMap((src, dest) =>
-                {
-                    dest.AnswersAmount = src.HomeworkAnswers != null ? src.HomeworkAnswers.Count : 0;
-                })
-                .ReverseMap();
-            CreateMap<HomeworkAnswer, HomeworkAnswerViewModel>()
                 .ReverseMap();
             CreateMap<Game, GameViewModel>()
                 .ReverseMap();
@@ -226,9 +183,40 @@ namespace CEG_BAL.AutoMapperProfile
                 .ReverseMap();
 
             // Course
-            CreateMap<Course, CourseViewModel>()
+            /*CreateMap<Course, CourseViewModel>()
+                .ReverseMap();*/
+            CreateMapforDefaultViewCreateUpdateModel<Course, CourseViewModel, CreateNewCourse, UpdateCourse>();
+
+            // Session
+            CreateMapforDefaultViewCreateUpdateModel<Session, SessionViewModel, CreateNewSession, UpdateSession>();
+            /*CreateMap<Session, SessionViewModel>()
+                .ReverseMap();*/
+
+            // Homework
+            CreateMap<Homework, HomeworkViewModel>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.QuestionsAmount = src.HomeworkQuestions != null ? src.HomeworkQuestions.Count : 0;
+                })
                 .ReverseMap();
-            CreateMap<UpdateCourse, Course>();
+            CreateMap<CreateNewHomework, Homework>();
+            CreateMap<UpdateHomework, Homework>();
+            //CreateMapforDefaultViewCreateUpdateModel<Homework, HomeworkViewModel, CreateNewHomework, UpdateHomework>();
+
+            // Homework Question
+            CreateMap<HomeworkQuestion, HomeworkQuestionViewModel>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.AnswersAmount = src.HomeworkAnswers != null ? src.HomeworkAnswers.Count : 0;
+                })
+                .ReverseMap();
+            CreateMap<UpdateQuestion, HomeworkQuestion>();
+
+            // Homework Answer
+            CreateMap<HomeworkAnswer, HomeworkAnswerViewModel>()
+                .ReverseMap();
+            CreateMap<CreateNewAnswer, HomeworkAnswer>();
+            CreateMap<UpdateAnswer, HomeworkAnswer>();
 
             // Account
             CreateMap<CreateNewAccount, Account>();

@@ -7,14 +7,13 @@ public class SoundManager : MonoBehaviour
 {
     private bool _muteBackgroundMusic = false;
     private bool _muteSoundFx = false;
-
     public static SoundManager instance;
 
     private AudioSource _audioSource;
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(this);
@@ -28,13 +27,13 @@ public class SoundManager : MonoBehaviour
     void Start()
     {
         _audioSource = GetComponent<AudioSource>();
-        _audioSource.Play();    
+        _audioSource.Play();
     }
 
     public void ToggleBackgroundMusic()
     {
         _muteBackgroundMusic = !_muteBackgroundMusic;
-        if(_muteBackgroundMusic)
+        if (_muteBackgroundMusic)
         {
             _audioSource.Stop();
         }
@@ -47,7 +46,7 @@ public class SoundManager : MonoBehaviour
     public void ToggleSoundFX()
     {
         _muteSoundFx = !_muteSoundFx;
-        GameEvents.OnToggleSoundFXMethod();
+        GameEvents.OnToggleSoundsFXMethod();
     }
 
     public bool IsBackgroundMusicMuted()
@@ -60,11 +59,11 @@ public class SoundManager : MonoBehaviour
         return _muteSoundFx;
     }
 
-    public void SilienceBackgroundMusic(bool silience)
+    public void SilenceBackgroundMusic(bool silence)
     {
-        if(_muteBackgroundMusic == false)
+        if (_muteBackgroundMusic == false)
         {
-            if (silience)
+            if (silence)
                 _audioSource.volume = 0f;
             else
                 _audioSource.volume = 1f;

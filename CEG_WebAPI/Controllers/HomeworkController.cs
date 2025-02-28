@@ -2,6 +2,7 @@
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -102,7 +103,7 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var resultSessionTitle = await _sessionService.GetSessionById(newHw.SessionId.Value);
+                var resultSessionTitle = await _sessionService.GetSessionById(newHw.SessionId);
                 if (resultSessionTitle == null)
                 {
                     return BadRequest(new
@@ -111,8 +112,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Session Not Found!"
                     });
                 }
-                HomeworkViewModel hw = new HomeworkViewModel();
-                _homeworkService.Create(hw, newHw);
+                await _homeworkService.Create(newHw);
                 return Ok(new
                 {
                     Data = true,
@@ -137,7 +137,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] HomeworkViewModel homework
+            [FromBody][Required] UpdateHomework homework
             )
         {
             try
@@ -151,13 +151,50 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Homework Does Not Exist"
                     });
                 }
-                homework.HomeworkId = id;
-                _homeworkService.Update(homework);
-                result = await _homeworkService.GetHomeworkById(homework.HomeworkId.Value);
+                // homework.HomeworkId = id;
+                await _homeworkService.Update(id,homework);
+                result = await _homeworkService.GetHomeworkById(id);
                 return Ok(new
                 {
                     Status = true,
                     Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+        [HttpDelete("{id}/Delete")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(
+            [FromRoute][Required] int id
+            )
+        {
+            try
+            {
+                var ses = await _homeworkService.GetHomeworkById(id);
+                if (ses == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "homework with given id does not exist."
+                    });
+                }
+                await _homeworkService.Delete(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = ses
                 });
             }
             catch (Exception ex)

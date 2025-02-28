@@ -135,6 +135,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoundFXButton
       objectReference: {fileID: 0}
+    - target: {fileID: 580520236009020977, guid: baf90bea95c2fb9458dcef5e8da33600, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1889509921}
+    - target: {fileID: 580520236009020977, guid: baf90bea95c2fb9458dcef5e8da33600, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: MuteToggleSoundFX
+      objectReference: {fileID: 0}
     - target: {fileID: 1604125309048517752, guid: baf90bea95c2fb9458dcef5e8da33600, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -311,7 +319,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &662435479
 RectTransform:
   m_ObjectHideFlags: 0
@@ -748,7 +756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1094172378
 RectTransform:
   m_ObjectHideFlags: 0

@@ -4,6 +4,8 @@ using CEG_BAL.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using CEG_BAL.Services.Implements;
+using CEG_BAL.ViewModels.Admin.Update;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -275,7 +277,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] HomeworkAnswerViewModel answer
+            [FromBody][Required] UpdateAnswer ans
             )
         {
             try
@@ -289,13 +291,50 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Answer Does Not Exist"
                     });
                 }
-                answer.HomeworkAnswerId = id;
-                _answerService.Update(answer);
-                result = await _answerService.GetById(answer.HomeworkAnswerId.Value);
+                // answer.HomeworkAnswerId = id;
+                await _answerService.Update(id, ans);
+                result = await _answerService.GetById(id);
                 return Ok(new
                 {
                     Status = true,
                     Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+        [HttpDelete("{id}/Delete")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(HomeworkQuestionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(
+            [FromRoute][Required] int id
+            )
+        {
+            try
+            {
+                var ses = await _answerService.GetById(id);
+                if (ses == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "answer with given id does not exist."
+                    });
+                }
+                await _answerService.Delete(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = ses
                 });
             }
             catch (Exception ex)

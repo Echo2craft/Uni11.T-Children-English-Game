@@ -5,7 +5,10 @@
     var courseInfo = Model.CourseInfo;
     var updateCourse = Model.UpdateCourseInfo;
     var createSession = Model.CreateSession;
-    Layout = Model.LayoutUrl;
+    var createHomework = Model.CreateHomework;
+    var addQuestion = Model.AddQuestion;
+    var createAnswer = Model.CreateAnswer;
+    Layout = "~/Pages/Shared/_ALayout.cshtml";
 }
 <html lang="en">
 <head>
@@ -45,128 +48,334 @@
                         </ol>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 customer-booking">
-                        <div class="row">
-                            <div id="alertContainer"></div>
-                            <div class="card profile col-12 mb-4">
-                                <div class="card-header" id="course-title-status">
-                                    <h4>Course <label id="course-course-title" class="truncate"></label> Information</h4>
+                <section>
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills nav-fill flex-column flex-sm-row" role="tablist">
+                                <!-- dung vong for o day -->
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab active flex-sm-fill text-sm-center" data-toggle="tab" href="#course_info_Tab" role="tab" aria-controls="info" aria-selected="true">
+                                        <i class='bx bx-home-alt-2'></i>
+                                        <span>Course Information</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab flex-sm-fill text-sm-center" data-toggle="tab" href="#session_list_tab" role="tab" aria-controls="schedule" aria-selected="true">
+                                        <i class='bx bx-home-alt-2'></i>
+                                        <span>Sessions</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <!-- course_info_Tab -->
+                                <div class="tab-pane fade show active" id="course_info_Tab" role="tabpanel">
+                                    <div class="card profile mb-4">
+                                        <div class="card-header" id="course-title-status">
+                                            <h4 id="course-course-title" class="truncate">Course Information</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless class-info-table">
+                                                    <colgroup>
+                                                        <col style="width: 40%;">
+                                                        <col style="width: 60%;">
+                                                    </colgroup>
+                                                    <tbody>
+                                                        <tr class="status-info">
+                                                            <th class="text-md-right">Status:</th>
+                                                            <td id="course-status"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Id:</th>
+                                                            <td id="course-id"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Name:</th>
+                                                            <td id="course-name"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Type:</th>
+                                                            <td id="course-type"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Description:</th>
+                                                            <td id="course-description"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Total hours to learn:</th>
+                                                            <td id="course-totalHours"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Required Age:</th>
+                                                            <td id="course-requiredAge"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Difficulty:</th>
+                                                            <td id="course-difficulty"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Category:</th>
+                                                            <td id="course-category"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Sessions amount:</th>
+                                                            <td id="course-sessions-amount"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Classes amount:</th>
+                                                            <td id="course-classes-amount"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Course ID:</label>
+                                <!-- session_list_tab -->
+                                <div class="tab-pane fade" id="session_list_tab" role="tabpanel">
+                                    <div class="card profile mb-4 pb-0">
+                                        <div class="card-header" id="class-allow-add-schedule">
+                                            <h4>Session list</h4>
                                         </div>
-                                        <div class="col-md-7">
-                                            <span id="course-id">
-                                            </span>
+                                        <!-- session_index -->
+                                        <div class="card-body" id="schedule_list">
+                                            <div id="session-table_wrapper" class="dataTables_wrapper no-footer">
+                                                <table id="session-table"
+                                                       class="table table-striped table-bordered dataTable no-footer compact"
+                                                       aria-describedby="session-table_info">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="session-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Number: activate to sort column ascending">
+                                                                Number
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="session-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Session Title: activate to sort column ascending">
+                                                                Title
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="session-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Description: activate to sort column ascending">
+                                                                Description
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="session-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Hours: activate to sort column ascending">
+                                                                Hours
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="session-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="End Time: activate to sort column ascending">
+                                                                Homeworks amount
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="session-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Options: activate to sort column ascending">
+                                                                Options
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="session-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Number: activate to sort column ascending">
+                                                                Session ID
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Status:</label>
+                                        <div id="homework_list" style="display: none; overflow: hidden;">
+                                            <div class="card-header" id="class-allow-add-schedule">
+                                                <h4>Homework list from selected Session</h4>
+                                            </div>
+                                            <!-- homework_index -->
+                                            <div class="card-body">
+                                                <div id="homework-table_wrapper" class="dataTables_wrapper no-footer">
+                                                    <table id="homework-table"
+                                                           class="table table-striped table-bordered dataTable no-footer compact"
+                                                           aria-describedby="homework-table_info">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="homework-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Homework Number: activate to sort column ascending">
+                                                                    Homework Number
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="homework-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Title: activate to sort column ascending">
+                                                                    Title
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="homework-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Description: activate to sort column ascending">
+                                                                    Description
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="homework-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Type: activate to sort column ascending">
+                                                                    Type
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="homework-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Hours: activate to sort column ascending">
+                                                                    Hours to finish
+                                                                </th>
+                                                                @* <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="homework-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Start Date: activate to sort column ascending">
+                                                                Start Date
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="homework-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="End Date: activate to sort column ascending">
+                                                                End Date
+                                                                </th> *@
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="homework-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Questions: activate to sort column ascending">
+                                                                    Questions
+                                                                </th>
+                                                                @* <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="homework-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Homework Progress: activate to sort column ascending">
+                                                                    Homework Progress
+                                                                </th> *@
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="homework-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Options: activate to sort column ascending">
+                                                                    Options
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-7" id="course-status">
+                                        <div id="question_list" style="display: none; overflow: hidden;">
+                                            <div class="card-header" id="class-allow-add-schedule">
+                                                <h4>Question list from selected Homework</h4>
+                                            </div>
+                                            <!-- question_index -->
+                                            <div class="card-body">
+                                                <div id="question-table_wrapper" class="dataTables_wrapper no-footer">
+                                                    <table id="question-table"
+                                                           class="table table-striped table-bordered dataTable no-footer compact"
+                                                           aria-describedby="question-table_info">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="question-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Question Number: activate to sort column ascending">
+                                                                    Question Number
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="question-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Question: activate to sort column ascending">
+                                                                    Question
+                                                                </th>
+                                                                @* <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="question-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Points: activate to sort column ascending">
+                                                                    Points
+                                                                </th> *@
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="question-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Answers: activate to sort column ascending">
+                                                                    Answers
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="question-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Options: activate to sort column ascending">
+                                                                    Options
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Course Name:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="course-name">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Course Type:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="course-type">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Course Description:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="course-description">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Total Hours:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="course-totalHours">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Required Age:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="course-requiredAge">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Difficulty:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="course-difficulty">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Category:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="course-category">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Sessions amount:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="course-sessions-amount">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-sm-2">
-                                        <div class="col-md-5 text-md-right">
-                                            <label class="col-form-label">Classes amount:</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <span id="course-classes-amount">
-                                            </span>
+                                        <div id="answer_list" style="display: none; overflow: hidden;">
+                                            <div class="card-header" id="class-allow-add-schedule">
+                                                <h4>Answer list from selected Question</h4>
+                                            </div>
+                                            <!-- answer_index -->
+                                            <div class="card-body">
+                                                <div id="answer-table_wrapper" class="dataTables_wrapper no-footer">
+                                                    <table id="answer-table"
+                                                           class="table table-striped table-bordered dataTable no-footer compact"
+                                                           aria-describedby="answer-table_info">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="question-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Answer Number: activate to sort column ascending">
+                                                                    Answer Number
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="question-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Answer: activate to sort column ascending">
+                                                                    Answer
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="question-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Type: activate to sort column ascending">
+                                                                    Type
+                                                                </th>
+                                                                <th class="sorting sorting_asc" tabindex="0"
+                                                                    aria-controls="question-table" rowspan="1"
+                                                                    colspan="1" aria-sort="ascending"
+                                                                    aria-label="Options: activate to sort column ascending">
+                                                                    Options
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 customer-booking">
-                        <div class="row">
-                            <div class="card profile col-12 mb-4">
-                                <div class="card-header" id="course-allow-add-session">
-                                    <h4>Course's Session List</h4>
-                                </div>
-                                <div class="card-body" id="session_list">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </section>
             </div>
         </div>
     </div>
@@ -281,7 +490,7 @@
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
                                     <label asp-for="@createSession.Hours" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <input asp-for="@createSession.Hours" value="@createSession.Hours" type="number" class="form-control col-md-7 mt-3" required>
+                                    <input asp-for="@createSession.Hours" value="@createSession.Hours" type="number" min="0" class="form-control col-md-7 mt-3" required>
                                     <span asp-validation-for="@createSession.Hours" id="error_message"
                                           class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
@@ -298,13 +507,1001 @@
             </div>
         </div>
     </div>
+    <div id="createHomework" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content modal-addRoom">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add new Homework</h4>
+                </div>
+                <form method="post" id="AddHomeworkForm">
+                    <div class="modal-body">
+                        <div class="row p-4">
+                            <div class="col-12">
+                                <div class="row form-group">
+                                    <label asp-for="@createHomework.Title" class="col-md-3 col-form-label text-md-right"></label>
+                                    <input asp-for="@createHomework.Title" value="@createHomework.Title" type="text" placeholder="Title" required class="form-control col-md-7">
+                                    <span asp-validation-for="@createHomework.Title" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+
+                                    <label asp-for="@createHomework.Description" class="col-md-3 col-form-label text-md-right"></label>
+                                    <textarea asp-for="@createHomework.Description" value="@createHomework.Description" required class="form-control col-md-7"></textarea>
+                                    <span asp-validation-for="@createHomework.Description" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+
+                                    <label asp-for="@createHomework.Hours" class="col-md-3 col-form-label mt-3 text-md-right"></label>
+                                    <input asp-for="@createHomework.Hours" value="@createHomework.Hours" type="number" class="form-control col-md-7 mt-3" required>
+                                    <span asp-validation-for="@createHomework.Hours" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+
+                                    <label asp-for="@createHomework.Type" class="col-md-3 col-form-label mt-3 text-md-right"></label>
+                                    <select class="form-control col-md-7 custom-select" asp-for="@createHomework.Type"></select>
+                                    <span asp-validation-for="@createHomework.Type" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                    <input id="createHomework_SessionId" type="text" required hidden readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-success" type="submit" name="action" value="createHomework">Create</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="addQuestion" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content modal-addRoom">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add question for Homework</h4>
+                </div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active align-items-center d-flex w-auto" data-toggle="tab" href="#add_question_Tab" role="tab" aria-controls="add" aria-selected="true">
+                            <span>Add Existing</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link align-items-center d-flex w-auto" data-toggle="tab" href="#create_question_Tab" role="tab" aria-controls="create" aria-selected="false">
+                            <span>Create New</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="add_question_Tab" class="tab-pane fade show active">
+                        <form method="post" id="AddQuestionForm">
+                            <div class="modal-body">
+                                <div class="row p-4">
+                                    <div class="col-12">
+                                        <div class="row form-group">
+                                            <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Selected Question</label>
+                                            <div class="col-md-8 p-0">
+                                                <select id="select2-question-dropdown" class="form-control custom-select" style="width: 100%;"></select>
+                                            </div>
+                                            <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                            <input id="homId_adding" name="homId.adding" type="number" value="0" required hidden>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button class="btn btn-success" type="submit">Add</button>
+                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="create_question_Tab" class="tab-pane fade">
+                        <form method="post" id="CreateQuestionForm">
+                            <div class="modal-body">
+                                <div class="row p-4">
+                                    <div class="col-12">
+                                        <div class="row form-group">
+                                            @* <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Selected Question</label>
+                                            <div class="col-md-8 p-0">
+                                                <select id="select2-question-dropdown" class="form-control custom-select" style="width: 100%;"></select>
+                                            </div>
+                                            <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                            <label class="col-md-4 col-form-label text-md-right">Question</label>
+                                            <input id="createQuestion_Question" type="text" required class="form-control col-md-8">
+                                            <span id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                            <input id="homId_creating" name="homId.creating" type="number" value="0" required hidden>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button class="btn btn-success" type="submit">Create</button>
+                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="createAnswer" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content modal-addRoom">
+                <div class="modal-header">
+                    <h4 class="modal-title">Create new Answer</h4>
+                </div>
+                <form method="post" id="createAnswerForm">
+                    <div class="modal-body">
+                        <div class="row p-4">
+                            <div class="col-12">
+                                <div class="row form-group">
+                                    <label asp-for="@createAnswer.Answer" class="col-md-4 col-form-label text-md-right"></label>
+                                    <textarea asp-for="@createAnswer.Answer" value="@createAnswer.Answer" required class="col-md-8 form-control"></textarea>
+                                    <span asp-validation-for="@createAnswer.Answer" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                </div>
+                                <div class="row form-group">
+                                    <label asp-for="@createAnswer.Type" class="col-md-4 col-form-label text-md-right"></label>
+                                    <select class="col-md-8 form-control custom-select" asp-for="@createAnswer.Type">
+                                        <option value="Correct">Correct</option>
+                                        <option value="Incorrect">Incorrect</option>
+                                    </select>
+                                    <span asp-validation-for="@createAnswer.Type" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                    <input id="queId_creating" name="queId.creating" type="number" value="0" required hidden>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-success" type="submit" name="action" value="createAnswer">Create</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script>
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
-        // var questionList = [];
-        var sesssionList = [];
+        var sessionTable;
+        var homeworkTable;
+        var questionTable;
+        var answerTable;
+        // let isTableDataEmpty = false; // To track if response data is empty
+        let isHomeworkTableDataEmpty = false; // To track if response data is empty
+        let isQuestionTableDataEmpty = false; // To track if response data is empty
+        let isAnswerTableDataEmpty = false; // To track if response data is empty
+
+        let hideHomeworkTableTimer = null; // Timer to handle delayed table hiding
+        let hideQuestionTableTimer = null; // Timer to handle delayed table hiding
+        let hideAnswerTableTimer = null; // Timer to handle delayed table hiding
+
+        let isTableVisible = false; // Track the table visibility status
+        let isHomeworkTableVisible = false; // Track the table visibility status
+        let isQuestionTableVisible = false; // Track the table visibility status
+        let isAnswerTableVisible = false; // Track the table visibility status
+
         $(document).ready(function () {
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('searchIcon', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bx-search-alt question-search-icon',
+                    hideLabel: true // Hide search label
+                }, opts);
+
+                // Create a container for the icon
+                let container = document.createElement('div');
+                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                // Create the icon element
+                let icon = document.createElement('i');
+                icon.className = options.iconClass;
+
+                // Check if pagination is enabled
+                // if (settings.oFeatures.bFilter) {
+                //     console.log(settings.oFeatures.bFilter);
+                //     console.log('Pagination is enabled for this DataTable.');
+                // }
+
+                setTimeout(() => {
+                    // Find the .dt-search container inside the DataTable wrapper
+                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                    if (searchContainer.length) {
+                        searchContainer.append(icon);
+                    } else {
+                        // Append icon to container
+                        container.appendChild(icon);
+                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                        $(settings.nTableWrapper).prepend(container);
+                    }
+                    if (options.hideLabel) {
+                        // Find the .dt-search label container inside the DataTable wrapper
+                        let searchLabel = searchContainer.find('label');
+                        if (searchLabel.length) {
+                            searchLabel.text('');
+                        } else {
+                            console.log('Label of search div not found!');
+                        }
+                    }
+                }, 100);
+                return '';
+            });
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('toggle', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bxs-add-to-queue bx-sm',
+                    modalId: 'createSession' // Modal ID that the icon will trigger
+                }, opts);
+
+                // Create a container for the icon
+                let container = document.createElement('div');
+                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                // Create the icon element
+                let icon = document.createElement('i');
+                icon.className = options.iconClass;
+                container.className = 'dt-modal-toggle';
+                icon.setAttribute('data-toggle', 'modal');
+                icon.setAttribute('data-target', `#${options.modalId}`);
+
+                // Append icon to container
+                container.appendChild(icon);
+
+                // Insert the container in the DataTable toolbar
+                $(settings.nTableWrapper).prepend(container);
+                return container;
+            });
+            DataTable.render.time = function (
+                {
+                    includeId = "session-hours"
+                }
+            ) {
+                return function (data, type, row) {
+                    var str = moment(data, "HH:mm:ss");
+                    // console.log(str);
+                    if (type === 'display') {
+                        return '<span id="' + includeId + '">' + str.format("hh:mm") + '</span >';
+                    }
+
+                    // Search, order and type can use the original data
+                    return str;
+                };
+            };
+            sessionTable = new DataTable('#session-table', {
+                data: [],
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
+                rowReorder: {
+                    dataSrc: 'sessionNumber'
+                },
+                autoWidth: false,
+                deferRender: false,
+                responsive: true,
+                columns: [
+                    {
+                        data: 'sessionNumber',
+                        className: 'dt-head-left',
+                        width: '2%'
+                        // render: function(data, type, row, meta){
+                        //     const currentStatus = $('td#course-status').text().trim(); Current status
+                        //     if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                        //         const dateValue = this.cell(rowIdx, 2).data();
+                        //         const node = $(this.cell(rowIdx, 2).node());
+
+                        //         const staDate = $('#class-start-date').data('stadate');
+                        //         const endDate = $('#class-end-date').data('enddate');
+
+                        //         Change display to a select box if not already updated
+                        //         if (!node.children('input[type=datetime-local]').length) {
+                        //             node.html(`
+                        //         <input type="datetime-local" id="schedule-start-date-${rowIdx}" class="form-control" value=${dateValue}
+                        //                 asp-format="{0:yyyy-MM-ddTHH:mm}" min="${staDate}" max="${endDate}"/>`);
+
+                        //             Add change event listener to the select element
+                        //             node.find('input[type=datetime-local]').on('change', function () {
+                        //                 const newStatus = $(this).val();
+                        //                 let formData = {
+                        //                     scheduleDate: $('input#schedule-start-date-' + rowIdx).val()
+                        //                 };
+                        //                 callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 7).data());
+                        //             });
+                        //         }
+                        //         return '<input type="number" class="form-control" value="' + data + '" />'
+                        //     }
+                        //     return data;
+                        // }
+                    },
+                    {
+                        data: 'title',
+                        width: '15%',
+                        render: function(data, type, row, meta){
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea id="updateSession_' + row.sessionId + '_Title" required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'description',
+                        width: '20%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea id="updateSession_' + row.sessionId + '_Description" required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                        // render: function (data, type, row, meta) {
+                        //     '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
+                        //     return '<span id="schedule-start-date">' + formatDate(data, { ignoreHour : true , addDayOfWeek : true }) + '</span >';
+                        // },
+                    },
+                    {
+                        data: 'hours',
+                        width: '7%',
+                        // render: function (data, type, row, meta) {
+                        //     return '<span id="schedule-start-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
+                        // },<input type="time" id="timeInput" name="timeInput">
+                        // render: DataTable.render.time({ includeId: "session-hours" })
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            var str = moment(data, "HH:mm:ss");
+                            // console.log(row);
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+
+                                return `
+                                    <div class="input-group">
+                                    <input type="number" min="0" max="8" id="updateSession_` + row.sessionId + `_Hours" class="form-control" value="` + data + `" aria-describedby="hours-addon">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="hours-addon">hour(s)</span>
+                                        </div>
+                                    </div>
+                                `;
+                                // return '<input type="time" inputmode="numeric" pattern="[0-9]{2}:[0-9]{2}" class="form-control" value="' + str.format("hh:mm") + '"> hour(s)';
+                            }
+                            return str.format("hh:mm");
+                            // return DataTable.render.time({ includeId: "session-hours" });
+                        }
+                    },
+                    {
+                        data: 'homeworks.length',
+                        width: '10%',
+                        defaultContent: 'No homeworks',
+                        render: function (data, type, row, meta) {
+                            if (data !== 0) return data + ' homework(s)';
+                            else return 'No homework provided';
+                        }
+                    },
+                    {
+                        data: null,
+                        width: '10%',
+                        defaultContent: '<i>Actions</i>',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row, meta) {
+                            // setTimeout(function () {
+                            //     const statusText = $('td#class-status').text().trim(); Adjust the delay if needed
+                            //         if (statusText == 'Draft' || statusText == 'Postponed')
+                            //             return '<button class="btn btn-danger">Delete</button>';
+                            //         else return '';
+                            // }, 500);
+                            const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                            if (statusText == 'Draft' || statusText == 'Postponed')
+                                return '<button class="btn btn-primary">Update</button> <button class="btn btn-danger">Delete</button>';
+                            else return '';
+                        }
+                    },
+                    {
+                        data: 'sessionId',
+                        width: '5%',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                select: {
+                    style: 'single',
+                    selector: 'tbody td:nth-child(5)'
+                },
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'search session data...'
+                        },
+                        searchIcon: {
+                        },
+                        toggle: {
+                        }
+                    }
+                },
+            }).on('draw', function (e, settings) {
+                sessionTable.column(6).visible(false, false);
+                const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                if (statusText !== 'Draft' && statusText !== 'Postponed') sessionTable.column(5).visible(false, false);
+                sessionTableMainFeatures();
+                // updateScheduleTable();
+            }).on('row-reorder', function (e, diff, edit) {
+                for (var i = 0, ien = diff.length; i < ien; i++) {
+                    console.log(diff[i].node);
+                    $(diff[i].node).addClass('reordered');
+                }
+            }).on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    // Clear any pending hide action
+                    if (hideHomeworkTableTimer) {
+                        clearTimeout(hideHomeworkTableTimer);
+                        hideHomeworkTableTimer = null;
+                    }
+                    let selectedSession = dt.row(indexes[0]).data();
+                    let rowSesId = selectedSession.sessionId;
+
+                    // console.log(selectedSession);
+                    homeworkTable.clear().rows.add(selectedSession.homeworks).draw();
+
+                    // if (isAnswerTableVisible) {
+                    //     $('#answer_list').stop(true, true).slideUp(350);
+                    //     answerTable.clear().draw();
+                    //     isAnswerTableVisible = false;
+                    // }
+                    // if (isQuestionTableVisible) {
+                    //     $('#question_list').stop(true, true).slideUp(350);
+                    //     questionTable.clear().draw();
+                    //     isQuestionTableVisible = false;
+                    // }
+
+                    $('#createHomework_SessionId').val(rowSesId);
+                    // callApiGetAttendanceList(rowSesId);
+
+                    // Ensure the target table is visible
+                    if (!isHomeworkTableVisible) {
+                        $('#homework_list').stop(true, true).slideDown(350);
+                        isHomeworkTableVisible = true;
+                    }
+                }
+            }).on('deselect', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    if (isAnswerTableVisible) {
+                        $('#answer_list').stop(true, true).slideUp(350);
+                        answerTable.clear().draw();
+                        isAnswerTableVisible = false;
+                    }
+                    if (isQuestionTableVisible) {
+                        $('#question_list').stop(true, true).slideUp(350);
+                        questionTable.clear().draw();
+                        isQuestionTableVisible = false;
+                    }
+                    // Set a short timer to delay hiding the table
+                    hideHomeworkTableTimer = setTimeout(() => {
+                        const selectedHomRows = dt.rows({ selected: true }).count();
+
+                        // Only hide the table if no rows are selected
+                        if (selectedHomRows === 0 && isHomeworkTableVisible) {
+                            $('#homework_list').stop(true, true).slideUp(350);
+                            homeworkTable.clear().draw();
+                            isHomeworkTableVisible = false;
+                        }
+                    }, 50);
+                }
+            });
+            homeworkTable = new DataTable('#homework-table', {
+                data: [],
+                rowReorder: {
+                    dataSrc: 'homeworkNumber'
+                },
+                deferRender: false,
+                responsive: true,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
+                columns: [
+                    {
+                        data: 'homeworkNumber',
+                        className: 'dt-head-left',
+                        width: '5%',
+                    },
+                    {
+                        data: 'title',
+                        width: '15%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea id="updateHomework_' + row.homeworkId + '_Title" required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                    },
+                    // {
+                    //     data: 'hasAttended', Add an attendance column
+                    //     render: function (data, type, row, meta) {
+                    //         Render a checkbox, set checked if "attend", unchecked if "absent"
+                    //         const statusText = scheduleTable.rows({ selected: true }).data()[0].status;
+                    //         const checked = data === 'Attended' ? 'checked' : '';
+                    //         const disabled = statusText === 'Ended' || statusText === 'Cancelled' ? 'disabled' : '';
+                    //         return `
+                    //                     <div class="custom-control custom-checkbox">
+                    //                         <input type="checkbox" class="attendance-checkbox custom-control-input" ${checked}
+                    //                             data-attendance-id="${row.attendanceId}" id="customCheck${row.attendanceId}" ${disabled} >
+                    //                         <label class="custom-control-label" class="attendance-checkbox-label" for="customCheck${row.attendanceId}" data-attendance-id="${row.attendanceId}" id="customCheck${row.attendanceId}" >${data}</label>
+                    //                     </div>
+                    //                 `;
+                    //     },
+                    //     orderable: false, Prevent sorting on this column
+                    //     searchable: false Prevent searching on this column
+                    // },
+                    {
+                        data: 'description',
+                        width: '20%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea id="updateHomework_' + row.homeworkId + '_Description" required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'type',
+                        width: '10%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return `
+                                        <select class="custom-select form-control status-dropdown" id="updateHomework_` + row.homeworkId + `_Type">
+                                        `
+                                    + getTypeOptions(data) +
+                                    `
+                                        </select>
+                                    `;
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'hours',
+                        width: '9%',
+                        // render: function (data, type, row, meta) {
+                        //     return '<span id="schedule-start-time">' + formatTime(data, { includeAmPm : true }) + '</span >';
+                        // },<input type="time" id="timeInput" name="timeInput">
+                        // render: DataTable.render.time({ includeId: "session-hours" })
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            var str = moment(data, "HH:mm:ss");
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return `
+                                    <div class="input-group">
+                                        <input type="number" id="updateHomework_` + row.homeworkId + `_Hours" min="0" max="8" class="form-control" value="` + data + `" aria-describedby="hours-addon">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="hours-addon">hour(s)</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                            return str.format("hh:mm");
+                            // return DataTable.render.time({ includeId: "session-hours" });
+                        }
+                    },
+                    // {
+                    //     data: 'startDate',
+                    //     render: DataTable.render.date("dddd, DD/MM/YYYY")
+                    // },
+                    // {
+                    //     data: 'endDate',
+                    //     render: DataTable.render.date("dddd, DD/MM/YYYY")
+                    // },
+                    {
+                        data: 'questionsAmount',
+                        width: '10%',
+                        defaultContent: 'Empty Homework',
+                        render: function (data, type, row, meta) {
+                            if (data !== 0) return data + ' question(s)';
+                            else return 'No question provided';
+                        }
+                    },
+                    // {
+                    //     data: null,
+                    //     render: function (data, type, row, meta) {
+                    //         return 'Nothing';
+                    //     }
+                    // },
+                    {
+                        data: null,
+                        width: '10%',
+                        defaultContent: '<i>Actions</i>',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row, meta) {
+                            // setTimeout(function () {
+                            //     const statusText = $('td#class-status').text().trim(); Adjust the delay if needed
+                            //         if (statusText == 'Draft' || statusText == 'Postponed')
+                            //             return '<button class="btn btn-danger">Delete</button>';
+                            //         else return '';
+                            // }, 500);
+                            const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                            if (statusText == 'Draft' || statusText == 'Postponed')
+                                return '<button class="btn btn-primary">Update</button> <button class="btn btn-danger">Delete</button>';
+                            else return '';
+                        }
+                    },
+                    {
+                        orderable: false,
+                        searchable: false,
+                        data: 'homeworkId',
+                        width: '5%'
+                    }
+                    // {
+                    //     data: 'studentProgress',
+                    //     render: function (data, type, row, meta) {
+                    //         if(data){
+                    //             if (row.homeworkCurrentProgress && row.homeworkAmount)
+                    //                 return `${row.homeworkCurrentProgress} / ${row.homeworkAmount} Homeworks submitted`;
+                    //             return `${data}`;
+                    //         }
+                    //         return `
+                    //                   Records not found
+                    //                 `;
+                    //         return `${row.homeworkCurrentProgress} / ${row.homeworkAmount} Homeworks submitted`;
+                    //     }
+                    // }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'Search homework...'
+                        },
+                        searchIcon: {
+                        },
+                        toggle: {
+                            modalId: 'createHomework'
+                        }
+                    }
+                },
+                select: {
+                    style: 'single',
+                    selector: 'tbody td:nth-child(6)'
+                    // selector: 'td:not(:has(input.attendance-checkbox)) div:not(.custom-control)'
+                },
+            }).on('draw', function (e, settings) {
+                homeworkTable.column(7).visible(false, false);
+                homeworkTableMainFeatures();
+                // Attach listener to checkboxes after the table is drawn
+                // $('#student-table div .attendance-checkbox')
+                //     .off('change')
+                //     .on('click', function (e) {
+                //         e.stopPropagation(); Prevent row selection when checkbox is clicked
+                //     })
+                //     .on('change', function (e) {
+                //         const attendanceId = $(this).data('attendance-id');
+                //         const isChecked = $(this).is(':checked');
+                //         const status = isChecked ? 'Attended' : 'Absent';
+
+                //         const node = $(this).parent();
+
+                //         Update the data or call API
+                //         callApiUpdateAttendanceStatus(attendanceId, status); Call your API or update logic here
+                //         if (node.children('label').length > 0) {
+                //             const label = node.children('label');
+                //             console.log(node);
+                //             label.text(status);
+                //         }
+                //     });
+
+                // $('#student-table')
+                // .on('click', '.attendance-checkbox', function (e) {
+                //     e.stopPropagation(); Prevent the click event from bubbling up to the row
+                // })
+                // .on('change', '.attendance-checkbox', function () {
+                //     const attendanceId = $(this).data('attendance-id');
+                //     const isChecked = $(this).is(':checked');
+                //     const status = isChecked ? 'Attended' : 'Absent';
+
+                //     const node = $(this).parent();
+
+                //     Update the data or call API
+                //     callApiUpdateAttendanceStatus(attendanceId, status); Call your API or update logic here
+                //     if (node.children('label').length > 0) {
+                //         const label = node.children('label');
+                //         label.text(status);
+                //     }
+                // });
+                // $('#student-table').on('click', '.attendance-checkbox-label', function (e) {
+                //     e.stopPropagation(); Prevent the click event from bubbling up to the row
+                // });
+            }).on('row-reorder', function (e, diff, edit) {
+                for (var i = 0, ien = diff.length; i < ien; i++) {
+                    console.log(diff[i].node);
+                    $(diff[i].node).addClass('reordered');
+                }
+            }).on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    // Clear any pending hide action
+                    if (hideQuestionTableTimer) {
+                        clearTimeout(hideQuestionTableTimer);
+                        hideQuestionTableTimer = null;
+                    }
+                    let selectedHomework = dt.row(indexes[0]).data();
+                    let rowHomId = selectedHomework.homeworkId;
+
+                    // if (isAnswerTableVisible) {
+                    //     $('#answer_list').stop(true, true).slideUp(350);
+                    //     answerTable.clear().draw();
+                    //     isAnswerTableVisible = false;
+                    // }
+
+                    callApiGetQuestionList(rowHomId);
+                    callApiGetQuestionOptionList(rowHomId);
+                    $('#homId_adding').val(rowHomId);
+                    $('#homId_creating').val(rowHomId);
+                    // console.log(selectedHomework);
+                    // homeworkTable.clear().rows.add(selectedSession.homeworks).draw();
+
+                    // $('#createHomework_SessionId').val(rowSesId);
+                    // callApiGetAttendanceList(rowSesId);
+
+                    // Ensure the target table is visible
+                    if (!isQuestionTableVisible) {
+                        $('#question_list').stop(true, true).slideDown(350);
+                        isQuestionTableVisible = true;
+                    }
+                }
+            }).on('deselect', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    if (isAnswerTableVisible) {
+                        $('#answer_list').stop(true, true).slideUp(350);
+                        answerTable.clear().draw();
+                        isAnswerTableVisible = false;
+                    }
+                    // Set a short timer to delay hiding the table
+                    hideQuestionTableTimer = setTimeout(() => {
+                        const selectedQueRows = dt.rows({ selected: true }).count();
+
+                        // Only hide the table if no rows are selected
+                        if (selectedQueRows === 0 && isQuestionTableVisible) {
+                            $('#question_list').stop(true, true).slideUp(350);
+                            questionTable.clear().draw();
+                            $('#homId_adding').val(0);
+                            $('#homId_creating').val(0);
+                            $('#select2-question-dropdown').empty().trigger('change');
+                            isQuestionTableVisible = false;
+                        }
+                    }, 50);
+                }
+            });
+            questionTable = new DataTable('#question-table', {
+                data: [],
+                rowReorder: {
+                    dataSrc: 'questionNumber'
+                },
+                deferRender: false,
+                responsive: true,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
+                columns: [
+                    {
+                        data: 'questionNumber',
+                        className: 'dt-head-left',
+                        width: '5%',
+                    },
+                    {
+                        data: 'question',
+                        width: '15%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea id="updateQuestion_' + row.homeworkQuestionId + '_Question" required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'answersAmount',
+                        width: '15%',
+                        defaultContent: 'No answer provided',
+                        render: function (data, type, row, meta) {
+                            if (data !== 0) return data + ' answer(s)';
+                            else return 'No answer provided';
+                        }
+                    },
+                    {
+                        data: null,
+                        width: '5%',
+                        defaultContent: '<i>Actions</i>',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row, meta) {
+                            const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                            if (statusText == 'Draft' || statusText == 'Postponed')
+                                return '<button class="btn btn-primary">Update</button> <button class="btn btn-danger">Delete</button>';
+                            else return '';
+                        }
+                    },
+                    {
+                        orderable: false,
+                        searchable: false,
+                        data: 'homeworkQuestionId',
+                        width: '5%'
+                    }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'Search question...'
+                        },
+                        searchIcon: {
+                        },
+                        toggle: {
+                            modalId: 'addQuestion'
+                        }
+                    }
+                },
+                select: {
+                    style: 'single',
+                    selector: 'tbody td:nth-child(3)'
+                },
+            }).on('draw', function (e, settings) {
+                questionTable.column(4).visible(false, false);
+                questionTableMainFeatures();
+            }).on('row-reorder', function (e, diff, edit) {
+                for (var i = 0, ien = diff.length; i < ien; i++) {
+                    console.log(diff[i].node);
+                    $(diff[i].node).addClass('reordered');
+                }
+            }).on('select', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    // Clear any pending hide action
+                    if (hideAnswerTableTimer) {
+                        clearTimeout(hideAnswerTableTimer);
+                        hideAnswerTableTimer = null;
+
+                    }
+                    let selectedQuestion = dt.row(indexes[0]).data();
+                    let rowHomId = selectedQuestion.homeworkQuestionId;
+
+                    // callApiGetQuestionList(rowHomId);
+                    // callApiGetQuestionOptionList(rowHomId);
+                    // $('#homId_adding').val(rowHomId);
+                    $('#queId_creating').val(rowHomId);
+                    // console.log(selectedHomework);
+                    // console.log(selectedQuestion);
+                    answerTable.clear().rows.add(selectedQuestion.homeworkAnswers).draw();
+
+                    // $('#createHomework_SessionId').val(rowSesId);
+                    // callApiGetAttendanceList(rowSesId);
+
+                    // Ensure the target table is visible
+                    if (!isAnswerTableVisible) {
+                        $('#answer_list').stop(true, true).slideDown(350);
+                        isAnswerTableVisible = true;
+                    }
+                }
+            }).on('deselect', function (e, dt, type, indexes) {
+                if (type === 'row') {
+                    // Set a short timer to delay hiding the table
+                    hideAnswerTableTimer = setTimeout(() => {
+                        const selectedAnsRows = dt.rows({ selected: true }).count();
+
+                        // Only hide the table if no rows are selected
+                        if (selectedAnsRows === 0 && isAnswerTableVisible) {
+                            // if (isQuestionTableVisible) {
+                            //     $('#question_list').stop(true, true).slideUp(350);
+                            //     homeworkTable.clear().draw();
+                            //     isQuestionTableVisible = false;
+                            // }
+                            $('#answer_list').stop(true, true).slideUp(350);
+                            answerTable.clear().draw();
+                            $('#queId_creating').val(0);
+                            // $('#select2-question-dropdown').empty().trigger('change');
+                            isAnswerTableVisible = false;
+                        }
+                    }, 50);
+                }
+            });
+            answerTable = new DataTable('#answer-table', {
+                data: [],
+                deferRender: false,
+                responsive: true,
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
+                columns: [
+                    {
+                        data: 'answerNumber',
+                        className: 'dt-head-left',
+                        width: '5%',
+                    },
+                    {
+                        data: 'answer',
+                        width: '15%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return '<textarea id="updateAnswer_' + row.homeworkAnswerId + '_Answer" required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'type',
+                        width: '15%',
+                        render: function (data, type, row, meta) {
+                            const currentStatus = $('td#course-status').text().trim(); // Current status
+                            if (currentStatus === "Draft" || currentStatus === "Postponed") {
+                                return `
+                                            <select class="custom-select form-control" id="updateAnswer_` + row.homeworkAnswerId + `_Type">
+                                        `
+                                    + getAnswerTypeOptions(data) +
+                                    `
+                                        </select>
+                                    `;
+                                // return '<textarea id="updateAnswer_' + rowData.homeworkAnswerId + '_Type" required class="form-control">' + data + '</textarea>'
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        data: null,
+                        width: '5%',
+                        defaultContent: '<i>Actions</i>',
+                        orderable: false,
+                        render: function (data, type, row, meta) {
+                            const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                            if (statusText == 'Draft' || statusText == 'Postponed')
+                                return '<button class="btn btn-primary">Update</button> <button class="btn btn-danger">Delete</button>';
+                            else return '';
+                        }
+                    },
+                    {
+                        data: 'homeworkAnswerId',
+                        width: '5%'
+                    }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'Search answer...'
+                        },
+                        searchIcon: {
+                        },
+                        toggle: {
+                            modalId: 'createAnswer'
+                        }
+                    }
+                },
+            }).on('draw', function (e, settings) {
+                answerTable.column(4).visible(false, false);
+                answerTableMainFeatures()
+            });
             callApiGetCourseDetail();
+            $('#select2-question-dropdown').select2({
+                placeholder: 'Select a question to be added to this homework',
+                allowClear: true,
+                width: 'resolve',
+                theme: 'bootstrap4'
+            })
+            .on('change', function () {
+                var data = $(this).select2('data');
+                // Manually trigger select2:select
+                $(this).trigger({
+                    type: 'select2:select',
+                    params: { data: data }
+                });
+            })
+            .off('select2:select') // Remove previous bindings
+            .on('select2:select', function (e) {
+                // var text = $(this).select2('data')[0].text;
+                // callApiGetStudentNameList(text);
+            });
+            $('#AddHomeworkForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                var formData = {
+                    title: $('#createHomework_Title').val(),
+                    description: $('#createHomework_Description').val(),
+                    hours: $('#createHomework_Hours').val(),
+                    type: $('#createHomework_Type').val(),
+                    sessionId: $('#createHomework_SessionId').val()
+                };
+                callApiPostCreateHomework(formData);
+            });
             $('#EditCourseForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
 
@@ -321,7 +1518,6 @@
 
                 //Make the AJAX request
                 callApiPutUpdateCourse(formData);
-                $('#EditCourseForm').trigger("reset");
             });
             $('#updateCourseStatusForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
@@ -339,15 +1535,57 @@
                 event.preventDefault(); // Prevent the form from submitting normally
 
                 var formData = {
-                    number: $('#createSession_Number').val(),
+                    sessionNumber: $('#createSession_Number').val(),
                     title: $('#createSession_Title').val(),
                     description: $('#createSession_Description').val(),
                     hours: $('#createSession_Hours').val(),
                     courseId: $('#course-id').text()
                 };
-                console.log(formData);
+                // console.log(formData);
                 callApiPostCreateSession(formData);
                 $('#AddSessionForm').trigger("reset");
+            });
+            $('#AddQuestionForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+                var questionId = $('#select2-question-dropdown').select2('data')[0].id;
+                var homeworkId = $('#homId_adding').val();
+                callApiPostChooseQuestion(questionId, homeworkId);
+                $('#AddQuestionForm').trigger("reset");
+            });
+            $('#CreateQuestionForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+                var homeworkId = $('#homId_creating').val();
+                var formData = {
+                    question: $('#createQuestion_Question').val()
+                };
+                // console.log(formData);
+                callApiPostCreateQuestion(formData, homeworkId);
+                $('#CreateQuestionForm').trigger("reset");
+            });
+            $('#createAnswerForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                // Get the form data
+                var formData = {
+                    answer: $('textarea[id="createAnswer_Answer"]').val(),
+                    type: $('select[id="createAnswer_Type"]').val(),
+                    questionid: $('input[id="queId_creating"]').val()
+                };
+
+                // let selectedQueTableRow = getSelectedQuestionTableRowInfo();
+
+                // Make the AJAX request
+                callApiPostCreateAnswer(formData);
+                $('#createAnswerForm').trigger("reset");
+
+                // let rowQueId = selectedQueTableRow.rowData.homeworkQuestionId;
+                // $('#queId_creating').val(rowQueId);
+
+                // console.log(selectedQueTableRow.rowIndex);
+                // questionTable.row(selectedQueTableRow.rowIndex).select();
+                // setTimeout(() => {
+                //     questionTable.row(selectedQueTableRow.rowIndex).select();
+                // }, 200);
             });
             $(document).on('submit', 'form[id^="editSessionForm_"]', function (event) {
                 event.preventDefault();
@@ -369,6 +1607,540 @@
                 //$(this).trigger("reset");
             });
         });
+        function addQuestionOptions(data) {
+            $('#select2-question-dropdown').empty();
+            data.forEach(item => {
+                // Add each item as an option
+                // console.log(item);
+                let newOption = new Option(item.question, item.homeworkQuestionId, false, false);
+                $('#select2-question-dropdown').append(newOption);
+            });
+            // Refresh the Select2 dropdown to show new options
+            $('#select2-question-dropdown').trigger('change'); // Ensure Select2 is updated
+            // Set up Student list based on the first data
+            // callApiGetStudentNameList(data[0].parentName);
+        }
+        function sessionTableMainFeatures() {
+            $('#session-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
+                let row = sessionTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                if (confirm(`Delete session "${rowData.title}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Session/' + rowData.sessionId + '/Delete',
+                        type: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Session deleted successfully.');
+                                callApiGetCourseDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+            $('#session-table tbody').off('click', '.btn-primary').on('click', '.btn-primary', function () {
+                let row = sessionTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                // console.log(rowData);
+
+                // Collect form data
+                let formData = {
+                    // sessionNumber: $('#updateSession_' + rowData.sessionId + '_Number').val(),
+                    title: $('#updateSession_' + rowData.sessionId + '_Title').val(),
+                    description: $('#updateSession_' + rowData.sessionId + '_Description').val(),
+                    hours: $('#updateSession_' + rowData.sessionId + '_Hours').val(),
+                };
+
+                // console.log(formData);
+
+                if (confirm(`Update session "${rowData.title}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Session/' + rowData.sessionId + '/Update',
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'Bearer ' + token, // Token for authentication
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Session updated successfully.');
+                                callApiGetCourseDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+            // scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            //     const currentStatus = $('td#class-status').text().trim(); Current status
+            //     if (currentStatus === "Draft" || currentStatus === "Postponed") {
+            //         const dateValue = this.cell(rowIdx, 2).data();
+            //         const node = $(this.cell(rowIdx, 2).node());
+
+            //         const staDate = $('#class-start-date').data('stadate');
+            //         const endDate = $('#class-end-date').data('enddate');
+
+            //         Change display to a select box if not already updated
+            //         if (!node.children('input[type=datetime-local]').length) {
+            //             node.html(`
+            //                     <input type="datetime-local" id="schedule-start-date-${rowIdx}" class="form-control" value=${dateValue}
+            //                             asp-format="{0:yyyy-MM-ddTHH:mm}" min="${staDate}" max="${endDate}"/>`);
+
+            //             Add change event listener to the select element
+            //             node.find('input[type=datetime-local]').on('change', function () {
+            //                 const newStatus = $(this).val();
+            //                 let formData = {
+            //                     scheduleDate: $('input#schedule-start-date-' + rowIdx).val()
+            //                 };
+            //                 console.log(scheduleTable.cell(rowIdx, 8).data());
+            //                 callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 8).data());
+            //             });
+            //         }
+            //     }
+            // });
+        }
+        function homeworkTableMainFeatures() {
+            $('#homework-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
+                let row = homeworkTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                if (confirm(`Delete homework "${rowData.title}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Homework/' + rowData.homeworkId + '/Delete',
+                        type: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Homework deleted successfully.');
+                                callApiGetCourseDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+            $('#homework-table tbody').off('click', '.btn-primary').on('click', '.btn-primary', function () {
+                let row = homeworkTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                // console.log(rowData);
+
+                // Collect form data
+                let formData = {
+                    title: $('#updateHomework_' + rowData.homeworkId + '_Title').val(),
+                    description: $('#updateHomework_' + rowData.homeworkId + '_Description').val(),
+                    type: $('#updateHomework_' + rowData.homeworkId + '_Type').val(),
+                    hours: $('#updateHomework_' + rowData.homeworkId + '_Hours').val(),
+                };
+
+                // console.log(formData);
+
+                if (confirm(`Update homework "${rowData.title}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Homework/' + rowData.homeworkId + '/Update',
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'Bearer ' + token, // Token for authentication
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Homework updated successfully.');
+                                callApiGetCourseDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+        }
+        function questionTableMainFeatures() {
+            $('#question-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
+                let row = questionTable.row($(this).closest('tr'));
+                let homId = $('#homId_creating').val();
+                let rowData = row.data();
+
+                if (confirm(`Delete question "${rowData.question}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Question/' + rowData.homeworkQuestionId + '/Homework/' + homId + '/Delete',
+                        type: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        success: function (response) {
+                            if (response.status) {
+                                showAlert('success', 'Question deleted successfully.');
+
+                                let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                                let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                                callApiGetCourseDetail();
+                                $('#homId_adding').val(rowHomId);
+
+                                callApiGetQuestionList(rowHomId);
+                                callApiGetQuestionOptionList(rowHomId);
+                                homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
+
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+            $('#question-table tbody').off('click', '.btn-primary').on('click', '.btn-primary', function () {
+                let row = questionTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                // console.log(rowData);
+                // console.log($('#updateQuestion_' + row.homeworkQuestionId + '_Question').val());
+                // Collect form data
+                let formData = {
+                    question: $('#updateQuestion_' + rowData.homeworkQuestionId + '_Question').val()
+                };
+
+                console.log(formData);
+
+                if (confirm(`Update question "${rowData.question}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Question/' + rowData.homeworkQuestionId + '/Update',
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'Bearer ' + token, // Token for authentication
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Question updated successfully.');
+
+                                let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                                let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                                callApiGetCourseDetail();
+                                $('#homId_adding').val(rowHomId);
+
+                                callApiGetQuestionList(rowHomId);
+                                callApiGetQuestionOptionList(rowHomId);
+                                homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+        }
+        function answerTableMainFeatures() {
+            $('#answer-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
+                let row = answerTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                if (confirm(`Delete answer "${rowData.answer}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Answer/' + rowData.homeworkAnswerId + '/Delete',
+                        type: 'DELETE',
+                        headers: { 'Authorization': 'Bearer ' + token },
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Answer deleted successfully.');
+                                let selectedQueTableRow = getSelectedQuestionTableRowInfo();
+
+                                let rowQueId = selectedQueTableRow.rowQueData.homeworkQuestionId;
+                                $('#queId_creating').val(rowQueId);
+
+                                let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                                let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                                $('#homId_creating').val(rowHomId);
+                                callApiGetQuestionList(rowHomId);
+                                callApiGetQuestionOptionList(rowHomId);
+
+                                // console.log(selectedQueTableRow.rowIndex);
+                                questionTable.row(selectedQueTableRow.rowQueIndex).select();
+                                // callApiGetCourseDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+            $('#answer-table tbody').off('click', '.btn-primary').on('click', '.btn-primary', function () {
+                let row = answerTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                // console.log(rowData);
+                // console.log($('#updateQuestion_' + row.homeworkQuestionId + '_Question').val());
+                // Collect form data
+                let formData = {
+                    answer: $('#updateAnswer_' + rowData.homeworkAnswerId + '_Answer').val(),
+                    type: $('#updateAnswer_' + rowData.homeworkAnswerId + '_Type').val()
+                };
+
+                // console.log(formData);
+
+                if (confirm(`Update answer "${rowData.answer}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Answer/' + rowData.homeworkAnswerId + '/Update',
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'Bearer ' + token, // Token for authentication
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Answer updated successfully.');
+
+                                let selectedQueTableRow = getSelectedQuestionTableRowInfo();
+
+                                let rowQueId = selectedQueTableRow.rowQueData.homeworkQuestionId;
+                                $('#queId_creating').val(rowQueId);
+
+                                let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                                let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                                $('#homId_creating').val(rowHomId);
+                                callApiGetQuestionList(rowHomId);
+                                callApiGetQuestionOptionList(rowHomId);
+
+                                // console.log(selectedQueTableRow.rowIndex);
+                                questionTable.row(selectedQueTableRow.rowQueIndex).select();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+        }
+        function getTypeOptions(selectedType) {
+            var options = ['Vocabulary', 'Grammar']; // Example statuses
+            var html = '';
+
+            options.forEach(function (type) {
+                html += `<option value="${type}" ${selectedType === type ? 'selected' : ''}>${type}</option>`;
+            });
+
+            return html;
+        }
+        function getAnswerTypeOptions(selectedType) {
+            var options = ['Correct', 'Incorrect']; // Example statuses
+            var html = '';
+
+            options.forEach(function (type) {
+                html += `<option value="${type}" ${selectedType === type ? 'selected' : ''}>${type}</option>`;
+            });
+
+            return html;
+        }
+        function callApiPostCreateHomework(formData) {
+            $.ajax({
+                url: apiUrl + 'Homework/Create', // Specify your Razor Page here
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Homework create successfully");
+                        callApiGetCourseDetail();
+                        $('#AddHomeworkForm').trigger("reset");
+                    } else {
+                        showAlert('error', response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = xhr.errorMessage || xhr.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (xhr.errors && typeof xhr.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in xhr.errors) {
+                            if (xhr.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = xhr.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+        }
         function callApiPutUpdateCourse(formData) {
             $.ajax({
                 url: apiUrl + 'Course/' + @Model.CourseID + '/Update', // Specify your Razor Page here
@@ -382,10 +2154,12 @@
                     // Handle success (display a success message or redirect, etc.)
                     if (response.status) {
                         showAlert('success', "Course update successfully");
+                        callApiGetCourseDetail();
+                        $('#EditCourseForm').trigger("reset");
                     } else {
                         showAlert('error', response.errorMessage);
                     }
-                    callApiGetCourseDetail();
+                    // callApiGetCourseDetail();
                 },
                 error: function (xhr, status, error) {
                     // Attempt to parse the response text if it is available
@@ -423,6 +2197,7 @@
                     if (response.status) {
                         showAlert('success', "Course Status update successfully");
                         callApiGetCourseDetail();
+                        $('#updateCourseStatusForm').trigger("reset");
                     } else {
                         showAlert('error', response.errorMessage);
                     }
@@ -532,6 +2307,227 @@
                 }
             });
         }
+        function callApiGetQuestionList(homId) {
+            $.ajax({
+                url: apiUrl + 'Question/All/ByHomework/' + homId, // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+                    // Check if the status is true
+                    if (response.status) {
+                        if (response.data && response.data.length > 0) {
+                            isQuestionTableDataEmpty = false;
+                            // console.log(response.data);
+                            questionTable.clear().rows.add(response.data).draw();
+                        }
+                        else {
+                            isQuestionTableDataEmpty = true;
+                            questionTable.clear().draw();
+                        }
+                        // showAlert('success', 'Schedule status updated');
+                    } else {
+                        showAlert('error', 'Failed to fetch question list. Error: ' + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiPostChooseQuestion(questionId, homeworkId) {
+            $.ajax({
+                url: apiUrl + 'Question/' + questionId + '/Update/HomeworkId/' + homeworkId, // Specify your Razor Page here
+                type: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Question update successfully");
+
+                        let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                        let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                        callApiGetCourseDetail();
+                        console.log(selectedHomTableRow.rowHomIndex);
+                        homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
+                        $('#homId_adding').val(rowHomId);
+                        callApiGetQuestionList(rowHomId);
+                        callApiGetQuestionOptionList(rowHomId);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiPostCreateQuestion(formData, homeworkId) {
+            $.ajax({
+                url: apiUrl + 'Question/Create/HomeworkId/' + homeworkId, // Specify your Razor Page here
+                type: 'POST',
+                data: JSON.stringify(formData),
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Question create successfully");
+
+                        let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                        let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                        callApiGetCourseDetail();
+                        homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
+                        $('#homId_creating').val(rowHomId);
+                        callApiGetQuestionList(rowHomId);
+                        callApiGetQuestionOptionList(rowHomId);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiPostCreateAnswer(formData) {
+            $.ajax({
+                url: apiUrl + 'Answer/Create', // Specify your Razor Page here
+                type: 'POST',
+                data: JSON.stringify(formData),
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        showAlert('success', "Answer create successfully");
+
+                        let selectedQueTableRow = getSelectedQuestionTableRowInfo();
+
+                        let rowQueId = selectedQueTableRow.rowQueData.homeworkQuestionId;
+                        callApiGetCourseDetail();
+                        $('#queId_creating').val(rowQueId);
+
+                        let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                        let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                        $('#homId_creating').val(rowHomId);
+                        callApiGetQuestionList(rowHomId);
+                        questionTable.row(selectedQueTableRow.rowQueIndex).select();
+                        callApiGetQuestionOptionList(rowHomId);
+
+                        // console.log(selectedQueTableRow.rowIndex);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        // Function to get the currently selected row's data and index
+        function getSelectedSessionTableRowInfo() {
+            const selectedSesRows = sessionTable.rows({ selected: true });
+            if (selectedSesRows.count() > 0) {
+                const rowSesIndex = selectedSesRows.indexes()[0]; // Get the index of the first selected row
+                const rowSesData = selectedSesRows.data()[0]; // Get the data of the first selected row
+                return { rowSesIndex, rowSesData };
+            }
+            return null; // No row is selected
+        }
+        // Function to get the currently selected row's data and index
+        function getSelectedHomeworkTableRowInfo() {
+            const selectedHomRows = homeworkTable.rows({ selected: true });
+            if (selectedHomRows.count() > 0) {
+                const rowHomIndex = selectedHomRows.indexes()[0]; // Get the index of the first selected row
+                const rowHomData = selectedHomRows.data()[0]; // Get the data of the first selected row
+                return { rowHomIndex, rowHomData };
+            }
+            return null; // No row is selected
+        }
+        function getSelectedQuestionTableRowInfo() {
+            const selectedQueRows = questionTable.rows({ selected: true });
+            if (selectedQueRows.count() > 0) {
+                const rowQueIndex = selectedQueRows.indexes()[0]; // Get the index of the first selected row
+                const rowQueData = selectedQueRows.data()[0]; // Get the data of the first selected row
+                return { rowQueIndex, rowQueData };
+            }
+            return null; // No row is selected
+        }
         function callApiGetCourseDetail() {
             $.ajax({
                 url: apiUrl + 'Course/' + @Model.CourseID , // API endpoint
@@ -543,18 +2539,27 @@
                         setCourseDisplay(response.data);
                         // Check if sessions is empty
                         if (response.data.sessions && response.data.sessions.length > 0) {
-                            // Clear any existing sessions
-                            $('#session_list').empty();
 
-                            sessionList = response.data.sessions;
+                            let selectedRow = getSelectedSessionTableRowInfo();
+                            sessionTable.clear().rows.add(response.data.sessions).draw();
+
+                            if (selectedRow != null)
+                                sessionTable.row(selectedRow.rowSesIndex).select();
+
+                            // let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                            // if (selectedHomTableRow != null)
+                            //     homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
+
+                            // getScheduleDateBasedOnTodayOrDefault(selectedRow != null ? selectedRow.rowIndex : 1);
+                            // sessionList = response.data.sessions;
                             // Loop through each sessions and generate the HTML
-                            response.data.sessions.forEach(function (session) {
-                                let sessionHtml = generateSessionHtml(session, response.data.status); // Assuming both sessionInfo and updateAnswer are the same structure
-                                $('#session_list').append(sessionHtml);
-                            });
+                            // response.data.sessions.forEach(function (session) {
+                            //     let sessionHtml = generateSessionHtml(session, response.data.status); Assuming both sessionInfo and updateAnswer are the same structure
+                            //     $('#session_list').append(sessionHtml);
+                            // });
                         } else {
                             // If the session list is empty
-                            $('#session_list').html('<h5>No sessions found</h5>');
+                            // $('#session_list').html('<h5>No sessions found</h5>');
                         }
                     } else {
                         showAlert('error', "Error: \n" + "API returned false status.");
@@ -582,140 +2587,194 @@
                 }
             });
         }
-        function generateSessionHtml(sessionInfo, status) {
-            var sessionUpdateToggleHtml = status === 'Draft' || status === 'Postponed' ? `
-                                            <div class="edit-info">
-                                                <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editsession_${sessionInfo.sessionId}"></i>
-                                            </div>
-                                        ` : '';
-            var sessionUpdateHtml = status === 'Draft' || status === 'Postponed' ? `
-                                            <div id="editsession_${sessionInfo.sessionId}" class="modal fade" role="dialog">
-                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="content">
-                                                    <div class="modal-content modal-addRoom">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title truncate">Update Session ${sessionInfo.title}</h4>
-                                                        </div>
-                                                        <form method="post" id="editSessionForm_${sessionInfo.sessionId}" class="form-group">
-                                                            <div class="modal-body">
-                                                                <div class="col-12">
-                                                                    <div class="form-group row">
-                                                                        <label for="updateSession_${sessionInfo.sessionId}_Title" class="col-sm-4 col-form-label">Title</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="text" id="updateSession_${sessionInfo.sessionId}_Title" required class="form-control" value="${sessionInfo.title}">
-                                                                            <span id="error_message"
-                                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label for="updateSession_${sessionInfo.sessionId}_Description" class="col-sm-4 col-form-label">Description</label>
-                                                                        <div class="col-sm-8">
-                                                                            <textarea id="updateSession_${sessionInfo.sessionId}_Description" required class="form-control">${sessionInfo.description}</textarea>
-                                                                            <span id="error_message"
-                                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label for="updateSession_${sessionInfo.sessionId}_Number" class="col-sm-4 col-form-label">Number</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="number" id="updateSession_${sessionInfo.sessionId}_Number" min="1" required class="form-control" value="${sessionInfo.sessionNumber}">
-                                                                            <span id="error_message"
-                                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label for="updateSession_${sessionInfo.sessionId}_Hours" class="col-sm-4 col-form-label">Hours to learn</label>
-                                                                        <div class="col-sm-8">
-                                                                            <input type="number" id="updateSession_${sessionInfo.sessionId}_Hours" min="1" required class="form-control" value="${sessionInfo.hours}">
-                                                                            <span id="error_message"
-                                                                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer justify-content-center">
-                                                                <button class="btn btn-success" type="submit">Save</button>
-                                                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ` : '';
-            var statusText = '';
-            switch (status) {
-                case 'Available':
-                    statusText = `<span class="outcome" style="float: left;">${status}</span>`
-                    break;
-                case 'Draft':
-                case 'Postponed':
-                    statusText = `<span class="approval" style="float: left;">${status}</span>`
-                    break;
-                case 'EndofService':
-                case 'Cancelled':
-                    statusText = `<span class="destroy" style="float: left;">${status}</span>`
-                    break;
-            }
-            // <div class="row mb-sm-2">
-            //     <div class="col-md-5 text-md-right">
-            //         <label class="col-form-label">Status:</label>
-            //     </div>
-            //     <div class="col-sm-7">
-            //         ` + statusText + `
-            //     </div>
-            // </div>
-            return `
-                                            <div class="card-header">
-                                                <h5>Session ${sessionInfo.sessionNumber} <label class="truncate">${sessionInfo.title}</label> Details</h5>
-                                                ` + sessionUpdateToggleHtml + `
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row mb-sm-2">
-                                                    <div class="col-md-5 text-md-right">
-                                                        <label class="col-form-label">Session ID:</label>
-                                                    </div>
-                                                    <div class="col-md-7">
-                                                        <span>${sessionInfo.sessionId}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-sm-2">
-                                                    <div class="col-sm-5 text-sm-right">
-                                                        <label for="meeting-name">Title:</label>
-                                                    </div>
-                                                    <div class="col-sm-7 text-sm-left">
-                                                        <span>${sessionInfo.title}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-sm-2">
-                                                    <div class="col-sm-5 text-sm-right">
-                                                        <label for="meeting-name">Description:</label>
-                                                    </div>
-                                                    <div class="col-sm-7 text-sm-left">
-                                                        <span>${sessionInfo.description}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-sm-2">
-                                                    <div class="col-sm-5 text-sm-right">
-                                                        <label for="meeting-name">Hours to learn:</label>
-                                                    </div>
-                                                    <div class="col-sm-7 text-sm-left">
-                                                        <span>${sessionInfo.hours}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-sm-2">
-                                                    <div class="col-sm-5 text-sm-right">
-                                                        <label for="meeting-name">Homeworks Amount:</label>
-                                                    </div>
-                                                    <div class="col-sm-7 text-sm-left">
-                                                        <span>${sessionInfo.homeworks.length} Homework(s)</span>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body d-flex justify-content-center">
-                                                    <a class="btn btn-success" href="/Admin/Course/` + @Model.CourseID + `/Session/${sessionInfo.sessionId}/Info">More Info</a>
-                                                </div>
-                                            </div>
-                                            <hr class="container my-0">
-                                            ` + sessionUpdateHtml;
+        function callApiGetQuestionOptionList(homId) {
+            $.ajax({
+                url: apiUrl + 'Question/All/Exclude/ByHomework/' + homId, // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token // Include the JWT token
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+                    // Check if the status is true
+                    if (response.status) {
+                        // console.log(questionTable.data());
+                        // questionList = response.data.filter(function (questionItem) {
+                        //     Check if the current question's id is NOT present in homeworkQuestionList
+                        //     return !questionTable.data().some(function (homeworkQuestion) {
+                        //         return homeworkQuestion.question === questionItem.question; Assuming both arrays have an 'id' field
+                        //     });
+                        //     $('#addQuestion_HomeworkQuestionId').select2({
+                        //         placeholder: 'Select a question',
+                        //         data: questionList.map(function (question) {
+                        //             return { id: question.homeworkQuestionId, text: question.question };
+                        //         }),  Use the processed array of objects
+                        //         allowClear: true,
+                        //     dropdownAutoWidth: true
+                        //     });
+                        //     $('#addQuestion_Question').append(getQuestionOptions(questionList));
+                        // })
+                        addQuestionOptions(response.data);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
         }
+        // function generateSessionHtml(sessionInfo, status) {
+        //     var sessionUpdateToggleHtml = status === 'Draft' || status === 'Postponed' ? `
+        //                                     <div class="edit-info">
+        //                                         <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editsession_${sessionInfo.sessionId}"></i>
+        //                                     </div>
+        //                                 ` : '';
+        //     var sessionUpdateHtml = status === 'Draft' || status === 'Postponed' ? `
+        //                                     <div id="editsession_${sessionInfo.sessionId}" class="modal fade" role="dialog">
+        //                                         <div class="modal-dialog modal-dialog-centered modal-lg" role="content">
+        //                                             <div class="modal-content modal-addRoom">
+        //                                                 <div class="modal-header">
+        //                                                     <h4 class="modal-title truncate">Update Session ${sessionInfo.title}</h4>
+        //                                                 </div>
+        //                                                 <form method="post" id="editSessionForm_${sessionInfo.sessionId}" class="form-group">
+        //                                                     <div class="modal-body">
+        //                                                         <div class="col-12">
+        //                                                             <div class="form-group row">
+        //                                                                 <label for="updateSession_${sessionInfo.sessionId}_Title" class="col-sm-4 col-form-label">Title</label>
+        //                                                                 <div class="col-sm-8">
+        //                                                                     <input type="text" id="updateSession_${sessionInfo.sessionId}_Title" required class="form-control" value="${sessionInfo.title}">
+        //                                                                     <span id="error_message"
+        //                                                                             class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+        //                                                                 </div>
+        //                                                             </div>
+        //                                                             <div class="form-group row">
+        //                                                                 <label for="updateSession_${sessionInfo.sessionId}_Description" class="col-sm-4 col-form-label">Description</label>
+        //                                                                 <div class="col-sm-8">
+        //                                                                     <textarea id="updateSession_${sessionInfo.sessionId}_Description" required class="form-control">${sessionInfo.description}</textarea>
+        //                                                                     <span id="error_message"
+        //                                                                             class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+        //                                                                 </div>
+        //                                                             </div>
+        //                                                             <div class="form-group row">
+        //                                                                 <label for="updateSession_${sessionInfo.sessionId}_Number" class="col-sm-4 col-form-label">Number</label>
+        //                                                                 <div class="col-sm-8">
+        //                                                                     <input type="number" id="updateSession_${sessionInfo.sessionId}_Number" min="1" required class="form-control" value="${sessionInfo.sessionNumber}">
+        //                                                                     <span id="error_message"
+        //                                                                             class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+        //                                                                 </div>
+        //                                                             </div>
+        //                                                             <div class="form-group row">
+        //                                                                 <label for="updateSession_${sessionInfo.sessionId}_Hours" class="col-sm-4 col-form-label">Hours to learn</label>
+        //                                                                 <div class="col-sm-8">
+        //                                                                     <input type="number" id="updateSession_${sessionInfo.sessionId}_Hours" min="1" required class="form-control" value="${sessionInfo.hours}">
+        //                                                                     <span id="error_message"
+        //                                                                             class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+        //                                                                 </div>
+        //                                                             </div>
+        //                                                         </div>
+        //                                                     </div>
+        //                                                     <div class="modal-footer justify-content-center">
+        //                                                         <button class="btn btn-success" type="submit">Save</button>
+        //                                                         <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+        //                                                     </div>
+        //                                                 </form>
+        //                                             </div>
+        //                                         </div>
+        //                                     </div>
+        //                                 ` : '';
+        //     var statusText = '';
+        //     switch (status) {
+        //         case 'Available':
+        //             statusText = `<span class="outcome" style="float: left;">${status}</span>`
+        //             break;
+        //         case 'Draft':
+        //         case 'Postponed':
+        //             statusText = `<span class="approval" style="float: left;">${status}</span>`
+        //             break;
+        //         case 'EndofService':
+        //         case 'Cancelled':
+        //             statusText = `<span class="destroy" style="float: left;">${status}</span>`
+        //             break;
+        //     }
+        //     <div class="row mb-sm-2">
+        //         <div class="col-md-5 text-md-right">
+        //             <label class="col-form-label">Status:</label>
+        //         </div>
+        //         <div class="col-sm-7">
+        //             ` + statusText + `
+        //         </div>
+        //     </div>
+        //     return `
+        //                                     <div class="card-header">
+        //                                         <h5>Session ${sessionInfo.sessionNumber} <label class="truncate">${sessionInfo.title}</label> Details</h5>
+        //                                         ` + sessionUpdateToggleHtml + `
+        //                                     </div>
+        //                                     <div class="card-body">
+        //                                         <div class="row mb-sm-2">
+        //                                             <div class="col-md-5 text-md-right">
+        //                                                 <label class="col-form-label">Session ID:</label>
+        //                                             </div>
+        //                                             <div class="col-md-7">
+        //                                                 <span>${sessionInfo.sessionId}</span>
+        //                                             </div>
+        //                                         </div>
+        //                                         <div class="row mb-sm-2">
+        //                                             <div class="col-sm-5 text-sm-right">
+        //                                                 <label for="meeting-name">Title:</label>
+        //                                             </div>
+        //                                             <div class="col-sm-7 text-sm-left">
+        //                                                 <span>${sessionInfo.title}</span>
+        //                                             </div>
+        //                                         </div>
+        //                                         <div class="row mb-sm-2">
+        //                                             <div class="col-sm-5 text-sm-right">
+        //                                                 <label for="meeting-name">Description:</label>
+        //                                             </div>
+        //                                             <div class="col-sm-7 text-sm-left">
+        //                                                 <span>${sessionInfo.description}</span>
+        //                                             </div>
+        //                                         </div>
+        //                                         <div class="row mb-sm-2">
+        //                                             <div class="col-sm-5 text-sm-right">
+        //                                                 <label for="meeting-name">Hours to learn:</label>
+        //                                             </div>
+        //                                             <div class="col-sm-7 text-sm-left">
+        //                                                 <span>${sessionInfo.hours}</span>
+        //                                             </div>
+        //                                         </div>
+        //                                         <div class="row mb-sm-2">
+        //                                             <div class="col-sm-5 text-sm-right">
+        //                                                 <label for="meeting-name">Homeworks Amount:</label>
+        //                                             </div>
+        //                                             <div class="col-sm-7 text-sm-left">
+        //                                                 <span>${sessionInfo.homeworks.length} Homework(s)</span>
+        //                                             </div>
+        //                                         </div>
+        //                                         <div class="card-body d-flex justify-content-center">
+        //                                             <a class="btn btn-success" href="/Admin/Course/` + @Model.CourseID + `/Session/${sessionInfo.sessionId}/Info">More Info</a>
+        //                                         </div>
+        //                                     </div>
+        //                                     <hr class="container my-0">
+        //                                     ` + sessionUpdateHtml;
+        // }
 
         function getDifficultyOptions(selectedDifficulty) {
             var options = ['Beginner', 'Intermediate', 'Advanced']; // Example statuses
@@ -765,16 +2824,11 @@
         }
         function setCourseDisplay(data) {
             var titleStatusHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-                                                        <div class="edit-info" id="course-course-status">
-                                                            <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeCourseStatus"></i>
-                                                            <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editCourse"></i>
-                                                        </div>
-                                                        ` : '';
-            var sessionAddHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-                                                        <div class="edit-info" id="course-add-session">
-                                                            <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createSession"></i>
-                                                        </div>
-                                                        ` : '';
+                <div class="edit-info" id="course-course-status">
+                    <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeCourseStatus"></i>
+                    <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editCourse"></i>
+                </div>
+                ` : '';
             var statusText = '';
             switch (data.status) {
                 case 'Available':
@@ -789,6 +2843,10 @@
                     statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
                     break;
             }
+            if (data.status != 'Draft' && data.status != 'Postponed') {
+                let dadiv = $('div.dt-modal-toggle').parent();
+                dadiv.find('div.dt-modal-toggle').remove();
+            }
             $('#updateCourse_Difficulty').empty();
             $('#updateCourseStatus_Status').empty();
             $('#updateCourse_Category').empty();
@@ -800,8 +2858,9 @@
 
             $('#course-id').text(data.courseId);
             $('#course-title-status').append(titleStatusHtml);
-            $('#course-allow-add-session').append(sessionAddHtml);
-            $('#course-course-title').text(data.courseName);
+            // $('#course-allow-add-session').append(sessionAddHtml);
+            // $('#course-course-title').text(data.courseName);
+            $('#course-course-title').text('Course ' + data.courseName + ' Informations');
             $('#course-name').text(data.courseName);
             $('#course-status').append(statusText);
             $('#course-description').text(data.description);
@@ -813,7 +2872,8 @@
             $('#course-sessions-amount').text(data.sessions.length + ' Session(s)');
             $('#course-classes-amount').text(data.classes.length + ' Class(es)');
 
-            $('#createSession_CourseName').val(data.courseName);
+            $('#createSession_Number').val(data.sessions.length + 1 );
+            // $('#createSession_CourseName').val(data.courseName);e
 
 
             $('input[id="updateCourse_CourseName"]').val(data.courseName);
@@ -825,6 +2885,9 @@
             $('select[id="updateCourse_Category"]').append(getCategoryOptions(data.category));
 
             $('select[id="updateCourseStatus_Status"]').append(getStatusOptions(data.status));
+
+            $('#createHomework_Type').empty();
+            $('#createHomework_Type').append(getTypeOptions());
         }
     </script>
 </body>
