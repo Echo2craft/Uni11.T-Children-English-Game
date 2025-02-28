@@ -854,7 +854,7 @@
 
                                 return `
                                     <div class="input-group">
-                                                <input type="number" min="0" max="8" id="updateSession_` + row.sessionId + `_Hours" class="form-control" value="` + data + `" aria-describedby="hours-addon">
+                                    <input type="number" min="0" max="8" id="updateSession_` + row.sessionId + `_Hours" class="form-control" value="` + data + `" aria-describedby="hours-addon">
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="hours-addon">hour(s)</span>
                                         </div>
@@ -880,6 +880,7 @@
                         width: '10%',
                         defaultContent: '<i>Actions</i>',
                         orderable: false,
+                        searchable: false,
                         render: function (data, type, row, meta) {
                             // setTimeout(function () {
                             //     const statusText = $('td#class-status').text().trim(); Adjust the delay if needed
@@ -895,7 +896,9 @@
                     },
                     {
                         data: 'sessionId',
-                        width: '5%'
+                        width: '5%',
+                        orderable: false,
+                        searchable: false
                     }
                 ],
                 select: {
@@ -1003,7 +1006,7 @@
                         render: function (data, type, row, meta) {
                             const currentStatus = $('td#course-status').text().trim(); // Current status
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
-                                return '<textarea required class="form-control">' + data + '</textarea>'
+                                return '<textarea id="updateHomework_' + row.homeworkId + '_Title" required class="form-control">' + data + '</textarea>'
                             }
                             return data;
                         }
@@ -1032,7 +1035,7 @@
                         render: function (data, type, row, meta) {
                             const currentStatus = $('td#course-status').text().trim(); // Current status
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
-                                return '<textarea required class="form-control">' + data + '</textarea>'
+                                return '<textarea id="updateHomework_' + row.homeworkId + '_Description" required class="form-control">' + data + '</textarea>'
                             }
                             return data;
                         }
@@ -1043,7 +1046,13 @@
                         render: function (data, type, row, meta) {
                             const currentStatus = $('td#course-status').text().trim(); // Current status
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
-                                return '<textarea required class="form-control">' + data + '</textarea>'
+                                return `
+                                        <select class="custom-select form-control status-dropdown" id="updateHomework_` + row.homeworkId + `_Type">
+                                        `
+                                    + getTypeOptions(data) +
+                                    `
+                                        </select>
+                                    `;
                             }
                             return data;
                         }
@@ -1061,7 +1070,7 @@
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
                                 return `
                                     <div class="input-group">
-                                        <input type="number" min="0" max="8" class="form-control" value="` + data + `" aria-describedby="hours-addon">
+                                        <input type="number" id="updateHomework_` + row.homeworkId + `_Hours" min="0" max="8" class="form-control" value="` + data + `" aria-describedby="hours-addon">
                                         <div class="input-group-append">
                                             <span class="input-group-text" id="hours-addon">hour(s)</span>
                                         </div>
@@ -1082,7 +1091,7 @@
                     // },
                     {
                         data: 'questionsAmount',
-                        width: '15%',
+                        width: '10%',
                         defaultContent: 'Empty Homework',
                         render: function (data, type, row, meta) {
                             if (data !== 0) return data + ' question(s)';
@@ -1097,9 +1106,10 @@
                     // },
                     {
                         data: null,
-                        width: '5%',
+                        width: '10%',
                         defaultContent: '<i>Actions</i>',
                         orderable: false,
+                        searchable: false,
                         render: function (data, type, row, meta) {
                             // setTimeout(function () {
                             //     const statusText = $('td#class-status').text().trim(); Adjust the delay if needed
@@ -1109,31 +1119,18 @@
                             // }, 500);
                             const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
                             if (statusText == 'Draft' || statusText == 'Postponed')
-                                return '<button class="btn btn-danger">Delete</button>';
+                                return '<button class="btn btn-primary">Update</button> <button class="btn btn-danger">Delete</button>';
                             else return '';
                         }
                     },
                     {
+                        orderable: false,
+                        searchable: false,
                         data: 'homeworkId',
                         width: '5%'
                     }
                     // {
                     //     data: 'studentProgress',
-                    //     render: function (data, type, row, meta) {
-                    //         if(data){
-                    //             if (row.homeworkCurrentProgress && row.homeworkAmount)
-                    //                 return `${row.homeworkCurrentProgress} / ${row.homeworkAmount} Homeworks submitted`;
-                    //             return `${data}`;
-                    //         }
-                    //         return `
-                    //                   Records not found
-                    //                 `;
-                    //         return `${row.homeworkCurrentProgress} / ${row.homeworkAmount} Homeworks submitted`;
-                    //     }
-                    // }
-                    // ,
-                    // {
-                    //     data: null,
                     //     render: function (data, type, row, meta) {
                     //         if(data){
                     //             if (row.homeworkCurrentProgress && row.homeworkAmount)
@@ -1291,7 +1288,7 @@
                         render: function (data, type, row, meta) {
                             const currentStatus = $('td#course-status').text().trim(); // Current status
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
-                                return '<textarea required class="form-control">' + data + '</textarea>'
+                                return '<textarea id="updateQuestion_' + row.homeworkQuestionId + '_Question" required class="form-control">' + data + '</textarea>'
                             }
                             return data;
                         }
@@ -1310,14 +1307,17 @@
                         width: '5%',
                         defaultContent: '<i>Actions</i>',
                         orderable: false,
+                        searchable: false,
                         render: function (data, type, row, meta) {
                             const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
                             if (statusText == 'Draft' || statusText == 'Postponed')
-                                return '<button class="btn btn-danger">Delete</button>';
+                                return '<button class="btn btn-primary">Update</button> <button class="btn btn-danger">Delete</button>';
                             else return '';
                         }
                     },
                     {
+                        orderable: false,
+                        searchable: false,
                         data: 'homeworkQuestionId',
                         width: '5%'
                     }
@@ -1414,7 +1414,7 @@
                         render: function (data, type, row, meta) {
                             const currentStatus = $('td#course-status').text().trim(); // Current status
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
-                                return '<textarea required class="form-control">' + data + '</textarea>'
+                                return '<textarea id="updateAnswer_' + row.homeworkAnswerId + '_Answer" required class="form-control">' + data + '</textarea>'
                             }
                             return data;
                         }
@@ -1425,7 +1425,14 @@
                         render: function (data, type, row, meta) {
                             const currentStatus = $('td#course-status').text().trim(); // Current status
                             if (currentStatus === "Draft" || currentStatus === "Postponed") {
-                                return '<textarea required class="form-control">' + data + '</textarea>'
+                                return `
+                                            <select class="custom-select form-control" id="updateAnswer_` + row.homeworkAnswerId + `_Type">
+                                        `
+                                    + getAnswerTypeOptions(data) +
+                                    `
+                                        </select>
+                                    `;
+                                // return '<textarea id="updateAnswer_' + rowData.homeworkAnswerId + '_Type" required class="form-control">' + data + '</textarea>'
                             }
                             return data;
                         }
@@ -1438,7 +1445,7 @@
                         render: function (data, type, row, meta) {
                             const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
                             if (statusText == 'Draft' || statusText == 'Postponed')
-                                return '<button class="btn btn-danger">Delete</button>';
+                                return '<button class="btn btn-primary">Update</button> <button class="btn btn-danger">Delete</button>';
                             else return '';
                         }
                     },
@@ -1669,7 +1676,7 @@
                     hours: $('#updateSession_' + rowData.sessionId + '_Hours').val(),
                 };
 
-                console.log(formData);
+                // console.log(formData);
 
                 if (confirm(`Update session "${rowData.title}"?`)) {
                     $.ajax({
@@ -1782,6 +1789,63 @@
                     });
                 }
             });
+            $('#homework-table tbody').off('click', '.btn-primary').on('click', '.btn-primary', function () {
+                let row = homeworkTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                // console.log(rowData);
+
+                // Collect form data
+                let formData = {
+                    title: $('#updateHomework_' + rowData.homeworkId + '_Title').val(),
+                    description: $('#updateHomework_' + rowData.homeworkId + '_Description').val(),
+                    type: $('#updateHomework_' + rowData.homeworkId + '_Type').val(),
+                    hours: $('#updateHomework_' + rowData.homeworkId + '_Hours').val(),
+                };
+
+                // console.log(formData);
+
+                if (confirm(`Update homework "${rowData.title}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Homework/' + rowData.homeworkId + '/Update',
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'Bearer ' + token, // Token for authentication
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Homework updated successfully.');
+                                callApiGetCourseDetail();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
         }
         function questionTableMainFeatures() {
             $('#question-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
@@ -1807,6 +1871,68 @@
                                 callApiGetQuestionOptionList(rowHomId);
                                 homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
 
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
+            $('#question-table tbody').off('click', '.btn-primary').on('click', '.btn-primary', function () {
+                let row = questionTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                // console.log(rowData);
+                // console.log($('#updateQuestion_' + row.homeworkQuestionId + '_Question').val());
+                // Collect form data
+                let formData = {
+                    question: $('#updateQuestion_' + rowData.homeworkQuestionId + '_Question').val()
+                };
+
+                console.log(formData);
+
+                if (confirm(`Update question "${rowData.question}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Question/' + rowData.homeworkQuestionId + '/Update',
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'Bearer ' + token, // Token for authentication
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Question updated successfully.');
+
+                                let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                                let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                                callApiGetCourseDetail();
+                                $('#homId_adding').val(rowHomId);
+
+                                callApiGetQuestionList(rowHomId);
+                                callApiGetQuestionOptionList(rowHomId);
+                                homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
                             } else {
                                 showAlert('error', 'Error: ' + response.errorMessage);
                             }
@@ -1890,9 +2016,87 @@
                     });
                 }
             });
+            $('#answer-table tbody').off('click', '.btn-primary').on('click', '.btn-primary', function () {
+                let row = answerTable.row($(this).closest('tr'));
+                let rowData = row.data();
+
+                // console.log(rowData);
+                // console.log($('#updateQuestion_' + row.homeworkQuestionId + '_Question').val());
+                // Collect form data
+                let formData = {
+                    answer: $('#updateAnswer_' + rowData.homeworkAnswerId + '_Answer').val(),
+                    type: $('#updateAnswer_' + rowData.homeworkAnswerId + '_Type').val()
+                };
+
+                // console.log(formData);
+
+                if (confirm(`Update answer "${rowData.answer}"?`)) {
+                    $.ajax({
+                        url: apiUrl + 'Answer/' + rowData.homeworkAnswerId + '/Update',
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'Bearer ' + token, // Token for authentication
+                        },
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if (response.status) {
+                                // row.remove().draw();
+                                showAlert('success', 'Answer updated successfully.');
+
+                                let selectedQueTableRow = getSelectedQuestionTableRowInfo();
+
+                                let rowQueId = selectedQueTableRow.rowQueData.homeworkQuestionId;
+                                $('#queId_creating').val(rowQueId);
+
+                                let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                                let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
+                                $('#homId_creating').val(rowHomId);
+                                callApiGetQuestionList(rowHomId);
+                                callApiGetQuestionOptionList(rowHomId);
+
+                                // console.log(selectedQueTableRow.rowIndex);
+                                questionTable.row(selectedQueTableRow.rowQueIndex).select();
+                            } else {
+                                showAlert('error', 'Error: ' + response.errorMessage);
+                            }
+                        },
+                        error: function (xhr) {
+                            // Attempt to parse the response text if it is available
+                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                            // Extract the custom error message if it exists
+                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                            // Check if errorResponse.errors exists and is an object
+                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                                // Loop through each field in the errors object and append to the errorMessage
+                                for (var field in errorResponse.errors) {
+                                    if (errorResponse.errors.hasOwnProperty(field)) {
+                                        // Add each error message for the field, joining multiple messages if they exist
+                                        var fieldErrors = errorResponse.errors[field].join(", ");
+                                        errorMessage += `\n${field}: ${fieldErrors}`;
+                                    }
+                                }
+                            }
+                            // Display the error message using your custom showAlert function
+                            showAlert('error', "Error: \n" + errorMessage);
+                        }
+                    });
+                }
+            });
         }
         function getTypeOptions(selectedType) {
             var options = ['Vocabulary', 'Grammar']; // Example statuses
+            var html = '';
+
+            options.forEach(function (type) {
+                html += `<option value="${type}" ${selectedType === type ? 'selected' : ''}>${type}</option>`;
+            });
+
+            return html;
+        }
+        function getAnswerTypeOptions(selectedType) {
+            var options = ['Correct', 'Incorrect']; // Example statuses
             var html = '';
 
             options.forEach(function (type) {

@@ -3,6 +3,7 @@ using CEG_BAL.Configurations;
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using CEG_DAL.Infrastructure;
 using CEG_DAL.Models;
 using Microsoft.Extensions.Configuration;
@@ -122,20 +123,51 @@ namespace CEG_BAL.Services.Implements
             return homList;
         }
 
-        public void Update(HomeworkQuestionViewModel model)
+        /*public void Update(HomeworkQuestionViewModel model)
         {
             var ques = _mapper.Map<HomeworkQuestion>(model);
-
-            /*var questionDefault = _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(model.HomeworkQuestionId.Value).Result;
-            //ques.HomeworkId = questionDefault.HomeworkId;
-            questionDefault.Question = model.Question;*/
             if (ques.Homework?.HomeworkId == 0)
             {
                 ques.Homework = null;
             }
             _unitOfWork.HomeworkQuestionRepositories.Update(ques);
             _unitOfWork.Save();
+        }*/
+
+        public async Task Update(int upQueId, UpdateQuestion upQue)
+        {
+            if (upQue == null)
+                throw new ArgumentNullException(nameof(upQue), "New question info for updating cannot be null.");
+
+            // Fetch the existing record
+            var que = await _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(upQueId)
+                ?? throw new KeyNotFoundException("Question not found.");
+            if (que.HomeworkId != null)
+            {
+                string? status = await _unitOfWork.CourseRepositories.GetStatusByQuestionIdNoTracking(upQueId)
+                        ?? throw new ArgumentNullException("Failed to fetch course status from given question.");
+                if (!status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+                    throw new ArgumentException("Cannot update question for course in used.");
+            }
+
+            // Map changes from the update model to the entity
+            _mapper.Map(upQue, que);
+
+            // Save to the database
+            try
+            {
+                _unitOfWork.HomeworkQuestionRepositories.Update(que);
+                // This ensures the session is updated first
+                _unitOfWork.Save();
+                return;
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while updating the question.", ex);
+            }
         }
+
         public void UpdateWithHomeworkId(int questionId, int homeworkId)
         {
             var questionDefault = _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(questionId).Result;
@@ -187,6 +219,7 @@ namespace CEG_BAL.Services.Implements
                 _unitOfWork.HomeworkQuestionRepositories.Delete(que);
                 // This ensures the session is deleted first
                 _unitOfWork.Save();
+                return;
             }
             catch (Exception ex)
             {

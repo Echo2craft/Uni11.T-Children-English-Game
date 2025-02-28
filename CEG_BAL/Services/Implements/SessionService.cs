@@ -59,6 +59,7 @@ namespace CEG_BAL.Services.Implements
                 _unitOfWork.Save();
 
                 await _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(ses.CourseId);
+                return;
             }
             catch (Exception ex)
             {
@@ -109,6 +110,7 @@ namespace CEG_BAL.Services.Implements
                 _unitOfWork.Save();
 
                 await _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(ses.CourseId);
+                return;
             }
             catch (Exception ex)
             {
@@ -135,6 +137,7 @@ namespace CEG_BAL.Services.Implements
                 _unitOfWork.Save();
 
                 await _unitOfWork.CourseRepositories.UpdateTotalHoursByIdThroughSessionsSum(ses.CourseId);
+                return;
             }
             catch (Exception ex)
             {
@@ -145,8 +148,7 @@ namespace CEG_BAL.Services.Implements
 
         public async Task<bool> IsSessionExistByTitle(string title)
         {
-            var ses = await _unitOfWork.SessionRepositories.GetByTitle(title);
-            return ses != null;
+            return (await _unitOfWork.SessionRepositories.GetByTitle(title)) != null;
         }
 
         public async Task<List<SessionViewModel>> GetSessionListByCourseId(int courseId)
