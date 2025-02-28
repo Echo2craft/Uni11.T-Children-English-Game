@@ -3,6 +3,10 @@
     "storage1": {
       "type": "storage",
       "connectionId": "CEGStorageConnection"
+    },
+    "secrets1": {
+      "type": "secrets",
+      "dynamicId": null
     }
   }
 }
