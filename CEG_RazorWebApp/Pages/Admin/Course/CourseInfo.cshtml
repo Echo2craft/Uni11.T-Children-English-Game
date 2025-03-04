@@ -197,8 +197,8 @@
                                             </div>
                                         </div>
                                         <div id="homework_list" style="display: none; overflow: hidden;">
-                                            <div class="card-header" id="class-allow-add-schedule">
-                                                <h4>Assignments of selected Session</h4>
+                                            <div class="card-header" id="homework_header">
+                                                <h4 id="homework_title">Assignments of selected Session</h4>
                                             </div>
                                             <!-- homework_index -->
                                             <div class="card-body">
@@ -212,7 +212,7 @@
                                                                     aria-controls="homework-table" rowspan="1"
                                                                     colspan="1" aria-sort="ascending"
                                                                     aria-label="Homework Number: activate to sort column ascending">
-                                                                    Homework Number
+                                                                    Assignment Number
                                                                 </th>
                                                                 <th class="sorting sorting_asc" tabindex="0"
                                                                     aria-controls="homework-table" rowspan="1"
@@ -277,8 +277,8 @@
                                             </div>
                                         </div>
                                         <div id="question_list" style="display: none; overflow: hidden;">
-                                            <div class="card-header" id="class-allow-add-schedule">
-                                                <h4>Questions of selected Assignment</h4>
+                                            <div class="card-header" id="question_header">
+                                                <h4 id="question_title">Questions of selected Assignment</h4>
                                             </div>
                                             <!-- question_index -->
                                             <div class="card-body">
@@ -327,8 +327,8 @@
                                             </div>
                                         </div>
                                         <div id="answer_list" style="display: none; overflow: hidden;">
-                                            <div class="card-header" id="class-allow-add-schedule">
-                                                <h4>Answers of selected Question</h4>
+                                            <div class="card-header" id="answer_header">
+                                                <h4 id="answer_title">Answers of selected Question</h4>
                                             </div>
                                             <!-- answer_index -->
                                             <div class="card-body">
@@ -951,6 +951,13 @@
                     //     isQuestionTableVisible = false;
                     // }
 
+                    // console.log($('#homework_title')[0].innerText);
+                    if(selectedSession.title != null){
+                        $('#homework_title')[0].innerText = "Assignments of Session \"" + selectedSession.title + "\"";
+                    }
+
+                    // console.log($('#homework_title')[0].innerText);
+
                     $('#createHomework_SessionId').val(rowSesId);
                     // callApiGetAttendanceList(rowSesId);
 
@@ -1228,6 +1235,10 @@
                     //     isAnswerTableVisible = false;
                     // }
 
+                    if(selectedHomework.title != null){
+                        $('#question_title')[0].innerText = "Questions of Assignment \"" + selectedHomework.title + "\"";
+                    }
+
                     callApiGetQuestionList(rowHomId);
                     callApiGetQuestionOptionList(rowHomId);
                     $('#homId_adding').val(rowHomId);
@@ -1356,6 +1367,10 @@
                     }
                     let selectedQuestion = dt.row(indexes[0]).data();
                     let rowHomId = selectedQuestion.homeworkQuestionId;
+
+                    if (selectedQuestion.question != null) {
+                        $('#answer_title')[0].innerText = "Answers of Question \"" + selectedQuestion.question + "\"";
+                    }
 
                     // callApiGetQuestionList(rowHomId);
                     // callApiGetQuestionOptionList(rowHomId);
