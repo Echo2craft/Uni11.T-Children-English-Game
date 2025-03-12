@@ -21,6 +21,7 @@
             </ol>
         </nav>
     </div> *@
+    <hr />
     <!-- CONTENT -->
     <section class="content__list-room container">
         <div class="row contain">
@@ -36,7 +37,7 @@
     </section>
     <script>
         var apiUrl = sessionStorage.getItem('apiUrl');
-        // var courseList[];
+        var courseList;
         var pageSize = 9;
         var currentPage = 1;
         $(document).ready(function () {
@@ -44,8 +45,133 @@
         });
         function callApiGetCourseList() {
             $.ajax({
-
+                url: apiUrl + 'Course/All/Available', // API endpoint
+                type: 'GET',
+                success: function (response) {
+                    // Check if the status is true
+                    if (response.status) {
+                        courseList = response.data;
+                        setCourseDisplay();
+                        setPaginationDisplay();
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
             })
+        }
+        function setCourseDisplay() {
+            var startIndex = (currentPage - 1) * pageSize;
+            var endIndex = Math.min(startIndex + pageSize, courseList.length);
+
+            formatter = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+            });
+
+            // Clear existing content
+            var courseListContainer = $('#course-list');
+            courseListContainer.empty();
+
+            if (courseList.length === 0) {
+                // Handle empty state
+                courseListContainer.append('<div class="col-12 text-center"><p>No courses available.</p></div>');
+                return;
+            }
+
+            // Loop through the current page's data
+            var currentPageData = courseList.slice(startIndex, endIndex);
+            currentPageData.forEach(function (courseItem) {
+                // var formattedStartDate = formatDate(courseItem.startDate, { ignoreHour: true });
+                // var formattedEndDate = formatDate(courseItem.endDate, { ignoreHour: true });
+                var courseHtml = `
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="card-title">${courseItem.courseName}</h5>
+                                        <span class="badge bg-info">${courseItem.status}</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Type:</strong> ${courseItem.courseType}</p>
+                                        <p><strong>Duration:</strong> ${courseItem.totalHours}</p>
+                                        <p><strong>For age:</strong> ${courseItem.requiredAge}</p>
+                                        <p><strong>Difficulty:</strong> ${courseItem.difficulty}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary" onclick="viewClassDetails(${courseItem.courseId})">Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                courseListContainer.append(courseHtml);
+            });
+        }
+        function setPaginationDisplay() {
+            var totalPages = Math.ceil(courseList.length / pageSize); // Total number of pages
+            var paginationContainer = $('.pagination');
+
+            // Clear existing pagination
+            paginationContainer.empty();
+
+            if (totalPages <= 1) {
+                return; // No pagination needed if only one page
+            }
+
+            // Previous button
+            paginationContainer.append(`
+                        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                            <button class="page-link" onclick="changePage(${currentPage - 1})">Previous</button>
+                        </li>
+                    `);
+
+            // Page numbers
+            for (var i = 1; i <= totalPages; i++) {
+                paginationContainer.append(`
+                            <li class="page-item ${currentPage === i ? 'active' : ''}">
+                                <button class="page-link" onclick="changePage(${i})">${i}</button>
+                            </li>
+                        `);
+            }
+
+            // Next button
+            paginationContainer.append(`
+                        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                            <button class="page-link" onclick="changePage(${currentPage + 1})">Next</button>
+                        </li>
+                    `);
+        }
+        function changePage(newPage) {
+            var totalPages = Math.ceil(courseList.length / pageSize);
+
+            // Ensure the new page is within valid range
+            if (newPage < 1 || newPage > totalPages) {
+                return;
+            }
+
+            currentPage = newPage;
+
+            // Update the display
+            updateDisplay();
+        }
+        function updateDisplay() {
+            setCourseDisplay();
+            setPaginationDisplay();
         }
     </script>
 </body>
