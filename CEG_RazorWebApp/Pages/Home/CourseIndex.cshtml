@@ -21,9 +21,13 @@
             </ol>
         </nav>
     </div> *@
-    <hr />
     <!-- CONTENT -->
     <section class="content__list-room container">
+        <div class="row my-3">
+            <div class="col-12">
+                <input type="text" id="search-input" class="form-control" placeholder="Search courses..." onkeyup="filterCourses()">
+            </div>
+        </div>
         <div class="row contain">
             <div class="col-12">
                 <div id="course-list" class="content__list row">
@@ -40,6 +44,7 @@
         var courseList;
         var pageSize = 9;
         var currentPage = 1;
+        var filteredCourseList = [];
         $(document).ready(function () {
             callApiGetCourseList();
         });
@@ -51,6 +56,7 @@
                     // Check if the status is true
                     if (response.status) {
                         courseList = response.data;
+                        filteredCourseList = courseList; // Initialize filtered list
                         setCourseDisplay();
                         setPaginationDisplay();
                     } else {
@@ -78,7 +84,7 @@
         }
         function setCourseDisplay() {
             var startIndex = (currentPage - 1) * pageSize;
-            var endIndex = Math.min(startIndex + pageSize, courseList.length);
+            var endIndex = Math.min(startIndex + pageSize, filteredCourseList.length);
 
             formatter = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
@@ -89,14 +95,14 @@
             var courseListContainer = $('#course-list');
             courseListContainer.empty();
 
-            if (courseList.length === 0) {
+            if (filteredCourseList.length === 0) {
                 // Handle empty state
                 courseListContainer.append('<div class="col-12 text-center"><p>No courses available.</p></div>');
                 return;
             }
 
             // Loop through the current page's data
-            var currentPageData = courseList.slice(startIndex, endIndex);
+            var currentPageData = filteredCourseList.slice(startIndex, endIndex);
             currentPageData.forEach(function (courseItem) {
                 // var formattedStartDate = formatDate(courseItem.startDate, { ignoreHour: true });
                 // var formattedEndDate = formatDate(courseItem.endDate, { ignoreHour: true });
@@ -172,6 +178,22 @@
         function updateDisplay() {
             setCourseDisplay();
             setPaginationDisplay();
+        }
+        function filterCourses() {
+            var searchTerm = $('#search-input').val().toLowerCase();
+
+            // Filter courses based on courseName or other criteria
+            filteredCourseList = courseList.filter(course =>
+                course.courseName.toLowerCase().includes(searchTerm) ||
+                course.courseType.toLowerCase().includes(searchTerm) ||
+                course.difficulty.toLowerCase().includes(searchTerm)
+            );
+
+            // Reset pagination
+            currentPage = 1;
+
+            // Update display with filtered results
+            updateDisplay();
         }
     </script>
 </body>

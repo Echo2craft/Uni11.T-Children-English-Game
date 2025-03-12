@@ -23,6 +23,11 @@
     </div> *@
     <!-- CONTENT -->
     <section class="content__list-room container">
+        <div class="row my-3">
+            <div class="col-12">
+                <input type="text" id="search-input" class="form-control" placeholder="Search classes..." onkeyup="filterClasses()">
+            </div>
+        </div>
         <div class="row contain">
             <div class="col-12">
                 <div id="class-list" class="content__list row">
@@ -39,6 +44,7 @@
         var classList = []; // Store all fetched classes
         var pageSize = 9; // Number of items per page
         var currentPage = 1;
+        var filteredClassList = [];
         $(document).ready(function () {
             callApiGetClassList();
         });
@@ -50,6 +56,7 @@
                     // Check if the status is true
                     if (response.status) {
                         classList = response.data;
+                        filteredClassList = classList; // Initialize filtered list
                         setClassDisplay();
                         setPaginationDisplay();
                     } else {
@@ -77,7 +84,7 @@
         }
         function setClassDisplay() {
             var startIndex = (currentPage - 1) * pageSize;
-            var endIndex = Math.min(startIndex + pageSize, classList.length);
+            var endIndex = Math.min(startIndex + pageSize, filteredClassList.length);
 
             formatter = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
@@ -88,14 +95,14 @@
             var classListContainer = $('#class-list');
             classListContainer.empty();
 
-            if (classList.length === 0) {
+            if (filteredClassList.length === 0) {
                 // Handle empty state
                 classListContainer.append('<div class="col-12 text-center"><p>No classes available.</p></div>');
                 return;
             }
 
             // Loop through the current page's data
-            var currentPageData = classList.slice(startIndex, endIndex);
+            var currentPageData = filteredClassList.slice(startIndex, endIndex);
             currentPageData.forEach(function (classItem) {
                 var formattedStartDate = formatDate(classItem.startDate, { ignoreHour : true });
                 var formattedEndDate = formatDate(classItem.endDate, { ignoreHour: true });
@@ -171,6 +178,20 @@
         function updateDisplay() {
             setClassDisplay();
             setPaginationDisplay();
+        }
+        function filterClasses() {
+            var searchTerm = $('#search-input').val().toLowerCase();
+
+            // Filter classes based on className or other criteria
+            filteredClassList = classList.filter(clazz =>
+                clazz.className.toLowerCase().includes(searchTerm)
+            );
+
+            // Reset pagination
+            currentPage = 1;
+
+            // Update display with filtered results
+            updateDisplay();
         }
     </script>
 </body>
