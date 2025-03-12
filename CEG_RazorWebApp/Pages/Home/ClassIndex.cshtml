@@ -11,16 +11,16 @@
     <link rel="stylesheet" href="~/css/Meeting.css">
 </head>
 <body class="background">
-    <div class="Title"><h1>Classes</h1></div>
+    @* <div class="Title"><h1>Classes</h1></div> *@
     <hr />
-    <div class="header__breadcrumb container">
+    @* <div class="header__breadcrumb container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/Home/Index" class="text-decoration-none">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">All Classes</li>
             </ol>
         </nav>
-    </div>
+    </div> *@
     <!-- CONTENT -->
     <section class="content__list-room container">
         <div class="row contain">
@@ -44,7 +44,7 @@
         });
         function callApiGetClassList() {
             $.ajax({
-                url: apiUrl + 'Class/All', // API endpoint
+                url: apiUrl + 'Class/All/Home', // API endpoint
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true

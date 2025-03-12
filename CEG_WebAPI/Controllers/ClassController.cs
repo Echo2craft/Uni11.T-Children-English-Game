@@ -92,21 +92,21 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        /*[HttpGet("All/Status/Open")]
-        [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
+        [HttpGet("All/Home")]
+        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassOptionListByStatusOpen()
+        public async Task<IActionResult> GetClassForHomePage()
         {
             try
             {
-                var result = await _classService.GetOptionListByStatusOpen();
+                var result = await _classService.GetClassListHome();
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Class option list by status Open not found!"
+                        ErrorMessage = "Class list empty."
                     });
                 }
                 return Ok(new
@@ -124,7 +124,7 @@ namespace CEG_WebAPI.Controllers
                     InnerExceptionMessage = ex.InnerException?.Message
                 });
             }
-        }*/
+        }
 
         [HttpGet("All/Status/Open")]
         [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
