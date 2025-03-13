@@ -3757,9 +3757,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39ad207d0b214a6449523578e0c1f330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerSpeed: 5
+  PlayerSpeed: 3.5
   PlayerMovement: 0
-  PlayerJumpSpeed: 6
+  PlayerJumpSpeed: 5
   JumpGroundCheck: {fileID: 1876276957}
   JumpGround: 0.8
   GroundLayer:
@@ -3801,7 +3801,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.024814606, y: -0.45793784}
+  m_Offset: {x: 0.024814606, y: -0.5630182}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -3811,7 +3811,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.1494789, y: 1.440984}
+  m_Size: {x: 0.6909485, y: 1.2308233}
   m_EdgeRadius: 0
 --- !u!50 &335483232
 Rigidbody2D:
@@ -3828,7 +3828,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 150
   m_Material: {fileID: 6200000, guid: f57e5d582981e7e4195ce077935b3ab8, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
