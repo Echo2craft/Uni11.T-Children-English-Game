@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.Configurations;
+using CEG_BAL.ViewModels.Admin.Update;
 
 namespace CEG_BAL.Services.Implements
 {
@@ -77,7 +78,7 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
-        public void Update(HomeworkViewModel model)
+        /*public void Update(HomeworkViewModel model)
         {
             var home = _mapper.Map<Homework>(model);
             var homeDefault = _unitOfWork.HomeworkRepositories.GetByIdNoTracking(model.HomeworkId.Value).Result;
@@ -85,6 +86,37 @@ namespace CEG_BAL.Services.Implements
             home.SessionId = homeDefault.SessionId;
             _unitOfWork.HomeworkRepositories.Update(home);
             _unitOfWork.Save();
+        }*/
+
+        public async Task Update(int upHomId, UpdateHomework upHom)
+        {
+            if (upHom == null)
+                throw new ArgumentNullException(nameof(upHom), "New homework info for updating cannot be null.");
+
+            // Fetch the existing record
+            var hom = await _unitOfWork.HomeworkRepositories.GetByIdNoTracking(upHomId)
+                ?? throw new KeyNotFoundException("Homework not found.");
+
+            string? status = await _unitOfWork.CourseRepositories.GetStatusByHomeworkIdNoTracking(upHomId)
+                ?? throw new ArgumentNullException("Failed to fetch course status from given homework.");
+            if (!status.Equals(CEGConstants.COURSE_STATUS_DRAFT))
+                throw new ArgumentException("Cannot update session for course in used.");
+
+            // Map changes from the update model to the entity
+            _mapper.Map(upHom, hom);
+            hom.Session = null;
+            // Save to the database
+            try
+            {
+                _unitOfWork.HomeworkRepositories.Update(hom);
+                // This ensures the session is updated first
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while updating the homework.", ex);
+            }
         }
 
         public async Task<bool> IsHomeworkExistByTitle(string title)
