@@ -11,18 +11,27 @@
     <link rel="stylesheet" href="~/css/Meeting.css">
 </head>
 <body class="background">
-    <div class="Title"><h1>Classes</h1></div>
+    @* <div class="Title"><h1>Classes</h1></div> *@
     <hr />
-    <div class="header__breadcrumb container">
+    @* <div class="header__breadcrumb container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/Home/Index" class="text-decoration-none">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">All Classes</li>
             </ol>
         </nav>
-    </div>
+    </div> *@
     <!-- CONTENT -->
     <section class="content__list-room container">
+        <div class="row my-3">
+            <div class="input-group">
+                <input type="text" id="search-input" class="col-10 form-control" placeholder="Search classes..." onkeyup="filterClasses()">
+                <select id="filter-type" class="col-2 form-control custom-select">
+                    <option value="className">By Name</option>
+                    <option value="status">By Status</option>
+                </select>
+            </div>
+        </div>
         <div class="row contain">
             <div class="col-12">
                 <div id="class-list" class="content__list row">
@@ -39,17 +48,19 @@
         var classList = []; // Store all fetched classes
         var pageSize = 9; // Number of items per page
         var currentPage = 1;
+        var filteredClassList = [];
         $(document).ready(function () {
             callApiGetClassList();
         });
         function callApiGetClassList() {
             $.ajax({
-                url: apiUrl + 'Class/All', // API endpoint
+                url: apiUrl + 'Class/All/Home', // API endpoint
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true
                     if (response.status) {
                         classList = response.data;
+                        filteredClassList = classList; // Initialize filtered list
                         setClassDisplay();
                         setPaginationDisplay();
                     } else {
@@ -77,7 +88,7 @@
         }
         function setClassDisplay() {
             var startIndex = (currentPage - 1) * pageSize;
-            var endIndex = Math.min(startIndex + pageSize, classList.length);
+            var endIndex = Math.min(startIndex + pageSize, filteredClassList.length);
 
             formatter = new Intl.NumberFormat('vi-VN', {
                 style: 'currency',
@@ -88,14 +99,14 @@
             var classListContainer = $('#class-list');
             classListContainer.empty();
 
-            if (classList.length === 0) {
+            if (filteredClassList.length === 0) {
                 // Handle empty state
                 classListContainer.append('<div class="col-12 text-center"><p>No classes available.</p></div>');
                 return;
             }
 
             // Loop through the current page's data
-            var currentPageData = classList.slice(startIndex, endIndex);
+            var currentPageData = filteredClassList.slice(startIndex, endIndex);
             currentPageData.forEach(function (classItem) {
                 var formattedStartDate = formatDate(classItem.startDate, { ignoreHour : true });
                 var formattedEndDate = formatDate(classItem.endDate, { ignoreHour: true });
@@ -107,13 +118,13 @@
                                 <span class="badge bg-info">${classItem.status}</span>
                             </div>
                             <div class="card-body">
-                                <p><strong>Students:</strong> ${classItem.numberOfStudents}/${classItem.maximumStudents}</p>
+                                <p><strong>Students:</strong> ${classItem.numberOfStudents}/${classItem.maximumStudents} students</p>
                                 <p><strong>Start Date:</strong> ${formattedStartDate}</p>
                                 <p><strong>End Date:</strong> ${formattedEndDate}</p>
                                 <p><strong>Enrollment Fee:</strong> ${formatter.format(classItem.enrollmentFee)}</p>
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-primary" onclick="viewClassDetails(${classItem.classId})">View Details</button>
+                                <button class="btn btn-primary" onclick="viewClassDetails(${classItem.classId})">Details</button>
                             </div>
                         </div>
                     </div>
@@ -171,6 +182,29 @@
         function updateDisplay() {
             setClassDisplay();
             setPaginationDisplay();
+        }
+        function filterClasses() {
+            var searchTerm = $('#search-input').val().toLowerCase();
+            var filterType = $('#filter-type').val(); // Get selected filter type
+
+            // Filter classes based on className or other criteria
+            // filteredClassList = classList.filter(clazz =>
+            //     clazz.className.toLowerCase().includes(searchTerm)
+            // );
+
+            // Filter courses based on the selected property
+            filteredClassList = classList.filter(clazz => {
+                if (clazz[filterType]) {
+                    return clazz[filterType].toString().toLowerCase().includes(searchTerm);
+                }
+                return false;
+            });
+
+            // Reset pagination
+            currentPage = 1;
+
+            // Update display with filtered results
+            updateDisplay();
         }
     </script>
 </body>

@@ -2095,6 +2095,12 @@ button.btn.btn-primary.btn-sm.submit-button{
     width: 100%;
     height: 10%;
 }
+/* Change row selection highlight color */
+table.dataTable.table > tbody > tr.selected > * {
+    box-shadow: inset 0 0 0 9999px #ffcc80 !important;
+    /*background-color: #ffcc80 !important;*/ /* Light orange background */
+    color: #000 !important; /* Black text for contrast */
+}
 /*.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after{
     background-image: 
 }*/

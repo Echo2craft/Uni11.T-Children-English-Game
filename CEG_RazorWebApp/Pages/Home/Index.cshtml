@@ -85,7 +85,220 @@
                     Many courses for all ages. Everyone can learn and play at the same time. Easily choose the right Enlish course for yourself with a diverse curriculum, designed to suit the needs and learning habits of each age
                 </span>
                 <div class="img-2"></div>
-                <div class="section"><a class="text-6" href="@Url.RouteUrl("/Auth/Login")">Join Now!</a></div>
+                <div class="section"><a class="text-6" href="/Auth/Login">Join Now!</a></div>
+            </div>
+        </div>
+    </section>
+    <section class="club container spacing" style="background-color:white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="heading"><i class="fa fa-newspaper"></i> Latest News</h3>
+        </div>
+        <div class="club__content">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5><i class="fa fa-sort-amount-down"></i> Courses</h5>
+                <a href="/Home/Course/Index" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
+            </div>
+            <div class="famousList-carousel owl-carousel owl-theme">
+                @* @foreach (var data in meetingList)
+                {
+                <div class="club-item">
+                <a href="#" class="club-image">
+                <img class="img-fluid" src="~/images/meeting.png" alt="nt1">
+                </a>
+                <div class="club-title">
+                <div class="d-flex justify-content-between">
+                <a href="@Url.Action("MeetingPost", "Meeting",new {id = data.MeetingId})" class="text-decoration-none truncate">@data.MeetingName</a>
+                </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                <p class="club-price">
+                <i class="fas fa-calendar"></i>
+                From @data.StartDate.ToString("MM/dd/yyyy")
+                to @data.EndDate.ToString("MM/dd/yyyy")
+                </p>
+                <button class="button--primary">
+                <a class="text-decoration-none text-black"
+                href="@Url.Action("MeetingPost", "Meeting",new {id = data.MeetingId})">See More</a>
+                </button>
+                </div>
+                </div>
+                } *@
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5><i class="fa fa-sort-amount-down"></i> Classes</h5>
+                <a href="~/Home/Class/Index" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
+            </div>
+            <div class="ratingList-carousel owl-carousel owl-theme">
+                @* @foreach (var data in fieldtripList)
+                {
+                <div class="club-item">
+                <a href="#" class="club-image">
+                <img class="img-fluid" src="~/images/meeting.png" alt="nt1">
+                </a>
+                <div class="club-title">
+                <div class="d-flex justify-content-between">
+                <a href="@Url.Action("FieldTripPost", "FieldTrip",new {id = data.TripId})" class="text-decoration-none truncate">@data.TripName</a>
+                </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                <p class="club-price">
+                <i class="fas fa-calendar"></i>
+                From @data.StartDate.ToString("MM/dd/yyyy")
+                to @data.EndDate.ToString("MM/dd/yyyy")
+                </p>
+                <button class="button--primary">
+                <a class="text-decoration-none text-black"
+                href="@Url.Action("FieldTripPost", "FieldTrip",new {id = data.TripId})">See More</a>
+                </button>
+                </div>
+                </div>
+                } *@
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5><i class="fa fa-sort-amount-down"></i> Students</h5>
+                <a href="/Home/Student/Index" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
+            </div>
+            <div class="ratingList-carousel owl-carousel owl-theme">
+                @* @foreach (var data in contestList)
+                {
+                <div class="club-item">
+                <a href="#" class="club-image">
+                <img class="img-fluid" src="~/images/meeting.png" alt="nt1">
+                </a>
+                <div class="club-title">
+                <div class="d-flex justify-content-between">
+                <a href="@Url.Action("ContestPost", "Contest",new {id = data.ContestId})" class="text-decoration-none truncate">@data.ContestName</a>
+                </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                <p class="club-price">
+                <i class="fas fa-calendar"></i>
+                From @data.StartDate.ToString("MM/dd/yyyy")
+                to @data.EndDate.ToString("MM/dd/yyyy")
+                </p>
+                <button class="button--primary">
+                <a class="text-decoration-none text-black"
+                href="@Url.Action("ContestPost", "Contest",new {id = data.ContestId})">See More</a>
+                </button>
+                </div>
+                </div>
+                } *@
+            </div>
+        </div>
+    </section>
+    <hr class="container my-0" />
+    <!-- SERVICES -->
+    <section id="services" class="services spacing">
+        <div class="container px-0" style="background-color:white">
+            <h3 class="heading"><i class="fa fa-concierge-bell"></i>Service</h3>
+            <div class="row">
+                <div class="offset-1 col-4 service-item">
+                    <i class="fa fa-cog"></i>
+                    <h5>Account<span>Manager</span></h5>
+                    <p class="p-font">Contact with Ho Tran Khanh Duy for emergency</p>
+                </div>
+                <div class="offset-2 col-4 service-item">
+                    <i class="fa fa-cog"></i>
+                    <h5>Account<span>Staff</span></h5>
+                    <p class="p-font">Contact with Dao Minh Hoa, Dang Hoang Minh, Bui Huu Vinh, Nguyen Khanh Linh for help</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <hr class="container my-0" />
+    <section id="aboutUs" class="about-us container px-0 spacing">
+        <h3 class="heading" style="background-color:white"><i class="fa fa-id-card"></i> About Us</h3>
+        <div class="row">
+            <div class="col-6 card intro-desc">
+                <div class="intro-title d-flex">
+                    <img class="img-fluid" src="~/images/a1.png alt="logo" />
+                    <p class="card-text my-3">
+                        <span class="text-center d-block">- CEG Inc. -</span>
+                        <span class="d-block text-center">
+                        </span>
+                    </p>
+                </div>
+
+                <div class="card-text">
+                </div>
+            </div>
+            <div class="col-6 intro-img" style="background-image: url(../images/chaomao1.jpg)" alt="cover-1"></div>
+        </div>
+    </section>
+    <hr class="container my-0" />
+    <!-- TEAM MEMBER -->
+    <section id="teamMember" class="team-member spacing">
+        <div class="container">
+            <h3 class="heading" style="background-color:white"><i class="fa fa-users"></i>Team</h3>
+            <div class="team-carousel owl-carousel owl-theme">
+                <div class="team__item">
+                    <img src="~/images/tv-4.jpg" alt="team 1" />
+                    <div class="team__title">
+                        <h5>Ho Tran Khanh Duy</h5>
+                        <p>- Manager</p>
+                    </div>
+                    <div class="team__details">
+                        <h5>Ho Tran Khanh Duy</h5>
+                        <p class="team__text">- Manager</p>
+                        <p>
+                            Children English Game Manager, expert in Children English Game with experienced of 5 years.
+                        </p>
+                        <div class="team__socials">
+                            <a href="https://github.com/DuyZomega" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team__item">
+                    <img src="~/images/tv-2.jpg" alt="team 1" />
+                    <div class="team__title">
+                        <h5>Dao Minh Hoa</h5>
+                        <p>- Staff</p>
+                    </div>
+                    <div class="team__details">
+                        <h5>Dao Minh Hoa</h5>
+                        <p class="team__text">- Staff</p>
+                        <p>
+                            Children English Game Staff, expert in Children English Game with experienced of 3 years.
+                        </p>
+                        <div class="team__socials">
+                            <a href="https://github.com/hoadmse151329" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team__item">
+                    <img src="~/images/tv-3.jpg" alt="team 1" />
+                    <div class="team__title">
+                        <h5>Dang Hoang Minh</h5>
+                        <p>- Staff</p>
+                    </div>
+                    <div class="team__details">
+                        <h5>Dang Hoang Minh</h5>
+                        <p class="team__text">- Staff</p>
+                        <p>
+                            Children English Game Staff, expert in Children English Game with experienced of 3 years.
+                        </p>
+                        <div class="team__socials">
+                            <a href="https://github.com/Echo2craft" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team__item">
+                    <img src="~/images/tv-2.jpg" alt="team 1" />
+                    <div class="team__title">
+                        <h5>Bui Huu Vinh</h5>
+                        <p>- Staff</p>
+                    </div>
+                    <div class="team__details">
+                        <h5>Bui Huu Vinh</h5>
+                        <p class="team__text">- Staff</p>
+                        <p>
+                            Children English Game Staff, expert in Children English Game with experienced of 3 years.
+                        </p>
+                        <div class="team__socials">
+                            <a href="https://github.com/Edwin2002104" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
