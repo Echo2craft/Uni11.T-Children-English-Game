@@ -24,8 +24,12 @@
     <!-- CONTENT -->
     <section class="content__list-room container">
         <div class="row my-3">
-            <div class="col-12">
-                <input type="text" id="search-input" class="form-control" placeholder="Search classes..." onkeyup="filterClasses()">
+            <div class="input-group">
+                <input type="text" id="search-input" class="col-10 form-control" placeholder="Search classes..." onkeyup="filterClasses()">
+                <select id="filter-type" class="col-2 form-control custom-select">
+                    <option value="className">By Name</option>
+                    <option value="status">By Status</option>
+                </select>
             </div>
         </div>
         <div class="row contain">
@@ -181,11 +185,20 @@
         }
         function filterClasses() {
             var searchTerm = $('#search-input').val().toLowerCase();
+            var filterType = $('#filter-type').val(); // Get selected filter type
 
             // Filter classes based on className or other criteria
-            filteredClassList = classList.filter(clazz =>
-                clazz.className.toLowerCase().includes(searchTerm)
-            );
+            // filteredClassList = classList.filter(clazz =>
+            //     clazz.className.toLowerCase().includes(searchTerm)
+            // );
+
+            // Filter courses based on the selected property
+            filteredClassList = classList.filter(clazz => {
+                if (clazz[filterType]) {
+                    return clazz[filterType].toString().toLowerCase().includes(searchTerm);
+                }
+                return false;
+            });
 
             // Reset pagination
             currentPage = 1;

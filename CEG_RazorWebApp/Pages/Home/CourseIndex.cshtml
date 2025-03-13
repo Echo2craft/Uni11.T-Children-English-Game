@@ -24,8 +24,15 @@
     <!-- CONTENT -->
     <section class="content__list-room container">
         <div class="row my-3">
-            <div class="col-12">
-                <input type="text" id="search-input" class="form-control" placeholder="Search courses..." onkeyup="filterCourses()">
+            <div class="input-group">
+                <input type="text" id="search-input" class="col-10 form-control" placeholder="Search courses..." onkeyup="filterCourses()">
+                <select id="filter-type" class="col-2 form-control custom-select">
+                    <option value="courseName">By Name</option>
+                    <option value="courseType">By Type</option>
+                    <option value="difficulty">By Age</option>
+                    <option value="difficulty">By Difficulty</option>
+                    <option value="status">By Status</option>
+                </select>
             </div>
         </div>
         <div class="row contain">
@@ -181,13 +188,22 @@
         }
         function filterCourses() {
             var searchTerm = $('#search-input').val().toLowerCase();
+            var filterType = $('#filter-type').val(); // Get selected filter type
 
             // Filter courses based on courseName or other criteria
-            filteredCourseList = courseList.filter(course =>
-                course.courseName.toLowerCase().includes(searchTerm) ||
-                course.courseType.toLowerCase().includes(searchTerm) ||
-                course.difficulty.toLowerCase().includes(searchTerm)
-            );
+            // filteredCourseList = courseList.filter(course =>
+            //     course.courseName.toLowerCase().includes(searchTerm) ||
+            //     course.courseType.toLowerCase().includes(searchTerm) ||
+            //     course.difficulty.toLowerCase().includes(searchTerm)
+            // );
+
+            // Filter courses based on the selected property
+            filteredCourseList = courseList.filter(course => {
+                if (course[filterType]) {
+                    return course[filterType].toString().toLowerCase().includes(searchTerm);
+                }
+                return false;
+            });
 
             // Reset pagination
             currentPage = 1;
