@@ -42,7 +42,7 @@ public class ClickStart : MonoBehaviour
             }
             else
             {
-                SceneManager.LoadScene("Menu");
+                SceneManager.LoadScene("Menu2");
             }
         }
     }
