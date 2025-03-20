@@ -133,16 +133,16 @@
                     <div class="collapse navbar-collapse" id="navbarText">
                         <ul class="navbar-nav ms-auto mb-2 mb-xl-0">
                             <li class="nav-item nav-item-text">
-                                <a class="nav-link" href="/Home/Index">Home</a>
+                                <a class="nav-link nav-tab-button" href="/Home/Index">Home</a>
                             </li>
                             <li class="nav-item nav-item-text">
-                                <a class="nav-link" href="/Home/Course/Index">Courses</a>
+                                <a class="nav-link nav-tab-button" href="/Home/Course/Index">Courses</a>
                             </li>
                             <li class="nav-item nav-item-text">
-                                <a class="nav-link" href="/Home/Class/Index">Classes</a>
+                                <a class="nav-link nav-tab-button" href="/Home/Class/Index">Classes</a>
                             </li>
                             <li class="nav-item nav-item-text">
-                                <a class="nav-link" href="/Home/Student/Index">Students</a>
+                                <a class="nav-link nav-tab-button" href="/Home/Student/Index">Students</a>
                             </li>
                         </ul>
                     </div>
@@ -201,6 +201,22 @@
             sessionStorage.setItem('apiUrl', apiUrl);
 
             // console.log("API URL stored in sessionStorage:", sessionStorage.getItem('apiUrl'));
+
+            // Get the current page URL path
+            let currentPath = window.location.pathname;
+
+            // Select all navbar links
+            let navLinks = document.querySelectorAll(".nav-tab-button");
+
+            // Loop through each link and check if its href matches the current page
+            navLinks.forEach(link => {
+                // var fullLink = "/Home" + currentPath;
+                // console.log(fullLink);
+                // console.log(link.getAttribute("href"));
+                if (link.getAttribute("href") === currentPath) {
+                    link.classList.add("active-tab"); // Add class to highlight it
+                }
+            });
         });
         function sendEmail(email) {
             var mailtoLink = 'mailto:' + email;
