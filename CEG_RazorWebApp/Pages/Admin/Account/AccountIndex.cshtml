@@ -708,6 +708,7 @@
                 success: function (response) {
                     if (response.status) {
                         showAlert('success','Status updated!');
+                        callApiGetAccountList();
                     } else {
                         showAlert('error','Failed to update status. Error:' + response.errorMessage);
                     }

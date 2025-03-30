@@ -57,6 +57,11 @@ namespace CEG_WebAPI
             // Add CORS services
             AddCorsServices(services);
 
+            /*services.Configure<RouteOptions>(options =>
+            {
+                options.LowercaseUrls = false;  // Keep case sensitivity
+            });*/
+
             // Add AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddDbContext<MyDBContext>(options =>

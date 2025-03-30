@@ -1,4 +1,4 @@
-﻿@page "/Home/Index"
+﻿@page "/home"
 @model IndexModel
 @{
     ViewData["Title"] = "Children English Game Home Page";
@@ -98,70 +98,74 @@
             </div>
         </div>
     </section>
-    <section class="club container spacing" style="background-color:white">
-        <div class="d-flex justify-content-between align-items-center">
-            <h3 class="heading"><i class="fa fa-newspaper"></i> Latest contents from us</h3>
+    <section class="club container-fluid main-container-header mb-5" style="background-color:white">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="heading"><i class="fa fa-newspaper"></i> Latest contents from us</h3>
+            </div>
         </div>
-        <div class="club__content">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5><i class="fa fa-sort-amount-down"></i> Courses</h5>
-                <a href="/Home/Course/Index" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
-            </div>
-            <div class="famousList-carousel owl-carousel owl-theme">
-                @* @foreach (var data in meetingList)
-                {
-                <div class="club-item">
-                <a href="#" class="club-image">
-                <img class="img-fluid" src="~/images/meeting.png" alt="nt1">
-                </a>
-                <div class="club-title">
-                <div class="d-flex justify-content-between">
-                <a href="@Url.Action("MeetingPost", "Meeting",new {id = data.MeetingId})" class="text-decoration-none truncate">@data.MeetingName</a>
+        <div class="row">
+            <div class="col-12 club__content">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5><i class="fa fa-sort-amount-down"></i> Our available courses</h5>
+                    <a href="/courses" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
                 </div>
+                <div class="famousList-carousel owl-carousel owl-theme">
+                    @* @foreach (var data in meetingList)
+                    {
+                    <div class="club-item">
+                    <a href="#" class="club-image">
+                    <img class="img-fluid" src="~/images/meeting.png" alt="nt1">
+                    </a>
+                    <div class="club-title">
+                    <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("MeetingPost", "Meeting",new {id = data.MeetingId})" class="text-decoration-none truncate">@data.MeetingName</a>
+                    </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                    <p class="club-price">
+                    <i class="fas fa-calendar"></i>
+                    From @data.StartDate.ToString("MM/dd/yyyy")
+                    to @data.EndDate.ToString("MM/dd/yyyy")
+                    </p>
+                    <button class="button--primary">
+                    <a class="text-decoration-none text-black"
+                    href="@Url.Action("MeetingPost", "Meeting",new {id = data.MeetingId})">See More</a>
+                    </button>
+                    </div>
+                    </div>
+                    } *@
                 </div>
-                <div class="d-flex justify-content-between">
-                <p class="club-price">
-                <i class="fas fa-calendar"></i>
-                From @data.StartDate.ToString("MM/dd/yyyy")
-                to @data.EndDate.ToString("MM/dd/yyyy")
-                </p>
-                <button class="button--primary">
-                <a class="text-decoration-none text-black"
-                href="@Url.Action("MeetingPost", "Meeting",new {id = data.MeetingId})">See More</a>
-                </button>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5><i class="fa fa-sort-amount-down"></i> Our available classes</h5>
+                    <a href="/classes" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
                 </div>
+                <div class="ratingList-carousel owl-carousel owl-theme">
+                    @* @foreach (var data in fieldtripList)
+                    {
+                    <div class="club-item">
+                    <a href="#" class="club-image">
+                    <img class="img-fluid" src="~/images/meeting.png" alt="nt1">
+                    </a>
+                    <div class="club-title">
+                    <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("FieldTripPost", "FieldTrip",new {id = data.TripId})" class="text-decoration-none truncate">@data.TripName</a>
+                    </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                    <p class="club-price">
+                    <i class="fas fa-calendar"></i>
+                    From @data.StartDate.ToString("MM/dd/yyyy")
+                    to @data.EndDate.ToString("MM/dd/yyyy")
+                    </p>
+                    <button class="button--primary">
+                    <a class="text-decoration-none text-black"
+                    href="@Url.Action("FieldTripPost", "FieldTrip",new {id = data.TripId})">See More</a>
+                    </button>
+                    </div>
+                    </div>
+                    } *@
                 </div>
-                } *@
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <h5><i class="fa fa-sort-amount-down"></i> Classes</h5>
-                <a href="~/Home/Class/Index" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
-            </div>
-            <div class="ratingList-carousel owl-carousel owl-theme">
-                @* @foreach (var data in fieldtripList)
-                {
-                <div class="club-item">
-                <a href="#" class="club-image">
-                <img class="img-fluid" src="~/images/meeting.png" alt="nt1">
-                </a>
-                <div class="club-title">
-                <div class="d-flex justify-content-between">
-                <a href="@Url.Action("FieldTripPost", "FieldTrip",new {id = data.TripId})" class="text-decoration-none truncate">@data.TripName</a>
-                </div>
-                </div>
-                <div class="d-flex justify-content-between">
-                <p class="club-price">
-                <i class="fas fa-calendar"></i>
-                From @data.StartDate.ToString("MM/dd/yyyy")
-                to @data.EndDate.ToString("MM/dd/yyyy")
-                </p>
-                <button class="button--primary">
-                <a class="text-decoration-none text-black"
-                href="@Url.Action("FieldTripPost", "FieldTrip",new {id = data.TripId})">See More</a>
-                </button>
-                </div>
-                </div>
-                } *@
             </div>
         </div>
     </section>

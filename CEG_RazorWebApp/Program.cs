@@ -61,7 +61,8 @@ namespace CEG_RazorWebApp
             services.AddRazorPages(options =>
             {
                 // options.Conventions.AuthorizeFolder("/Admin", "SessionAuthorize");
-                // options.Conventions.AddPageRoute("/Home/Index", "/Index");
+                options.Conventions.AddPageRoute("/home", "/Home/Index");
+                options.Conventions.AddPageRoute("/Index", "/Home/Index");
             });
 
             // Add controllers with views
@@ -139,7 +140,7 @@ namespace CEG_RazorWebApp
                 pattern: "{controller=Home}/{action=Index}/{id?}");*/
             app.MapGet("/", context =>
             {
-                context.Response.Redirect("/Home/Index");
+                context.Response.Redirect("/home");
                 return Task.CompletedTask;
             });
             app.MapRazorPages();

@@ -1,4 +1,4 @@
-﻿@page "/Auth/Login"
+﻿@page "/auth/login"
 @model CEG_RazorWebApp.Pages.Auth.LoginModel
 @{
     ViewData["Title"] = "Login Page";
@@ -80,7 +80,7 @@
         });
         function callApiPostLogin(formData) {
             $.ajax({
-                url: apiUrl + 'Account/Login', // Specify your Razor Page here
+                url: apiUrl + 'account/login', // Specify your Razor Page here
                 type: 'POST',
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
@@ -97,27 +97,27 @@
                         switch (response.data.roleName) {
                             case 'Admin':
                                 // Redirect to admin dashboard
-                                window.location.href = '/Admin/Index';
+                                window.location.href = '/admin/index';
                                 break;
 
                             case 'Teacher':
                                 // Redirect to teacher dashboard
-                                window.location.href = '/Teacher/Index';
+                                window.location.href = '/teacher/index';
                                 break;
 
                             case 'Parent':
                                 // Redirect to parent dashboard
-                                window.location.href = '/Parent/Index';
+                                window.location.href = '/parent/index';
                                 break;
 
                             case 'Student':
                                 // Redirect to student dashboard
-                                window.location.href = '/Student/Index';
+                                window.location.href = '/student/index';
                                 break;
 
                             default:
                                 // Redirect to a generic page or error page if role is not recognized
-                                window.location.href = '/Auth/Login';
+                                window.location.href = '/auth/login';
                                 break;
                         }
                         $('#loginForm').trigger("reset");
