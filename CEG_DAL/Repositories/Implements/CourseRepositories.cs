@@ -25,7 +25,12 @@ namespace CEG_DAL.Repositories.Implements
                 .SingleOrDefaultAsync(cou => cou.CourseId == id);
         }
 
-        public async Task<Course?> GetByIdNoTracking(int id, bool includeSessions = false, bool includeClasses = false, bool includeHomeworks = false)
+        public async Task<Course?> GetByIdNoTracking(
+            int id, 
+            bool includeSessions = false, 
+            bool includeClasses = false, 
+            bool includeHomeworks = false
+            )
         {
             var query = _dbContext.Courses
                         .AsNoTrackingWithIdentityResolution()
@@ -51,7 +56,17 @@ namespace CEG_DAL.Repositories.Implements
                                 SessionNumber = s.SessionNumber,
                                 //Status = s.Status,
                                 // Include Homeworks only if requested
-                                Homeworks = includeHomeworks ? s.Homeworks.ToList() : new List<Homework>()
+                                Homeworks = includeHomeworks ? s.Homeworks.Select(h => new Homework
+                                {
+                                    HomeworkId = h.HomeworkId,
+                                    Title = h.Title,
+                                    Description = h.Description,
+                                    Type = h.Type,
+                                    StartDate = h.StartDate,
+                                    EndDate = h.EndDate,
+                                    Hours = h.Hours,
+                                    SessionId = h.SessionId
+                                }).ToList() : new List<Homework>()
                             }).ToList() : new List<Session>(),
                             // Include Classes only if requested
                             Classes = includeClasses ? c.Classes.ToList() : new List<Class>()
@@ -61,6 +76,40 @@ namespace CEG_DAL.Repositories.Implements
         }
 
         public async Task<List<Course>> GetList()
+        {
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Available", 1 },
+                { "Postponed", 2 },
+                { "EndofService", 3 },
+                { "Cancelled", 4 },
+                { "Draft", 5 }
+            };
+
+            var courses = await _dbContext.Courses
+                .Select(c => new Course()
+                {
+                    CourseId = c.CourseId,
+                    CourseName = c.CourseName,
+                    CourseType = c.CourseType,
+                    Description = c.Description,
+                    Difficulty = c.Difficulty,
+                    Category = c.Category,
+                    Image = c.Image,
+                    RequiredAge = c.RequiredAge,
+                    TotalHours = c.TotalHours,
+                    Status = c.Status,
+                    Sessions = c.Sessions,
+                    Classes = c.Classes
+                })
+                .ToListAsync();
+            return courses
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
+        }
+
+        public async Task<List<Course>> GetListForGuest()
         {
             // Define a dictionary for custom order mapping
             var statusOrder = new Dictionary<string, int>

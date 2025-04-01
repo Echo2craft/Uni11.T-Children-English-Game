@@ -4,6 +4,7 @@ using CEG_BAL.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using CEG_BAL.ViewModels.Admin.Update;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -108,6 +109,79 @@ namespace CEG_WebAPI.Controllers
                     {
                         Status = false,
                         ErrorMessage = "Question List based on session Id not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("All/ByHomework/{homId}")]
+        [ProducesResponseType(typeof(List<HomeworkQuestionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetQuestionListByHomeworkId(
+            [FromRoute][Required] int homId
+            )
+        {
+            try
+            {
+                var result = await _questionService.GetListByHomeworkId(homId);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Question List based on homework Id not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("All/Exclude/ByHomework/{homId}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(List<HomeworkQuestionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetQuestionListExcludedByHomeworkId(
+            [FromRoute][Required] int homId
+            )
+        {
+            try
+            {
+                var result = await _questionService.GetExcludedListByHomeworkId(homId);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Excluded question list based on homework Id not found!"
                     });
                 }
                 return Ok(new
@@ -351,7 +425,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] HomeworkQuestionViewModel question
+            [FromBody][Required] UpdateQuestion upQue
             )
         {
             try
@@ -365,9 +439,9 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Question Does Not Exist"
                     });
                 }
-                question.HomeworkQuestionId = id;
-                _questionService.Update(question);
-                result = await _questionService.GetById(question.HomeworkQuestionId.Value);
+                // question.HomeworkQuestionId = id;
+                await _questionService.Update(id, upQue);
+                result = await _questionService.GetById(id);
                 return Ok(new
                 {
                     Status = true,
@@ -411,6 +485,53 @@ namespace CEG_WebAPI.Controllers
                 {
                     Status = true,
                     Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+        [HttpDelete("{id}/Homework/{homId}/Delete")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(HomeworkQuestionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(
+            [FromRoute][Required] int id,
+            [FromRoute][Required] int homId
+            )
+        {
+            try
+            {
+                var hom = await _homeworkService.GetHomeworkById(homId);
+                if (hom == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "homework with given Id does not exist."
+                    });
+                }
+                var ses = await _questionService.GetById(id, homId);
+                if (ses == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "question with given id does not exist."
+                    });
+                }
+                await _questionService.Delete(id, homId);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = ses
                 });
             }
             catch (Exception ex)

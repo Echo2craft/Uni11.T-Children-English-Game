@@ -2,6 +2,7 @@
 using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -136,7 +137,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] HomeworkViewModel homework
+            [FromBody][Required] UpdateHomework homework
             )
         {
             try
@@ -150,9 +151,9 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Homework Does Not Exist"
                     });
                 }
-                homework.HomeworkId = id;
-                _homeworkService.Update(homework);
-                result = await _homeworkService.GetHomeworkById(homework.HomeworkId.Value);
+                // homework.HomeworkId = id;
+                await _homeworkService.Update(id,homework);
+                result = await _homeworkService.GetHomeworkById(id);
                 return Ok(new
                 {
                     Status = true,
@@ -171,7 +172,7 @@ namespace CEG_WebAPI.Controllers
         }
         [HttpDelete("{id}/Delete")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(

@@ -2,6 +2,7 @@
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account.Create;
 using CEG_BAL.ViewModels.Authenticates;
+using CEG_WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +10,7 @@ using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace CEG_WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]", Name = "admin")]
     [ApiController]
     public class AccountController : Controller
     {
@@ -27,7 +28,7 @@ namespace CEG_WebAPI.Controllers
             _configuration = configuration;
             _emailService = emailService;
         }
-
+        /*[Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
         [HttpPost("Login")]
         [ProducesResponseType(typeof(AuthenResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -35,9 +36,85 @@ namespace CEG_WebAPI.Controllers
         public async Task<IActionResult> GetAccountLogin(
             [FromBody] AuthenRequest logaccount)
         {
+            return await Login(logaccount);
+        }*/
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(List<AccountViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAccountList()
+        {
+            return await GetList();
+        }
+
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/Count")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTotalAccountAmount()
+        {
+            return await CountTotalAccounts();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update([FromRoute] int id, AccountViewModel account)
+        {
+            return await UpdateById(id, account);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update/Status")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateStatus(
+            [FromRoute][Required] int id,
+            [FromBody][Required] string status
+            )
+        {
+            return await UpdateStatusById(id, status);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("{id}/Disable")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Disable([FromRoute] int id)
+        {
+            return await DisableById(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Register")]
+        [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateAccount(
+            [FromBody][Required] CreateNewAccount newAcc)
+        {
+            return await Register(newAcc);
+        }
+
+        // [HttpPost("logins", Order = 0), HttpPost("Login", Order = 1)]
+        [HttpPost("login")]
+        [ProducesResponseType(typeof(AuthenResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Login(
+            [FromBody] AuthenRequest logaccount)
+        {
             try
             {
                 var result = await _accountService.AuthenticateAccount(logaccount);
+
                 if (result == null)
                 {
                     return NotFound(new
@@ -100,12 +177,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All")]
-        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(List<AccountViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAccountList()
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -135,12 +212,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Count")]
-        [Authorize(Roles = "Admin")]
+        [HttpGet("count")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTotalAccountAmount()
+        public async Task<IActionResult> CountTotalAccounts()
         {
             try
             {
@@ -163,11 +240,11 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAccountById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
             {
@@ -197,12 +274,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/Update")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update([FromRoute] int id, AccountViewModel account)
+        public async Task<IActionResult> UpdateById([FromRoute] int id, AccountViewModel account)
         {
             try
             {
@@ -235,12 +312,56 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("{id}/Disable")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}/status")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Disable([FromRoute] int id)
+        public async Task<IActionResult> UpdateStatusById(
+            [FromRoute][Required] int id,
+            [FromBody][Required] string status
+            )
+        {
+            try
+            {
+                var result = await _accountService.GetById(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Account does not exist"
+                    });
+                }
+                if (await _accountService.UpdateStatus(status, id))
+                    return Ok(new
+                    {
+                        Status = true,
+                        Data = result
+                    });
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = "Failed to update account status"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpPost("{id}/status/disabled")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DisableById([FromRoute] int id)
         {
             try
             {
@@ -274,55 +395,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/Update/Status")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost]
         [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateStatus(
-            [FromRoute][Required] int id,
-            [FromBody][Required] string status
-            )
-        {
-            try
-            {
-                var result = await _accountService.GetById(id);
-                if (result == null)
-                {
-                    return NotFound(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Account does not exist"
-                    });
-                }
-                if(await _accountService.UpdateStatus(status, id))
-                    return Ok(new
-                    {
-                        Status = true,
-                        Data = result
-                    });
-                return BadRequest(new
-                {
-                    Status = false,
-                    ErrorMessage = "Failed to update account status"
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Status = false,
-                    ErrorMessage = ex.Message,
-                    InnerExceptionMessage = ex.InnerException?.Message
-                });
-            }
-        }
-
-        [HttpPost("Register")]
-        [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAccount(
+        public async Task<IActionResult> Register(
             [FromBody][Required] CreateNewAccount newAcc)
         {
             try

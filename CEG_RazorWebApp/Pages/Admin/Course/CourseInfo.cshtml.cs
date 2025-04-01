@@ -7,6 +7,8 @@ using CEG_RazorWebApp.Models.Admin.Response;
 using CEG_RazorWebApp.Models.Course.Get;
 using CEG_RazorWebApp.Models.Course.Update;
 using CEG_RazorWebApp.Models.Homework.Create;
+using CEG_RazorWebApp.Models.HomeworkAnswer.Create;
+using CEG_RazorWebApp.Models.HomeworkQuestion.Update;
 using CEG_RazorWebApp.Models.Session.Create;
 using CEG_RazorWebApp.Models.Session.Get;
 using CEG_RazorWebApp.Models.Session.Update;
@@ -47,6 +49,8 @@ namespace CEG_RazorWebApp.Pages.Admin.Course
         public UpdateCourseVM UpdateCourseInfo { get; set; } = new UpdateCourseVM();
         public CreateSessionVM CreateSession { get; set; } = new CreateSessionVM();
         public CreateHomeworkVM CreateHomework {  get; set; } = new CreateHomeworkVM();
+        public UpdateQuestionVM AddQuestion { get; set; } = new UpdateQuestionVM();
+        public CreateAnswerVM CreateAnswer { get; set; } = new CreateAnswerVM();
         public CourseInfoModel(ILogger<CourseInfoModel> logger, IConfiguration config, IMapper mapper)
         {
             _logger = logger;

@@ -59,9 +59,20 @@ namespace CEG_DAL.Repositories.Implements
             return await _dbContext.HomeworkAnswers.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(answ => answ.Answer == answer);
         }
 
-        public async Task<HomeworkAnswer?> GetByIdNoTracking(int id)
+        public async Task<HomeworkAnswer?> GetByIdNoTracking(int id, bool includeQuestion = false)
         {
-            return await _dbContext.HomeworkAnswers.AsNoTrackingWithIdentityResolution().SingleOrDefaultAsync(answ => answ.HomeworkAnswerId == id);
+            return await _dbContext.HomeworkAnswers
+                .AsNoTrackingWithIdentityResolution()
+                .Where(an => an.HomeworkAnswerId == id)
+                .Select(ans =>  new HomeworkAnswer()
+                {
+                    HomeworkAnswerId = ans.HomeworkAnswerId,
+                    HomeworkQuestionId = ans.HomeworkQuestionId,
+                    Answer = ans.Answer,
+                    Type = ans.Type,
+                    HomeworkQuestion = includeQuestion ? ans.HomeworkQuestion : null
+                })
+                .SingleOrDefaultAsync();
         }
 
         public async Task<int> GetIdByAnswer(string answer)

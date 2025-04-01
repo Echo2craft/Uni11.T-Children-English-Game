@@ -11,6 +11,7 @@ namespace CEG_DAL.Repositories.Interfaces
     public interface ICourseRepositories : IRepositoryBase<Course>
     {
         Task<List<Course>> GetList();
+        Task<List<Course>> GetListForGuest();
         Task<List<Course>?> GetListByStatus(string status);
         Task<List<string>> GetNameList();
         Task<int> GetTotalAmount();
@@ -22,7 +23,12 @@ namespace CEG_DAL.Repositories.Interfaces
         Task<string?> GetStatusBySessionIdNoTracking(int sessionId);
         Task<string?> GetStatusByHomeworkIdNoTracking(int homeworkId);
         Task<string?> GetStatusByQuestionIdNoTracking(int questionId);
-        Task<Course?> GetByIdNoTracking(int id, bool includeSessions = false, bool includeClasses = false, bool includeHomeworks = false);
+        Task<Course?> GetByIdNoTracking(
+            int id, 
+            bool includeSessions = false, 
+            bool includeClasses = false, 
+            bool includeHomeworks = false
+            );
         Task<Course?> GetByName(string name);
         Task<int> GetIdByName(string name);
     }

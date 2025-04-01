@@ -69,7 +69,7 @@ namespace CEG_RazorWebApp.Services.HostedServices
                                     accessToken: accToken);
                 if (claList == null || !claList.Status)
                 {
-                    _logger.LogError("Not working");
+                    _logger.LogError("Not Working");
                     return;
                 }
                 _logger.LogInformation("Update classes response. {}", claList.Data);
