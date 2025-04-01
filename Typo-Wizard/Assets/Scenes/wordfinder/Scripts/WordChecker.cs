@@ -235,7 +235,7 @@ public class WordChecker : MonoBehaviour
             }
             if (authManager != null)
             {
-                authManager.SendScore(categoryName, currentBoardIndex.ToString(), timeRemaining.ToString());
+                //authManager.SendScore(categoryName, currentBoardIndex.ToString(), timeRemaining.ToString());
             }
             else
             {
