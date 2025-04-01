@@ -11,6 +11,7 @@ namespace CEG_DAL.Repositories.Interfaces
     public interface ICourseRepositories : IRepositoryBase<Course>
     {
         Task<List<Course>> GetList();
+        Task<List<Course>> GetListForGuest();
         Task<List<Course>?> GetListByStatus(string status);
         Task<List<string>> GetNameList();
         Task<int> GetTotalAmount();

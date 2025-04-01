@@ -79,51 +79,59 @@
         </div>
     </div>
     <div id="addCourse" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Add new Course</h4>
                 </div>
                 <form method="post" id="createCourseForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@createCourse.CourseName" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createCourse.CourseName" value="@createCourse.CourseName" type="text" placeholder="Course Name..." required class="form-control col-md-7">
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createCourse.CourseName" class="col-form-label"></label>
+                                    <input asp-for="@createCourse.CourseName" value="@createCourse.CourseName" type="text" placeholder="Course Name..." required class="form-control">
                                     <span asp-validation-for="@createCourse.CourseName" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createCourse.CourseType" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createCourse.CourseType" value="@createCourse.CourseType" type="text" placeholder="Course Type" required class="form-control col-md-7">
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createCourse.CourseType" class="col-form-label"></label>
+                                    <input asp-for="@createCourse.CourseType" value="@createCourse.CourseType" type="text" placeholder="Course Type" required class="form-control">
                                     <span asp-validation-for="@createCourse.CourseType" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createCourse.Category" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createCourse.Category" value="@createCourse.Category" type="text" placeholder="Course Type" readonly required class="form-control col-md-7">
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createCourse.Category" class="col-form-label"></label>
+                                    <input asp-for="@createCourse.Category" value="@createCourse.Category" type="text" placeholder="Course Type" readonly required class="form-control">
                                     @* <select class="form-control col-md-7 custom-select" asp-for="@createCourse.Category" required></select> *@
                                     <span asp-validation-for="@createCourse.Category" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createCourse.Description" class="col-md-3 col-form-label text-md-right"></label>
-                                    <textarea asp-for="@createCourse.Description" value="@createCourse.Description" required class="form-control col-md-7"></textarea>
-                                    <span asp-validation-for="@createCourse.Description" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createCourse.Difficulty" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <select class="form-control col-md-7 custom-select" asp-for="@createCourse.Difficulty" required></select>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createCourse.Difficulty" class="col-form-label"></label>
+                                    <select class="form-control custom-select" asp-for="@createCourse.Difficulty" required></select>
                                     <span asp-validation-for="@createCourse.Difficulty" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createCourse.RequiredAge" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createCourse.RequiredAge" value="@createCourse.RequiredAge" type="number" min="11" max="14" placeholder="Full Name" required class="form-control col-md-7">
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-4">
+                                    <label asp-for="@createCourse.RequiredAge" class="col-form-label"></label>
+                                    <input asp-for="@createCourse.RequiredAge" value="@createCourse.RequiredAge" type="number" min="11" max="14" placeholder="11" required class="form-control">
                                     <span asp-validation-for="@createCourse.RequiredAge" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-8">
+                                    <label asp-for="@createCourse.Description" class="col-form-label"></label>
+                                    <textarea asp-for="@createCourse.Description" value="@createCourse.Description" required class="form-control"></textarea>
+                                    <span asp-validation-for="@createCourse.Description" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                     @* <label asp-for="@createCourse.TotalHours" class="col-md-3 col-form-label text-md-right"></label>
                                     <input asp-for="@createCourse.TotalHours" value="@createCourse.TotalHours" type="number" min="1" placeholder="Full Name" required class="form-control col-md-7">
                                     <span asp-validation-for="@createCourse.TotalHours" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
                                 </div>
                             </div>
                         </div>

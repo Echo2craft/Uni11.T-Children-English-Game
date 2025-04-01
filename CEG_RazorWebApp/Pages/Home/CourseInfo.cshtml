@@ -1,7 +1,7 @@
-﻿@page "/courses"
-@model CEG_RazorWebApp.Pages.Home.CourseIndexModel
+﻿@page "/courses/info"
+@model CEG_RazorWebApp.Pages.Home.CourseInfoModel
 @{
-    ViewData["Title"] = "Children English Game Course List Page";
+    ViewData["Title"] = "Children English Game Course Info Page";
 }
 <html lang="en">
 <head>
@@ -114,11 +114,11 @@
                 // var formattedStartDate = formatDate(courseItem.startDate, { ignoreHour: true });
                 // var formattedEndDate = formatDate(courseItem.endDate, { ignoreHour: true });
                 var courseHtml = `
-                            <div class="col-12 col-lg-4 col-md-6 mb-4">
+                            <div class="col-md-4 mb-4">
                                 <div class="card">
-                                    <div class="card-header bg-card-header text-black">
-                                        <h5 class="card-title bg-card-header-text">${courseItem.courseName}</h5>
-                                        <h3><span class="badge badge-primary bg-info">${courseItem.status}</span></h3>
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="card-title">${courseItem.courseName}</h5>
+                                        <span class="badge bg-info">${courseItem.status}</span>
                                     </div>
                                     <div class="card-body">
                                         <p><strong>Type:</strong> ${courseItem.courseType}</p>
@@ -127,7 +127,7 @@
                                         <p><strong>Difficulty:</strong> ${courseItem.difficulty}</p>
                                     </div>
                                     <div class="card-footer">
-                                        <button class="btn btn-skyblue btn-guest-details" onclick="viewClassDetails(${courseItem.courseId})">Details</button>
+                                        <button class="btn btn-primary" onclick="viewClassDetails(${courseItem.courseId})">Details</button>
                                     </div>
                                 </div>
                             </div>
