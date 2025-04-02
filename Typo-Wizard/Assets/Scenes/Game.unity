@@ -1525,6 +1525,7 @@ MonoBehaviour:
   timerText: {fileID: 2092137027}
   timerHalfWayOutColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   timerAlmostOutColor: {r: 1, g: 0, b: 0, a: 1}
+  globalTimerDuration: 90
 --- !u!1 &1046550945
 GameObject:
   m_ObjectHideFlags: 0
@@ -2084,9 +2085,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7eadc75c311024c840962a08a007a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds: []
+  sounds:
+  - name: CorrectSFX
+    clip: {fileID: 8300000, guid: 796a5fd4b627d874da9e6523af9be14f, type: 3}
+    parameters:
+      Volume: 1
+      Pitch: 0
+      Loop: 0
+    Source: {fileID: 0}
+  - name: CountdownSFX
+    clip: {fileID: 8300000, guid: 1d36ab203efcad149aeac7b91758f85f, type: 3}
+    parameters:
+      Volume: 1
+      Pitch: 0
+      Loop: 0
+    Source: {fileID: 0}
+  - name: IncorrectSFX
+    clip: {fileID: 8300000, guid: 799175111f0e81d4dac2a4c069c10a89, type: 3}
+    parameters:
+      Volume: 1
+      Pitch: 0
+      Loop: 0
+    Source: {fileID: 0}
   sourcePrefab: {fileID: 82509203759054478, guid: 0b2c85631b731e34faec7b3adb879f79, type: 3}
-  startupTrack: Game Music
+  startupTrack: 
 --- !u!1 &1354563564
 GameObject:
   m_ObjectHideFlags: 0

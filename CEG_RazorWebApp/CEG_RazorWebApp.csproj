@@ -33,5 +33,9 @@
     <Folder Include="Libraries\Attributes\" />
     <Folder Include="Models\Schedule\Update\" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
    
 </Project>
