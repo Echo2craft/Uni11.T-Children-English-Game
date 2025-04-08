@@ -434,7 +434,7 @@
                         // Append icon to container
                         container.appendChild(icon);
                         // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
-                        $(settings.nTableWrapper).prepend(container);
+                        settings.nTableWrapper.prepend(container);
                     }
                     if (options.hideLabel) {
                         // Find the .dt-search label container inside the DataTable wrapper
@@ -471,7 +471,65 @@
                 container.appendChild(icon);
 
                 // Insert the container in the DataTable toolbar
-                $(settings.nTableWrapper).prepend(container);
+                settings.nTableWrapper.prepend(container);
+                return container;
+            });
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('filter', function (settings, opts) {
+                const options = Object.assign({
+                    label: 'Filter by :',
+                    selectId: 'filter-dropdown',
+                    columnIndex: 2 // The column to get unique values from
+                }, opts);
+
+                const container = document.createElement('div');
+                container.className = 'dt-custom-filter';
+
+                // const label = document.createElement('label');
+                // label.setAttribute('for', options.selectId);
+                // label.textContent = options.label;
+
+                const select = document.createElement('select');
+                select.id = options.selectId;
+                select.className = 'custom-select';
+
+                // Add "All" option
+                const allOption = document.createElement('option');
+                allOption.value = '';
+                allOption.textContent = 'All roles';
+                select.appendChild(allOption);
+
+                setTimeout(() => {
+                    const uniqueValues = new Set();
+                    // `aoData` is an array-like object
+                    settings.aoData.forEach(row => {
+                        const filterValue = row._aFilterData?.[options.columnIndex]; // use optional chaining
+                        if (filterValue && filterValue.trim() !== '') {
+                            uniqueValues.add(filterValue);
+                        }
+                    });
+
+                    Array.from(uniqueValues).sort().forEach(value => {
+                        const opt = document.createElement('option');
+                        opt.value = value;
+                        opt.textContent = value;
+                        select.appendChild(opt);
+                    });
+                    // console.log(settings);
+
+                    // Filtering logic
+                    select.addEventListener('change', function () {
+                        const selected = this.value;
+                        settings.api
+                            .column(options.columnIndex)
+                            .search(selected ? `^${selected}$` : '', true, false)
+                            .draw();
+                    });
+                }, 500);
+                // container.appendChild(label);
+                container.appendChild(select);
+
+                settings.nTableWrapper.prepend(container);
                 return container;
             });
             accountTable = new DataTable('#account-table', {
@@ -508,6 +566,11 @@
                 ],
                 layout: {
                     topEnd: {
+                        filter:{
+                            label: 'Filter by Role',
+                            selectId: 'filter-role-dropdown',
+                            columnIndex: 4
+                        },
                         search: {
                             placeholder: 'search info...'
                         },
@@ -518,16 +581,11 @@
                     }
                 }
             }).on('draw', function (e, settings) {
-                accountTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                    // if (rowIdx == "1") {
-                    //     console.log(rowIdx);
-                    //     var data = this.row(rowIdx).data();
-                    //     console.log(data);
-                    // }
-                    var node = $(this.cell(rowIdx, 5).node());
-                    node.children(0).on('change', function () {
-                        var accountId = node.children(0).data('accountid');
-                        var newStatus = node.children(0).val();
+                accountTable.rows({ page: 'current' }).every(function (rowIdx) {
+                    const $select = $(this.cell(rowIdx, 5).node()).find('select.status-dropdown');
+                    $select.off('change').on('change', function () {
+                        const accountId = $(this).data('accountid');
+                        const newStatus = $(this).val();
                         callApiUpdateAccountStatus(accountId, newStatus);
                     });
                 });
