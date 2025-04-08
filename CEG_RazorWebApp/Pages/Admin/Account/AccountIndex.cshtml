@@ -477,17 +477,12 @@
             // Registering the custom feature with DataTables
             DataTable.feature.register('filter', function (settings, opts) {
                 const options = Object.assign({
-                    label: 'Filter by :',
                     selectId: 'filter-dropdown',
                     columnIndex: 2 // The column to get unique values from
                 }, opts);
 
                 const container = document.createElement('div');
                 container.className = 'dt-custom-filter';
-
-                // const label = document.createElement('label');
-                // label.setAttribute('for', options.selectId);
-                // label.textContent = options.label;
 
                 const select = document.createElement('select');
                 select.id = options.selectId;
@@ -526,7 +521,6 @@
                             .draw();
                     });
                 }, 500);
-                // container.appendChild(label);
                 container.appendChild(select);
 
                 settings.nTableWrapper.prepend(container);
@@ -536,6 +530,7 @@
                 data: [],
                 deferRender: false,
                 responsive: true,
+                order: [[3, 'desc']],
                 columns: [
                     { 
                         data: 'username',
@@ -548,6 +543,7 @@
                     { data: 'gender' },
                     { 
                         data: 'createdDate',
+                        className: 'dt-head-left',
                         render: DataTable.render.date("dddd, DD/MM/YYYY")
                     },
                     { data: 'role.roleName' },
@@ -567,7 +563,6 @@
                 layout: {
                     topEnd: {
                         filter:{
-                            label: 'Filter by Role',
                             selectId: 'filter-role-dropdown',
                             columnIndex: 4
                         },
