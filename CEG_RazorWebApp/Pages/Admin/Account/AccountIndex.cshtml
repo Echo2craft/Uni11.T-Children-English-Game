@@ -536,7 +536,17 @@
                         data: 'username',
                         render: function (data, type, row, meta) {
                             var url = row.role.roleName === 'Admin' ? '' : `href="/Admin/${row.role.roleName}/${row.accountId}/Info"`
-                            return `<a ${url}>${data}</a>`;
+                            if(row.role.roleName === 'Parent')
+                                return `
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <a ${url}>${data}</a><i class="bx bxs-add-to-queue bx-sm" data-toggle="modal" data-target="#createAccount" data-fullname="${row.fullname}"></i>
+                                </div>
+                                `;
+                            return `
+                                <div class="">
+                                    <a ${url}>${data}</a>
+                                </div>
+                                `;
                         }
                     },
                     { data: 'fullname' },
@@ -577,11 +587,40 @@
                 }
             }).on('draw', function (e, settings) {
                 accountTable.rows({ page: 'current' }).every(function (rowIdx) {
+                    // edit status selection
                     const $select = $(this.cell(rowIdx, 5).node()).find('select.status-dropdown');
                     $select.off('change').on('change', function () {
                         const accountId = $(this).data('accountid');
                         const newStatus = $(this).val();
                         callApiUpdateAccountStatus(accountId, newStatus);
+                    });
+                    const $addChildIcon = $(this.cell(rowIdx, 0).node()).find('i.bxs-add-to-queue');
+                    $addChildIcon.off('click').on('click', function(){
+                        const fullname = $(this).data('fullname');
+
+                        // 2. Switch to specific tab (example: #parent-tab)
+                        const studentTabLink = document.getElementById('createAccount').querySelector('a[href="#student_Tab"]');
+                        if (studentTabLink) {
+                            $(studentTabLink).tab('show'); // jQuery-based tab switch (for Bootstrap 4)
+                        }
+
+                        // 3. Wait for a moment to ensure tab is rendered before accessing Select2
+                        setTimeout(() => {
+                            // Assuming your select2 is inside student_Tab and has a known ID or class
+                            const parentSelect = $('#student_Tab select#select2-parent-fullname-dropdown');
+                            if (parentSelect.length) {
+                                // If the fullname is already one of the options, select it
+                                const optionExists = parentSelect.find(`option:contains("${fullname}")`).length > 0;
+
+                                if (!optionExists) {
+                                    // Add new option if not already present
+                                    const newOption = new Option(fullname, fullname, true, true);
+                                    parentSelect.append(newOption).trigger('change');
+                                } else {
+                                    parentSelect.val(fullname).trigger('change');
+                                }
+                            }
+                        }, 300); // Give a brief delay after tab switch
                     });
                 });
             });
