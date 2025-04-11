@@ -109,6 +109,40 @@ namespace CEG_DAL.Repositories.Implements
                 .ToList();
         }
 
+        public async Task<List<Course>> GetListForGuest()
+        {
+            // Define a dictionary for custom order mapping
+            var statusOrder = new Dictionary<string, int>
+            {
+                { "Available", 1 },
+                { "Postponed", 2 },
+                { "EndofService", 3 },
+                { "Cancelled", 4 },
+                { "Draft", 5 }
+            };
+
+            var courses = await _dbContext.Courses
+                .Select(c => new Course()
+                {
+                    CourseId = c.CourseId,
+                    CourseName = c.CourseName,
+                    CourseType = c.CourseType,
+                    Description = c.Description,
+                    Difficulty = c.Difficulty,
+                    Category = c.Category,
+                    Image = c.Image,
+                    RequiredAge = c.RequiredAge,
+                    TotalHours = c.TotalHours,
+                    Status = c.Status,
+                    Sessions = c.Sessions,
+                    Classes = c.Classes
+                })
+                .ToListAsync();
+            return courses
+                .OrderBy(c => statusOrder.ContainsKey(c.Status) ? statusOrder[c.Status] : int.MaxValue)
+                .ToList();
+        }
+
         public async Task<List<Course>?> GetListByStatus(string status)
         {
             return await _dbContext.Courses

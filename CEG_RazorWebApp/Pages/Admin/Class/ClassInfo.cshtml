@@ -565,7 +565,7 @@
                         // Append icon to container
                         container.appendChild(icon);
                         // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
-                        $(settings.nTableWrapper).prepend(container);
+                        settings.nTableWrapper.prepend(container);
                     }
                     if (options.hideLabel) {
                         // Find the .dt-search label container inside the DataTable wrapper
@@ -602,7 +602,7 @@
                 container.appendChild(icon);
 
                 // Insert the container in the DataTable toolbar
-                $(settings.nTableWrapper).prepend(container);
+                settings.nTableWrapper.prepend(container);
                 return container;
             });
             DataTable.render.time = function (

@@ -81,109 +81,125 @@
         </div>
     </div>
     <div id="addClass" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Add new Class</h4>
                 </div>
                 <form method="post" id="createClassForm">
                     <div class="modal-body">
-                        <div class="container-fluid p-5">
-                            <div class="row form-group">
-                                <label asp-for="@createClass.ClassName" class="col-md-4 col-form-label text-md-right">Class code</label>
-                                <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-8">
-                                <span asp-validation-for="@createClass.ClassName" id="error_message"
-                                      class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                <label asp-for="@createClass.MinimumStudents" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.MinimumStudents" value="@createClass.MinimumStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-8">
-                                <span asp-validation-for="@createClass.MinimumStudents" id="error_message"
-                                      class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                <label asp-for="@createClass.MaximumStudents" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.MaximumStudents" value="@createClass.MaximumStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-8">
-                                <span asp-validation-for="@createClass.MaximumStudents" id="error_message"
-                                      class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                <label asp-for="@createClass.TeacherName" class="col-md-4 col-form-label text-md-right">Select a Teacher</label>
-                                <div class="col-md-8 p-0">
-                                    <!-- search bar with dropdown list-->
-                                    <select id="searchableTeacherDropdown" class="form-control custom-select" style="width: 100%;">
-                                    </select>
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-4">
+                                    <label asp-for="@createClass.ClassName" class="col-form-label">Class code</label>
+                                    <input asp-for="@createClass.ClassName" value="@createClass.ClassName" type="text" placeholder="Class code here..." required
+                                           class="form-control">
+                                    <span asp-validation-for="@createClass.ClassName" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
-                                <span asp-validation-for="@createClass.TeacherName" id="error_message"
-                                      class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-
-                                <label asp-for="@createClass.CourseName" class="col-md-4 col-form-label text-md-right">Select a available Course</label>
-                                <div class="col-md-8 p-0">
-                                    <!-- search bar with dropdown list-->
-                                    <select id="searchableCourseDropdown" class="form-control custom-select" style="width: 100%;">
-                                    </select>
+                                <div class="form-group col-xl-8">
+                                    <label asp-for="@createClass.EnrollmentFee" class="col-form-label">Enrollment Fee</label>
+                                    <input asp-for="@createClass.EnrollmentFee" value="@createClass.EnrollmentFee" type="text" placeholder="Fee" required
+                                           class="form-control">
+                                    <span asp-validation-for="@createClass.EnrollmentFee" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
-                                <span asp-validation-for="@createClass.CourseName" id="error_message"
-                                      class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                <label asp-for="@createClass.StartDate" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.StartDate" type="date" value="@createClass.StartDate.ToString("yyyy-MM-dd")" min="@createClass.StartDate.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
-                                <span asp-validation-for="@createClass.StartDate" id="error_message"
-                                      class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                <label asp-for="@createClass.EndDate" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.EndDate" type="date" value="@createClass.EndDate.ToString("yyyy-MM-dd")" min="@createClass.EndDate.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-8" required>
-                                <span asp-validation-for="@createClass.EndDate" id="error_message"
-                                      class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                <label asp-for="@createClass.EnrollmentFee" class="col-md-4 col-form-label text-md-right"></label>
-                                <input asp-for="@createClass.EnrollmentFee" value="@createClass.EnrollmentFee" type="text" required class="form-control col-md-8">
-                                <span asp-validation-for="@createClass.EnrollmentFee" id="error_message"
-                                      class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                             </div>
-                            <hr>
-                            <div class="row form-group justify-content-center">
-                                <label class="col-form-label">Course's Sessions preview</label>
-                                <div id="session-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
-                                    <table id="session-table"
-                                           class="table table-striped table-bordered dataTable no-footer"
-                                           aria-describedby="session-table_info">
-                                        <thead>
-                                            <tr>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="session-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Select Session: activate to sort column ascending">
-                                                    Add to Class
-                                                </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="session-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Title: activate to sort column ascending">
-                                                    Session Title
-                                                </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="schedule-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="hour: activate to sort column ascending">
-                                                    Hours
-                                                </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="schedule-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Description: activate to sort column ascending">
-                                                    Schedule Start Date & Time
-                                                </th>
-                                                <th class="sorting sorting_asc" tabindex="0"
-                                                    aria-controls="schedule-table" rowspan="1"
-                                                    colspan="1" aria-sort="ascending"
-                                                    aria-label="Description: activate to sort column ascending">
-                                                    Schedule End Date & Time
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createClass.MinimumStudents" class="col-form-label"></label>
+                                    <input asp-for="@createClass.MinimumStudents" value="@createClass.MinimumStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control">
+                                    <span asp-validation-for="@createClass.MinimumStudents" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createClass.MinimumStudents" class="col-form-label"></label>
+                                    <input asp-for="@createClass.MaximumStudents" value="@createClass.MaximumStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control">
+                                    <span asp-validation-for="@createClass.MinimumStudents" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createClass.TeacherName" class="col-form-label">Select a Teacher</label>
+                                    <div class="p-0">
+                                        <!-- search bar with dropdown list-->
+                                        <select id="searchableTeacherDropdown" class="form-control custom-select" style="width: 100%;">
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="@createClass.TeacherName" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createClass.CourseName" class="col-form-label">Select a available Course</label>
+                                    <div class="p-0">
+                                        <!-- search bar with dropdown list-->
+                                        <select id="searchableCourseDropdown" class="form-control custom-select" style="width: 100%;">
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="@createClass.CourseName" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createClass.StartDate" class="col-form-label"></label>
+                                    <input asp-for="@createClass.StartDate" type="date" value="@createClass.StartDate.ToString("yyyy-MM-dd")" min="@createClass.StartDate.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control" required>
+                                    <span asp-validation-for="@createClass.StartDate" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createClass.EndDate" class="col-form-label"></label>
+                                    <input asp-for="@createClass.EndDate" type="date" value="@createClass.EndDate.ToString("yyyy-MM-dd")" min="@createClass.EndDate.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control" required>
+                                    <span asp-validation-for="@createClass.EndDate" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row form-group justify-content-center">
+                            <label class="col-form-label">Course's Sessions preview</label>
+                            <div id="session-table_wrapper" class="dataTables_wrapper no-footer col-md-12">
+                                <table id="session-table"
+                                       class="table table-striped table-bordered dataTable no-footer"
+                                       aria-describedby="session-table_info">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="session-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Select Session: activate to sort column ascending">
+                                                Add to Class
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="session-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Title: activate to sort column ascending">
+                                                Session Title
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="schedule-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="hour: activate to sort column ascending">
+                                                Hours
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="schedule-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Description: activate to sort column ascending">
+                                                Schedule Start Date & Time
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="schedule-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Description: activate to sort column ascending">
+                                                Schedule End Date & Time
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
