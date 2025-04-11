@@ -121,97 +121,57 @@
         </div>
     </div>
     <div id="createTransaction" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Add new enrollment transaction</h4>
                 </div>
-                <ul class="nav nav-tabs justify-content-center" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active align-items-center d-flex w-auto" data-toggle="tab" href="#enrollment_Tab" role="tab" aria-controls="enrollment" aria-selected="true">
-                            <span>Enrollment</span>
-                        </a>
-                    </li>
-                    @* <li class="nav-item">
-                        <a class="nav-link align-items-center d-flex w-auto" data-toggle="tab" href="#donation_Tab" role="tab" aria-controls="donation" aria-selected="false">
-                            <span>Donation</span>
-                        </a>
-                    </li> *@
-                </ul>
-                <div class="tab-content">
-                    <div id="enrollment_Tab" class="tab-pane fade show active">
-                        <form method="post" id="createEnrollmentTransactionForm">
-                            <div class="modal-body">
-                                <div class="row p-4">
-                                    <div class="col-12">
-                                        <div class="row form-group">
-                                            <label asp-for="@createTransaction.ParentFullname" class="col-md-4 col-form-label text-md-right">Parent Fullname</label>
-                                            <div class="col-md-8 p-0">
-                                                <select id="select2-parent-fullname-enrollment-dropdown" class="form-control custom-select" style="width: 100%;"></select>
-                                            </div>
-                                            <span asp-validation-for="@createTransaction.ParentFullname" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTransaction.StudentFullname" class="col-md-4 col-form-label text-md-right">Student Fullname</label>
-                                            <div class="col-md-8 p-0">
-                                                <select id="select2-student-fullname-dropdown" class="form-control custom-select" style="width: 100%;"></select>
-                                            </div>
-                                            <span asp-validation-for="@createTransaction.StudentFullname" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTransaction.Classname" class="col-md-4 col-form-label text-md-right">Class Name</label>
-                                            <div class="col-md-8 p-0">
-                                                <select id="select2-class-name-dropdown" class="form-control custom-select" style="width: 100%;"></select>
-                                            </div>
-                                            <span asp-validation-for="@createTransaction.Classname" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTransaction.TransactionAmount" class="col-md-4 col-form-label text-md-right">Amount</label>
-                                            <input asp-for="@createTransaction.TransactionAmount" type="text" required class="form-control col-md-8">
-                                            <span asp-validation-for="@createTransaction.TransactionAmount" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <input asp-for="@createTransaction.TransactionType" type="text" value="Enrollment" required hidden readonly>
-                                        </div>
+                <form method="post" id="createEnrollmentTransactionForm">
+                    <div class="modal-body">
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createTransaction.ParentFullname" class="col-form-label">Parent Fullname</label>
+                                    <div class="p-0">
+                                        <select id="select2-parent-fullname-enrollment-dropdown" class="form-control custom-select" style="width: 100%;"></select>
                                     </div>
+                                    <span asp-validation-for="@createTransaction.ParentFullname" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createTransaction.StudentFullname" class="col-form-label">Student Fullname</label>
+                                    <div class="p-0">
+                                        <select id="select2-student-fullname-dropdown" class="form-control custom-select" style="width: 100%;"></select>
+                                    </div>
+                                    <span asp-validation-for="@createTransaction.StudentFullname" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
                             </div>
-                            <div class="modal-footer justify-content-center">
-                                <button class="btn btn-success" type="submit">Create</button>
-                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createTransaction.Classname" class="col-form-label">Class Name</label>
+                                    <div class="p-0">
+                                        <select id="select2-class-name-dropdown" class="form-control custom-select" style="width: 100%;"></select>
+                                    </div>
+                                    <span asp-validation-for="@createTransaction.Classname" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createTransaction.TransactionAmount" class="col-form-label">Amount</label>
+                                    <input asp-for="@createTransaction.TransactionAmount" type="text" required class="form-control">
+                                    <span asp-validation-for="@createTransaction.TransactionAmount" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+
+                                    <input asp-for="@createTransaction.TransactionType" type="text" value="Enrollment" required hidden readonly>
+                                </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                    @* <div id="donation_Tab" class="tab-pane fade">
-                        <form method="post" id="createDonationTransactionForm">
-                            <div class="modal-body">
-                                <div class="row p-4">
-                                    <div class="col-12">
-                                        <div class="row form-group">
-                                            <label asp-for="@createTransaction.ParentFullname" class="col-md-4 col-form-label text-md-right">Parent Fullname</label>
-                                            <div class="col-md-8 p-0">
-                                                <select id="select2-parent-fullname-donation-dropdown" class="form-control custom-select" style="width: 100%;"></select>
-                                            </div>
-                                            <span asp-validation-for="@createTransaction.ParentFullname" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <label asp-for="@createTransaction.TransactionAmount" class="col-md-4 col-form-label text-md-right">Amount</label>
-                                            <input asp-for="@createTransaction.TransactionAmount" type="text" required class="form-control col-md-8">
-                                            <span asp-validation-for="@createTransaction.TransactionAmount" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                            <input asp-for="@createTransaction.TransactionType" type="text" value="Donation" required hidden readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer justify-content-center">
-                                <button class="btn btn-success" type="submit">Create</button>
-                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                            </div>
-                        </form>
-                    </div> *@
-                </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-success" type="submit">Create</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -441,7 +401,7 @@
         $('#createEnrollmentTransactionForm').submit(function (event) {
             event.preventDefault(); // Prevent the form from submitting normally
 
-            if ($('#select2-class-name-dropdown').select2('data')[0].text != "No classes available"){
+            if ($('#select2-class-name-dropdown').select2('data')[0] != null && $('#select2-class-name-dropdown').select2('data')[0].text != "No classes available"){
                 // Serialize form data
                 var formData = {
                     ParentFullname: $('#select2-parent-fullname-enrollment-dropdown').select2('data')[0].text,
