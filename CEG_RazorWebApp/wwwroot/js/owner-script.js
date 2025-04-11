@@ -101,11 +101,11 @@ $(document).ready(function () {
   });
 });
 
-$(document).ready(function () {
+/*$(document).ready(function () {
   setTimeout(function () {
     $("#notif").css("display", "none");
   }, 3000);
-});
+});*/
 
 
 //profile

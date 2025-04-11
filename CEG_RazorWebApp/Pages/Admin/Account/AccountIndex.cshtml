@@ -176,12 +176,12 @@
                                     <div class="col-xl-12 justify-content-around form-row">
                                         <div class="form-group col-xl-4">
                                             <label asp-for="@createStudent.Birthdate" class="col-form-label"></label>
-                                            <input asp-for="@createStudent.Birthdate" 
-                                                    value="@createStudent.Birthdate.ToString("yyyy-MM-ddTHH:mm")" 
-                                                    type="datetime-local" 
-                                                    min="@DateTime.Now.AddYears(-16).ToString("yyyy-MM-ddTHH:mm")" 
-                                                    max="@DateTime.Now.AddYears(-12).ToString("yyyy-MM-ddTHH:mm")" 
-                                                    asp-format="{0:yyyy-MM-ddTHH:mm}"
+                                            <input asp-for="@createStudent.Birthdate"
+                                                   value="@createStudent.Birthdate.ToString("yyyy-MM-dd")"
+                                                   type="date"
+                                                   min="@DateTime.Now.AddYears(-16).ToString("yyyy-MM-dd")"
+                                                   max="@DateTime.Now.AddYears(-12).ToString("yyyy-MM-dd")"
+                                                   asp-format="{0:yyyy-MM-dd}"
                                                    class="form-control" required>
                                             <span asp-validation-for="@createStudent.Birthdate" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
@@ -434,7 +434,7 @@
                         // Append icon to container
                         container.appendChild(icon);
                         // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
-                        $(settings.nTableWrapper).prepend(container);
+                        settings.nTableWrapper.prepend(container);
                     }
                     if (options.hideLabel) {
                         // Find the .dt-search label container inside the DataTable wrapper
@@ -471,25 +471,101 @@
                 container.appendChild(icon);
 
                 // Insert the container in the DataTable toolbar
-                $(settings.nTableWrapper).prepend(container);
+                settings.nTableWrapper.prepend(container);
+                return container;
+            });
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('filter', function (settings, opts) {
+                const options = Object.assign({
+                    selectId: 'filter-dropdown',
+                    columnIndex: 2, // The column to get unique values from
+                    predefinedOptions: [] // Optional: array of values like ['Admin', 'User']
+                }, opts);
+
+                const container = document.createElement('div');
+                container.className = 'dt-custom-filter';
+
+                const select = document.createElement('select');
+                select.id = options.selectId;
+                select.className = 'custom-select';
+
+                // Add "All" option
+                const allOption = document.createElement('option');
+                allOption.value = '';
+                allOption.textContent = 'All roles';
+                select.appendChild(allOption);
+
+                setTimeout(() => {
+                    const uniqueValues = new Set();
+                    console.log(settings.aoData);
+                    // `aoData` is an array-like object
+                    // If predefined options are passed, use them
+                    if (Array.isArray(options.predefinedOptions) && options.predefinedOptions.length > 0) {
+                        options.predefinedOptions.forEach(value => {
+                            if(value && value.trim() !== ''){
+                                uniqueValues.add(value);
+                            }
+                        });
+                    } else {
+                        // Otherwise, extract from data
+                        settings.aoData.forEach(row => {
+                            const filterValue = row._aFilterData?.[options.columnIndex]; // use optional chaining
+                            if (filterValue && filterValue.trim() !== '') {
+                                uniqueValues.add(filterValue);
+                            }
+                        });
+                    }
+
+                    Array.from(uniqueValues).sort().forEach(value => {
+                        const opt = document.createElement('option');
+                        opt.value = value;
+                        opt.textContent = value;
+                        select.appendChild(opt);
+                    });
+                    // console.log(settings);
+
+                    // Filtering logic
+                    select.addEventListener('change', function () {
+                        const selected = this.value;
+                        settings.api
+                            .column(options.columnIndex)
+                            .search(selected ? `^${selected}$` : '', true, false)
+                            .draw();
+                    });
+                }, 800);
+                container.appendChild(select);
+
+                settings.nTableWrapper.prepend(container);
                 return container;
             });
             accountTable = new DataTable('#account-table', {
                 data: [],
                 deferRender: false,
                 responsive: true,
+                order: [[3, 'desc']],
                 columns: [
                     { 
                         data: 'username',
                         render: function (data, type, row, meta) {
                             var url = row.role.roleName === 'Admin' ? '' : `href="/Admin/${row.role.roleName}/${row.accountId}/Info"`
-                            return `<a ${url}>${data}</a>`;
+                            if(row.role.roleName === 'Parent')
+                                return `
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <a ${url}>${data}</a><i class="bx bxs-add-to-queue bx-sm" data-toggle="modal" data-target="#createAccount" data-fullname="${row.fullname}"></i>
+                                </div>
+                                `;
+                            return `
+                                <div class="">
+                                    <a ${url}>${data}</a>
+                                </div>
+                                `;
                         }
                     },
                     { data: 'fullname' },
                     { data: 'gender' },
                     { 
                         data: 'createdDate',
+                        className: 'dt-head-left',
                         render: DataTable.render.date("dddd, DD/MM/YYYY")
                     },
                     { data: 'role.roleName' },
@@ -508,6 +584,11 @@
                 ],
                 layout: {
                     topEnd: {
+                        filter:{
+                            selectId: 'filter-role-dropdown',
+                            columnIndex: 4,
+                            predefinedOptions: ['Admin', 'Teacher','Student','Parent']
+                        },
                         search: {
                             placeholder: 'search info...'
                         },
@@ -518,17 +599,41 @@
                     }
                 }
             }).on('draw', function (e, settings) {
-                accountTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                    // if (rowIdx == "1") {
-                    //     console.log(rowIdx);
-                    //     var data = this.row(rowIdx).data();
-                    //     console.log(data);
-                    // }
-                    var node = $(this.cell(rowIdx, 5).node());
-                    node.children(0).on('change', function () {
-                        var accountId = node.children(0).data('accountid');
-                        var newStatus = node.children(0).val();
+                accountTable.rows({ page: 'current' }).every(function (rowIdx) {
+                    // edit status selection
+                    const $select = $(this.cell(rowIdx, 5).node()).find('select.status-dropdown');
+                    $select.off('change').on('change', function () {
+                        const accountId = $(this).data('accountid');
+                        const newStatus = $(this).val();
                         callApiUpdateAccountStatus(accountId, newStatus);
+                    });
+                    const $addChildIcon = $(this.cell(rowIdx, 0).node()).find('i.bxs-add-to-queue');
+                    $addChildIcon.off('click').on('click', function(){
+                        const fullname = $(this).data('fullname');
+
+                        // 2. Switch to specific tab (example: #parent-tab)
+                        const studentTabLink = document.getElementById('createAccount').querySelector('a[href="#student_Tab"]');
+                        if (studentTabLink) {
+                            $(studentTabLink).tab('show'); // jQuery-based tab switch (for Bootstrap 4)
+                        }
+
+                        // 3. Wait for a moment to ensure tab is rendered before accessing Select2
+                        setTimeout(() => {
+                            // Assuming your select2 is inside student_Tab and has a known ID or class
+                            const parentSelect = $('#student_Tab select#select2-parent-fullname-dropdown');
+                            if (parentSelect.length) {
+                                // If the fullname is already one of the options, select it
+                                const optionExists = parentSelect.find(`option:contains("${fullname}")`).length > 0;
+
+                                if (!optionExists) {
+                                    // Add new option if not already present
+                                    const newOption = new Option(fullname, fullname, true, true);
+                                    parentSelect.append(newOption).trigger('change');
+                                } else {
+                                    parentSelect.val(fullname).trigger('change');
+                                }
+                            }
+                        }, 300); // Give a brief delay after tab switch
                     });
                 });
             });
