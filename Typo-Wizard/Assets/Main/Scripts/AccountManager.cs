@@ -164,6 +164,8 @@ public class AccountManager : MonoBehaviour
 private void SetUIForRole()
     {
         LoginScreen.SetActive(false);
+
+
         canvasToActivate.SetActive(true);
     }
     private void checkActive()
