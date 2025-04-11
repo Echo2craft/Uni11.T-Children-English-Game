@@ -123,9 +123,9 @@
         <div class="header__bottom">
             <nav class="myNavBar navbar navbar-expand-lg navbar-dark container-fluid">
                 <div class="container-fluid">
-                    <a class="navbar-brand nav-name-text" href="/Home/Index">
+                    <a class="navbar-brand nav-name-text" href="/home">
                         <img class="d-inline-block web-logo-image" src="/images/study.png" />
-                        <a class="navbar-brand nav-name-text nav-link" href="/Home/Index">Children English Game</a>
+                        <a class="navbar-brand nav-name-text nav-link" href="/home">Children English Game</a>
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -133,16 +133,16 @@
                     <div class="collapse navbar-collapse" id="navbarText">
                         <ul class="navbar-nav ms-auto mb-2 mb-xl-0">
                             <li class="nav-item nav-item-text">
-                                <a class="nav-link" href="/Home/Index">Home</a>
+                                <a class="nav-link nav-tab-button" href="/home">Home</a>
                             </li>
                             <li class="nav-item nav-item-text">
-                                <a class="nav-link" href="/Home/Course/Index">Courses</a>
+                                <a class="nav-link nav-tab-button" href="/courses">Courses</a>
                             </li>
                             <li class="nav-item nav-item-text">
-                                <a class="nav-link" href="/Home/Class/Index">Classes</a>
+                                <a class="nav-link nav-tab-button" href="/classes">Classes</a>
                             </li>
                             <li class="nav-item nav-item-text">
-                                <a class="nav-link" href="/Home/Student/Index">Students</a>
+                                <a class="nav-link nav-tab-button" href="/students">Students</a>
                             </li>
                         </ul>
                     </div>
@@ -201,6 +201,22 @@
             sessionStorage.setItem('apiUrl', apiUrl);
 
             // console.log("API URL stored in sessionStorage:", sessionStorage.getItem('apiUrl'));
+
+            // Get the current page URL path
+            let currentPath = window.location.pathname;
+
+            // Select all navbar links
+            let navLinks = document.querySelectorAll(".nav-tab-button");
+
+            // Loop through each link and check if its href matches the current page
+            navLinks.forEach(link => {
+                // var fullLink = "/Home" + currentPath;
+                // console.log(fullLink);
+                // console.log(link.getAttribute("href"));
+                if (link.getAttribute("href") === currentPath) {
+                    link.classList.add("active-tab"); // Add class to highlight it
+                }
+            });
         });
         function sendEmail(email) {
             var mailtoLink = 'mailto:' + email;

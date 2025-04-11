@@ -4,6 +4,7 @@ using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +25,96 @@ namespace CEG_WebAPI.Controllers
             _config = config;
         }
 
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
         [ProducesResponseType(typeof(List<CourseViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetCourseList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/Name")]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCourseNameList()
+        {
+            return await GetNameList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/Count")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTotalCourseAmount()
+        {
+            return await GetCount();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/Available")]
+        [ProducesResponseType(typeof(List<CourseViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCourseAvailableList()
+        {
+            return await GetListByStatusAvailable();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/Name/Available")]
+        [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCourseNameAvailableList()
+        {
+            return await GetNameListByStatusAvailable();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Create")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(CourseViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateCourse(
+            [FromBody][Required] CreateNewCourse newCourse
+            )
+        {
+            return await Create(newCourse);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(CourseViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateCourse(
+            [FromRoute][Required] int id,
+            [FromBody][Required] UpdateCourse course
+            )
+        {
+            return await Update(id, course);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update/Status")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(CourseViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateCourseStatus(
+            [FromRoute][Required] int id,
+            [FromBody][Required] string status
+            )
+        {
+            return await UpdateStatus(id, status);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<CourseViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -58,11 +144,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Name")]
+        [HttpGet("names")]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCourseNameList()
+        public async Task<IActionResult> GetNameList()
         {
             try
             {
@@ -92,12 +178,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Count")]
-        [Authorize(Roles = "Admin")]
+        [HttpGet("count")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTotalCourseAmount()
+        public async Task<IActionResult> GetCount()
         {
             try
             {
@@ -119,11 +205,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Available")]
+        [HttpGet("status/available")]
         [ProducesResponseType(typeof(List<CourseViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCourseAvailableList()
+        public async Task<IActionResult> GetListByStatusAvailable()
         {
             try
             {
@@ -153,11 +239,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Name/Available")]
+        [HttpGet("name/status/available")]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCourseNameAvailableList()
+        public async Task<IActionResult> GetNameListByStatusAvailable()
         {
             try
             {
@@ -191,7 +277,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(CourseViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCourseById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
             {
@@ -221,12 +307,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Create")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(CourseViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateCourse(
+        public async Task<IActionResult> Create(
             [FromBody][Required] CreateNewCourse newCourse
             )
         {
@@ -251,8 +337,8 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/Update")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(CourseViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -284,8 +370,8 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPut("{id}/Update/Status")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}/status")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(CourseViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -1,4 +1,4 @@
-﻿@page "/Auth/Login"
+﻿@page "/auth/login"
 @model CEG_RazorWebApp.Pages.Auth.LoginModel
 @{
     ViewData["Title"] = "Login Page";
@@ -18,13 +18,13 @@
 <body class="background">
     <div class="main-container">
         <div class="row justify-content-around">
-            <div class="col-lg-5 row justify-content-center justify-content-lg-end">
+            <div class="col-12 col-xl-5 row justify-content-center">
                 <div class="box-container">
-                    <div class="box-header light-blue">
+                    <div class="box-header sky-blue">
                         <h4 class="mb-0 p-1 text-center"><b>Login</b></h4>
                     </div>
                     <div id="alertContainer"></div>
-                    <div class="d-flex box-body justify-content-center p-2">
+                    <div class="box-body p-2 d-flex justify-content-center">
                         <form class="reg-form p-3" method="post" id="loginForm">
                             <div class="form-group">
                                 <input placeholder="Username" asp-for="AuthenRequest.Username" class="form-control" />
@@ -36,10 +36,9 @@
                                 <span asp-validation-for="AuthenRequest.Password" class="text-danger"></span>
                                 <span id="error_message" class="helper-text text-danger"></span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group d-flex justify-content-center">
                                 <!-- <a href="#">Forgot Password?</a> -->
-                                <div class="w-100 my-3"></div>
-                                <button class="btn1 light-blue px-4 reg-button" type="submit">
+                                <button class="text-join-button" type="submit">
                                     <span class="text-lg">Login</span>
                                 </button>
                             </div>
@@ -47,7 +46,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7 row justify-content-center">
+            <div class="col-12 col-xl-7 row justify-content-center">
                 <div class="write-container" style="text-align:center">
                     <div class="write-title">Children English Game</div>
                 </div>
@@ -81,7 +80,7 @@
         });
         function callApiPostLogin(formData) {
             $.ajax({
-                url: apiUrl + 'Account/Login', // Specify your Razor Page here
+                url: apiUrl + 'account/login', // Specify your Razor Page here
                 type: 'POST',
                 data: JSON.stringify(formData),
                 contentType: 'application/json; charset=utf-8',
@@ -98,27 +97,27 @@
                         switch (response.data.roleName) {
                             case 'Admin':
                                 // Redirect to admin dashboard
-                                window.location.href = '/Admin/Index';
+                                window.location.href = '/admin/index';
                                 break;
 
                             case 'Teacher':
                                 // Redirect to teacher dashboard
-                                window.location.href = '/Teacher/Index';
+                                window.location.href = '/teacher/index';
                                 break;
 
                             case 'Parent':
                                 // Redirect to parent dashboard
-                                window.location.href = '/Parent/Index';
+                                window.location.href = '/parent/index';
                                 break;
 
                             case 'Student':
                                 // Redirect to student dashboard
-                                window.location.href = '/Student/Index';
+                                window.location.href = '/student/index';
                                 break;
 
                             default:
                                 // Redirect to a generic page or error page if role is not recognized
-                                window.location.href = '/Auth/Login';
+                                window.location.href = '/auth/login';
                                 break;
                         }
                         $('#loginForm').trigger("reset");

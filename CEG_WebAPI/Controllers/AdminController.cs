@@ -4,6 +4,7 @@ using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Account;
 using CEG_BAL.ViewModels.Account.Create;
 using CEG_BAL.ViewModels.Authenticates;
+using CEG_WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CEG_WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]",Name = "admin")]
     [ApiController]
     public class AdminController : ControllerBase
     {
@@ -38,12 +39,105 @@ namespace CEG_WebAPI.Controllers
             _config = config;
             _emailService = emailService;
         }
+
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(AccountService), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetAccountById([FromRoute] int id)
+        {
+            return GetById(id);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPut("Update/{id}")]
+        [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update(
+            [FromRoute][Required] int id,
+            [FromForm][Required] string username,
+            [FromForm][Required] string role)
+        {
+            return await UpdateById(id, username, role);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpPut("ChangePassword")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ChangePassword(
+            [FromBody][Required] UpdateAccountPassword upPass)
+        {
+            return await UpdatePassword(upPass);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Account/Create")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateAccount(
+            [FromBody][Required] CreateNewAccount newAcc)
+        {
+            return await Create(newAcc);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Teacher/Create")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateTeacher(
+            [FromBody][Required] CreateNewTeacher newTeach)
+        {
+            return await CreateByTeacherRole(newTeach);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Teacher/{teacherName}/Upload/Certificate")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UploadTeacherCertificate(
+            [FromRoute][Required] string teacherName,
+            IFormFile certificate)
+        {
+            return await UploadTeacherCertificateToDb(teacherName,certificate);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Parent/Create")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(ParentViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateParent(
+            [FromBody][Required] CreateNewParent newPar)
+        {
+            return await CreateByParentRole(newPar);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Student/Create")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateStudent(
+            [FromBody][Required] CreateNewStudent newStu)
+        {
+            return await CreateByStudentRole(newStu);
+        }
+
+        [HttpGet("accounts/{id}")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(AccountService), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetById([FromRoute] int id)
         {
             try
             {
@@ -73,13 +167,13 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        [HttpPut("Update/{id}")]
+
+        [HttpPut("accounts/{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update(
+        public async Task<IActionResult> UpdateById(
             [FromRoute][Required] int id,
             [FromForm][Required] string username,
             [FromForm][Required] string role)
@@ -115,12 +209,13 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPut("ChangePassword")]
-        [Authorize(Roles = "Admin")]
+
+        [HttpPut("accounts/password")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ChangePassword(
+        public async Task<IActionResult> UpdatePassword(
             [FromBody][Required] UpdateAccountPassword upPass)
         {
             try
@@ -161,12 +256,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Account/Create")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost("accounts")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(AccountViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAccount(
+        public async Task<IActionResult> Create(
             [FromBody][Required] CreateNewAccount newAcc)
         {
             try
@@ -219,12 +314,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Teacher/Create")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost("accounts/teacher")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateTeacher(
+        public async Task<IActionResult> CreateByTeacherRole(
             [FromBody][Required] CreateNewTeacher newTeach)
         {
             try
@@ -299,12 +394,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Teacher/{teacherName}/Upload/Certificate")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost("accounts/teacher/{teacherName}/certificate")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UploadTeacherCertificate(
+        public async Task<IActionResult> UploadTeacherCertificateToDb(
             [FromRoute][Required] string teacherName,
             IFormFile certificate)
         {
@@ -337,12 +432,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Parent/Create")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost("accounts/parent")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ParentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateParent(
+        public async Task<IActionResult> CreateByParentRole(
             [FromBody][Required] CreateNewParent newPar)
         {
             try
@@ -424,12 +519,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Student/Create")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost("accounts/student")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateStudent(
+        public async Task<IActionResult> CreateByStudentRole(
             [FromBody][Required] CreateNewStudent newStu)
         {
             try
@@ -525,7 +620,7 @@ namespace CEG_WebAPI.Controllers
             }
         }*/
         /*[HttpPost("CreateTeacher")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
