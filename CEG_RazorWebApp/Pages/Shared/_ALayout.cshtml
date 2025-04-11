@@ -365,6 +365,10 @@
             // If you want to include seconds as well, use this return:
             // return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
         };
+        // Helper function to convert full datetime string to yyyy-MM-dd
+        function toDateInputFormat(dateTimeString) {
+            return dateTimeString ? dateTimeString.split('T')[0] : '';
+        }
         // Function to display alerts
         function showAlert(type, message) {
             var alertHtml = '';
