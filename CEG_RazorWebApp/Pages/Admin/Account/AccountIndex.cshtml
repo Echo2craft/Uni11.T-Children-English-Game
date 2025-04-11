@@ -478,7 +478,8 @@
             DataTable.feature.register('filter', function (settings, opts) {
                 const options = Object.assign({
                     selectId: 'filter-dropdown',
-                    columnIndex: 2 // The column to get unique values from
+                    columnIndex: 2, // The column to get unique values from
+                    predefinedOptions: [] // Optional: array of values like ['Admin', 'User']
                 }, opts);
 
                 const container = document.createElement('div');
@@ -496,13 +497,24 @@
 
                 setTimeout(() => {
                     const uniqueValues = new Set();
+                    console.log(settings.aoData);
                     // `aoData` is an array-like object
-                    settings.aoData.forEach(row => {
-                        const filterValue = row._aFilterData?.[options.columnIndex]; // use optional chaining
-                        if (filterValue && filterValue.trim() !== '') {
-                            uniqueValues.add(filterValue);
-                        }
-                    });
+                    // If predefined options are passed, use them
+                    if (Array.isArray(options.predefinedOptions) && options.predefinedOptions.length > 0) {
+                        options.predefinedOptions.forEach(value => {
+                            if(value && value.trim() !== ''){
+                                uniqueValues.add(value);
+                            }
+                        });
+                    } else {
+                        // Otherwise, extract from data
+                        settings.aoData.forEach(row => {
+                            const filterValue = row._aFilterData?.[options.columnIndex]; // use optional chaining
+                            if (filterValue && filterValue.trim() !== '') {
+                                uniqueValues.add(filterValue);
+                            }
+                        });
+                    }
 
                     Array.from(uniqueValues).sort().forEach(value => {
                         const opt = document.createElement('option');
@@ -574,7 +586,8 @@
                     topEnd: {
                         filter:{
                             selectId: 'filter-role-dropdown',
-                            columnIndex: 4
+                            columnIndex: 4,
+                            predefinedOptions: ['Admin', 'Teacher','Student','Parent']
                         },
                         search: {
                             placeholder: 'search info...'
