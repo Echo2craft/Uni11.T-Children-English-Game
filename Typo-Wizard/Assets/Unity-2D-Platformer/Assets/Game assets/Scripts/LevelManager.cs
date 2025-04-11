@@ -10,7 +10,7 @@ public class LevelManager : MonoBehaviour
     //Respawning delay mean it will allow the player some times before respawn
     public float PlayerRespawnDelay;
     public PlayerControl PlayerControl;
-
+    public GameObject prefabToActivate;
 
     //Variable for Collectable item controls
     public int Coins;
@@ -50,5 +50,10 @@ public class LevelManager : MonoBehaviour
         Coins += numberofCoins;
         ScoreText.text = "Score: " + Coins;
         DontDestroyOnLoad(ScoreText);
+
+        if (prefabToActivate != null)
+        {
+            prefabToActivate.SetActive(true);
+        }
     }
 }
