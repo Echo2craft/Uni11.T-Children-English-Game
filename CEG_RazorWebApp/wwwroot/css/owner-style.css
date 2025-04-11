@@ -177,17 +177,13 @@ html body {
     left: 30% !important;
     right: auto !important;
     top: auto !important;
-    width: 50% !important;
-    animation: notif 200 3s ease-in-out none;
+    /*width: 50% !important;*/
+    animation: show_slide 1s ease forwards !important;
+    /*animation: notif 2 3s ease-in-out none;*/
 }
-#alertContainer .admin-alert#notif {
+/*#alertContainer .admin-alert#notif {
     white-space: pre-wrap !important;
-    left: 30%;
-    right: auto;
-    top: auto;
-    width: 50%;
-    animation: notif 1 3s ease-in-out none;
-}
+}*/
 
 @keyframes notif {
     0% {
@@ -2097,7 +2093,7 @@ button.btn.btn-primary.btn-sm.submit-button{
 }
 /* Change row selection highlight color */
 table.dataTable.table > tbody > tr.selected > * {
-    box-shadow: inset 0 0 0 9999px #ffcc80 !important;
+    box-shadow: inset 0 0 0 9999px skyblue !important;
     /*background-color: #ffcc80 !important;*/ /* Light orange background */
     color: #000 !important; /* Black text for contrast */
 }

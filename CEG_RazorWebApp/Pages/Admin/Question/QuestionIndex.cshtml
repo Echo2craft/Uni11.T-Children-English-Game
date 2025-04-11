@@ -85,20 +85,20 @@
         </div>
     </div>
     <div id="createQuestion" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add new Homework Question</h4>
+                    <h4 class="modal-title">Add new Homework's Question</h4>
                 </div>
                 <form method="post" id="createQuestionForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@createQuestion.Question" class="col-md-3 col-form-label text-md-right"></label>
-                                    <textarea asp-for="@createQuestion.Question" value="@createQuestion.Question" required class="form-control col-md-7"></textarea>
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label asp-for="@createQuestion.Question" class="col-form-label">New Question</label>
+                                    <textarea asp-for="@createQuestion.Question" value="@createQuestion.Question" required class="form-control"></textarea>
                                     <span asp-validation-for="@createQuestion.Question" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
                             </div>
                         </div>

@@ -176,12 +176,12 @@
                                     <div class="col-xl-12 justify-content-around form-row">
                                         <div class="form-group col-xl-4">
                                             <label asp-for="@createStudent.Birthdate" class="col-form-label"></label>
-                                            <input asp-for="@createStudent.Birthdate" 
-                                                    value="@createStudent.Birthdate.ToString("yyyy-MM-ddTHH:mm")" 
-                                                    type="datetime-local" 
-                                                    min="@DateTime.Now.AddYears(-16).ToString("yyyy-MM-ddTHH:mm")" 
-                                                    max="@DateTime.Now.AddYears(-12).ToString("yyyy-MM-ddTHH:mm")" 
-                                                    asp-format="{0:yyyy-MM-ddTHH:mm}"
+                                            <input asp-for="@createStudent.Birthdate"
+                                                   value="@createStudent.Birthdate.ToString("yyyy-MM-dd")"
+                                                   type="date"
+                                                   min="@DateTime.Now.AddYears(-16).ToString("yyyy-MM-dd")"
+                                                   max="@DateTime.Now.AddYears(-12).ToString("yyyy-MM-dd")"
+                                                   asp-format="{0:yyyy-MM-dd}"
                                                    class="form-control" required>
                                             <span asp-validation-for="@createStudent.Birthdate" id="error_message"
                                                   class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
@@ -520,7 +520,7 @@
                             .search(selected ? `^${selected}$` : '', true, false)
                             .draw();
                     });
-                }, 500);
+                }, 800);
                 container.appendChild(select);
 
                 settings.nTableWrapper.prepend(container);
