@@ -562,6 +562,7 @@ GameObject:
   - component: {fileID: 108310491}
   - component: {fileID: 108310493}
   - component: {fileID: 108310494}
+  - component: {fileID: 108310495}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -657,6 +658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 94931125}
   gameOverMenuUI: {fileID: 1472316625}
+  pauseMenuUI: {fileID: 108310495}
   barry: {fileID: 1420168460}
   audioClips: []
 --- !u!114 &108310493
@@ -672,7 +674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 108310487}
-  optionMenu: {fileID: 0}
+  optionMenu: {fileID: 617988445}
   mainMenu: {fileID: 0}
 --- !u!114 &108310494
 MonoBehaviour:
@@ -681,7 +683,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 108310487}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 487e34baf02094e4d8daf04d685740e6, type: 3}
   m_Name: 
@@ -689,6 +691,19 @@ MonoBehaviour:
   pointsText: {fileID: 0}
   BestScore: {fileID: 0}
   scoreText: {fileID: 0}
+--- !u!114 &108310495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108310487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ccfa06bbad2b44dbb47025ed88db44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenuPanel: {fileID: 108310487}
 --- !u!1 &145100645
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,7 +982,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -99, y: -3}
+  m_AnchoredPosition: {x: -66, y: -3}
   m_SizeDelta: {x: 89.8732, y: 90.247}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &273183030
@@ -1014,10 +1029,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 108310491}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: ReturnGame
-        m_Mode: 3
+      - m_Target: {fileID: 1472316625}
+        m_TargetAssemblyTypeName: GameOverScript, Assembly-CSharp
+        m_MethodName: ExitButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2453,7 +2468,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &796491455
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2877,7 +2892,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2, y: -3}
+  m_AnchoredPosition: {x: 78, y: -3}
   m_SizeDelta: {x: 86.3646, y: 90.247}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &870414986
@@ -3351,10 +3366,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1472316626}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: ReturnGame
-        m_Mode: 3
+      - m_Target: {fileID: 1472316625}
+        m_TargetAssemblyTypeName: GameOverScript, Assembly-CSharp
+        m_MethodName: ExitButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3800,7 +3815,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1225477592
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4653,7 +4668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsText: {fileID: 1443061050}
-  BestScore: {fileID: 0}
+  BestScore: {fileID: 1839009393}
   scoreText: {fileID: 2074018990}
 --- !u!114 &1472316626
 MonoBehaviour:
@@ -5859,7 +5874,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1768036137
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6218,6 +6233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 94931125}
   gameOverMenuUI: {fileID: 1472316625}
+  pauseMenuUI: {fileID: 0}
   barry: {fileID: 1420168460}
   audioClips: []
 --- !u!114 &1839009392
@@ -6235,7 +6251,7 @@ MonoBehaviour:
   easyPrefab: {fileID: 2855716244028195872, guid: 3e3bf4ba1486c52498bf40611ab3a22b, type: 3}
   normalPrefab: {fileID: 2855716244028195872, guid: ebc751ede1b578c4c917631a8173fdb1, type: 3}
   hardPrefab: {fileID: 2855716244028195872, guid: e3e47e375e9b8bd46ba8943dcde64111, type: 3}
-  spawnInterval: 5
+  spawnInterval: 10
 --- !u!114 &1839009393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6266,7 +6282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1878954063
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6330,8 +6346,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 108310493}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+      - m_Target: {fileID: 108310495}
+        m_TargetAssemblyTypeName: PauseMenuScript, Assembly-CSharp
         m_MethodName: Resume
         m_Mode: 1
         m_Arguments:

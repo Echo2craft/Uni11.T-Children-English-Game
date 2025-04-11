@@ -30,7 +30,7 @@ public class Spawner : MonoBehaviour
     public GameObject normalPrefab;
     public GameObject hardPrefab;
     private bool readyToSpawn = false;
-    public float spawnInterval = 2;
+    public float spawnInterval = 5;
     private float _counter = 0;
     [Serializable]
     public class HomeworkQuestion
@@ -70,7 +70,7 @@ public class Spawner : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
-        await FetchHomeworkQuestions();
+        //await FetchHomeworkQuestions();
         await FetchHomeworkAnswer();
 
         Debug.Log($"Easy: {easyWords.Count}, Normal: {normalWords.Count}, Hard: {hardWords.Count}");
@@ -95,7 +95,7 @@ public class Spawner : MonoBehaviour
 
         if (_counter >= spawnInterval)
         {
-            _counter = 0 + Random.Range(0, Time.deltaTime * 5);
+            _counter = 0 + Random.Range(0, Time.deltaTime * 10);
             Spawn();
         }
     }
@@ -128,56 +128,60 @@ public class Spawner : MonoBehaviour
             {
                 Debug.Log($"[Answer] ID: {answer.homeworkAnswerId}, Text: {answer.answer}");
 
-                if (answer.answer.Length <= 4)
+                if (answer.answer.Length <= 2)
                 {
                     easyWords.Add(answer.answer);
+                }if (answer.answer.Length <= 4)
+                {
+                    normalWords.Add(answer.answer);
                 }
                 else
                 {
-                    normalWords.Add(answer.answer);
+                    hardWords.Add(answer.answer);
                 }
             }
 
             Debug.Log($"[After Parse] easyWords: {easyWords.Count}, normalWords: {normalWords.Count}");
             foreach (var word in easyWords) Debug.Log($"Easy: {word}");
             foreach (var word in normalWords) Debug.Log($"Normal: {word}");
+            foreach (var word in hardWords) Debug.Log($"Normal: {word}");
         }
     }
-    public async Task FetchHomeworkQuestions()
-    {
-        string url = $"{_baseUrl}/api/Question/All";
-        Debug.Log($"[Question] Sending request to: {url}");
+    //public async Task FetchHomeworkQuestions()
+    //{
+    //    string url = $"{_baseUrl}/api/Question/All";
+    //    Debug.Log($"[Question] Sending request to: {url}");
 
-        UnityWebRequest request = UnityWebRequest.Get(url);
-        var operation = request.SendWebRequest();
+    //    UnityWebRequest request = UnityWebRequest.Get(url);
+    //    var operation = request.SendWebRequest();
 
-        while (!operation.isDone)
-        {
-            await Task.Yield();
-        }
+    //    while (!operation.isDone)
+    //    {
+    //        await Task.Yield();
+    //    }
 
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError($"[Question] Error: {request.error}");
-        }
-        else
-        {
-            string jsonResponse = request.downloadHandler.text;
-            Debug.Log($"[Question] Response: {jsonResponse}");
+    //    if (request.result != UnityWebRequest.Result.Success)
+    //    {
+    //        Debug.LogError($"[Question] Error: {request.error}");
+    //    }
+    //    else
+    //    {
+    //        string jsonResponse = request.downloadHandler.text;
+    //        Debug.Log($"[Question] Response: {jsonResponse}");
 
-            List<HomeworkQuestion> questions = JsonUtilityHelper.FromJsonList<HomeworkQuestion>(jsonResponse);
-            Debug.Log($"[Question] Parsed {questions.Count} items");
+    //        List<HomeworkQuestion> questions = JsonUtilityHelper.FromJsonList<HomeworkQuestion>(jsonResponse);
+    //        Debug.Log($"[Question] Parsed {questions.Count} items");
 
-            foreach (var question in questions)
-            {
-                Debug.Log($"[Question] ID: {question.homework_question_id}, Text: {question.question}");
-                hardWords.Add(question.question);
-            }
+    //        foreach (var question in questions)
+    //        {
+    //            Debug.Log($"[Question] ID: {question.homework_question_id}, Text: {question.question}");
+    //            hardWords.Add(question.question);
+    //        }
 
-            Debug.Log($"[After Parse] hardWords: {hardWords.Count}");
-            foreach (var word in hardWords) Debug.Log($"Hard: {word}");
-        }
-    }
+    //        Debug.Log($"[After Parse] hardWords: {hardWords.Count}");
+    //        foreach (var word in hardWords) Debug.Log($"Hard: {word}");
+    //    }
+    //}
     string FixJson(string value)
     {
         return "{\"data\":" + value + "}";

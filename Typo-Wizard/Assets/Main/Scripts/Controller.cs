@@ -25,6 +25,7 @@ public class Controller : MonoBehaviour
     private int _score = 0;
     [SerializeField]
     public GameOverScript gameOverMenuUI;
+    public PauseMenuScript pauseMenuUI;
     public GameObject barry;
     public AudioClip[] audioClips;
     private readonly string _baseUrl = "https://cegwebapi-bsamgfdjgqbyg2fr.eastus-01.azurewebsites.net";
@@ -95,6 +96,8 @@ public class Controller : MonoBehaviour
     }
     public bool CastSpell(string text)
     {
+        text = text.Trim().ToLower(); //  add this line
+
         if (textToEnemyMappings.ContainsKey(text) && textToEnemyMappings[text].Any())
         {
             foreach (var enemy in textToEnemyMappings[text])
@@ -261,14 +264,21 @@ public class Controller : MonoBehaviour
     public void End()
     {
         // Save best score
-        GetComponent<BestScore>().SetBestScore(_score);
+        if (gameOverMenuUI != null)
+        {
+            gameOverMenuUI.Setup(_score);
+        }
+        else
+        {
+            Debug.LogWarning("gameOverMenuUI is null when trying to call Setup in End()");
+        }
 
         // Dummy values – replace with real ones dynamically if needed
         int homeworkId = 1;
         int studentProgressId = 1;
         int homeworkResultId = 1;
         int studentId = 1;
-        int classId = 1;
+        int classId = 10;
 
         int point = _score;
         int totalCorrectAnswers = _score;
@@ -314,8 +324,8 @@ public class Controller : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    public void Restart()
-    {
-        SceneManager.LoadScene("SampleScene");
-    }
+    //public void Restart()
+    //{
+    //    SceneManager.LoadScene("SampleScene");
+    //}
 }

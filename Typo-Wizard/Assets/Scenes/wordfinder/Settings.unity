@@ -67,9 +67,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -209,7 +206,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1604125309048517752, guid: baf90bea95c2fb9458dcef5e8da33600, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 623
+      value: 267
       objectReference: {fileID: 0}
     - target: {fileID: 1604125309048517752, guid: baf90bea95c2fb9458dcef5e8da33600, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -456,7 +453,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -800.5}
+  m_AnchoredPosition: {x: -12, y: -346}
   m_SizeDelta: {x: 490, y: 189}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &849345317
@@ -623,11 +620,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5210806350275648073, guid: 499d0aac377dfe043b81a1179ebb1eea, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 234
+      value: 215.5
       objectReference: {fileID: 0}
     - target: {fileID: 5210806350275648073, guid: 499d0aac377dfe043b81a1179ebb1eea, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 618
+      value: 267
       objectReference: {fileID: 0}
     - target: {fileID: 5210806350275648073, guid: 499d0aac377dfe043b81a1179ebb1eea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -697,7 +694,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 821.32}
+  m_AnchoredPosition: {x: -12, y: 474.00003}
   m_SizeDelta: {x: 805, y: 132}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1024503896
@@ -904,8 +901,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1445.2432, y: 2134}
+  m_AnchoredPosition: {x: 0.005043, y: 3.75}
+  m_SizeDelta: {x: 1920, y: 1087.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1160195622
 MonoBehaviour:
