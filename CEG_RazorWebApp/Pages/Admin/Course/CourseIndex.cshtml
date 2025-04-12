@@ -37,40 +37,37 @@
                     <div class="card">
                         <div class="card-body">
                             <div id="alertContainer"></div>
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs">
-                                <!-- dung vong for o day -->
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="/Admin/Course/Index">
-                                        <i class='bx bx-home-alt-2'></i>
-                                        <span>All Courses</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-                                <!-- home1 -->
-                                <div class="tab-pane active" id="home1" role="tabpanel">
-                                    <div class="row search">
-                                        <div class="col-sm-12 d-flex">
-                                            <div class="col-sm-6 d-flex address-home">
-                                            </div>
-                                            <div class="col-sm-6 d-flex justify-content-end">
-                                                <form method="get" asp-route-search="@search">
-                                                    <div>
-                                                        <label>
-                                                            <input asp-for="@search" class="form-control" type="text" placeholder="Search..." value="@search">
-                                                            <i class='bx bx-search-alt'></i>
-                                                        </label>
-                                                    </div>
-                                                </form>
+                            <div class="row search">
+                                <div class="col-sm-12 d-flex justify-content-between align-items-center">
+                                    <div class="col-sm-6">
+                                        <h4 class="m-0">All Courses</h4>
+                                    </div>
+                                    <div class="col-sm-6 d-flex justify-content-end">
+                                        <div class="input-group w-auto">
+                                            <select class="custom-select" id="select-difficulty">
+                                                <option value="" selected>All Difficulty</option>
+                                                <option value="Beginner">Beginner</option>
+                                                <option value="Intermediate">Intermediate</option>
+                                                <option value="Advanced">Advanced</option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                @* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div role="separator" class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Separated link</a>
+                                                </div> *@
+                                                <input asp-for="@search" class="form-control" type="text" placeholder="Search course name..." value="@search">
+                                                <i class='bx bx-search-alt search-icon'></i>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row card-content" id="courseList">
-                                        <!-- dung vong for o day -->
-                                    </div>
                                 </div>
+                            </div>
+                            <div class="row card-content" id="courseList">
+                                <!-- dung vong for o day -->
                             </div>
                         </div>
                     </div>
@@ -151,7 +148,19 @@
         var homeworkQuestionList = [];
         $(document).ready(function () {
             callApiGetCourseList();
-            $('#search').on('keyup', function (event) {
+            $('#select-difficulty').off('change').on('change', function () {
+                // Get the search term
+                var selectedValue = $(this).val().toLowerCase();
+
+                // Filter the classes based on the search term
+                var filteredcourseList = courseList.filter(function (courseObject) {
+                    return courseObject.difficulty.toLowerCase().includes(selectedValue);
+                });
+
+                // Display the filtered classList
+                setCourseDisplay(filteredcourseList);
+            });
+            $('#search').off('keyup').on('keyup', function (event) {
                 // Get the search term
                 var searchTerm = $(this).val().toLowerCase();
 
@@ -221,7 +230,7 @@
             courseList.empty(); // Clear any existing options
             var cardCreateCourseHtml = `
                 <div class="col-xl-3 col-lg-6 col-sm-6 my-3 item">
-                    <div class="card1 card-child">
+                    <div class="card1 card-child shadow-sm h-100">
                         <div class="card-body add-club">
                             <button class="border-0" data-toggle="modal" data-target="#addCourse">
                                 <span>Add Course</span>
@@ -252,33 +261,91 @@
                 // Construct card HTML
                 var cardHtml = `
                     <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
-                        <div class="card1 card-child">
-                            <div class="club-name">
-                                Course ID: ${courseObj.courseId}
-                                <div class="status">
-                                        ${statusText}
-                                </div>
+                        <div class="card1 card-child shadow-sm h-100">
+                            <div class="club-name d-flex justify-content-between align-items-center flex-wrap">
+                                <strong class="text-truncate" style="max-width: 200px;">Course ID: ${courseObj.courseId}</strong>
+                                ${statusText}
                             </div>
                             <div class="card-body">
-                                <div class="club-title">
-                                    <ul>
-                                        <li><h6>Course name:</h6><span>${courseObj.courseName}</span></li>
-                                        <li><h6>Course type:</h6><span>${courseObj.courseType}</span></li>
-                                        <li><h6>Total hours:</h6><span>${courseObj.totalHours}</span></li>
-                                        <li><h6>Required age:</h6><span>${courseObj.requiredAge}</span></li>
-                                        <li><h6>Difficulty:</h6><span>${courseObj.difficulty}</span></li>
-                                        <li><h6>Description:</h6><span class="truncate">${courseObj.description}</span></li>
-                                        <li><h6>Sessions amount:</h6><span>${courseObj.sessions.length} Session(s)</span></li>
-                                        <li><h6>Classes amount:</h6><span>${courseObj.classes.length} Class(es)</span></li>
-                                    </ul>
-                                </div>
+                                <h5 class="card-title h-18">${courseObj.courseName}</h5>
+                                <p class="card-text text-truncate" style="max-width: 200px;">${courseObj.description}</p>
                             </div>
-                            <div class="form-group mx-auto">
-                                <a class="btn btn-primary clickable-row" href="/Admin/Course/${courseObj.courseId}/Info" role="button">Details</a>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-category mr-2'></i><span> Course Type ${courseObj.courseType}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-bar-chart mr-2'></i><span> ${courseObj.difficulty} Difficulty</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-time-five mr-2'></i><span> ${courseObj.totalHours} hrs</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-child mr-2'></i><span> ${courseObj.requiredAge}+ years old</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-spreadsheet mr-2'></i><span> ${courseObj.sessions.length} session(s)</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-calendar mr-2'></i><span> ${courseObj.classes.length} class(es)</span></li>
+                            </ul>
+                            <div class="club-footer d-flex justify-content-around">
+                                <a class="btn btn-primary clickable-row d-flex align-items-center" href="/Admin/Course/${courseObj.courseId}/Info" role="button"><i class='bx bx-info-circle mr-2'></i> Details</a>
                             </div>
                         </div>
                     </div>
                 `;
+                // <div class="club-title">
+                //     <ul class="club-details">
+                //         <li><h6>Course name:</h6><span>${courseObj.courseName}</span></li>
+                //         <li><h6>Course type:</h6><span>${courseObj.courseType}</span></li>
+                //         <li><h6>Total hours:</h6><span>${courseObj.totalHours}</span></li>
+                //         <li><h6>Required age:</h6><span>${courseObj.requiredAge}</span></li>
+                //         <li><h6>Difficulty:</h6><span>${courseObj.difficulty}</span></li>
+                //         <li><h6>Description:</h6><span class="truncate">${courseObj.description}</span></li>
+                //         <li><h6>Sessions amount:</h6><span>${courseObj.sessions.length} Session(s)</span></li>
+                //         <li><h6>Classes amount:</h6><span>${courseObj.classes.length} Class(es)</span></li>
+                //     </ul>
+                // </div>
+                // cardHtml = `<div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                //     <div class="card shadow-sm h-100">
+                //         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                //             <strong>Course ID: ${courseObj.courseId}</strong>
+                //             <span class="badge badge-light text-dark">${statusText}</span>
+                //         </div>
+                //         <div class="card-body">
+                //             <table class="table table-borderless table-sm mb-0">
+                //                 <tbody>
+                //                     <tr>
+                //                         <th scope="row">Course Name</th>
+                //                         <td>${courseObj.courseName}</td>
+                //                     </tr>
+                //                     <tr>
+                //                         <th scope="row">Course Type</th>
+                //                         <td>${courseObj.courseType}</td>
+                //                     </tr>
+                //                     <tr>
+                //                         <th scope="row">Total Hours</th>
+                //                         <td>${courseObj.totalHours}</td>
+                //                     </tr>
+                //                     <tr>
+                //                         <th scope="row">Required Age</th>
+                //                         <td>${courseObj.requiredAge}</td>
+                //                     </tr>
+                //                     <tr>
+                //                         <th scope="row">Difficulty</th>
+                //                         <td>${courseObj.difficulty}</td>
+                //                     </tr>
+                //                     <tr>
+                //                         <th scope="row">Description</th>
+                //                         <td class="text-truncate" style="max-width: 200px;">${courseObj.description}</td>
+                //                     </tr>
+                //                     <tr>
+                //                         <th scope="row">Sessions</th>
+                //                         <td>${courseObj.sessions.length} Session(s)</td>
+                //                     </tr>
+                //                     <tr>
+                //                         <th scope="row">Classes</th>
+                //                         <td>${courseObj.classes.length} Class(es)</td>
+                //                     </tr>
+                //                 </tbody>
+                //             </table>
+                //         </div>
+                //         <div class="card-footer text-center">
+                //             <a class="btn btn-sm btn-primary" href="/Admin/Course/${courseObj.courseId}/Info">Details</a>
+                //         </div>
+                //     </div>
+                // </div>`;
                 // Append the constructed HTML to the class list container
                 courseList.append(cardHtml);
             });

@@ -358,8 +358,8 @@
                                     <select class="form-control custom-select" id="updateClassStatus_Status"></select>
                                     <span id="helper_message"
                                           class="helper-text text-danger d-block">* This action cannot be undone!</span>
-                                    @* <span asp-validation-for="@updateClass.Status" id="error_message"
-                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"
+                                          data-valmsg-for="updateClassStatus.Status" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                         </div>
@@ -1293,6 +1293,12 @@
                     if (response.status) {
                         showAlert('success', "Class Status update successfully");
                         callApiGetClassDetail();
+                        // Check if the updated status is "Ongoing"
+                        if (formData === "Ongoing") {
+                            setTimeout(() => {
+                                $('div#changeClassStatus').modal('hide'); // Bootstrap modal hide
+                            }, 500);
+                        }
                     } else {
                         showAlert('error', "Error: \n" + response.errorMessage);
                     }
