@@ -38,41 +38,37 @@
                 <section>
                     <div class="card">
                         <div class="card-body">
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs">
-                                <!-- dung vong for o day -->
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="/Admin/Class/Index">
-                                        <i class='bx bx-home-alt-2'></i>
-                                        <span>All Classes</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-                                <!-- home1 -->
-                                <div class="tab-pane active" id="home1" role="tabpanel">
-                                    <div class="row search">
-                                        <div class="col-sm-12 d-flex">
-                                            <div class="col-sm-6 d-flex address-home">
-                                            </div>
-                                            <div class="col-sm-6 d-flex justify-content-end">
-                                                <form method="get" asp-route-search="@search">
-                                                    <div>
-                                                        <label>
-                                                            <input asp-for="@search" class="form-control" type="text" placeholder="Search..." value="@search">
-                                                            <i class='bx bx-search-alt'></i>
-                                                        </label>
-                                                    </div>
-                                                </form>
+                            <div class="row search">
+                                <div class="col-sm-12 d-flex justify-content-between align-items-center">
+                                    <div class="col-sm-6">
+                                        <h4 class="m-0">All Classes</h4>
+                                    </div>
+                                    <div class="col-sm-6 d-flex justify-content-end">
+                                        <div class="input-group w-auto">
+                                            @* <select class="custom-select" id="select-difficulty">
+                                                <option value="" selected>All Difficulty</option>
+                                                <option value="Beginner">Beginner</option>
+                                                <option value="Intermediate">Intermediate</option>
+                                                <option value="Advanced">Advanced</option>
+                                            </select> *@
+                                            <div class="input-group-append">
+                                                @* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div role="separator" class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Separated link</a>
+                                                </div> *@
+                                                <input asp-for="@search" class="form-control" type="text" placeholder="Search class name..." value="@search">
+                                                <i class='bx bx-search-alt search-icon'></i>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row card-content" id="classList">
-                                        <!-- dung vong for o day -->
-                                    </div>
-                                    <!-- end tapnet -->
                                 </div>
+                            </div>
+                            <div class="row card-content" id="classList">
+                                <!-- dung vong for o day -->
                             </div>
                         </div>
                     </div>
@@ -597,7 +593,7 @@
             classList.empty(); // Clear any existing options
             var cardCreateClassHtml = `
                         <div class="col-xl-3 col-lg-6 col-sm-6 my-3 item">
-                            <div class="card1 card-child">
+                            <div class="card1 card-child shadow-sm h-100">
                                 <div class="card-body add-club">
                                     <button class="border-0" data-toggle="modal" data-target="#addClass">
                                         <span>Add Class</span>
@@ -637,35 +633,58 @@
                 // Construct card HTML
                 var cardHtml = `
                     <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
-                        <div class="card1 card-child">
-                            <div class="club-name">
-                                Class Code: ${classObj.className}
-                                <div class="status">
-                                    ${statusText}
-                                </div>
+                        <div class="card1 card-child shadow-sm h-100">
+                            <div class="club-name d-flex justify-content-between align-items-center flex-wrap">
+                                <strong class="text-truncate" style="max-width: 200px;">${classObj.className}</strong>
+                                ${statusText}
                             </div>
                             <div class="card-body">
-                                <div class="club-title">
-                                    <ul>
-                                        <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
-                                        <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
-                                        <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
-                                        <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
-                                        <li><h6>Enrollment Fee:</h6><span>${formatter.format(classObj.enrollmentFee)}</span></li>
-                                        <li><h6>Minimum students amount:</h6><span>${classObj.minimumStudents}</span></li>
-                                        <li><h6>Maximum students amount:</h6><span>${classObj.maximumStudents}</span></li>
-                                        <li><h6>Current students amount:</h6><span>${filteredEnrollList.length}</span></li>
-                                        <li><h6>Weekly scheduled sessions amount:</h6><span>${classObj.schedules.length}</span></li>
-                                        <li><h6>Current enrolls amount:</h6><span>${classObj.enrolls.length}</span></li>
-                                    </ul>
-                                </div>
+                                <h5 class="card-title h-14"><strong>Course: </strong><br/> ${classObj.course.courseName}</h5>
                             </div>
-                            <div class="form-group mx-auto">
-                                <a class="btn btn-primary clickable-row" href="/Admin/Class/${classObj.classId}/Info" role="button">Details</a>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-book-reader mr-2'></i><span> Teacher: ${classObj.teacher.account.fullname}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-calendar-event mr-2'></i><span> Class start at ${formattedStartDate} and ends at ${formattedEndDate}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-user-circle mr-2'></i><span> Require ${classObj.minimumStudents} - ${classObj.maximumStudents} students</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-money mr-2'></i><span> ${formatter.format(classObj.enrollmentFee)}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-child mr-2'></i><span> ${filteredEnrollList.length} enrolled students - ${classObj.enrolls.length} enrolls</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-spreadsheet mr-2'></i><span> ${classObj.schedules.length} scheduled session(s)</span></li>
+                            </ul>
+                            <div class="club-footer d-flex justify-content-around">
+                                <a class="btn btn-primary clickable-row d-flex align-items-center" href="/Admin/Class/${classObj.classId}/Info" role="button"><i class='bx bx-info-circle mr-2'></i> Details</a>
                             </div>
                         </div>
                     </div>
                 `;
+                // <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                //         <div class="card1 card-child">
+                //             <div class="club-name">
+                //                 Class Code: ${classObj.className}
+                //                 <div class="status">
+                //                     ${statusText}
+                //                 </div>
+                //             </div>
+                //             <div class="card-body">
+                //                 <div class="club-title">
+                //                     <ul>
+                //                         <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
+                //                         <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
+                //                         <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
+                //                         <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
+                //                         <li><h6>Enrollment Fee:</h6><span>${formatter.format(classObj.enrollmentFee)}</span></li>
+                //                         <li><h6>Minimum students amount:</h6><span>${classObj.minimumStudents}</span></li>
+                //                         <li><h6>Maximum students amount:</h6><span>${classObj.maximumStudents}</span></li>
+                //                         <li><h6>Current students amount:</h6><span>${filteredEnrollList.length}</span></li>
+                //                         <li><h6>Weekly scheduled sessions amount:</h6><span>${classObj.schedules.length}</span></li>
+                //                         <li><h6>Current enrolls amount:</h6><span>${classObj.enrolls.length}</span></li>
+                //                     </ul>
+                //                 </div>
+                //             </div>
+                //             <div class="form-group mx-auto">
+                //                 <a class="btn btn-primary clickable-row" href="/Admin/Class/${classObj.classId}/Info" role="button">Details</a>
+                //             </div>
+                //         </div>
+                //     </div>
                 // Append the constructed HTML to the class list container
                 // <form method="get" asp-route-id="${classObj.classId}">
                 //     <button class="btn btn-primary clickable-row" type="submit">See Detail</button>
