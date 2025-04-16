@@ -1,4 +1,4 @@
-﻿@page "/Admin/Course/Index"
+﻿@page "/admin/courses"
 @model CEG_RazorWebApp.Pages.Admin.Course.CourseIndexModel
 @{
     ViewData["Title"] = "Admin All Courses Page";
@@ -28,7 +28,7 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Course/Index">Course</a>
+                                <a href="/admin/courses">Course</a>
                             </li>
                         </ol>
                     </div>
@@ -43,13 +43,22 @@
                                     </div>
                                     <div class="col-sm-6 d-flex justify-content-end">
                                         <div class="input-group w-auto">
-                                            <select class="custom-select" id="select-difficulty">
+                                            <select class="custom-select w-auto" id="select-status">
+                                                <option value="" selected>All Status</option>
+                                                <option value="Available">Available</option>
+                                                <option value="Draft">Draft</option>
+                                            </select>
+                                            <select class="custom-select w-auto" id="select-difficulty">
                                                 <option value="" selected>All Difficulty</option>
                                                 <option value="Beginner">Beginner</option>
                                                 <option value="Intermediate">Intermediate</option>
                                                 <option value="Advanced">Advanced</option>
                                             </select>
                                             <div class="input-group-append">
+                                                <div class="col p-0 m-0">
+                                                    <input asp-for="@search" class="form-control" type="text" placeholder="Search course name..." value="@search">
+                                                    <i class='bx bx-search-alt search-icon'></i>
+                                                </div>
                                                 @* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="#">Action</a>
@@ -58,8 +67,6 @@
                                                     <div role="separator" class="dropdown-divider"></div>
                                                     <a class="dropdown-item" href="#">Separated link</a>
                                                 </div> *@
-                                                <input asp-for="@search" class="form-control" type="text" placeholder="Search course name..." value="@search">
-                                                <i class='bx bx-search-alt search-icon'></i>
                                             </div>
                                         </div>
                                     </div>
@@ -147,6 +154,18 @@
         var homeworkQuestionList = [];
         $(document).ready(function () {
             callApiGetCourseList();
+            $('#select-status').off('change').on('change', function () {
+                // Get the search term
+                var selectedValue = $(this).val().toLowerCase();
+
+                // Filter the classes based on the search term
+                var filteredcourseList = courseList.filter(function (courseObject) {
+                    return courseObject.status.toLowerCase().includes(selectedValue);
+                });
+
+                // Display the filtered classList
+                setCourseDisplay(filteredcourseList);
+            });
             $('#select-difficulty').off('change').on('change', function () {
                 // Get the search term
                 var selectedValue = $(this).val().toLowerCase();

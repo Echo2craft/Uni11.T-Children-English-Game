@@ -1,4 +1,4 @@
-﻿@page "/Student/Class/{classId}/Info"
+﻿@page "/student/classes/{classId}"
 @model CEG_RazorWebApp.Pages.Student.Class.ClassInfoModel
 @{
     ViewData["Title"] = "Student Class Info Page";
@@ -26,19 +26,19 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Student/Class/Index">Class</a>
+                                <a href="/student/classes">Class</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Student/Class/@Model.ClassID/Info">@Model.ClassID</a>
+                                <a href="/student/classes/@Model.ClassID">@Model.ClassID</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Student/Class/@Model.ClassID/Info">Info</a>
+                                <a href="/student/classes/@Model.ClassID">Details</a>
                             </li>
                         </ol>
                     </div>

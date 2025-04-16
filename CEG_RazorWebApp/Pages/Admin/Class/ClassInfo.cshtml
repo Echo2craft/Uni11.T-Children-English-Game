@@ -1,4 +1,4 @@
-﻿@page "/Admin/Class/{classId}/Info"
+﻿@page "/admin/classes/{classId}"
 @model CEG_RazorWebApp.Pages.Admin.Class.ClassInfoModel
 @{
     ViewData["Title"] = "Admin Class Info Page";
@@ -29,19 +29,19 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Class/Index">Class</a>
+                                <a href="/admin/classes">Class</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Class/@Model.ClassID/Info">@Model.ClassID</a>
+                                <a href="/admin/classes/@Model.ClassID">@Model.ClassID</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Class/@Model.ClassID/Info">Info</a>
+                                <a href="/admin/classes/@Model.ClassID">Details</a>
                             </li>
                         </ol>
                     </div>
