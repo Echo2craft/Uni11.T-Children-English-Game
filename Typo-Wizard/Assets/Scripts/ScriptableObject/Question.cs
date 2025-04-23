@@ -116,8 +116,8 @@ public class Question : ScriptableObject {
 
         // Save the asset
         string path = $"Assets/Questions/Question_{questionData.homework_question_id}.asset";
-        AssetDatabase.CreateAsset(newQuestion, path);
-        AssetDatabase.SaveAssets();
+        //AssetDatabase.CreateAsset(newQuestion, path);
+        //AssetDatabase.SaveAssets();
 
         Debug.Log($"Created Question asset at {path}");
     }

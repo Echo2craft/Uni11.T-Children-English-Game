@@ -46,6 +46,7 @@ public class Typer : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
+            Debug.Log($"Casting spell with string: [{currentString}]");
             CastSpell();
             return;
         }
@@ -62,10 +63,25 @@ public class Typer : MonoBehaviour
 
     public void CastSpell()
     {
+        currentString = currentString.Trim().ToLower(); // Clean it up
+
+        Debug.Log($"Trying to cast spell: [{currentString}]");
+
+        if (Controller.INSTANCE == null)
+        {
+            Debug.LogWarning("Controller.INSTANCE is null!");
+            return;
+        }
+
         if (Controller.INSTANCE.CastSpell(currentString))
         {
+            Debug.Log("Spell cast successfully!");
             currentString = "";
             wordOutput.text = currentString;
+        }
+        else
+        {
+            Debug.Log("Spell cast failed.");
         }
     }
 
