@@ -1,14 +1,46 @@
-let toggle = document.querySelector(".toggle");
+/*let toggle = document.querySelector(".toggle");
 let navigation = document.querySelector(".navigation");
 let header = document.querySelector(".header");
 let main = document.querySelector(".main-content");
 
 
 toggle.onclick = function () {
-  navigation.classList.toggle("active");
-  header.classList.toggle("active");
-  main.classList.toggle("active");
-};
+    navigation.classList.toggle("active");
+    header.classList.toggle("active");
+    main.classList.toggle("active");
+
+    // Save state to localStorage
+    *//*const isActive = navigation.classList.contains("active");
+    localStorage.setItem("layoutActive", isActive ? "true" : "false");*//*
+};*/
+/*if (localStorage.getItem("layoutActive") === "true") {
+    navigation.addClass("active");
+    header.addClass("active");
+    main.addClass("active");
+}*/
+// DOM
+/*$(document).ready(function () {
+    // still valid!
+});*/
+
+$(function () {
+    // Restore layout state on page load
+    if (localStorage.getItem("layoutActive") === "true") {
+        console.log("is toggled");
+        $(".navigation, .header, .main-content").addClass("active");
+    }
+    // Toggle layout and store state
+    $(".toggle").off("click").on("click", function () {
+        $(".navigation, .header, .main-content").toggleClass("active");
+
+        // Save state
+        const isActive = $(".navigation").hasClass("active");
+        console.log("check this out");
+        localStorage.setItem("layoutActive", isActive ? "true" : "false");
+    });
+});
+
+
 
 $(".nav-link").each(function (i) {
   if (i === 0) {
@@ -22,7 +54,7 @@ $(".tab-pane").each(function (i) {
 });
 
 //print bill
-$('.btn-print').click(function () {
+$('.btn-print').off('click').on('click',function () {
     var table = document.getElementById("table");
     var wme = window.open("","","with=900,height=700");
     wme.document.write(table.outerHTML);
@@ -34,10 +66,10 @@ $('.btn-print').click(function () {
 })
 
 //loading
-// $(window).on("load",function () {
-//     $(".preloader").fadeOut("slow");
-//     $(".preloader").css("display","none");
-// });
+/*$(window).on("load",function () {
+    $(".preloader").fadeOut("slow");
+    $(".preloader").css("display","none");
+});*/
 
 let vnd = Intl.NumberFormat("vi-VN", {
   style: "currency",

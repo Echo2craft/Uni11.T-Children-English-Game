@@ -1,4 +1,4 @@
-﻿@page "/Admin/Class/{classId}/Info"
+﻿@page "/admin/classes/{classId}"
 @model CEG_RazorWebApp.Pages.Admin.Class.ClassInfoModel
 @{
     ViewData["Title"] = "Admin Class Info Page";
@@ -29,19 +29,19 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Class/Index">Class</a>
+                                <a href="/admin/classes">Class</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Class/@Model.ClassID/Info">@Model.ClassID</a>
+                                <a href="/admin/classes/@Model.ClassID">@Model.ClassID</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Class/@Model.ClassID/Info">Info</a>
+                                <a href="/admin/classes/@Model.ClassID">Details</a>
                             </li>
                         </ol>
                     </div>
@@ -358,8 +358,8 @@
                                     <select class="form-control custom-select" id="updateClassStatus_Status"></select>
                                     <span id="helper_message"
                                           class="helper-text text-danger d-block">* This action cannot be undone!</span>
-                                    @* <span asp-validation-for="@updateClass.Status" id="error_message"
-                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"
+                                          data-valmsg-for="updateClassStatus.Status" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                         </div>
@@ -1293,6 +1293,12 @@
                     if (response.status) {
                         showAlert('success', "Class Status update successfully");
                         callApiGetClassDetail();
+                        // Check if the updated status is "Ongoing"
+                        if (formData === "Ongoing") {
+                            setTimeout(() => {
+                                $('div#changeClassStatus').modal('hide'); // Bootstrap modal hide
+                            }, 500);
+                        }
                     } else {
                         showAlert('error', "Error: \n" + response.errorMessage);
                     }
