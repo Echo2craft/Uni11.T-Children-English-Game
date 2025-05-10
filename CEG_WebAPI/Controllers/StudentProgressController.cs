@@ -94,6 +94,42 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
+        [HttpGet("ByStudent/{id}")]
+        [ProducesResponseType(typeof(StudentProgressViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetStudentProgressByStudentId(
+            [FromRoute][Required] int id
+            )
+        {
+            try
+            {
+                var result = await _studentProgressService.GetListByStudentId(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Student progress not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
         [HttpGet("Dashboard/{id}")]
         [Authorize(Roles = "Student")]
         [ProducesResponseType(typeof(StudentDashboard), StatusCodes.Status200OK)]

@@ -59,6 +59,17 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
+        public async Task<List<StudentAnswerViewModel>> GetListByStudentId(int id)
+        {
+            var answ = await _unitOfWork.StudentAnswerRepositories.GetListByStudentId(id);
+            if (answ != null)
+            {
+                var answvm = _mapper.Map<List<StudentAnswerViewModel>>(answ);
+                return answvm;
+            }
+            return new List<StudentAnswerViewModel>();
+        }
+
         public async Task<List<StudentAnswerViewModel>> GetList()
         {
             return _mapper.Map<List<StudentAnswerViewModel>>(await _unitOfWork.StudentAnswerRepositories.GetList());
