@@ -1,4 +1,4 @@
-﻿@page "/Admin/Question/{questionId}/Info"
+﻿@page "/admin/questions/{questionId}"
 @model CEG_RazorWebApp.Pages.Admin.Question.QuestionInfoModel
 @{
     ViewData["Title"] = "Admin Homework Question Info Page";
@@ -31,31 +31,30 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Question/Index">Question</a>
+                                <a href="/admin/questions">Questions</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Question/@Model.QuestionId/Info">@Model.QuestionId</a>
+                                <a href="/admin/questions/@Model.QuestionId">@Model.QuestionId</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Question/@Model.QuestionId/Info">Info</a>
+                                <a href="/admin/questions/@Model.QuestionId">Details</a>
                             </li>
                         </ol>
                     </div>
                 </div>
-                <div class="row">
+                @* <div class="row">
                     <div class="col-12 customer-booking">
                         <div class="row">
                             <div class="card profile col-12 mb-4">
                                 <div class="card-header" id="question-title-status">
                                     <h4>Question <label id="question-question-title" class="truncate"></label> Information</h4>
                                 </div>
-                                <div id="alertContainer"></div>
                                 <div class="card-body">
                                     <div class="row mb-sm-2">
                                         <div class="col-md-5 text-md-right">
@@ -100,27 +99,129 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> *@
+                <section>
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills nav-fill flex-column flex-sm-row" role="tablist">
+                                <!-- dung vong for o day -->
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab active flex-sm-fill text-sm-center" data-toggle="tab" href="#question_info_Tab" role="tab" aria-controls="info" aria-selected="true">
+                                        <i class='bx bx-home-alt-2'></i>
+                                        <span>Question details</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab flex-sm-fill text-sm-center" data-toggle="tab" href="#answer_list_Tab" role="tab" aria-controls="answer" aria-selected="true">
+                                        <i class='bx bx-home-alt-2'></i>
+                                        <span>Answers</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <!-- question_info_Tab -->
+                                <div class="tab-pane fade show active" id="question_info_Tab" role="tabpanel">
+                                    <div class="card profile mb-4">
+                                        <div class="card-header" id="question-title-status">
+                                            <h4 id="question-question-title">Question details</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-borderless class-info-table">
+                                                    <colgroup>
+                                                        <col style="width: 30%;">
+                                                        <col style="width: 70%;">
+                                                    </colgroup>
+                                                    <tbody>
+                                                        <tr>
+                                                            <th class="text-md-right">Question ID:</th>
+                                                            <td id="question-id"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Description:</th>
+                                                            <td id="question-question"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="text-md-right">Answers:</th>
+                                                            <td id="question-answers-amount"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- answer_list_Tab -->
+                                <div class="tab-pane fade" id="answer_list_Tab" role="tabpanel">
+                                    <div class="card profile mb-4">
+                                        <div class="card-header" id="question-allow-add-answer">
+                                            <h4>Answer list</h4>
+                                        </div>
+                                        <!-- answer_list_Tab -->
+                                        <div class="card-body" id="answer_list">
+                                            <div id="answer-table_wrapper" class="dataTables_wrapper no-footer">
+                                                <table id="answer-table"
+                                                       class="table table-striped table-bordered dataTable no-footer compact"
+                                                       aria-describedby="answer-table_info">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="answer-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Answer ID: activate to sort column ascending">
+                                                                ID
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="answer-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Session Title: activate to sort column ascending">
+                                                                Answer
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="answer-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Date: activate to sort column ascending">
+                                                                Type
+                                                            </th>
+                                                            <th class="sorting sorting_asc" tabindex="0"
+                                                                aria-controls="answer-table" rowspan="1"
+                                                                colspan="1" aria-sort="ascending"
+                                                                aria-label="Start Time: activate to sort column ascending">
+                                                                Options
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
     <div id="editQuestion" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Edit Question</h4>
                 </div>
                 <form method="put" id="editQuestionForm" class="form-group">
                     <div class="modal-body">
-                        <div class="modal-body">
-                            <div class="col-12">
-                                <div class="form-group row">
-                                    <label asp-for="@updateQuestion.Question" class="col-sm-4 col-form-label"></label>
-                                    <div class="col-sm-8">
-                                        <textarea asp-for="@updateQuestion.Question" value="@updateQuestion.Question" required class="form-control"></textarea>
-                                        <span asp-validation-for="@updateQuestion.Question" id="error_message"
-                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                    </div>
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label asp-for="@updateQuestion.Question" class="col-form-label">New Question</label>
+                                    <textarea asp-for="@updateQuestion.Question" value="@updateQuestion.Question" required class="form-control"></textarea>
+                                    <span asp-validation-for="@updateQuestion.Question" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
                             </div>
                         </div>
@@ -134,29 +235,34 @@
         </div>
     </div>
     <div id="createAnswer" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Add new Homework Answer</h4>
                 </div>
                 <form method="post" id="createAnswerForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@createAnswer.Answer" class="col-md-3 col-form-label text-md-right"></label>
-                                    <textarea asp-for="@createAnswer.Answer" value="@createAnswer.Answer" required class="col-md-7 form-control"></textarea>
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label asp-for="@createAnswer.Answer" class="col-form-label">Answer description</label>
+                                    <textarea asp-for="@createAnswer.Answer" value="@createAnswer.Answer" required class="form-control"></textarea>
                                     <span asp-validation-for="@createAnswer.Answer" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                </div>
-                                <div class="row form-group">
-                                    <label asp-for="@createAnswer.Type" class="col-md-3 col-form-label text-md-right"></label>
-                                    <select class="form-control col-md-7 custom-select" asp-for="@createAnswer.Type"></select>
-                                    <span asp-validation-for="@createAnswer.Type" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                    <input asp-for="@createAnswer.QuestionId" value="@Model.QuestionId" type="text" required hidden readonly>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
                             </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-4">
+                                    <label asp-for="@createAnswer.Type" class="col-form-label">Hours</label>
+                                    <select class="form-control custom-select" asp-for="@createAnswer.Type" required>
+                                        <option value="Correct">Correct</option>
+                                        <option value="Incorrect">Incorrect</option>
+                                    </select>
+                                    <span asp-validation-for="@createAnswer.Type" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <input asp-for="@createAnswer.QuestionId" value="@Model.QuestionId" type="text" required hidden readonly>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
@@ -171,8 +277,130 @@
         var token = '@acctoken';
         var apiUrl = sessionStorage.getItem('apiUrl');
         var questionList = [];
+        var answerTable;
+        var courseStatus;
         $(document).ready(function () {
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('searchIcon', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bx-search-alt question-search-icon',
+                    hideLabel: true // Hide search label
+                }, opts);
+
+                // Create a container for the icon
+                let container = document.createElement('div');
+                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                // Create the icon element
+                let icon = document.createElement('i');
+                icon.className = options.iconClass;
+
+                // Check if pagination is enabled
+                // if (settings.oFeatures.bFilter) {
+                //     console.log(settings.oFeatures.bFilter);
+                //     console.log('Pagination is enabled for this DataTable.');
+                // }
+
+                setTimeout(() => {
+                    // Find the .dt-search container inside the DataTable wrapper
+                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                    if (searchContainer.length) {
+                        searchContainer.append(icon);
+                    } else {
+                        // Append icon to container
+                        container.appendChild(icon);
+                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                        settings.nTableWrapper.prepend(container);
+                    }
+                    if (options.hideLabel) {
+                        // Find the .dt-search label container inside the DataTable wrapper
+                        let searchLabel = searchContainer.find('label');
+                        if (searchLabel.length) {
+                            searchLabel.text('');
+                        } else {
+                            console.log('Label of search div not found!');
+                        }
+                    }
+                }, 100);
+                return '';
+            });
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('toggle', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bxs-add-to-queue bx-sm',
+                    modalId: 'createAnswer', // Modal ID that the icon will trigger
+                }, opts);
+                let container = document.createElement('div');
+                setTimeout(() => {
+                    if(!isEditable()) return container;
+                    // console.log(options.isActivated);
+                    if (settings.nTableWrapper.querySelector('.dt-modal-toggle')) return;
+                    // if(!options.isActivated) return;
+
+                    // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                    // Create the icon element
+                    let icon = document.createElement('i');
+                    icon.className = options.iconClass;
+                    container.className = 'dt-modal-toggle';
+                    icon.setAttribute('data-toggle', 'modal');
+                    icon.setAttribute('data-target', `#${options.modalId}`);
+                    icon.style.cursor = 'pointer';
+
+                    // Append icon to container
+                    container.appendChild(icon);
+
+                    // Insert the container in the DataTable toolbar
+                    // console.log(settings);
+                    // console.log(settings.nTableWrapper);
+                    console.log($(settings.nTableWrapper));
+                    console.log($(settings.nTableWrapper)[0].childNodes[0].childNodes[1]);
+                    $(settings.nTableWrapper)[0].childNodes[0].childNodes[1].append(container);
+                }, 500);
+                return container;
+            });
             callApiGetQuestionDetail();
+            answerTable = new DataTable('#answer-table', {
+                data: [],
+                lengthMenu: [8, 10, 25, 50],
+                pageLength: 8,
+                deferRender: false,
+                responsive: true,
+                columns: [
+                    {
+                        data: 'homeworkAnswerId',
+                        className: 'dt-head-left'
+                    },
+                    {
+                        data: 'answer'
+                    },
+                    // { data: 'status' },
+                    { // Add a select box in the last column
+                        data: 'type'
+                    },
+                    { // Add a select box in the last column
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return `
+                                <span>Placeholder</span>
+                                `;
+                        }
+                    }
+                ],
+                layout: {
+                    topEnd: {
+                        search: {
+                            placeholder: 'Search answer...'
+                        },
+                        searchIcon: {
+                        },
+                        toggle:{
+                        }
+                    }
+                }
+            });
             $('#editQuestionForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
 
@@ -217,34 +445,11 @@
                 //$(this).trigger("reset");
             });
         });
-        // Function to display alerts
-        function showAlert(type, message) {
-            var alertHtml = '';
-
-            if (type === 'success') {
-                alertHtml = `
-                                <div class="alert alert-success alert-dismissible fade show" id="notif">
-                                    <i class='bx bx-message-alt-x p-1'></i>
-                                    <strong class="mr-1">` + message + `</strong>
-                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                        <span><i class='bx bx-x'></i></span>
-                                    </button>
-                                </div>
-                            `;
-            } else if (type === 'error') {
-                alertHtml = `
-                                <div class="alert alert-danger alert-dismissible fade show" id="notif">
-                                    <i class='bx bx-message-alt-x p-1'></i>
-                                    <strong class="mr-1">` + message + `</strong>
-                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                        <span><i class='bx bx-x'></i></span>
-                                    </button>
-                                </div>
-                            `;
-            }
-
-            // Inject the alert HTML into the alert container
-            $('#alertContainer').html(alertHtml);
+        function isEditable(){
+            // setTimeout(() => {
+            //     return courseStatus === 'Draft' || courseStatus === 'Postponed' || courseStatus === 'NotFound' || courseStatus === null || courseStatus === undefined;
+            // }, 300);
+            return courseStatus === 'Draft' || courseStatus === 'Postponed' || courseStatus === 'NotFound' || courseStatus === null || courseStatus === undefined;
         }
         function callApiPutUpdateQuestion(formData) {
             $.ajax({
@@ -386,17 +591,18 @@
                         setQuestionDisplay(response.data);
                         // Check if homeworkAnswers is empty
                         if (response.data.homeworkAnswers && response.data.homeworkAnswers.length > 0) {
+                            answerTable.clear().rows.add(response.data.homeworkAnswers).draw();
                             // Clear any existing answers
-                            $('#answer_list').empty();
+                            // $('#answer_list').empty();
 
                             // Loop through each answer and generate the HTML
-                            response.data.homeworkAnswers.forEach(function (answer) {
-                                let answerHtml = generateAnswerHtml(answer, response.data.courseStatus); // Assuming both answerInfo and updateAnswer are the same structure
-                                $('#answer_list').append(answerHtml);
-                            });
+                            // response.data.homeworkAnswers.forEach(function (answer) {
+                            //     let answerHtml = generateAnswerHtml(answer, response.data.courseStatus); Assuming both answerInfo and updateAnswer are the same structure
+                            //     $('#answer_list').append(answerHtml);
+                            // });
                         } else {
                             // If the answer list is empty
-                            $('#answer_list').html('<h5>No answers found</h5>');
+                            // $('#answer_list').html('<h5>No answers found</h5>');
                         }
                     } else {
                         console.error("API returned false status.");
@@ -424,116 +630,106 @@
                 }
             });
         }
-        function generateAnswerHtml(answerInfo, status) {
-            var answerUpdateToggleHtml = status === 'Draft' || status === 'Postponed' || status === 'NotFound' ? `
-                            <div class="edit-info">
-                                <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editanswer_${answerInfo.homeworkAnswerId}"></i>
-                            </div>
-                        ` : '';
-            var answerUpdateHtml = status === 'Draft' || status === 'Postponed' || status === 'NotFound' ? `
-                            <div id="editanswer_${answerInfo.homeworkAnswerId}" class="modal fade" role="dialog">
-                                <div class="modal-dialog modal-dialog-centered modal-lg" role="content">
-                                    <div class="modal-content modal-addRoom">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title truncate">Update Answer ${answerInfo.answer}</h4>
-                                        </div>
-                                        <form method="put" class="form-group" id="editAnswerForm_${answerInfo.homeworkAnswerId}">
-                                            <div class="modal-body">
-                                                <div class="col-12">
-                                                    <div class="form-group row">
-                                                        <label for="updateAnswer_${answerInfo.homeworkAnswerId}_Answer" class="col-sm-4 col-form-label">Answer</label>
-                                                        <div class="col-sm-8">
-                                                            <textarea id="updateAnswer_${answerInfo.homeworkAnswerId}_Answer" name="Answer" required class="form-control">${answerInfo.answer}</textarea>
-                                                            <span class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2" id="error_message"></span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="updateAnswer_${answerInfo.homeworkAnswerId}_Type" class="col-sm-4 col-form-label">Answer Type</label>
-                                                        <div class="col-sm-8">
-                                                            <select id="updateAnswer_${answerInfo.homeworkAnswerId}_Type" name="Type" class="form-control custom-select">
-                                                                ${getTypeOptions(answerInfo.type)}
-                                                            </select>
-                                                            <span class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2" id="error_message"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer justify-content-center">
-                                                <button class="btn btn-success" type="submit" value="Update">Save</button>
-                                                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        ` : '';
-            return `
-                            <div class="card-header">
-                                <h5>Answer <label class="truncate">${answerInfo.answer}</label> Details</h5>
-                                ` + answerUpdateToggleHtml + `
-                            </div>
-                            <div class="card-body">
-                                <div class="row mb-sm-2">
-                                    <div class="col-md-5 text-md-right">
-                                        <label class="col-form-label">Answer ID:</label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <span>${answerInfo.homeworkAnswerId}</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-sm-2">
-                                    <div class="col-sm-5 text-sm-right">
-                                        <label for="meeting-name">Answer:</label>
-                                    </div>
-                                    <div class="col-sm-7 text-sm-left">
-                                        <span>${answerInfo.answer}</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-sm-2">
-                                    <div class="col-sm-5 text-sm-right">
-                                        <label for="meeting-name">Answer Type:</label>
-                                    </div>
-                                    <div class="col-sm-7 text-sm-left">
-                                        <span>${answerInfo.type}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr class="container my-0">
-                        ` + answerUpdateHtml;
-        }
-        function getTypeOptions(selectedType) {
-            var options = ['Incorrect', 'Correct']; // Example types
-            var html = '';
-
-            options.forEach(function (type) {
-                html += `<option value="${type}" ${selectedType === type ? 'selected' : ''}>${type}</option>`;
-            });
-
-            return html;
-        }
+        // function generateAnswerHtml(answerInfo, status) {
+        //     var answerUpdateToggleHtml = status === 'Draft' || status === 'Postponed' || status === 'NotFound' ? `
+        //                     <div class="edit-info">
+        //                         <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editanswer_${answerInfo.homeworkAnswerId}"></i>
+        //                     </div>
+        //                 ` : '';
+        //     var answerUpdateHtml = status === 'Draft' || status === 'Postponed' || status === 'NotFound' ? `
+        //                     <div id="editanswer_${answerInfo.homeworkAnswerId}" class="modal fade" role="dialog">
+        //                         <div class="modal-dialog modal-dialog-centered modal-lg" role="content">
+        //                             <div class="modal-content modal-addRoom">
+        //                                 <div class="modal-header">
+        //                                     <h4 class="modal-title truncate">Update Answer ${answerInfo.answer}</h4>
+        //                                 </div>
+        //                                 <form method="put" class="form-group" id="editAnswerForm_${answerInfo.homeworkAnswerId}">
+        //                                     <div class="modal-body">
+        //                                         <div class="col-12">
+        //                                             <div class="form-group row">
+        //                                                 <label for="updateAnswer_${answerInfo.homeworkAnswerId}_Answer" class="col-sm-4 col-form-label">Answer</label>
+        //                                                 <div class="col-sm-8">
+        //                                                     <textarea id="updateAnswer_${answerInfo.homeworkAnswerId}_Answer" name="Answer" required class="form-control">${answerInfo.answer}</textarea>
+        //                                                     <span class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2" id="error_message"></span>
+        //                                                 </div>
+        //                                             </div>
+        //                                             <div class="form-group row">
+        //                                                 <label for="updateAnswer_${answerInfo.homeworkAnswerId}_Type" class="col-sm-4 col-form-label">Answer Type</label>
+        //                                                 <div class="col-sm-8">
+        //                                                     <select id="updateAnswer_${answerInfo.homeworkAnswerId}_Type" name="Type" class="form-control custom-select">
+        //                                                         ${getTypeOptions(answerInfo.type)}
+        //                                                     </select>
+        //                                                     <span class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2" id="error_message"></span>
+        //                                                 </div>
+        //                                             </div>
+        //                                         </div>
+        //                                     </div>
+        //                                     <div class="modal-footer justify-content-center">
+        //                                         <button class="btn btn-success" type="submit" value="Update">Save</button>
+        //                                         <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+        //                                     </div>
+        //                                 </form>
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                 ` : '';
+        //     return `
+        //                     <div class="card-header">
+        //                         <h5>Answer <label class="truncate">${answerInfo.answer}</label> Details</h5>
+        //                         ` + answerUpdateToggleHtml + `
+        //                     </div>
+        //                     <div class="card-body">
+        //                         <div class="row mb-sm-2">
+        //                             <div class="col-md-5 text-md-right">
+        //                                 <label class="col-form-label">Answer ID:</label>
+        //                             </div>
+        //                             <div class="col-md-7">
+        //                                 <span>${answerInfo.homeworkAnswerId}</span>
+        //                             </div>
+        //                         </div>
+        //                         <div class="row mb-sm-2">
+        //                             <div class="col-sm-5 text-sm-right">
+        //                                 <label for="meeting-name">Answer:</label>
+        //                             </div>
+        //                             <div class="col-sm-7 text-sm-left">
+        //                                 <span>${answerInfo.answer}</span>
+        //                             </div>
+        //                         </div>
+        //                         <div class="row mb-sm-2">
+        //                             <div class="col-sm-5 text-sm-right">
+        //                                 <label for="meeting-name">Answer Type:</label>
+        //                             </div>
+        //                             <div class="col-sm-7 text-sm-left">
+        //                                 <span>${answerInfo.type}</span>
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                     <hr class="container my-0">
+        //                 ` + answerUpdateHtml;
+        // }
 
         function setQuestionDisplay(data) {
-            var titleStatusHtml = data.courseStatus === 'Draft' || data.courseStatus === 'Postponed' || data.courseStatus === 'NotFound' ? `
-                                        <div class="edit-info" id="question-question-status">
-                                            <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editQuestion"></i>
-                                        </div>
-                                        ` : '';
-            var answerAddHtml = data.courseStatus === 'Draft' || data.courseStatus === 'Postponed' || data.courseStatus === 'NotFound' ? `
-                                        <div class="edit-info" id="question-add-answer">
-                                            <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createAnswer"></i>
-                                        </div>
-                                        ` : '';
+            courseStatus = data.courseStatus;
+            console.log(courseStatus);
+            var titleStatusHtml = courseStatus === 'Draft' || courseStatus === 'Postponed' || courseStatus === 'NotFound' ? `
+                <div class="edit-info" id="question-question-status">
+                    <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editQuestion"></i>
+                </div>
+                ` : '';
+            // var answerAddHtml = data.courseStatus === 'Draft' || data.courseStatus === 'Postponed' || data.courseStatus === 'NotFound' ? `
+            //     <div class="edit-info" id="question-add-answer">
+            //         <i class='bx bxs-add-to-queue bx-sm' data-toggle="modal" data-target="#createAnswer"></i>
+            //     </div>
+            //     ` : '';
             $('#question-title-status').find('#question-question-status').remove();
-            $('#question-allow-add-answer').find('#question-add-answer').remove();
             $('#question-id').text(data.homeworkQuestionId);
-            $('#question-question-title').text(data.question);
+            $('#question-question-title').text('Question ' + data.question + ' details');
             $('#question-title-status').append(titleStatusHtml);
-            $('#question-allow-add-answer').append(answerAddHtml);
             $('#question-question').text(data.question);
             $('#question-answers-amount').text(data.answersAmount + ' Answer(s)');
 
             $('#updateQuestion_Question').text(data.question);
-            $('#createAnswer_Type').append(getTypeOptions());
+            // $('#createAnswer_Type').append(getTypeOptions());
         }
     </script>
 </body>

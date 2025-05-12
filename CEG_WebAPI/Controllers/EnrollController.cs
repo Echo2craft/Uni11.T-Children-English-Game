@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using CEG_BAL.Configurations;
 using CEG_BAL.ViewModels.Parent;
+using CEG_WebAPI.Constants;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -22,11 +23,80 @@ namespace CEG_WebAPI.Controllers
             _enrollService = enrollService;
             _config = config;
         }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
         [ProducesResponseType(typeof(List<EnrollViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetEnrollList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Parent/{id}")]
+        [Authorize(Roles = Roles.Parent)]
+        [ProducesResponseType(typeof(List<EnrollViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetEnrollListParent(
+            [FromRoute][Required] int id)
+        {
+            return await GetListForParent(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Student/{id}")]
+        [Authorize(Roles = Roles.Student)]
+        [ProducesResponseType(typeof(List<EnrollViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetEnrollListStudent(
+            [FromRoute][Required] int id)
+        {
+            return await GetListForStudent(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(EnrollViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateEnroll(
+            [FromBody][Required] CreateNewEnroll newEn
+            )
+        {
+            return await Create(newEn);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateEnroll(
+            [FromRoute][Required] int id,
+            [FromBody][Required] EnrollViewModel upEnr
+            )
+        {
+            return await Update(id, upEnr);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update/Status")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateEnrollStatus(
+            [FromRoute][Required] int id,
+            [FromBody][Required] string upEnrSta
+            )
+        {
+            return await UpdateStatus(id, upEnrSta);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<EnrollViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -60,7 +130,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(EnrollViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetEnrollById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
             {
@@ -90,12 +160,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("Parent/{id}")]
-        [Authorize(Roles = "Parent")]
+        [HttpGet("parent/account/{id}")]
+        [Authorize(Roles = Roles.Parent)]
         [ProducesResponseType(typeof(List<EnrollViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetEnrollListParent(
+        public async Task<IActionResult> GetListForParent(
             [FromRoute][Required] int id)
         {
             try
@@ -126,12 +196,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("Student/{id}")]
-        [Authorize(Roles = "Student")]
+        [HttpGet("student/account/{id}")]
+        [Authorize(Roles = Roles.Student)]
         [ProducesResponseType(typeof(List<EnrollViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetEnrollListStudent(
+        public async Task<IActionResult> GetListForStudent(
             [FromRoute][Required] int id)
         {
             try
@@ -162,11 +232,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Create")]
+        [HttpPost]
         [ProducesResponseType(typeof(EnrollViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateEnroll(
+        public async Task<IActionResult> Create(
             [FromBody][Required] CreateNewEnroll newEn
             )
         {
@@ -199,14 +269,14 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPut("{id}/Update")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] EnrollViewModel enroll
+            [FromBody][Required] EnrollViewModel upEnr
             )
         {
             try
@@ -220,9 +290,9 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Enroll Does Not Exist"
                     });
                 }
-                enroll.EnrollId = id;
-                _enrollService.Update(enroll);
-                result = await _enrollService.GetById(enroll.EnrollId.Value);
+                upEnr.EnrollId = id;
+                _enrollService.Update(upEnr);
+                result = await _enrollService.GetById(upEnr.EnrollId.Value);
                 return Ok(new
                 {
                     Status = true,
@@ -239,14 +309,14 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPut("{id}/Update/Status")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}/status")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateStatus(
             [FromRoute][Required] int id,
-            [FromBody][Required] string status
+            [FromBody][Required] string upEnrSta
             )
         {
             try
@@ -260,10 +330,10 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Enroll does not Exist."
                     });
                 }
-                bool isValid = CEG_BAL_Library.IsEnrollNewStatusValid(result.Status, status);
+                bool isValid = CEG_BAL_Library.IsEnrollNewStatusValid(result.Status, upEnrSta);
                 if (isValid)
                 {
-                    _enrollService.UpdateStatus(id, status);
+                    _enrollService.UpdateStatus(id, upEnrSta);
                     result = await _enrollService.GetById(id);
                     return Ok(new
                     {

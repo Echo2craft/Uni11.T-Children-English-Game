@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using CEG_BAL.Services.Implements;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_WebAPI.Constants;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -23,12 +24,87 @@ namespace CEG_WebAPI.Controllers
             _questionService = questionService;
             _config = config;
         }
-
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
         [ProducesResponseType(typeof(List<HomeworkAnswerViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAnswerList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/ByQuestion/{questionId}")]
+        [ProducesResponseType(typeof(List<HomeworkAnswerViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAnswerListByQuestionId(
+            [FromRoute][Required] int questionId)
+        {
+            return await GetListByQuestionId(questionId);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/BySession/{sessionId}")]
+        [ProducesResponseType(typeof(List<HomeworkAnswerViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAnswerListBySessionId(
+            [FromRoute][Required] int sessionId)
+        {
+            return await GetListBySessionId(sessionId);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/ByCourse/{courseId}")]
+        [ProducesResponseType(typeof(List<HomeworkAnswerViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAnswerListByCourseId(
+            [FromRoute][Required] int courseId)
+        {
+            return await GetListByCourseId(courseId);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(HomeworkAnswerViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateAnswer(
+            [FromBody][Required] CreateNewAnswer newSes
+            )
+        {
+            return await Create(newSes);
+        }
+        [Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(HomeworkAnswerViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAnswer(
+            [FromRoute][Required] int id,
+            [FromBody][Required] UpdateAnswer ans
+            )
+        {
+            return await Update(id, ans);
+        }
+        /*[Obsolete("This api use old Api url mapping that is not correct. Use new api instead", false)]
+        [HttpDelete("{id}/Delete")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(HomeworkQuestionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteAnswer(
+            [FromRoute][Required] int id
+            )
+        {
+            return await Delete(id);
+        }*/
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<HomeworkAnswerViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -58,11 +134,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/ByQuestion/{questionId}")]
+        [HttpGet("question/{questionId}")]
         [ProducesResponseType(typeof(List<HomeworkAnswerViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAnswerListByQuestionId(
+        public async Task<IActionResult> GetListByQuestionId(
             [FromRoute][Required] int questionId)
         {
             try
@@ -93,11 +169,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/BySession/{sessionId}")]
+        [HttpGet("session/{sessionId}")]
         [ProducesResponseType(typeof(List<HomeworkAnswerViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAnswerListBySessionId(
+        public async Task<IActionResult> GetListBySessionId(
             [FromRoute][Required] int sessionId)
         {
             try
@@ -128,11 +204,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/ByCourse/{courseId}")]
+        [HttpGet("course/{courseId}")]
         [ProducesResponseType(typeof(List<HomeworkAnswerViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAnswerListByCourseId(
+        public async Task<IActionResult> GetListByCourseId(
             [FromRoute][Required] int courseId)
         {
             try
@@ -167,7 +243,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(HomeworkAnswerViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAnswerById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
             {
@@ -231,11 +307,11 @@ namespace CEG_WebAPI.Controllers
             }
         }*/
 
-        [HttpPost("Create")]
+        [HttpPost]
         [ProducesResponseType(typeof(HomeworkAnswerViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAnswer(
+        public async Task<IActionResult> Create(
             [FromBody][Required] CreateNewAnswer newSes
             )
         {
@@ -270,8 +346,8 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/Update")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(HomeworkAnswerViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -310,8 +386,8 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpDelete("{id}/Delete")]
-        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(HomeworkQuestionViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

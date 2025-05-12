@@ -23,6 +23,101 @@ toggle.onclick = function () {
     // still valid!
 });*/
 
+function buildChart(
+    data,
+    chartId,
+    chartType = 'bar',
+    labelKey = 'label',
+    valueKey = 'value',
+    datasetLabel = 'Dataset',
+    backgroundColor = 'rgba(54, 162, 235, 0.6)',
+    borderColor = 'rgba(54, 162, 235, 1)'
+) {
+    // Extract the labels and values depending on your API structure
+    const labels = data.map(item => item[labelKey]);   // Example: if your API returns [{name: 'Jan', value: 10}, ...]
+    const values = data.map(item => item[valueKey]);
+
+    const ctx = document.getElementById(chartId).getContext('2d');
+    new Chart(ctx, {
+        type: chartType, // or 'line', 'pie', etc
+        data: {
+            labels: labels,
+            datasets: [{
+                label: datasetLabel,
+                data: values,
+                backgroundColor: backgroundColor, // Semi-transparent blue
+                borderColor: borderColor,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function buildFilteredChart(
+    labels,
+    values,
+    chartId,
+    chartType = 'bar',
+    datasetLabel = 'Dataset',
+    backgroundColor = 'rgba(54, 162, 235, 0.6)',
+    borderColor = 'rgba(54, 162, 235, 1)'
+) {
+    const ctx = document.getElementById(chartId).getContext('2d');
+    new Chart(ctx, {
+        type: chartType, // or 'line', 'pie', etc
+        data: {
+            labels: labels,
+            datasets: [{
+                label: datasetLabel,
+                data: values,
+                backgroundColor: backgroundColor, // Semi-transparent blue
+                borderColor: borderColor,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Amount (VND)'
+                    },
+                    beginAtZero: true
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Monthly Transaction Totals'
+                },
+                legend: {
+                    labels: {
+                        // This more specific font property overrides the global property
+                        font: {
+                            size: 20
+                        }
+                    }
+                }
+            },
+        }
+    });
+}
+
 $(function () {
     // Restore layout state on page load
     if (localStorage.getItem("layoutActive") === "true") {
