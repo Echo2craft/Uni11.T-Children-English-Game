@@ -7,6 +7,7 @@ using CEG_BAL.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using CEG_WebAPI.Constants;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -26,12 +27,80 @@ namespace CEG_WebAPI.Controllers
             _sessionService = sessionService;
             _config = config;
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
         [ProducesResponseType(typeof(List<ScheduleViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetScheduleList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Admin/All")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(List<ScheduleViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetScheduleListAdmin()
+        {
+            return await GetListForAdmin();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update/Status")]
+        [Authorize(Roles = Roles.Admin +"," + Roles.Teacher)]
+        [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateScheduleStatus(
+            [FromRoute][Required] int id,
+            [FromBody][Required] string status
+            )
+        {
+            return await UpdateStatus(id, status);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateSchedule(
+            [FromRoute][Required] int id,
+            [FromBody][Required] UpdateSchedule upSch
+            )
+        {
+            return await Update(id, upSch);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Create")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateSchedule(
+            [FromBody][Required] CreateNewSchedule newSch
+            )
+        {
+            return await Create(newSch);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpDelete("{id}/Delete")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteSchedule(
+            [FromRoute][Required] int id
+            )
+        {
+            return await Delete(id);
+        }
+        [HttpGet]
+        [ProducesResponseType(typeof(List<ScheduleViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -61,12 +130,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("Admin/All")]
-        [Authorize(Roles = "Admin")]
+        [HttpGet("for-admin")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(List<ScheduleViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetScheduleListAdmin()
+        public async Task<IActionResult> GetListForAdmin()
         {
             try
             {
@@ -99,7 +168,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetScheduleById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
             {
@@ -161,8 +230,8 @@ namespace CEG_WebAPI.Controllers
         //        });
         //    }
         //}
-        [HttpPut("{id}/Update/Status")]
-        [Authorize(Roles = "Teacher,Admin")]
+        [HttpPut("{id}/status")]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Teacher)]
         [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -212,8 +281,8 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPut("{id}/Update")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -251,12 +320,12 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPost("Create")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateSchedule(
+        public async Task<IActionResult> Create(
             [FromBody][Required] CreateNewSchedule newSch
             )
         {
@@ -298,8 +367,8 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpDelete("{id}/Delete")]
-        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ScheduleViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

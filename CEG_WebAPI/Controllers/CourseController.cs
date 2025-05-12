@@ -239,7 +239,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("name/status/available")]
+        [HttpGet("names/status/available")]
         [ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

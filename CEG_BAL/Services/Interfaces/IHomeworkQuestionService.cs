@@ -11,11 +11,11 @@ namespace CEG_BAL.Services.Interfaces
 {
     public interface IHomeworkQuestionService
     {
-        void Create(HomeworkQuestionViewModel model, CreateNewQuestion newQues);
-        void CreateWithHomeworkId(HomeworkQuestionViewModel model, CreateNewQuestion newQues, int homeworkId);
+        Task Create(CreateNewQuestion newQues);
+        Task CreateWithHomeworkId(CreateNewQuestion newQues, int homId);
         // void Update(HomeworkQuestionViewModel model);
         Task Update(int upQueId, UpdateQuestion upQue);
-        void UpdateWithHomeworkId(int questionId, int homeworkId);
+        Task UpdateWithHomeworkId(int upQueId, int upHomId);
         Task Delete(int delQueId, int homId);
         Task<List<HomeworkQuestionViewModel>> GetList();
         Task<List<HomeworkQuestionViewModel>> GetListByHomeworkId(int homId);

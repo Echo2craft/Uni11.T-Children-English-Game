@@ -57,7 +57,7 @@ namespace CEG_BAL.Services.Implements
             catch (Exception ex)
             {
                 // Log exception (if logging is configured)
-                throw new Exception("An error occurred while creating the homework.", ex);
+                throw new Exception("An error occurred while creating homework.", ex);
             }
         }
 

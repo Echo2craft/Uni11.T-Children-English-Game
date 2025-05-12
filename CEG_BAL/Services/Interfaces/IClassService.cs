@@ -49,7 +49,7 @@ namespace CEG_BAL.Services.Interfaces
             bool includeAttendances = false
         );
         Task<ClassViewModel?> GetByIdParent(int id);
-        Task<ClassViewModel?> GetByClassName(string className);
+        Task<ClassViewModel?> GetByClassCode(string className);
         Task<bool> IsEditableById(int id);
         Task<int> GetTotalAmount();
         Task<int> GetTotalAmountByTeacherAccountIdAndClassStatus(int id, string? status = null);
