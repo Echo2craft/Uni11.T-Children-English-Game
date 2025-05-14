@@ -1,4 +1,4 @@
-﻿@page "/Admin/Class/{classId}/Info"
+﻿@page "/admin/classes/{classId}"
 @model CEG_RazorWebApp.Pages.Admin.Class.ClassInfoModel
 @{
     ViewData["Title"] = "Admin Class Info Page";
@@ -29,19 +29,19 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Class/Index">Class</a>
+                                <a href="/admin/classes">Class</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Class/@Model.ClassID/Info">@Model.ClassID</a>
+                                <a href="/admin/classes/@Model.ClassID">@Model.ClassID</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Class/@Model.ClassID/Info">Info</a>
+                                <a href="/admin/classes/@Model.ClassID">Details</a>
                             </li>
                         </ol>
                     </div>
@@ -344,20 +344,22 @@
         </div>
     </div>
     <div id="changeClassStatus" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Update Class Status</h4>
                 </div>
                 <form method="post" id="updateClassStatusForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label for="updateClassStatus_Status" class="col-md-3 col-form-label mt-3 text-md-right">New Status (this action cannot be undone!)</label>
-                                    <select class="form-control col-md-7 custom-select" id="updateClassStatus_Status"></select>
-                                    @* <span asp-validation-for="@updateClass.Status" id="error_message"
-                                    class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group">
+                                    <label for="updateClassStatus_Status" class="col-form-label">New Status</label>
+                                    <select class="form-control custom-select" id="updateClassStatus_Status"></select>
+                                    <span id="helper_message"
+                                          class="helper-text text-danger d-block">* This action cannot be undone!</span>
+                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"
+                                          data-valmsg-for="updateClassStatus.Status" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                         </div>
@@ -371,56 +373,98 @@
         </div>
     </div>
     <div id="editClass" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Edit Class Information</h4>
                 </div>
                 <form method="post" id="editClassForm" class="form-group">
                     <div class="modal-body">
-                        <div class="modal-body">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <div class="row form-group justify-content-center">
-                                        <label asp-for="@updateClass.ClassName" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.ClassName" value="@updateClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-7">
-                                        <span asp-validation-for="@updateClass.ClassName" id="error_message"
-                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-4">
+                                    <label asp-for="@updateClass.ClassName" class="col-form-label">Class code</label>
+                                    <input asp-for="@updateClass.ClassName" value="@updateClass.ClassName" type="text" placeholder="Class code here..." required
+                                           class="form-control">
+                                    <span asp-validation-for="@updateClass.ClassName" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-8">
+                                    <label asp-for="@updateClass.EnrollmentFee" class="col-form-label">Enrollment Fee</label>
+                                    <input asp-for="@updateClass.EnrollmentFee" value="@updateClass.EnrollmentFee" type="text" placeholder="Fee" required
+                                           class="form-control">
+                                    <span asp-validation-for="@updateClass.EnrollmentFee" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@updateClass.MinStudents" class="col-form-label"></label>
+                                    <input asp-for="@updateClass.MinStudents" value="@updateClass.MinStudents" type="number" min="@CEG_RazorWebApp.Libraries.Constants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control">
+                                    <span asp-validation-for="@updateClass.MinStudents" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@updateClass.MaxStudents" class="col-form-label"></label>
+                                    <input asp-for="@updateClass.MaxStudents" value="@updateClass.MaxStudents" type="number" max="@CEG_RazorWebApp.Libraries.Constants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control">
+                                    <span asp-validation-for="@updateClass.MaxStudents" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@updateClass.StartDate" class="col-form-label"></label>
+                                    <input asp-for="@updateClass.StartDate" type="date" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control" required>
+                                    <span asp-validation-for="@updateClass.StartDate" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@updateClass.EndDate" class="col-form-label"></label>
+                                    <input asp-for="@updateClass.EndDate" type="date" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control" required>
+                                    <span asp-validation-for="@updateClass.EndDate" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    @* <label asp-for="@updateClass.ClassName" class="col-md-3 col-form-label text-md-right"></label>
+                                    <input asp-for="@updateClass.ClassName" value="@updateClass.ClassName" type="text" placeholder="Class Name..." required class="form-control col-md-7">
+                                    <span asp-validation-for="@updateClass.ClassName" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
 
-                                        <label asp-for="@updateClass.MinStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.MinStudents" value="@updateClass.MinStudents" type="number" min="@CEG_BAL.Configurations.CEGConstants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
-                                        <span asp-validation-for="@updateClass.MinStudents" id="error_message"
-                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                    @* <label asp-for="@updateClass.MinStudents" class="col-md-3 col-form-label text-md-right"></label>
+                                    <input asp-for="@updateClass.MinStudents" value="@updateClass.MinStudents" type="number" min="@CEG_BAL.Configurations.CEGConstants.CLASS_MINIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                    <span asp-validation-for="@updateClass.MinStudents" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
 
-                                        <label asp-for="@updateClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.MaxStudents" value="@updateClass.MaxStudents" type="number" max="@CEG_BAL.Configurations.CEGConstants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
-                                        <span asp-validation-for="@updateClass.MaxStudents" id="error_message"
-                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                    <label asp-for="@updateClass.MaxStudents" class="col-md-3 col-form-label text-md-right"></label>
+                                    <input asp-for="@updateClass.MaxStudents" value="@updateClass.MaxStudents" type="number" max="@CEG_BAL.Configurations.CEGConstants.CLASS_MAXIMUM_STUDENTS_REQ" required class="form-control col-md-7">
+                                    <span asp-validation-for="@updateClass.MaxStudents" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
 
-                                        <label asp-for="@updateClass.TeacherName" class="col-md-3 col-form-label text-md-right">Select a Teacher</label>
-                                        <div class="col-md-7">
-                                            <!-- search bar with dropdown list-->
-                                            <select id="searchableTeacherDropdown" class="form-control custom-select" style="width: 100%;">
-                                            </select>
-                                        </div>
-                                        <span asp-validation-for="@updateClass.TeacherName" id="error_message"
-                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                        <label asp-for="@updateClass.StartDate" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.StartDate" type="datetime-local" class="form-control col-md-7" required>
-                                        <span asp-validation-for="@updateClass.StartDate" id="error_message"
-                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                        <label asp-for="@updateClass.EndDate" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.EndDate" type="datetime-local" class="form-control col-md-7" required>
-                                        <span asp-validation-for="@updateClass.EndDate" id="error_message"
-                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                        <label asp-for="@updateClass.EnrollmentFee" class="col-md-3 col-form-label text-md-right"></label>
-                                        <input asp-for="@updateClass.EnrollmentFee" value="@updateClass.EnrollmentFee" type="text" required class="form-control col-md-7">
-                                        <span asp-validation-for="@updateClass.EnrollmentFee" id="error_message"
-                                              class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                    <label asp-for="@updateClass.TeacherName" class="col-form-label">Assigned teacher</label>
+                                    <div class="p-0">
+                                        <!-- search bar with dropdown list-->
+                                        <select id="searchableTeacherDropdown" class="form-control custom-select" style="width: 100%;">
+                                        </select>
                                     </div>
+                                    <span asp-validation-for="@updateClass.TeacherName" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+
+                                    @* <label asp-for="@updateClass.StartDate" class="col-md-3 col-form-label text-md-right"></label>
+                                    <input asp-for="@updateClass.StartDate" type="date" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-7" required>
+                                    <span asp-validation-for="@updateClass.StartDate" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+
+                                    <label asp-for="@updateClass.EndDate" class="col-md-3 col-form-label text-md-right"></label>
+                                    <input asp-for="@updateClass.EndDate" type="date" max="@DateTime.Now.AddYears(1).ToString("yyyy-MM-dd")" class="form-control col-md-7" required>
+                                    <span asp-validation-for="@updateClass.EndDate" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
+
+                                    @* <label asp-for="@updateClass.EnrollmentFee" class="col-md-3 col-form-label text-md-right"></label>
+                                    <input asp-for="@updateClass.EnrollmentFee" value="@updateClass.EnrollmentFee" type="text" required class="form-control col-md-7">
+                                    <span asp-validation-for="@updateClass.EnrollmentFee" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
                                 </div>
                             </div>
                         </div>
@@ -434,7 +478,7 @@
         </div>
     </div>
     <div id="createSchedule" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Add new Schedule</h4>
@@ -664,9 +708,15 @@
                 deferRender: false,
                 responsive: true,
                 columns: [
-                    { data: 'sessionNumber' },
+                    { 
+                        data: 'sessionNumber',
+                        className: 'dt-head-left'
+                    },
                     { data: 'title' },
-                    { data: 'hours' },
+                    { 
+                        data: 'hours',
+                        className: 'dt-head-left'
+                    },
                     { data: 'description' }
                 ],
                 layout: {
@@ -717,13 +767,15 @@
                 responsive: true,
                 columns: [
                     {
-                        data: 'scheduleNumber'
+                        data: 'scheduleNumber',
+                        className: 'dt-head-left'
                     },
                     {
                         data: 'session.title'
                     },
                     {
                         data: 'scheduleDate',
+                        className: 'dt-head-left',
                         // render: function (data, type, row, meta) {
                         //     '<input type="datetime-local" id="schedule-start-date" class="form-control" value="' + data + '" asp-format="{0:yyyy-MM-ddTHH:mm}"/>';
                         //     return '<span id="schedule-start-date">' + formatDate(data, { ignoreHour : true , addDayOfWeek : true }) + '</span >';
@@ -1189,7 +1241,7 @@
             var html = '';
             switch (selectedStatus) {
                 case 'Open':
-                    options = ['Open', 'Postponed', 'Cancelled', 'Ended']
+                    options = ['Open', 'Ongoing', 'Postponed', 'Cancelled', 'Ended']
                     break;
                 case 'Draft':
                     options = ['Draft', 'Open']
@@ -1241,6 +1293,12 @@
                     if (response.status) {
                         showAlert('success', "Class Status update successfully");
                         callApiGetClassDetail();
+                        // Check if the updated status is "Ongoing"
+                        if (formData === "Ongoing") {
+                            setTimeout(() => {
+                                $('div#changeClassStatus').modal('hide'); // Bootstrap modal hide
+                            }, 500);
+                        }
                     } else {
                         showAlert('error', "Error: \n" + response.errorMessage);
                     }
@@ -1270,11 +1328,15 @@
 
         function setClassDisplay(data) {
             var titleStatusHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
-                            <div class="edit-info" id="class-class-status">
-                                <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeClassStatus"></i>
-                                <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editClass"></i>
-                            </div>
-                            ` : '';
+                <div class="edit-info" id="class-class-status">
+                    <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeClassStatus"></i>
+                    <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editClass"></i>
+                </div>
+                ` : '';
+            titleStatusHtml = data.status === 'Open' ? `
+                <div class="edit-info" id="class-class-status">
+                    <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeClassStatus"></i>
+                </div>` : titleStatusHtml;
             var filteredEnrollList = data.enrolls.filter(function (enroll) {
                 return enroll.status === 'Enrolled';
             });
@@ -1365,10 +1427,15 @@
             $('input#updateClass_ClassName').val(data.className);
             $('input#updateClass_MinStudents').val(data.minimumStudents);
             $('input#updateClass_MaxStudents').val(data.maximumStudents);
-            $('input#updateClass_StartDate').val(data.startDate);
-            $('input#updateClass_StartDate').attr('min', data.startDate);
-            $('input#updateClass_EndDate').val(data.endDate);
-            $('input#updateClass_EndDate').attr('min', data.endDate);
+            let startDateFormatted = toDateInputFormat(data.startDate);
+            $('input#updateClass_StartDate')
+                .val(startDateFormatted)
+                .attr('min', startDateFormatted);
+            let endDateFormatted = toDateInputFormat(data.endDate);
+            $('input#updateClass_EndDate')
+                .val(endDateFormatted)
+                .attr('min', endDateFormatted);
+
             $('input#updateClass_EnrollmentFee').val(data.enrollmentFee);
             classAmount.set(data.enrollmentFee);
             // Update Class Status

@@ -1,4 +1,4 @@
-﻿@page "/Teacher/Class/Index"
+﻿@page "/teacher/classes"
 @model CEG_RazorWebApp.Pages.Teacher.Class.ClassIndexModel
 @{
     Layout = null;
@@ -29,7 +29,7 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Teacher/Class/Index">Class</a>
+                                <a href="/teacher/classes">Class</a>
                             </li>
                         </ol>
                     </div>
@@ -37,41 +37,39 @@
                 <section>
                     <div class="card">
                         <div class="card-body">
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs">
-                                <!-- dung vong for o day -->
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="/Teacher/Class/Index">
-                                        <i class='bx bx-home-alt-2'></i>
-                                        <span>All Classes</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-                                <!-- home1 -->
-                                <div class="tab-pane active" id="home1" role="tabpanel">
-                                    <div class="row search">
-                                        <div class="col-sm-12 d-flex">
-                                            <div class="col-sm-6 d-flex address-home">
-                                            </div>
-                                            <div class="col-sm-6 d-flex justify-content-end">
-                                                <form method="get" asp-route-search="@search">
-                                                    <div>
-                                                        <label>
-                                                            <input asp-for="@search" class="form-control" type="text" placeholder="Search..." value="@search">
-                                                            <i class='bx bx-search-alt'></i>
-                                                        </label>
-                                                    </div>
-                                                </form>
+                            <div class="row search">
+                                <div class="col-sm-12 d-flex justify-content-between align-items-center">
+                                    <div class="col-sm-6">
+                                        <h4 class="m-0">All Assigned Classes</h4>
+                                    </div>
+                                    <div class="col-sm-6 d-flex justify-content-end">
+                                        <div class="input-group w-auto">
+                                            <select class="custom-select w-auto" id="select-status">
+                                                <option value="" selected>All Status</option>
+                                                <option value="Ongoing">Ongoing</option>
+                                                <option value="Open">Open</option>
+                                                <option value="Ended">Ended</option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                @* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div role="separator" class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Separated link</a>
+                                                </div> *@
+                                                <div class="col p-0 m-0">
+                                                    <input asp-for="@search" class="form-control" type="text" placeholder="Search class name..." value="@search">
+                                                    <i class='bx bx-search-alt search-icon'></i>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row card-content" id="classList">
-                                        <!-- dung vong for o day -->
-                                    </div>
-                                    <!-- end tapnet -->
                                 </div>
+                            </div>
+                            <div class="row card-content" id="classList">
+                                <!-- dung vong for o day -->
                             </div>
                         </div>
                     </div>
@@ -83,21 +81,43 @@
         var id = sessionStorage.getItem('usrId');
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
+        var filteredclassList = [];
         var classList = [];
         $(document).ready(function () {
             callApiGetClassList();
             // Search event handler
-            $('#search').on('keyup', function (event) {
+            $('#select-status').off('change').on('change', function () {
                 // Get the search term
-                var searchTerm = $(this).val().toLowerCase();
+                var selectedValue = $(this).val().toLowerCase();
 
                 // Filter the classes based on the search term
-                var filteredclassList = classList.filter(function (classObject) {
+                filteredclassList = classList.filter(function (classObject) {
+                    var searchTerm = $('#search').val().toLowerCase();
+                    if(searchTerm != ""){
+                        return classObject.className.toLowerCase().includes(searchTerm) &&
+                                classObject.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.status.toLowerCase().includes(selectedValue);
+                });
+
+                // Display the filtered classList
+                setClassDisplay(filteredclassList, true);
+            });
+            $('#search').off('keyup').on('keyup', function () {
+                // Get the search term
+                var searchTerm = $(this).val().toLowerCase();
+                // Filter the classes based on the search term
+                filteredclassList = classList.filter(function (classObject) {
+                    var selectedValue = $('#select-status').val().toLowerCase();
+                    if(selectedValue != ""){
+                        return classObject.className.toLowerCase().includes(searchTerm) &&
+                                classObject.status.toLowerCase().includes(selectedValue);
+                    }
                     return classObject.className.toLowerCase().includes(searchTerm);
                 });
 
                 // Display the filtered classList
-                setClassDisplay(filteredclassList);
+                setClassDisplay(filteredclassList, true);
             });
         });
         // Function to call API for class list
@@ -111,7 +131,7 @@
                 success: function (response) {
                     if (response.status) {
                         classList = response.data;
-                        setClassDisplay(classList);
+                        setClassDisplay(classList, false);
                     } else {
                         showAlert('error',"API returned false status.");
                     }
@@ -140,9 +160,29 @@
         }
 
         // Function to display class list
-        function setClassDisplay(data) {
-            var classList = $('#classList');
-            classList.empty();
+        function setClassDisplay(data, isFiltered) {
+            var classDiv = $('#classList');
+            classDiv.empty();
+            if (!data || data.length === 0) {
+                if(isFiltered){
+                classDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn’t find any assigned classes that fit your filter settings.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+                }
+                classDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn't find any assigned classes for you, sorry.'.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+            }
             $.each(data, function (index, classObj) {
                 var formattedStartDate = formatDate(classObj.startDate, { ignoreHour: true });
                 var formattedEndDate = formatDate(classObj.endDate, { ignoreHour: true });
@@ -164,43 +204,33 @@
                         statusText = `<span class="destroy" style="float: left;">Status: ${classObj.status}</span>`
                         break;
                 }
-                formatter = new Intl.NumberFormat('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                });
                 // Construct card HTML
                 var cardHtml = `
                     <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
-                        <div class="card1 card-child">
-                            <div class="club-name">
-                                Class Code: ${classObj.className}
-                                <div class="status">
-                                    ${statusText}
-                                </div>
+                        <div class="card1 card-child shadow-sm h-100">
+                            <div class="club-name d-flex justify-content-between align-items-center flex-wrap">
+                                <strong class="text-truncate" style="max-width: 200px;">${classObj.className}</strong>
+                                ${statusText}
                             </div>
                             <div class="card-body">
-                                <div class="club-title">
-                                    <ul>
-                                        <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
-                                        <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
-                                        <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
-                                        <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
-                                        <li><h6>Enrollment Fee:</h6><span>${formatter.format(classObj.enrollmentFee)}</span></li>
-                                        <li><h6>Minimum students amount:</h6><span>${classObj.minimumStudents}</span></li>
-                                        <li><h6>Maximum students amount:</h6><span>${classObj.maximumStudents}</span></li>
-                                        <li><h6>Current students amount:</h6><span>${filteredEnrollList.length}</span></li>
-                                        <li><h6>Weekly scheduled sessions amount:</h6><span>${classObj.schedules.length}</span></li>
-                                        <li><h6>Current enrolls amount:</h6><span>${classObj.enrolls.length}</span></li>
-                                    </ul>
-                                </div>
+                                <h5 class="card-title h-14"><strong>Course: </strong><br/> ${classObj.course.courseName}</h5>
                             </div>
-                            <div class="form-group mx-auto">
-                                <a class="btn btn-primary clickable-row" href="/Teacher/Class/${classObj.classId}/Info" role="button">Details</a>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-book-reader mr-2'></i><span> Teacher: ${classObj.teacher.account.fullname}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-calendar-event mr-2'></i><span> Class start at ${formattedStartDate} and ends at ${formattedEndDate}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-user-circle mr-2'></i><span> Require ${classObj.minimumStudents} - ${classObj.maximumStudents} students</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-money mr-2'></i><span> ${vnd.format(classObj.enrollmentFee)}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-child mr-2'></i><span> ${filteredEnrollList.length} enrolled students - ${classObj.enrolls.length} enrolls</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-spreadsheet mr-2'></i><span> ${classObj.schedules.length} scheduled session(s)</span></li>
+                            </ul>
+                            <div class="club-footer d-flex justify-content-around">
+                                <a class="btn btn-primary clickable-row d-flex align-items-center" href="/teacher/classes/${classObj.classId}" role="button"><i class='bx bx-info-circle mr-2'></i> Details</a>
                             </div>
                         </div>
                     </div>
                 `;
-                classList.append(cardHtml);
+                classDiv.append(cardHtml);
             });
         }
     </script>
