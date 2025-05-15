@@ -1,4 +1,4 @@
-﻿@page "/Admin/Question/Index"
+﻿@page "/admin/questions"
 @model CEG_RazorWebApp.Pages.Admin.Question.QuestionIndexModel
 @{
     ViewData["Title"] = "Admin All Questions Page";
@@ -27,7 +27,7 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Question/Index">Question</a>
+                                <a href="/admin/questions">Question</a>
                             </li>
                         </ol>
                     </div>
@@ -35,48 +35,29 @@
                 <section>
                     <div class="card">
                         <div class="card-body">
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs">
-                                <!-- dung vong for o day -->
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#home1">
-                                        <i class='bx bx-home-alt-2'></i>
-                                        <span>All Questions</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-                                <!-- home1 -->
-                                <div class="tab-pane active" id="home1" role="tabpanel">
-                                    <div class="row">
-                                    </div>
-                                    <div id="question-table_wrapper" class="dataTables_wrapper no-footer">
-                                        <table id="question-table"
-                                               class="table table-striped table-bordered dataTable no-footer"
-                                               aria-describedby="question-table_info">
-                                            <thead>
-                                                <tr>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="question-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Question: activate to sort column ascending">
-                                                        Question
-                                                    </th>
-                                                    <th class="sorting sorting_asc" tabindex="0"
-                                                        aria-controls="question-table" rowspan="1"
-                                                        colspan="1" aria-sort="ascending"
-                                                        aria-label="Answers amount: activate to sort column ascending">
-                                                        Amount of Answers
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <!-- end tapnet -->
+                            <div id="question-table_wrapper" class="dataTables_wrapper no-footer">
+                                <table id="question-table"
+                                       class="table table-striped table-bordered dataTable no-footer"
+                                       aria-describedby="question-table_info">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="question-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Question: activate to sort column ascending">
+                                                Question
+                                            </th>
+                                            <th class="sorting sorting_asc" tabindex="0"
+                                                aria-controls="question-table" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Answers amount: activate to sort column ascending">
+                                                Amount of Answers
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -85,20 +66,20 @@
         </div>
     </div>
     <div id="createQuestion" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add new Homework Question</h4>
+                    <h4 class="modal-title">Add new Homework's Question</h4>
                 </div>
                 <form method="post" id="createQuestionForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@createQuestion.Question" class="col-md-3 col-form-label text-md-right"></label>
-                                    <textarea asp-for="@createQuestion.Question" value="@createQuestion.Question" required class="form-control col-md-7"></textarea>
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label asp-for="@createQuestion.Question" class="col-form-label">New Question</label>
+                                    <textarea asp-for="@createQuestion.Question" value="@createQuestion.Question" required class="form-control"></textarea>
                                     <span asp-validation-for="@createQuestion.Question" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
                             </div>
                         </div>
