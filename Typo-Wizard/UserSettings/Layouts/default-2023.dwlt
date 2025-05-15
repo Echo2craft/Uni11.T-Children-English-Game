@@ -48,7 +48,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 38
+  controlID: 104
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -396,7 +396,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scenes/wordfinder/Scripts/ScriptableObjects/ObjectInGame
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -406,16 +406,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Scenes/wordfinder/Scripts/ScriptableObjects/ObjectInGame
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\My Stuff\Codes\CSharp\Uni11.T-Children-English-Game\Typo-Wizard
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 79}
-    m_SelectedIDs: 305a0000
-    m_LastClickedID: 23088
-    m_ExpandedIDs: 00000000305a0000325a000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 212.36493}
+    m_SelectedIDs: ce5a0000
+    m_LastClickedID: 23246
+    m_ExpandedIDs: 00000000305a0000745a0000aa5a000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

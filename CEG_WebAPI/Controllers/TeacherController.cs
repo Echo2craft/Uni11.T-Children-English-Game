@@ -5,6 +5,7 @@ using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin.Create;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,11 +37,89 @@ namespace CEG_WebAPI.Controllers
             _scheduleService = scheduleService;
         }
 
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
         [ProducesResponseType(typeof(List<TeacherViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetTeacherList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/FullnameOption")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(List<GetTeacherNameOption>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTeacherNameOptionList()
+        {
+            return await GetNameOptionList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTeacherById(
+            [FromRoute][Required] int id)
+        {
+            return await GetById(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Account/{id}")]
+        [Authorize(Roles = $"{Roles.Teacher}, {Roles.Admin}")]
+        [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTeacherByAccountId(
+            [FromRoute][Required] int id
+            )
+        {
+            return await GetByAccountId(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Student/Attendance/All/ByScheduleId/{scheduleId}")]
+        [Authorize(Roles = Roles.Teacher)]
+        [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAttendanceByScheduleId(
+            [FromRoute][Required] int scheduleId
+            )
+        {
+            return await GetAttendanceListByScheduleId(scheduleId);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("SendRemindHomeworkEmail")]
+        [Authorize(Roles = Roles.Teacher)]
+        [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SendEmailRemindHomework(
+            [FromBody][Required] CreateRemindHomeworkEmail emaReq
+            )
+        {
+            return await SendEmailRemindHomeworktoParent(emaReq);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("Account/{id}/Update")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateTeacher(
+            [FromRoute][Required] int id,
+            [FromBody][Required] UpdateTeacher teacher)
+        {
+            return await Update(id, teacher);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<TeacherViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -69,12 +148,13 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpGet("All/FullnameOption")]
-        [Authorize(Roles = "Admin")]
+
+        [HttpGet("fullnameoption")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(List<GetTeacherNameOption>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTeacherNameOptionList()
+        public async Task<IActionResult> GetNameOptionList()
         {
             try
             {
@@ -84,7 +164,7 @@ namespace CEG_WebAPI.Controllers
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Teacher name option list not found."
+                        ErrorMessage = "Teacher Name Option List Not Found!"
                     });
                 }
                 return Ok(new
@@ -108,8 +188,9 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTeacherById(
-            [FromRoute][Required] int id)
+        public async Task<IActionResult> GetById(
+            [FromRoute][Required] int id
+            )
         {
             try
             {
@@ -138,12 +219,13 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpGet("Account/{id}")]
-        [Authorize(Roles = "Teacher, Admin")]
+
+        [HttpGet("account/{id}")]
+        [Authorize(Roles = $"{Roles.Teacher}, {Roles.Admin}")]
         [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTeacherByAccountId(
+        public async Task<IActionResult> GetByAccountId(
             [FromRoute][Required] int id
             )
         {
@@ -175,12 +257,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("Student/Attendance/All/ByScheduleId/{scheduleId}")]
-        [Authorize(Roles = "Teacher")]
+        [HttpGet("student/attendance/schedule/{scheduleId}")]
+        [Authorize(Roles = Roles.Teacher)]
         [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAttendanceByScheduleId(
+        public async Task<IActionResult> GetAttendanceListByScheduleId(
             [FromRoute][Required] int scheduleId
             )
         {
@@ -212,7 +294,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("SendRemindHomeworkEmail")]
+        [HttpPost("sendremindhomeworkemail")]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -251,7 +333,7 @@ namespace CEG_WebAPI.Controllers
                     });
                 }
                 var stuHomList = await _studentHomeworkService.GetListByStudentId(emaReq.StudentId);
-                if(stuHomList == null)
+                if (stuHomList == null)
                 {
                     return NotFound(new
                     {
@@ -259,7 +341,7 @@ namespace CEG_WebAPI.Controllers
                         ErrorMessage = "Student homework not found."
                     });
                 }
-                if (stuHomList != null && 
+                if (stuHomList != null &&
                     stuHomList.Any(stuHom =>
                         stuHom.StudentProgress.StudentId == emaReq.StudentId &&
                         stuHom.HomeworkId == emaReq.HomeworkId &&
@@ -329,14 +411,15 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("Account/{id}/Update")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("account/{id}/update")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] UpdateTeacher teacher)
+            [FromBody][Required] UpdateTeacher teacher
+            )
         {
             try
             {

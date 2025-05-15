@@ -5,6 +5,7 @@ using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Parent;
 using CEG_BAL.ViewModels.Teacher.Transaction;
 using CEG_BAL.ViewModels.Transaction;
+using CEG_WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -40,101 +41,36 @@ namespace CEG_WebAPI.Controllers
             _classService = classService;
         }
 
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(List<TransactionViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetTransactionList()
         {
-            try
-            {
-                var result = await _transactionService.GetTransactionList();
-                if (result == null)
-                {
-                    return NotFound(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Transaction List Not Found!"
-                    });
-                }
-                return Ok(new
-                {
-                    Status = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Status = false,
-                    ErrorMessage = ex.Message,
-                    InnerExceptionMessage = ex.InnerException?.Message
-                });
-            }
+            return await GetList();
         }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(TransactionViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetTransactionById([FromRoute] int id)
         {
-            try
-            {
-                var result = await _transactionService.GetTransactionById(id);
-                if (result == null)
-                {
-                    return NotFound(new
-                    {
-                        Status = false,
-                        ErrorMessage = "Transaction Not Found!"
-                    });
-                }
-                return Ok(new
-                {
-                    Status = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Status = false,
-                    ErrorMessage = ex.Message,
-                    InnerExceptionMessage = ex.InnerException?.Message
-                });
-            }
+            return await GetById(id);
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All/Count")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetTotalTransactionAmount()
         {
-            try
-            {
-                var result = await _transactionService.GetTotalAmount();
-                return Ok(new
-                {
-                    Status = true,
-                    Data = result
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new
-                {
-                    Status = false,
-                    ErrorMessage = ex.Message,
-                    InnerExceptionMessage = ex.InnerException?.Message
-                });
-            }
+            return await GetCount();
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All/Count/{id}")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -161,9 +97,9 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All/ByTeacher/{id}")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = Roles.Teacher)]
         [ProducesResponseType(typeof(List<EarningViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -196,7 +132,7 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All/Sum")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -222,7 +158,7 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All/Sum/ByTeacher/{id}")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -249,9 +185,9 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("ByParent/{id}")]
-        [Authorize(Roles = "Parent")]
+        [Authorize(Roles = Roles.Parent)]
         [ProducesResponseType(typeof(List<TransactionViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -285,9 +221,9 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpPost("GenerateUrl")]
-        [Authorize(Roles = "Parent")]
+        [Authorize(Roles = Roles.Parent)]
         [ProducesResponseType(typeof(TransactionRequest), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -307,7 +243,7 @@ namespace CEG_WebAPI.Controllers
                     });
                 }
                 var parentObj = await _parentService.IsExistByFullname(newTraReq.ParentFullname);
-                if(!parentObj)
+                if (!parentObj)
                 {
                     return NotFound(new
                     {
@@ -358,9 +294,9 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpPost("Create")]
-        [Authorize(Roles = "Admin, Parent")]
+        [Authorize(Roles = $"{Roles.Admin}, {Roles.Parent}")]
         [ProducesResponseType(typeof(TransactionViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -433,6 +369,103 @@ namespace CEG_WebAPI.Controllers
                     Data = true,
                     Status = true,
                     SuccessMessage = "Transaction create successfully."
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(List<TransactionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
+        {
+            try
+            {
+                var result = await _transactionService.GetTransactionList();
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Transaction List Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("{id}")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(TransactionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            try
+            {
+                var result = await _transactionService.GetTransactionById(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Transaction Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("count")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCount()
+        {
+            try
+            {
+                var result = await _transactionService.GetTotalAmount();
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
                 });
             }
             catch (Exception ex)
