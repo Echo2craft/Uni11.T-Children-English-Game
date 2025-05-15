@@ -189,6 +189,7 @@
     <Compile Include="Assets\Main\Scripts\Sound2.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\FindPuzzle.cs" />
     <Compile Include="Assets\Menu\UI SlideShow\Scenes\RuntimeImageLoader\Scripts\ImageLoader.cs" />
+    <Compile Include="Assets\Main\Scripts\CourseList.cs" />
     <Compile Include="Assets\Unity-2D-Platformer\Scripts Backup\RestartGO2.cs" />
     <Compile Include="Assets\Unity-2D-Platformer\Assets\Game assets\Scripts\Quit.cs" />
     <Compile Include="Assets\Scenes\wordfinder\Scripts\SelectPuzzleButton.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Assets\Intro\Scripts\BackgroundAnimation.cs" />
     <Compile Include="Assets\Menu\UI SlideShow\Scripts\UISlideShow.cs" />
     <Compile Include="Assets\Unity-2D-Platformer\Scripts Backup\RestartLvl3.cs" />
+    <Compile Include="Assets\Main\Scripts\ClassList.cs" />
     <Compile Include="Assets\Unity-2D-Platformer\Scripts Backup\GoToAbandon.cs" />
     <Compile Include="Assets\GoogleSignIn\GoogleSignInUser.cs" />
     <Compile Include="Assets\Unity-2D-Platformer\Assets\Enemy Knight\Demo\Sensor_HeroKnight.cs" />
