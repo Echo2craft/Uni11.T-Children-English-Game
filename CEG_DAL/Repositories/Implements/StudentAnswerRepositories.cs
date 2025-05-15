@@ -32,5 +32,20 @@ namespace CEG_DAL.Repositories.Implements
                 .AsNoTrackingWithIdentityResolution()
                 .ToListAsync();
         }
+
+        public async Task<List<StudentAnswer>> GetListByStudentId(int stuId)
+        {
+            return await _dbContext.StudentAnswers
+                .Include(sa => sa.StudentHomework)
+                .ThenInclude(sh => sh.StudentProgress)
+                .Where(sa => sa.StudentHomework.StudentProgress.StudentId == stuId)
+                .Select(stuAns => new StudentAnswer()
+                {
+                    GameId = stuAns.GameId,
+                    Answer = stuAns.Answer,
+                    Type = stuAns.Type,
+                })
+                .ToListAsync();
+        }
     }
 }

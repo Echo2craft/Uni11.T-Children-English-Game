@@ -5,8 +5,6 @@ using TMPro;
 using UnityEngine;
 using static AccountManager;
 using UnityEngine.Networking;
-using i5.Toolkit.Core.OpenIDConnectClient;
-using i5.Toolkit.Core.ServiceCore;
 using System.Text;
 using System.Collections;
 using System.Threading.Tasks;

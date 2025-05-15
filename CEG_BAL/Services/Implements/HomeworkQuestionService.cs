@@ -29,36 +29,61 @@ namespace CEG_BAL.Services.Implements
             _mapper = mapper;
         }
 
-        public void Create(HomeworkQuestionViewModel model, CreateNewQuestion newQus)
+        public async Task Create(CreateNewQuestion newQus)
         {
-            var ques = _mapper.Map<HomeworkQuestion>(model);
-            if (newQus != null)
+            if (newQus == null)
+                throw new ArgumentNullException(nameof(newQus), "The new question info cannot be null.");
+            var ques = _mapper.Map<HomeworkQuestion>(newQus);
+            // Save to the database
+            try
+            {
+                if (ques.Homework?.HomeworkId == 0)
+                {
+                    ques.Homework = null;
+                }
+                _unitOfWork.HomeworkQuestionRepositories.Create(ques);
+                // This ensures the session is created first
+                _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating question.", ex);
+            }
+            /*if (newQus != null)
             {
                 ques.Question = newQus.Question;
                 if(ques.Homework?.HomeworkId == 0)
                 {
                     ques.Homework = null;
                 }
-                /*ques.HomeworkId = _unitOfWork.HomeworkRepositories.GetIdByTitle(newQus.HomeworkTitle).Result;*/
+                *//*ques.HomeworkId = _unitOfWork.HomeworkRepositories.GetIdByTitle(newQus.HomeworkTitle).Result;*//*
             }
             _unitOfWork.HomeworkQuestionRepositories.Create(ques);
-            _unitOfWork.Save();
+            _unitOfWork.Save();*/
         }
-        public void CreateWithHomeworkId(HomeworkQuestionViewModel model, CreateNewQuestion newQus, int homeworkId)
+        public async Task CreateWithHomeworkId(CreateNewQuestion newQus, int homeworkId)
         {
-            var ques = _mapper.Map<HomeworkQuestion>(model);
-            if (newQus != null)
+            if (newQus == null)
+                throw new ArgumentNullException(nameof(newQus), "The new question info cannot be null.");
+            var ques = _mapper.Map<HomeworkQuestion>(newQus);
+            ques.HomeworkId = homeworkId;
+            // Save to the database
+            try
             {
-                ques.Question = newQus.Question;
                 if (ques.Homework?.HomeworkId == 0)
                 {
                     ques.Homework = null;
                 }
-                ques.HomeworkId = homeworkId;
-                /*ques.HomeworkId = _unitOfWork.HomeworkRepositories.GetIdByTitle(newQus.HomeworkTitle).Result;*/
+                _unitOfWork.HomeworkQuestionRepositories.Create(ques);
+                // This ensures the session is created first
+                _unitOfWork.Save();
             }
-            _unitOfWork.HomeworkQuestionRepositories.Create(ques);
-            _unitOfWork.Save();
+            catch (Exception ex)
+            {
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while creating question.", ex);
+            }
         }
 
         public async Task<List<HomeworkQuestionViewModel>?> GetOrderedList()
@@ -168,33 +193,58 @@ namespace CEG_BAL.Services.Implements
             }
         }
 
-        public void UpdateWithHomeworkId(int questionId, int homeworkId)
+        public async Task UpdateWithHomeworkId(int upQueId, int upHomId)
         {
-            var questionDefault = _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(questionId).Result;
-            if (questionDefault == null) return;
-            if (questionDefault.HomeworkId != 0)
+            // Fetch the existing record
+            var que = await _unitOfWork.HomeworkQuestionRepositories.GetByIdNoTracking(upQueId)
+                ?? throw new KeyNotFoundException("Question not found.");
+            // Save to the database
+            try
             {
-                var newQuestion = new HomeworkQuestion
+                if(que.HomeworkId != 0)
                 {
-                    HomeworkQuestionId = 0,  // Set to 0 or default, since it's a new record
-                    HomeworkId = homeworkId,  // Use the new homeworkId
-                    Question = questionDefault.Question,  // Copy other properties
-                                                          // Add any other properties here as needed...
-                    HomeworkAnswers = questionDefault.HomeworkAnswers?.Select(answer => new HomeworkAnswer
+                    /*var newQue = new HomeworkQuestion
                     {
-                        HomeworkAnswerId = 0,  // Reset the answer ID to create a new one
-                        Answer = answer.Answer,  // Copy the answer text
-                        Type = answer.Type
-                    }).ToList() ?? []  // Convert to list after projection
-                };
-                _unitOfWork.HomeworkQuestionRepositories.Create(newQuestion);
+                        HomeworkQuestionId = 0,  // Set to 0 or default, since it's a new record
+                        HomeworkId = upHomId,  // Use the new homeworkId
+                        Question = que.Question,  // Copy other properties
+                                                              // Add any other properties here as needed...
+                        HomeworkAnswers = que.HomeworkAnswers?.Select(newAns => new HomeworkAnswer
+                        {
+                            HomeworkAnswerId = 0,  // Reset the answer ID to create a new one
+                            Answer = newAns.Answer,  // Copy the answer text
+                            Type = newAns.Type
+                        }).ToList() ?? []  // Convert to list after projection
+                    };*/
+                    _unitOfWork.HomeworkQuestionRepositories.Create(
+                        new HomeworkQuestion
+                        {
+                            HomeworkQuestionId = 0,  // Set to 0 or default, since it's a new record
+                            HomeworkId = upHomId,  // Use the new homeworkId
+                            Question = que.Question,  // Copy other properties
+                                                      // Add any other properties here as needed...
+                            HomeworkAnswers = que.HomeworkAnswers?.Select(newAns => new HomeworkAnswer
+                            {
+                                HomeworkAnswerId = 0,  // Reset the answer ID to create a new one
+                                Answer = newAns.Answer,  // Copy the answer text
+                                Type = newAns.Type
+                            }).ToList() ?? []  // Convert to list after projection
+                        }
+                    );
+                }
+                else
+                {
+                    que.HomeworkId = upHomId;
+                    _unitOfWork.HomeworkQuestionRepositories.Update(que);
+                }
+                // This ensures the session is deleted first
                 _unitOfWork.Save();
-            } 
-            else
+                return;
+            }
+            catch (Exception ex)
             {
-                questionDefault.HomeworkId = homeworkId;
-                _unitOfWork.HomeworkQuestionRepositories.Update(questionDefault);
-                _unitOfWork.Save();
+                // Log exception (if logging is configured)
+                throw new Exception("An error occurred while updating the question with given homework.", ex);
             }
         }
 

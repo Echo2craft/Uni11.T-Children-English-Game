@@ -119,7 +119,7 @@ namespace CEG_BAL.Services.Implements
             return null;
         }
 
-        public async Task<ClassViewModel?> GetByClassName(string className)
+        public async Task<ClassViewModel?> GetByClassCode(string className)
         {
             var clas = await _unitOfWork.ClassRepositories.GetByClassName(className);
             return clas != null ? _mapper.Map<ClassViewModel>(clas) : null;

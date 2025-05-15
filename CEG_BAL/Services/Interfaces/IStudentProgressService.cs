@@ -17,5 +17,6 @@ namespace CEG_BAL.Services.Interfaces
         Task<List<StudentProgressViewModel>> GetList();
         Task<StudentProgressViewModel?> GetById(int id);
         Task<StudentDashboard> GetByStudentAccountId(int id);
+        Task<List<StudentProgressViewModel>> GetListByStudentId(int id);
     }
 }

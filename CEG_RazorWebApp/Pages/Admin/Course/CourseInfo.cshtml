@@ -1,4 +1,4 @@
-﻿@page "/Admin/Course/{courseId}/Info"
+﻿@page "/admin/courses/{courseId}"
 @model CEG_RazorWebApp.Pages.Admin.Course.CourseInfoModel
 @{
     ViewData["Title"] = "Admin Course Info Page";
@@ -31,19 +31,19 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Course/Index">Course</a>
+                                <a href="/admin/courses">Course</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Course/@Model.CourseID/Info">@Model.CourseID</a>
+                                <a href="/admin/courses/@Model.CourseID">@Model.CourseID</a>
                             </li>
                             <li class="breadcrumd-item">
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Admin/Course/@Model.CourseID/Info">Info</a>
+                                <a href="/admin/courses/@Model.CourseID">Details</a>
                             </li>
                         </ol>
                     </div>
@@ -380,20 +380,22 @@
         </div>
     </div>
     <div id="changeCourseStatus" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Update Course Status</h4>
                 </div>
                 <form method="post" id="updateCourseStatusForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label for="updateCourseStatus_Status" class="col-md-3 col-form-label mt-3 text-md-right">New Status (this action cannot be undone!)</label>
-                                    <select class="form-control col-md-7 custom-select" id="updateCourseStatus_Status"></select>
-                                    <span asp-validation-for="@updateCourse.Status" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group">
+                                    <label for="updateCourseStatus_Status" class="col-form-label">New Status</label>
+                                    <select class="form-control custom-select" id="updateCourseStatus_Status"></select>
+                                    <span id="helper_message"
+                                          class="helper-text text-danger d-block">* This action cannot be undone!</span>
+                                    <span id="error_message" class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"
+                                          data-valmsg-for="updateCourseStatus.Status" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                         </div>
@@ -407,50 +409,65 @@
         </div>
     </div>
     <div id="editCourse" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Edit Course Information</h4>
                 </div>
                 <form method="post" id="EditCourseForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@updateCourse.CourseName" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@updateCourse.CourseName" value="@updateCourse.CourseName" type="text" placeholder="Course Name..." required class="form-control col-md-7">
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-8">
+                                    <label asp-for="@updateCourse.CourseName" class="col-form-label">Course name</label>
+                                    <input asp-for="@updateCourse.CourseName" value="@updateCourse.CourseName" type="text" placeholder="Course name here..." required
+                                           class="form-control">
                                     <span asp-validation-for="@updateCourse.CourseName" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateCourse.CourseType" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@updateCourse.CourseType" value="@updateCourse.CourseType" type="text" placeholder="Course Type..." required class="form-control col-md-7">
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <label asp-for="@updateCourse.CourseType" class="col-form-label">Type</label>
+                                    <input asp-for="@updateCourse.CourseType" value="@updateCourse.CourseType" type="text" placeholder="type here..." required
+                                           class="form-control">
                                     <span asp-validation-for="@updateCourse.CourseType" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateCourse.Description" class="col-md-3 col-form-label text-md-right"></label>
-                                    <textarea asp-for="@updateCourse.Description" value="@updateCourse.Description" required class="form-control col-md-7"></textarea>
-                                    <span asp-validation-for="@updateCourse.Description" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateCourse.TotalHours" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <input asp-for="@updateCourse.TotalHours" value="@updateCourse.TotalHours" type="number" class="form-control col-md-7 mt-3" required>
-                                    <span asp-validation-for="@updateCourse.TotalHours" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateCourse.RequiredAge" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <input asp-for="@updateCourse.RequiredAge" value="@updateCourse.RequiredAge" type="number" min="11" max="18" class="form-control col-md-7 mt-3" required>
-                                    <span asp-validation-for="@updateCourse.RequiredAge" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateCourse.Difficulty" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <select class="form-control col-md-7 custom-select" asp-for="@updateCourse.Difficulty"></select>
-                                    <span asp-validation-for="@updateCourse.Difficulty" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@updateCourse.Category" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <select class="form-control col-md-7 custom-select" asp-for="@updateCourse.Category"></select>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@updateCourse.Category" class="col-form-label"></label>
+                                    <input asp-for="@updateCourse.Category" value="@updateCourse.Category" type="text" placeholder="category" readonly required class="form-control">
+                                    @* <select class="form-control col-md-7 custom-select" asp-for="@updateCourse.Category" required></select> *@
                                     <span asp-validation-for="@updateCourse.Category" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@updateCourse.Difficulty" class="col-form-label"></label>
+                                    <select class="form-control custom-select" asp-for="@updateCourse.Difficulty" required></select>
+                                    <span asp-validation-for="@updateCourse.Difficulty" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@updateCourse.RequiredAge" class="col-form-label"></label>
+                                    <input asp-for="@updateCourse.RequiredAge" value="@updateCourse.RequiredAge" type="number" min="11" max="14" placeholder="11" required class="form-control">
+                                    <span asp-validation-for="@updateCourse.RequiredAge" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@updateCourse.TotalHours" class="col-form-label"></label>
+                                    <input asp-for="@updateCourse.TotalHours" value="@updateCourse.TotalHours" type="number" min="1" placeholder="1" required class="form-control">
+                                    <span asp-validation-for="@updateCourse.TotalHours" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label asp-for="@updateCourse.Description" class="col-form-label"></label>
+                                    <textarea asp-for="@updateCourse.Description" value="@updateCourse.Description" required class="form-control"></textarea>
+                                    <span asp-validation-for="@updateCourse.Description" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
                             </div>
                         </div>
@@ -464,37 +481,45 @@
         </div>
     </div>
     <div id="createSession" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Add new Session</h4>
                 </div>
                 <form method="post" id="AddSessionForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@createSession.Number" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createSession.Number" value="@createSession.Number" type="number" min="1" required class="form-control col-md-7">
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-4">
+                                    <label asp-for="@createSession.Number" class="col-form-label">Session number</label>
+                                    <input asp-for="@createSession.Number" value="@createSession.Number" type="number" min="1" required
+                                           class="form-control">
                                     <span asp-validation-for="@createSession.Number" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createSession.Title" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createSession.Title" value="@createSession.Title" type="text" placeholder="Title" required class="form-control col-md-7">
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-8">
+                                    <label asp-for="@createSession.Title" class="col-form-label">Title</label>
+                                    <input asp-for="@createSession.Title" value="@createSession.Title" type="text" placeholder="title here..." required
+                                           class="form-control">
                                     <span asp-validation-for="@createSession.Title" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createSession.Description" class="col-md-3 col-form-label text-md-right"></label>
-                                    <textarea asp-for="@createSession.Description" value="@createSession.Description" required class="form-control col-md-7"></textarea>
-                                    <span asp-validation-for="@createSession.Description" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createSession.Hours" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <input asp-for="@createSession.Hours" value="@createSession.Hours" type="number" min="0" class="form-control col-md-7 mt-3" required>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-4">
+                                    <label asp-for="@createSession.Hours" class="col-form-label">Hours to learn</label>
+                                    <input asp-for="@createSession.Hours" value="@createSession.Hours" type="number" min="1" required
+                                           class="form-control">
                                     <span asp-validation-for="@createSession.Hours" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    @* <input asp-for="@createSession.CourseName" type="text" required hidden readonly> *@
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label asp-for="@createSession.Description" class="col-form-label">Description</label>
+                                    <textarea asp-for="@createSession.Description" value="@createSession.Description" required class="form-control"></textarea>
+                                    <span asp-validation-for="@createSession.Description" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
                             </div>
                         </div>
@@ -507,39 +532,139 @@
             </div>
         </div>
     </div>
+    <div id="updateSessionConfirm" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-addRoom">
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirm updating session</h4>
+                </div>
+                <form method="post" id="UpdateSessionForm">
+                    <div class="modal-body">
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-8">
+                                    <label for="updateSessionConfirm_Title" class="col-form-label">Title</label>
+                                    <input id="updateSessionConfirm_Title" type="text" placeholder="title here..." required
+                                           class="form-control" readonly>
+                                    <span data-valmsg-for="updateSessionConfirm.Title" data-valmsg-replace="true" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <label for="updateSessionConfirm_Hours" class="col-form-label">Hours to learn</label>
+                                    <input id="updateSessionConfirm_Hours" type="number" min="1" required
+                                           class="form-control" readonly>
+                                    <span data-valmsg-for="updateSessionConfirm.Hours" data-valmsg-replace="true" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label for="updateSessionConfirm_Description" class="col-form-label">Description</label>
+                                    <textarea id="updateSessionConfirm_Description" required class="form-control" readonly></textarea>
+                                    <span data-valmsg-for="updateSessionConfirm.Description" data-valmsg-replace="true" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <span id="updateSessionConfirm_ID" hidden></span>
+                            <span id="helper_message"
+                                  class="helper-text text-danger d-block">* This action cannot be undone!</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-success" type="submit" name="action" value="updateSessionConfirm">Confirm</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="deleteSessionConfirm" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-addRoom">
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirm deleting session</h4>
+                </div>
+                <form method="post" id="DeleteSessionForm">
+                    <div class="modal-body">
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-8">
+                                    <label for="deleteSessionConfirm_Title" class="col-form-label">Title</label>
+                                    <input id="deleteSessionConfirm_Title" type="text" placeholder="title here..." required
+                                           class="form-control" readonly>
+                                    <span data-valmsg-for="deleteSessionConfirm.Title" data-valmsg-replace="true" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-4">
+                                    <label for="deleteSessionConfirm_Hours" class="col-form-label">Hours to learn</label>
+                                    <input id="deleteSessionConfirm_Hours" type="number" min="1" required
+                                           class="form-control" readonly>
+                                    <span data-valmsg-for="deleteSessionConfirm.Hours" data-valmsg-replace="true" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label for="deleteSessionConfirm_Description" class="col-form-label">Description</label>
+                                    <textarea id="deleteSessionConfirm_Description" required class="form-control" readonly></textarea>
+                                    <span data-valmsg-for="deleteSessionConfirm.Description" data-valmsg-replace="true" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <span id="deleteSessionConfirm_ID" hidden></span>
+                            <span id="helper_message"
+                                  class="helper-text text-danger d-block">* This action cannot be undone!</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button class="btn btn-success" type="submit" name="action" value="deleteSessionConfirm">Confirm</button>
+                        <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div id="createHomework" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Add new Homework</h4>
                 </div>
                 <form method="post" id="AddHomeworkForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@createHomework.Title" class="col-md-3 col-form-label text-md-right"></label>
-                                    <input asp-for="@createHomework.Title" value="@createHomework.Title" type="text" placeholder="Title" required class="form-control col-md-7">
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createHomework.Title" class="col-form-label"></label>
+                                    <input asp-for="@createHomework.Title" value="@createHomework.Title" type="text" placeholder="Title here..." required class="form-control">
                                     <span asp-validation-for="@createHomework.Title" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createHomework.Description" class="col-md-3 col-form-label text-md-right"></label>
-                                    <textarea asp-for="@createHomework.Description" value="@createHomework.Description" required class="form-control col-md-7"></textarea>
-                                    <span asp-validation-for="@createHomework.Description" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createHomework.Hours" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <input asp-for="@createHomework.Hours" value="@createHomework.Hours" type="number" class="form-control col-md-7 mt-3" required>
-                                    <span asp-validation-for="@createHomework.Hours" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-
-                                    <label asp-for="@createHomework.Type" class="col-md-3 col-form-label mt-3 text-md-right"></label>
-                                    <select class="form-control col-md-7 custom-select" asp-for="@createHomework.Type"></select>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                                <div class="form-group col-xl-6">
+                                    <label asp-for="@createHomework.Type" class="col-form-label"></label>
+                                    <select class="form-control custom-select" asp-for="@createHomework.Type" required></select>
                                     <span asp-validation-for="@createHomework.Type" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                    <input id="createHomework_SessionId" type="text" required hidden readonly>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
                             </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-4">
+                                    <label asp-for="@createHomework.Hours" class="col-form-label">Hours</label>
+                                    <input asp-for="@createHomework.Hours" value="@createHomework.Hours" type="number" min="1" required
+                                           class="form-control">
+                                    <span asp-validation-for="@createHomework.Hours" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label asp-for="@createHomework.Description" class="col-form-label">Description</label>
+                                    <textarea asp-for="@createHomework.Description" value="@createHomework.Description" required class="form-control"></textarea>
+                                    <span asp-validation-for="@createHomework.Description" id="error_message"
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                </div>
+                            </div>
+                            <input id="createHomework_SessionId" type="text" required hidden readonly>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
@@ -551,7 +676,7 @@
         </div>
     </div>
     <div id="addQuestion" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Add question for Homework</h4>
@@ -572,8 +697,8 @@
                     <div id="add_question_Tab" class="tab-pane fade show active">
                         <form method="post" id="AddQuestionForm">
                             <div class="modal-body">
-                                <div class="row p-4">
-                                    <div class="col-12">
+                                <div class="row justify-content-center p-4">
+                                    @* <div class="col-12">
                                         <div class="row form-group">
                                             <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Selected Question</label>
                                             <div class="col-md-8 p-0">
@@ -583,7 +708,18 @@
                                                   class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
                                             <input id="homId_adding" name="homId.adding" type="number" value="0" required hidden>
                                         </div>
+                                    </div> *@
+                                    <div class="col-xl-12 justify-content-around form-row">
+                                        <div class="form-group col-xl-12">
+                                            <label asp-for="@addQuestion.HomeworkQuestionId" class="col-form-label">Select available question</label>
+                                            <div class="p-0">
+                                                <select id="select2-question-dropdown" class="form-control custom-select" style="width: 100%;"></select>
+                                            </div>
+                                            <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
+                                        </div>
                                     </div>
+                                    <input id="homId_adding" name="homId.adding" type="number" value="0" required hidden>
                                 </div>
                             </div>
                             <div class="modal-footer justify-content-center">
@@ -595,21 +731,15 @@
                     <div id="create_question_Tab" class="tab-pane fade">
                         <form method="post" id="CreateQuestionForm">
                             <div class="modal-body">
-                                <div class="row p-4">
-                                    <div class="col-12">
-                                        <div class="row form-group">
-                                            @* <label asp-for="@addQuestion.HomeworkQuestionId" class="col-md-4 col-form-label text-md-right">Selected Question</label>
-                                            <div class="col-md-8 p-0">
-                                                <select id="select2-question-dropdown" class="form-control custom-select" style="width: 100%;"></select>
-                                            </div>
-                                            <span asp-validation-for="@addQuestion.HomeworkQuestionId" id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span> *@
-                                            <label class="col-md-4 col-form-label text-md-right">Question</label>
-                                            <input id="createQuestion_Question" type="text" required class="form-control col-md-8">
-                                            <span id="error_message"
-                                                  class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                            <input id="homId_creating" name="homId.creating" type="number" value="0" required hidden>
+                                <div class="row justify-content-center p-4">
+                                    <div class="col-xl-12 justify-content-around form-row">
+                                        <div class="form-group col-xl-12">
+                                            <label for="createQuestion_Question" class="col-form-label">Question description</label>
+                                            <input id="createQuestion_Question" type="text" required class="form-control">
+                                            <span data-valmsg-for="createQuestion.Question" data-valmsg-replace="true" id="error_message"
+                                                  class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                         </div>
+                                        <input id="homId_creating" name="homId.creating" type="number" value="0" required hidden>
                                     </div>
                                 </div>
                             </div>
@@ -624,32 +754,34 @@
         </div>
     </div>
     <div id="createAnswer" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-addRoom">
                 <div class="modal-header">
                     <h4 class="modal-title">Create new Answer</h4>
                 </div>
                 <form method="post" id="createAnswerForm">
                     <div class="modal-body">
-                        <div class="row p-4">
-                            <div class="col-12">
-                                <div class="row form-group">
-                                    <label asp-for="@createAnswer.Answer" class="col-md-4 col-form-label text-md-right"></label>
-                                    <textarea asp-for="@createAnswer.Answer" value="@createAnswer.Answer" required class="col-md-8 form-control"></textarea>
+                        <div class="row justify-content-center p-4">
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-12">
+                                    <label asp-for="@createAnswer.Answer" class="col-form-label">Answer description</label>
+                                    <textarea asp-for="@createAnswer.Answer" value="@createAnswer.Answer" required class="form-control"></textarea>
                                     <span asp-validation-for="@createAnswer.Answer" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
-                                <div class="row form-group">
-                                    <label asp-for="@createAnswer.Type" class="col-md-4 col-form-label text-md-right"></label>
-                                    <select class="col-md-8 form-control custom-select" asp-for="@createAnswer.Type">
+                            </div>
+                            <div class="col-xl-12 justify-content-around form-row">
+                                <div class="form-group col-xl-4">
+                                    <label asp-for="@createAnswer.Type" class="col-form-label">Hours</label>
+                                    <select class="form-control custom-select" asp-for="@createAnswer.Type" required>
                                         <option value="Correct">Correct</option>
                                         <option value="Incorrect">Incorrect</option>
                                     </select>
                                     <span asp-validation-for="@createAnswer.Type" id="error_message"
-                                          class="helper-text text-danger d-block offset-md-5 col-md-5 col-sm-8 mt-2"></span>
-                                    <input id="queId_creating" name="queId.creating" type="number" value="0" required hidden>
+                                          class="helper-text text-danger d-block offset-md-5 col-md-7 col-sm-12 mt-2"></span>
                                 </div>
                             </div>
+                            <input id="queId_creating" name="queId.creating" type="number" value="0" required hidden>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-center">
@@ -890,7 +1022,7 @@
                             // }, 500);
                             const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
                             if (statusText == 'Draft' || statusText == 'Postponed')
-                                return '<button class="btn btn-primary">Update</button> <button class="btn btn-danger">Delete</button>';
+                                return '<button class="btn btn-primary" data-toggle="modal" data-target="#updateSessionConfirm">Update</button> <button class="btn btn-danger" data-toggle="modal" data-target="#deleteSessionConfirm">Delete</button>';
                             else return '';
                         }
                     },
@@ -1170,6 +1302,8 @@
                 },
             }).on('draw', function (e, settings) {
                 homeworkTable.column(7).visible(false, false);
+                const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                if (statusText !== 'Draft' && statusText !== 'Postponed') homeworkTable.column(6).visible(false, false);
                 homeworkTableMainFeatures();
                 // Attach listener to checkboxes after the table is drawn
                 // $('#student-table div .attendance-checkbox')
@@ -1351,6 +1485,8 @@
                 },
             }).on('draw', function (e, settings) {
                 questionTable.column(4).visible(false, false);
+                const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                if (statusText !== 'Draft' && statusText !== 'Postponed') questionTable.column(3).visible(false, false);
                 questionTableMainFeatures();
             }).on('row-reorder', function (e, diff, edit) {
                 for (var i = 0, ien = diff.length; i < ien; i++) {
@@ -1483,6 +1619,8 @@
                 },
             }).on('draw', function (e, settings) {
                 answerTable.column(4).visible(false, false);
+                const statusText = $('td#course-status').text().trim(); // Adjust the delay if needed
+                if (statusText !== 'Draft' && statusText !== 'Postponed') answerTable.column(3).visible(false, false);
                 answerTableMainFeatures()
             });
             callApiGetCourseDetail();
@@ -1560,6 +1698,24 @@
                 callApiPostCreateSession(formData);
                 $('#AddSessionForm').trigger("reset");
             });
+            $('#UpdateSessionForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                var formData = {
+                    title: $('#updateSessionConfirm_Title').val(),
+                    description: $('#updateSessionConfirm_Description').val(),
+                    hours: $('#updateSessionConfirm_Hours').val()
+                };
+                callApiPutUpdateSession(formData, $('#updateSessionConfirm_ID').text());
+                // callApiPostCreateHomework(formData);
+            });
+            $('#DeleteSessionForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+                // callApiPutUpdateSession(formData, $('#updateSessionConfirm_ID').text());
+                // callApiPostCreateHomework(formData);
+                // console.log()
+                callApiDeleteSession($('#deleteSessionConfirm_ID').text());
+            });
             $('#AddQuestionForm').submit(function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
                 var questionId = $('#select2-question-dropdown').select2('data')[0].id;
@@ -1602,25 +1758,6 @@
                 //     questionTable.row(selectedQueTableRow.rowIndex).select();
                 // }, 200);
             });
-            $(document).on('submit', 'form[id^="editSessionForm_"]', function (event) {
-                event.preventDefault();
-                // Extract the answerId from the form's id
-                let sessionId = $(this).attr('id').split('_')[1];
-
-                // Collect form data
-                let formData = {
-                    sessionNumber: $('#updateSession_' + sessionId + '_Number').val(),
-                    title: $('#updateSession_' + sessionId + '_Title').val(),
-                    description: $('#updateSession_' + sessionId + '_Description').val(),
-                    hours: $('#updateSession_' + sessionId + '_Hours').val(),
-                };
-
-                // Call the API to update the answer
-                callApiPutUpdateSession(formData, sessionId);
-
-                // Optionally reset the form
-                //$(this).trigger("reset");
-            });
         });
         function addQuestionOptions(data) {
             $('#select2-question-dropdown').empty();
@@ -1636,54 +1773,24 @@
             // callApiGetStudentNameList(data[0].parentName);
         }
         function sessionTableMainFeatures() {
-            $('#session-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
-                let row = sessionTable.row($(this).closest('tr'));
+            $('#deleteSessionConfirm').on('shown.bs.modal', function (e) {
+                let row = sessionTable.row($(e.relatedTarget).closest('tr'));
                 let rowData = row.data();
-
-                if (confirm(`Delete session "${rowData.title}"?`)) {
-                    $.ajax({
-                        url: apiUrl + 'Session/' + rowData.sessionId + '/Delete',
-                        type: 'DELETE',
-                        headers: { 'Authorization': 'Bearer ' + token },
-                        success: function (response) {
-                            if (response.status) {
-                                // row.remove().draw();
-                                showAlert('success', 'Session deleted successfully.');
-                                callApiGetCourseDetail();
-                            } else {
-                                showAlert('error', 'Error: ' + response.errorMessage);
-                            }
-                        },
-                        error: function (xhr) {
-                            // Attempt to parse the response text if it is available
-                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
-                            // Extract the custom error message if it exists
-                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
-                            // Check if errorResponse.errors exists and is an object
-                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
-                                // Loop through each field in the errors object and append to the errorMessage
-                                for (var field in errorResponse.errors) {
-                                    if (errorResponse.errors.hasOwnProperty(field)) {
-                                        // Add each error message for the field, joining multiple messages if they exist
-                                        var fieldErrors = errorResponse.errors[field].join(", ");
-                                        errorMessage += `\n${field}: ${fieldErrors}`;
-                                    }
-                                }
-                            }
-                            // Display the error message using your custom showAlert function
-                            showAlert('error', "Error: \n" + errorMessage);
-                        }
-                    });
-                }
-            });
-            $('#session-table tbody').off('click', '.btn-primary').on('click', '.btn-primary', function () {
-                let row = sessionTable.row($(this).closest('tr'));
+                let formData = {
+                    // sessionNumber: $('#updateSession_' + rowData.sessionId + '_Number').val(),
+                    title: $('#updateSession_' + rowData.sessionId + '_Title').val(),
+                    description: $('#updateSession_' + rowData.sessionId + '_Description').val(),
+                    hours: $('#updateSession_' + rowData.sessionId + '_Hours').val(),
+                };
+                // DeleteSessionForm
+                $('#deleteSessionConfirm_Title').val(formData.title);
+                $('#deleteSessionConfirm_Hours').val(formData.hours);
+                $('#deleteSessionConfirm_Description').val(formData.description);
+                $('#deleteSessionConfirm_ID').text(rowData.sessionId);
+            })
+            $('#updateSessionConfirm').on('shown.bs.modal', function (e) {
+                let row = sessionTable.row($(e.relatedTarget).closest('tr'));
                 let rowData = row.data();
-
-                // console.log(rowData);
-
-                // Collect form data
                 let formData = {
                     // sessionNumber: $('#updateSession_' + rowData.sessionId + '_Number').val(),
                     title: $('#updateSession_' + rowData.sessionId + '_Title').val(),
@@ -1691,76 +1798,11 @@
                     hours: $('#updateSession_' + rowData.sessionId + '_Hours').val(),
                 };
 
-                // console.log(formData);
-
-                if (confirm(`Update session "${rowData.title}"?`)) {
-                    $.ajax({
-                        url: apiUrl + 'Session/' + rowData.sessionId + '/Update',
-                        type: 'PUT',
-                        data: JSON.stringify(formData),
-                        headers: {
-                            'Authorization': 'Bearer ' + token, // Token for authentication
-                        },
-                        contentType: 'application/json; charset=utf-8',
-                        success: function (response) {
-                            if (response.status) {
-                                // row.remove().draw();
-                                showAlert('success', 'Session updated successfully.');
-                                callApiGetCourseDetail();
-                            } else {
-                                showAlert('error', 'Error: ' + response.errorMessage);
-                            }
-                        },
-                        error: function (xhr) {
-                            // Attempt to parse the response text if it is available
-                            var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
-
-                            // Extract the custom error message if it exists
-                            var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
-                            // Check if errorResponse.errors exists and is an object
-                            if (errorResponse.errors && typeof errorResponse.errors === 'object') {
-                                // Loop through each field in the errors object and append to the errorMessage
-                                for (var field in errorResponse.errors) {
-                                    if (errorResponse.errors.hasOwnProperty(field)) {
-                                        // Add each error message for the field, joining multiple messages if they exist
-                                        var fieldErrors = errorResponse.errors[field].join(", ");
-                                        errorMessage += `\n${field}: ${fieldErrors}`;
-                                    }
-                                }
-                            }
-                            // Display the error message using your custom showAlert function
-                            showAlert('error', "Error: \n" + errorMessage);
-                        }
-                    });
-                }
+                $('#updateSessionConfirm_Title').val(formData.title);
+                $('#updateSessionConfirm_Hours').val(formData.hours);
+                $('#updateSessionConfirm_Description').val(formData.description);
+                $('#updateSessionConfirm_ID').text(rowData.sessionId);
             });
-            // scheduleTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-            //     const currentStatus = $('td#class-status').text().trim(); Current status
-            //     if (currentStatus === "Draft" || currentStatus === "Postponed") {
-            //         const dateValue = this.cell(rowIdx, 2).data();
-            //         const node = $(this.cell(rowIdx, 2).node());
-
-            //         const staDate = $('#class-start-date').data('stadate');
-            //         const endDate = $('#class-end-date').data('enddate');
-
-            //         Change display to a select box if not already updated
-            //         if (!node.children('input[type=datetime-local]').length) {
-            //             node.html(`
-            //                     <input type="datetime-local" id="schedule-start-date-${rowIdx}" class="form-control" value=${dateValue}
-            //                             asp-format="{0:yyyy-MM-ddTHH:mm}" min="${staDate}" max="${endDate}"/>`);
-
-            //             Add change event listener to the select element
-            //             node.find('input[type=datetime-local]').on('change', function () {
-            //                 const newStatus = $(this).val();
-            //                 let formData = {
-            //                     scheduleDate: $('input#schedule-start-date-' + rowIdx).val()
-            //                 };
-            //                 console.log(scheduleTable.cell(rowIdx, 8).data());
-            //                 callApiPutUpdateSchedule(formData, scheduleTable.cell(rowIdx, 8).data());
-            //             });
-            //         }
-            //     }
-            // });
         }
         function homeworkTableMainFeatures() {
             $('#homework-table tbody').off('click', '.btn-danger').on('click', '.btn-danger', function () {
@@ -1983,7 +2025,7 @@
 
                 if (confirm(`Delete answer "${rowData.answer}"?`)) {
                     $.ajax({
-                        url: apiUrl + 'Answer/' + rowData.homeworkAnswerId + '/Delete',
+                        url: apiUrl + 'Answer/' + rowData.homeworkAnswerId,
                         type: 'DELETE',
                         headers: { 'Authorization': 'Bearer ' + token },
                         success: function (response) {
@@ -2288,13 +2330,47 @@
                 success: function (response) {
                     // Handle success (display a success message or redirect, etc.)
                     if (response.status) {
+                        // row.remove().draw();
                         showAlert('success', "Session update successfully");
-                        $('.modal-backdrop').remove();
-                        // Remove specific class from body
-                        $('body').removeClass('modal-open');
+                        callApiGetCourseDetail();
+                    } else {
+                        showAlert('error', response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
 
-                        // Remove all inline styles from body
-                        $('body').removeAttr('style');
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiDeleteSession(sessionId) {
+            $.ajax({
+                url: apiUrl + 'Session/' + sessionId + '/Delete', // Specify your Razor Page here
+                type: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                success: function (response) {
+                    // Handle success (display a success message or redirect, etc.)
+                    if (response.status) {
+                        // row.remove().draw();
+                        showAlert('success', "Session delete successfully");
                         callApiGetCourseDetail();
                     } else {
                         showAlert('error', response.errorMessage);
