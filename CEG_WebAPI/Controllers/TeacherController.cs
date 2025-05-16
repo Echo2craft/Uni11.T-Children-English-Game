@@ -164,7 +164,7 @@ namespace CEG_WebAPI.Controllers
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Teacher Name Option List Not Found!"
+                        ErrorMessage = "Teacher name option list not found."
                     });
                 }
                 return Ok(new
@@ -295,7 +295,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpPost("sendremindhomeworkemail")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = Roles.Teacher)]
         [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -411,7 +411,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("account/{id}/update")]
+        [HttpPut("account/{id}")]
         [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -449,6 +449,7 @@ namespace CEG_WebAPI.Controllers
                     InnerExceptionMessage = ex.InnerException?.Message
                 });
             }
+
         }
     }
 }

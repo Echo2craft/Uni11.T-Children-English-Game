@@ -138,7 +138,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         [ProducesResponseType(typeof(GameViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -167,7 +167,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id}/update")]
+        [HttpPut("{id}")]
         [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(GameViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

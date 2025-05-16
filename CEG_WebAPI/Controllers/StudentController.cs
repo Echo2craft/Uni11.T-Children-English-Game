@@ -308,7 +308,7 @@ namespace CEG_WebAPI.Controllers
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Student Rank List Not Found!"
+                        ErrorMessage = "Student List Not Found!"
                     });
                 }
                 return Ok(new
@@ -338,13 +338,13 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _studentService.GetStudentById(id);
+                var result = await _studentService.GetStudentListByPointRank();
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Student Not Found!"
+                        ErrorMessage = "Student List Not Found!"
                     });
                 }
                 return Ok(new
@@ -543,16 +543,17 @@ namespace CEG_WebAPI.Controllers
         {
             try
             {
-                var result = await _studentService.GetStudentById(id);
+                var result = await _studentService.GetStudentByAccountId(id);
                 if (result == null)
                 {
                     return NotFound(new
                     {
                         Status = false,
-                        ErrorMessage = "Student Not Found!"
+                        ErrorMessage = "Student Does Not Exist"
                     });
                 }
                 _studentService.Update(result, student);
+                result = await _studentService.GetStudentByAccountId(id);
                 return Ok(new
                 {
                     Status = true,
