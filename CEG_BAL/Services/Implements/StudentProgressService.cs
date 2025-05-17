@@ -54,6 +54,12 @@ namespace CEG_BAL.Services.Implements
             return viewStuPro != null ? _mapper.Map<StudentProgressViewModel>(viewStuPro) : null;
         }
 
+        public async Task<List<StudentProgressViewModel>> GetListByStudentId(int id)
+        {
+            var viewStuPro = await _unitOfWork.StudentProgressRepositories.GetListByStudentId(id);
+            return viewStuPro != null ? _mapper.Map<List<StudentProgressViewModel>>(viewStuPro) : new List<StudentProgressViewModel>();
+        }
+
         public async Task<List<StudentProgressViewModel>> GetList()
         {
             return _mapper.Map<List<StudentProgressViewModel>>(await _unitOfWork.StudentProgressRepositories.GetList());

@@ -6,14 +6,17 @@ TagManager:
   tags:
   - AudioThroughScene
   - MainSound
+  - Checkpoint
+  - FallDetector
+  - Hazard
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PostProcessing
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 
