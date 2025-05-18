@@ -52,15 +52,6 @@ namespace CEG_WebAPI.Controllers
             return await GetList();
         }
         [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(TransactionViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTransactionById([FromRoute] int id)
-        {
-            return await GetById(id);
-        }
-        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All/Count")]
         [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
