@@ -57,28 +57,6 @@ namespace CEG_WebAPI.Controllers
             return await GetNameOptionList();
         }
         [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTeacherById(
-            [FromRoute][Required] int id)
-        {
-            return await GetById(id);
-        }
-        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
-        [HttpGet("Account/{id}")]
-        [Authorize(Roles = $"{Roles.Teacher}, {Roles.Admin}")]
-        [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTeacherByAccountId(
-            [FromRoute][Required] int id
-            )
-        {
-            return await GetByAccountId(id);
-        }
-        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("Student/Attendance/All/ByScheduleId/{scheduleId}")]
         [Authorize(Roles = Roles.Teacher)]
         [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]

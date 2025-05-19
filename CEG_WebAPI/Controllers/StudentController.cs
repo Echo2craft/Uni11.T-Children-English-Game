@@ -75,15 +75,6 @@ namespace CEG_WebAPI.Controllers
             return await GetRank();
         }
         [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
-        [HttpGet("{id}")]
-        [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetStudentById([FromRoute] int id)
-        {
-            return await GetById(id);
-        }
-        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All/Count/ByTeacher/{id}")]
         [Authorize(Roles = Roles.Teacher)]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
@@ -104,18 +95,6 @@ namespace CEG_WebAPI.Controllers
             [FromRoute] int id)
         {
             return await GetCountByParent(id);
-        }
-        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
-        [HttpGet("Account/{id}")]
-        [Authorize(Roles = $"{Roles.Admin},{Roles.Student}")]
-        [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetStudentByAccountId(
-            [FromRoute][Required] int id
-            )
-        {
-            return await GetByAccountId(id);
         }
         [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("ByParent/{id}")]
@@ -531,7 +510,7 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("account/{id}/update")]
+        [HttpPut("account/{id}")]
         [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(StudentViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
