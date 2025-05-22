@@ -46,17 +46,6 @@ namespace CEG_WebAPI.Controllers
             return await GetByStudentId(id);
         }
         [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
-        [HttpGet("Dashboard/{id}")]
-        [Authorize(Roles = Roles.Student)]
-        [ProducesResponseType(typeof(StudentDashboard), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetStudentDashboard(
-            [FromRoute][Required] int id)
-        {
-            return await GetDashboard(id);
-        }
-        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpPost("Create")]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

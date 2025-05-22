@@ -69,18 +69,6 @@ namespace CEG_WebAPI.Controllers
             return await GetAttendanceListByScheduleId(scheduleId);
         }
         [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
-        [HttpPost("SendRemindHomeworkEmail")]
-        [Authorize(Roles = Roles.Teacher)]
-        [ProducesResponseType(typeof(AttendanceViewModel), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SendEmailRemindHomework(
-            [FromBody][Required] CreateRemindHomeworkEmail emaReq
-            )
-        {
-            return await SendEmailRemindHomeworktoParent(emaReq);
-        }
-        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpPut("Account/{id}/Update")]
         [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(TeacherViewModel), StatusCodes.Status200OK)]

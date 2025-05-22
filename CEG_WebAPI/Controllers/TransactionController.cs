@@ -112,18 +112,6 @@ namespace CEG_WebAPI.Controllers
             return await GetByParentAccountId(id);
         }
         [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
-        [HttpPost("GenerateUrl")]
-        [Authorize(Roles = Roles.Parent)]
-        [ProducesResponseType(typeof(TransactionRequest), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GeneratePaymentUrl(
-            [FromBody][Required] TransactionRequest newTraReq
-            )
-        {
-            return await GenerateUrl(newTraReq);
-        }
-        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpPost("Create")]
         [Authorize(Roles = $"{Roles.Admin}, {Roles.Parent}")]
         [ProducesResponseType(typeof(TransactionViewModel), StatusCodes.Status200OK)]
