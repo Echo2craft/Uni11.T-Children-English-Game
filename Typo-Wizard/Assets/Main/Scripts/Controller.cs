@@ -6,8 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-using i5.Toolkit.Core.OpenIDConnectClient;
-using i5.Toolkit.Core.ServiceCore;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.UI;

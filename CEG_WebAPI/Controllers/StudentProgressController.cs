@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using CEG_BAL.ViewModels.Student;
+using CEG_WebAPI.Constants;
 
 namespace CEG_WebAPI.Controllers
 {
@@ -24,11 +25,55 @@ namespace CEG_WebAPI.Controllers
             _config = config;
         }
 
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
         [ProducesResponseType(typeof(List<StudentProgressViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetStudentAnswerList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("ByStudent/{id}")]
+        [ProducesResponseType(typeof(StudentProgressViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetStudentProgressByStudentId(
+            [FromRoute][Required] int id
+            )
+        {
+            return await GetByStudentId(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateStudentProgress(
+            [FromBody][Required] CreateNewStudentProgress newStuPro
+            )
+        {
+            return await Create(newStuPro);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update")]
+        [ProducesResponseType(typeof(StudentProgressViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateStudentProgress(
+            [FromRoute][Required] int id,
+            [FromBody][Required] UpdateStudentProgress upStuPro
+            )
+        {
+            return await Update(id, upStuPro);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<StudentProgressViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -62,7 +107,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(StudentProgressViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetStudentAnswerById(
+        public async Task<IActionResult> GetById(
             [FromRoute][Required] int id
             )
         {
@@ -94,12 +139,48 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("Dashboard/{id}")]
-        [Authorize(Roles = "Student")]
+        [HttpGet("student/{id}")]
+        [ProducesResponseType(typeof(StudentProgressViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetByStudentId(
+            [FromRoute][Required] int id
+            )
+        {
+            try
+            {
+                var result = await _studentProgressService.GetListByStudentId(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Student progress not found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("dashboard/{id}")]
+        [Authorize(Roles = Roles.Student)]
         [ProducesResponseType(typeof(StudentDashboard), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetStudentDashboard(
+        public async Task<IActionResult> GetDashboard(
             [FromRoute][Required] int id)
         {
             try
@@ -130,11 +211,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Create")]
+        [HttpPost]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateStudentProgress(
+        public async Task<IActionResult> Create(
             [FromBody][Required] CreateNewStudentProgress newStuPro
             )
         {
@@ -158,7 +239,8 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPut("{id}/Update")]
+
+        [HttpPut("{id}")]
         [ProducesResponseType(typeof(StudentProgressViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

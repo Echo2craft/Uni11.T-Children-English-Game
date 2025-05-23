@@ -590,7 +590,6 @@ html body {
         padding: 25px;
         display: flex;
         border-radius: 20px;
-        justify-content: space-between;
         cursor: pointer;
         flex-direction: row;
         color: #fff;
@@ -633,17 +632,20 @@ html body {
             font-weight: 600;
             font-size: 5rem;
         }
-    .cardBox .card .number {
-        position: relative;
-        font-weight: 600;
-        font-size: 30px;
+    .cardBox .card .amount {
+        /*margin-left: 10px;*/
     }
+        .cardBox .card .amount .number {
+            position: relative;
+            font-weight: 600;
+            font-size: 30px;
+        }
 
-    .cardBox .card .cardName {
-        color: #fff;
-        font-size: 1em;
-        margin-top: 5px;
-    }
+        .cardBox .card .amount .cardName {
+            color: #fff;
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
 
     .cardBox .card .inconBx {
         font-size: 2.5em;

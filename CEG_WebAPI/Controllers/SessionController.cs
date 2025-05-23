@@ -4,6 +4,7 @@ using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,12 +26,65 @@ namespace CEG_WebAPI.Controllers
             _courseService = courseService;
             _config = config;
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
         [ProducesResponseType(typeof(List<SessionViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetSessionList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("ByCourse/{courseId}")]
+        [ProducesResponseType(typeof(List<SessionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSessionListByCourseId([FromRoute] int courseId)
+        {
+            return await GetListByCourseId(courseId);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateSession(
+            [FromBody][Required] CreateNewSession newSes
+            )
+        {
+            return await Create(newSes);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{sesId}/Update")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateSession(
+            [FromRoute][Required] int sesId,
+            [FromBody][Required] UpdateSession ses
+            )
+        {
+            return await Update(sesId, ses);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpDelete("{id}/Delete")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteSession(
+            [FromRoute][Required] int id
+            )
+        {
+            return await Delete(id);
+        }
+        [HttpGet]
+        [ProducesResponseType(typeof(List<SessionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -94,11 +148,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("ByCourse/{courseId}")]
+        [HttpGet("course/{courseId}")]
         [ProducesResponseType(typeof(List<SessionViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetSessionListByCourseId([FromRoute] int courseId)
+        public async Task<IActionResult> GetListByCourseId([FromRoute] int courseId)
         {
             try
             {
@@ -128,11 +182,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Create")]
+        [HttpPost]
         [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateSession(
+        public async Task<IActionResult> Create(
             [FromBody][Required] CreateNewSession newSes
             )
         {
@@ -166,8 +220,8 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{sesId}/Update")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{sesId}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -206,8 +260,8 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpDelete("{id}/Delete")]
-        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
