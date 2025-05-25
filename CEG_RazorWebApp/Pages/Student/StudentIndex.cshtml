@@ -55,7 +55,7 @@
         });
         function callApiGetStudentTimeAndPoint() {
             $.ajax({
-                url: apiUrl + `StudentProgress/Dashboard/${id}`,
+                url: apiUrl + `studentprogress/dashboard/${id}`,
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token, // Token for authentication
