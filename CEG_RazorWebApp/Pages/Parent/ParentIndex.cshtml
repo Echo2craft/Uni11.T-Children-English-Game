@@ -55,7 +55,7 @@
         });
         function callApiGetStudentCountByParent() {
             $.ajax({
-                url: apiUrl + `Student/All/Count/ByParent/${id}`, // API endpoint
+                url: apiUrl + `student/count/parent/${id}`, // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token, // Token for authentication
@@ -93,7 +93,7 @@
         }
         function callApiGetTransactionCount() {
             $.ajax({
-                url: apiUrl + `Transaction/All/Count/${id}`, // API endpoint
+                url: apiUrl + `transaction/count/${id}`, // API endpoint
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true

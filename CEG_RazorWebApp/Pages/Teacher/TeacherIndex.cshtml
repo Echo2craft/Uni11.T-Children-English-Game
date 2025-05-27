@@ -22,8 +22,8 @@
                     <i class='bx bx-calendar'></i>
                 </div>
                 <div>
-                    <div id="class-amount" class="cardName">0</div>
-                    @* <div class="cardName">Active Classes</div> *@
+                    <div id="class-amount">0</div>
+                    <div class="cardName">Active Classes</div>
                 </div>
             </div>
             <div class="card feedback">
@@ -80,7 +80,7 @@
         });
         function callApiGetClassCount() {
             $.ajax({
-                url: apiUrl + `Class/${id}/All/Ongoing/Count`, // API endpoint
+                url: apiUrl + `class/count/teacher/account/${id}/status/ongoing`, // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token, // Token for authentication
@@ -89,7 +89,7 @@
                 // Check if the status is true
                 if (response.status) {
                     $('#class-amount').empty();
-                    $('#class-amount').text(response.data + ' Active Classes');
+                    $('#class-amount').text(response.data);
                 } else {
                     showAlert('error', "Error: \n" + response.errorMessage);
                 }
@@ -118,7 +118,7 @@
         }
         function callApiGetStudentCount() {
             $.ajax({
-                url: apiUrl + `Student/All/Count/ByTeacher/${id}`,
+                url: apiUrl + `student/count/teacher/${id}`,
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token, // Token for authentication
@@ -156,7 +156,7 @@
         }
         function callApiGetSumValue() {
             $.ajax({
-                url: apiUrl + `Transaction/All/Sum/ByTeacher/${id}`,
+                url: apiUrl + `transaction/sum/teacher/${id}`,
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true
