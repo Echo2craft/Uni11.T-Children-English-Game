@@ -110,7 +110,7 @@
                     <h5><i class="fa fa-sort-amount-down"></i> Our available courses</h5>
                     <a href="/courses" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
                 </div>
-                <div class="famousList-carousel owl-carousel owl-theme d-flex" id="courses">
+                <div class="famousList-carousel owl-carousel owl-theme" id="courses">
                     @* @foreach (var data in meetingList)
                     {
                     <div class="club-item">
@@ -140,7 +140,7 @@
                     <h5><i class="fa fa-sort-amount-down"></i> Our available classes</h5>
                     <a href="/classes" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
                 </div>
-                <div class="ratingList-carousel owl-carousel owl-theme d-flex" id="classes">
+                <div class="ratingList-carousel owl-carousel owl-theme" id="classes">
                     @* @foreach (var data in fieldtripList)
                     {
                     <div class="club-item">
@@ -303,7 +303,7 @@
         $(".carousel").carousel({
             interval: 3000,
         });
-        var apiUrl = sessionStorage.getItem('apiUrl');
+        // var apiUrl = sessionStorage.getItem('apiUrl');
         var classList = []; // Store all fetched classes
         $(document).ready(function () {
             callApiGetClassList();
@@ -311,7 +311,7 @@
         });
         function callApiGetCourseList() {
             $.ajax({
-                url: apiUrl + 'course/status/available', // API endpoint
+                url: 'https://localhost:7143/api/' + 'course/status/available', // API endpoint
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true
@@ -345,7 +345,7 @@
         }
         function callApiGetClassList() {
             $.ajax({
-                url: apiUrl + 'class/home', // API endpoint
+                url: 'https://localhost:7143/api/' + 'class/home', // API endpoint
                 type: 'GET',
                 success: function (response) {
                     // Check if the status is true
@@ -411,9 +411,9 @@
                 }
                 // Construct card HTML
                 var cardHtml = `
-                    <div class="club-item w-25">
+                    <div class="club-item">
                         <a href="#" class="club-image">
-                            <img class="img-fluid" src="~/images/middleSchoolers2.png" alt="nt1">
+                            <img class="img-fluid" src="../images/middleSchoolers2.png" alt="nt1">
                         </a>
                         <div class="club-title">
                             <div class="d-flex justify-content-between">
@@ -474,9 +474,9 @@
                 }
                 // Construct card HTML
                 var cardHtml = `
-                    <div class="club-item w-25">
+                    <div class="club-item">
                         <a href="#" class="club-image">
-                            <img class="img-fluid" src="~/images/middleSchoolers2.png" alt="nt1">
+                            <img class="img-fluid" src="../images/middleSchoolers2.png" alt="nt1">
                         </a>
                         <div class="club-title">
                             <div class="d-flex justify-content-between">
@@ -610,6 +610,5 @@
             });
         });
     </script>
-    <script src="~/js/user-script.js"></script>
 </body>
 </html>
