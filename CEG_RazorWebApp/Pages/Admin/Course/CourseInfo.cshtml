@@ -1666,7 +1666,7 @@
                     totalHours: $('input[id="updateCourse_TotalHours"]').val(),
                     requiredAge: $('input[id="updateCourse_RequiredAge"]').val(),
                     difficulty: $('select[id="updateCourse_Difficulty"]').val(),
-                    category: $('select[id="updateCourse_Category"]').val()
+                    category: $('input[id="updateCourse_Category"]').val()
                 };
 
                 //Make the AJAX request
@@ -2461,7 +2461,7 @@
                         let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
                         let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
                         callApiGetCourseDetail();
-                        console.log(selectedHomTableRow.rowHomIndex);
+                        // console.log(selectedHomTableRow.rowHomIndex);
                         homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
                         $('#homId_adding').val(rowHomId);
                         callApiGetQuestionList(rowHomId);
@@ -2504,6 +2504,7 @@
                         showAlert('success', "Question create successfully");
 
                         let selectedHomTableRow = getSelectedHomeworkTableRowInfo();
+                        console.log(selectedHomTableRow);
                         let rowHomId = selectedHomTableRow.rowHomData.homeworkId;
                         callApiGetCourseDetail();
                         homeworkTable.row(selectedHomTableRow.rowHomIndex).select();
