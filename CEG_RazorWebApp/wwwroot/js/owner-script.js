@@ -1,14 +1,141 @@
-let toggle = document.querySelector(".toggle");
+/*let toggle = document.querySelector(".toggle");
 let navigation = document.querySelector(".navigation");
 let header = document.querySelector(".header");
 let main = document.querySelector(".main-content");
 
 
 toggle.onclick = function () {
-  navigation.classList.toggle("active");
-  header.classList.toggle("active");
-  main.classList.toggle("active");
-};
+    navigation.classList.toggle("active");
+    header.classList.toggle("active");
+    main.classList.toggle("active");
+
+    // Save state to localStorage
+    *//*const isActive = navigation.classList.contains("active");
+    localStorage.setItem("layoutActive", isActive ? "true" : "false");*//*
+};*/
+/*if (localStorage.getItem("layoutActive") === "true") {
+    navigation.addClass("active");
+    header.addClass("active");
+    main.addClass("active");
+}*/
+// DOM
+/*$(document).ready(function () {
+    // still valid!
+});*/
+
+function buildChart(
+    data,
+    chartId,
+    chartType = 'bar',
+    labelKey = 'label',
+    valueKey = 'value',
+    datasetLabel = 'Dataset',
+    backgroundColor = 'rgba(54, 162, 235, 0.6)',
+    borderColor = 'rgba(54, 162, 235, 1)'
+) {
+    // Extract the labels and values depending on your API structure
+    const labels = data.map(item => item[labelKey]);   // Example: if your API returns [{name: 'Jan', value: 10}, ...]
+    const values = data.map(item => item[valueKey]);
+
+    const ctx = document.getElementById(chartId).getContext('2d');
+    new Chart(ctx, {
+        type: chartType, // or 'line', 'pie', etc
+        data: {
+            labels: labels,
+            datasets: [{
+                label: datasetLabel,
+                data: values,
+                backgroundColor: backgroundColor, // Semi-transparent blue
+                borderColor: borderColor,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function buildFilteredChart(
+    labels,
+    values,
+    chartId,
+    chartType = 'bar',
+    datasetLabel = 'Dataset',
+    backgroundColor = 'rgba(54, 162, 235, 0.6)',
+    borderColor = 'rgba(54, 162, 235, 1)'
+) {
+    const ctx = document.getElementById(chartId).getContext('2d');
+    new Chart(ctx, {
+        type: chartType, // or 'line', 'pie', etc
+        data: {
+            labels: labels,
+            datasets: [{
+                label: datasetLabel,
+                data: values,
+                backgroundColor: backgroundColor, // Semi-transparent blue
+                borderColor: borderColor,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Amount (VND)'
+                    },
+                    beginAtZero: true
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Month'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Monthly Transaction Totals'
+                },
+                legend: {
+                    labels: {
+                        // This more specific font property overrides the global property
+                        font: {
+                            size: 20
+                        }
+                    }
+                }
+            },
+        }
+    });
+}
+
+$(function () {
+    // Restore layout state on page load
+    if (localStorage.getItem("layoutActive") === "true") {
+        console.log("is toggled");
+        $(".navigation, .header, .main-content").addClass("active");
+    }
+    // Toggle layout and store state
+    $(".toggle").off("click").on("click", function () {
+        $(".navigation, .header, .main-content").toggleClass("active");
+
+        // Save state
+        const isActive = $(".navigation").hasClass("active");
+        console.log("check this out");
+        localStorage.setItem("layoutActive", isActive ? "true" : "false");
+    });
+});
+
+
 
 $(".nav-link").each(function (i) {
   if (i === 0) {
@@ -22,7 +149,7 @@ $(".tab-pane").each(function (i) {
 });
 
 //print bill
-$('.btn-print').click(function () {
+$('.btn-print').off('click').on('click',function () {
     var table = document.getElementById("table");
     var wme = window.open("","","with=900,height=700");
     wme.document.write(table.outerHTML);
@@ -34,10 +161,10 @@ $('.btn-print').click(function () {
 })
 
 //loading
-// $(window).on("load",function () {
-//     $(".preloader").fadeOut("slow");
-//     $(".preloader").css("display","none");
-// });
+/*$(window).on("load",function () {
+    $(".preloader").fadeOut("slow");
+    $(".preloader").css("display","none");
+});*/
 
 let vnd = Intl.NumberFormat("vi-VN", {
   style: "currency",
@@ -272,8 +399,3 @@ $('#checkAll').click(function () {
 //  } 
 
   
-
-
-
-
-

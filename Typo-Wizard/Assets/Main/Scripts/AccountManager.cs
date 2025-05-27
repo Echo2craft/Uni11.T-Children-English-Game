@@ -1,20 +1,20 @@
-using i5.Toolkit.Core.OpenIDConnectClient;
-using i5.Toolkit.Core.ServiceCore;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.IO;
 using System;
 using System.Linq;
 using System.Text;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using static System.Net.Mime.MediaTypeNames;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 using Text = UnityEngine.UI.Text;
+using Application = UnityEngine.Application;
 
 public class AccountManager : MonoBehaviour
 {
@@ -109,8 +109,6 @@ public class AccountManager : MonoBehaviour
     private string accessToken;
     [HideInInspector]
     public int currentIndex;
-    [HideInInspector]
-    public UserProgressResponse UserProgressResponse;
 
     [Header("Login")]
     public TMP_InputField nameLoginField;
@@ -164,6 +162,8 @@ public class AccountManager : MonoBehaviour
 private void SetUIForRole()
     {
         LoginScreen.SetActive(false);
+
+
         canvasToActivate.SetActive(true);
     }
     private void checkActive()
@@ -491,10 +491,11 @@ public string GetAccessToken()
     {
         _user = null;
         _gameData = new Dictionary<string, List<LevelObject>>();
-        PlayerPrefs.SetInt(loginKey, 0);
-        PlayerPrefs.DeleteKey(usernameKey);
-        PlayerPrefs.Save();
-        Debug.Log("User logged out successfully");
-    }
 
+        PlayerPrefs.DeleteAll(); // Clears all saved PlayerPrefs data
+        PlayerPrefs.Save();      // Save the changes
+
+        Debug.Log("PlayerPrefs cleared and user logged out.");
+        Application.Quit();
+    }
 }

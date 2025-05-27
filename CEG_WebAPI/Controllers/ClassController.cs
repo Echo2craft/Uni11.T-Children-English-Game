@@ -5,6 +5,7 @@ using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Get;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,12 +31,189 @@ namespace CEG_WebAPI.Controllers
             _teacherService = teacherService;
             _config = config;
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
         [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetClassList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/Count")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTotalClassAmount()
+        {
+            return await GetTotalAmount();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/Home")]
+        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassForHomePage()
+        {
+            return await GetListForHomePage();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/Status/Open")]
+        [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassOptionListByStatusOpen(
+            [FromQuery] string stuFullname)
+        {
+            return await GetOptionListByStatusOpen(stuFullname);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/Date/Update/Status")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateClassListByDate()
+        {
+            return await UpdateListStatusByDate();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Parent/All")]
+        [Authorize(Roles = Roles.Parent)]
+        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassListParent()
+        {
+            return await GetListForParent();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("{id}/All")]
+        [Authorize(Roles = Roles.Teacher)]
+        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassListTeacher([FromRoute] int id)
+        {
+            return await GetListForTeacherByAccountId(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All/ByStudent/{id}")]
+        [Authorize(Roles = Roles.Student)]
+        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassListStudent([FromRoute] int id)
+        {
+            return await GetListForStudentByAccountId(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("{id}/All/{status}/Count")]
+        [Authorize(Roles = Roles.Teacher)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetTotalClassAmountByTeacher(
+            [FromRoute] int id,
+            [FromRoute] string status
+            )
+        {
+            return await GetTotalAmountByTeacherAccountId(id, status);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Admin/{id}")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassByIdAdmin([FromRoute] int id)
+        {
+            return await GetByIdForAdmin(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Teacher/{id}")]
+        [Authorize(Roles = Roles.Teacher)]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassByIdTeacher([FromRoute] int id)
+        {
+            return await GetByIdForTeacher(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Student/{id}")]
+        [Authorize(Roles = Roles.Student)]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassByIdStudent([FromRoute] int id)
+        {
+            return await GetByIdForStudent(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("Parent/{id}")]
+        [Authorize(Roles = Roles.Parent)]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassByIdParent([FromRoute] int id)
+        {
+            return await GetByIdForParent(id);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Name")]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClassByName([FromBody] string className)
+        {
+            return await GetByClassCode(className);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update/Status")]
+        [Authorize(Roles = Roles.Teacher + "," + Roles.Admin)]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateClassStatus(
+            [FromRoute][Required] int id,
+            [FromBody][Required] string status
+            )
+        {
+            return await UpdateStatus(id, status);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateClass(
+            [FromRoute][Required] int id,
+            [FromBody][Required] UpdateClass upCla
+            )
+        {
+            return await Update(id, upCla);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Create")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateClass(
+            [FromBody][Required] CreateNewClass newCla
+            )
+        {
+            return await Create(newCla);
+        }
+        [HttpGet]
+        [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -65,12 +243,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Count")]
-        [Authorize(Roles = "Admin")]
+        [HttpGet("count")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTotalClassAmount()
+        public async Task<IActionResult> GetTotalAmount()
         {
             try
             {
@@ -92,11 +270,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Home")]
+        [HttpGet("home")]
         [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassForHomePage()
+        public async Task<IActionResult> GetListForHomePage()
         {
             try
             {
@@ -126,11 +304,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Status/Open")]
+        [HttpGet("options/status/open")]
         [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassOptionListByStatusOpen(
+        public async Task<IActionResult> GetOptionListByStatusOpen(
             [FromQuery] string stuFullname)
         {
             try
@@ -161,12 +339,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/Date/Update/Status")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("status")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(List<GetClassForTransaction>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateClassListByDate()
+        public async Task<IActionResult> UpdateListStatusByDate()
         {
             try
             {
@@ -196,12 +374,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("Parent/All")]
-        [Authorize(Roles = "Parent")]
+        [HttpGet("parent")]
+        [Authorize(Roles = Roles.Parent)]
         [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassListParent()
+        public async Task<IActionResult> GetListForParent()
         {
             try
             {
@@ -230,12 +408,12 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpGet("{id}/All")]
-        [Authorize(Roles = "Teacher")]
+        [HttpGet("teacher/account/{id}")]
+        [Authorize(Roles = Roles.Teacher)]
         [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassListTeacher([FromRoute] int id)
+        public async Task<IActionResult> GetListForTeacherByAccountId([FromRoute] int id)
         {
             try
             {
@@ -265,12 +443,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("All/ByStudent/{id}")]
-        [Authorize(Roles = "Student")]
+        [HttpGet("student/account/{id}")]
+        [Authorize(Roles = Roles.Student)]
         [ProducesResponseType(typeof(List<ClassViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassListStudent([FromRoute] int id)
+        public async Task<IActionResult> GetListForStudentByAccountId([FromRoute] int id)
         {
             try
             {
@@ -299,12 +477,12 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpGet("{id}/All/{status}/Count")]
-        [Authorize(Roles = "Teacher")]
+        [HttpGet("count/teacher/account/{id}/status/{status}")]
+        [Authorize(Roles = Roles.Teacher)]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetTotalClassAmountByTeacher(
+        public async Task<IActionResult> GetTotalAmountByTeacherAccountId(
             [FromRoute] int id,
             [FromRoute] string status
             )
@@ -333,7 +511,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
             {
@@ -362,12 +540,12 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpGet("Admin/{id}")]
-        [Authorize(Roles = "Admin")]
+        [HttpGet("{id}/admin")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassByIdAdmin([FromRoute] int id)
+        public async Task<IActionResult> GetByIdForAdmin([FromRoute] int id)
         {
             try
             {
@@ -397,12 +575,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("Teacher/{id}")]
-        [Authorize(Roles = "Teacher")]
+        [HttpGet("{id}/teacher")]
+        [Authorize(Roles = Roles.Teacher)]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassByIdTeacher([FromRoute] int id)
+        public async Task<IActionResult> GetByIdForTeacher([FromRoute] int id)
         {
             try
             {
@@ -431,12 +609,12 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpGet("Student/{id}")]
-        [Authorize(Roles = "Student")]
+        [HttpGet("{id}/student")]
+        [Authorize(Roles = Roles.Student)]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassByIdStudent([FromRoute] int id)
+        public async Task<IActionResult> GetByIdForStudent([FromRoute] int id)
         {
             try
             {
@@ -466,12 +644,12 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpGet("Parent/{id}")]
-        [Authorize(Roles = "Parent")]
+        [HttpGet("{id}/parent")]
+        [Authorize(Roles = Roles.Parent)]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassByIdParent([FromRoute] int id)
+        public async Task<IActionResult> GetByIdForParent([FromRoute] int id)
         {
             try
             {
@@ -501,15 +679,15 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Name")]
+        [HttpGet("code/{classCode}")]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClassByName([FromBody] string className)
+        public async Task<IActionResult> GetByClassCode([FromRoute] string classCode)
         {
             try
             {
-                var result = await _classService.GetByClassName(className);
+                var result = await _classService.GetByClassCode(classCode);
                 if (result == null)
                 {
                     return NotFound(new
@@ -535,19 +713,19 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPut("{claId}/Update/Status")]
-        [Authorize(Roles = "Teacher,Admin")]
+        [HttpPut("{id}/status")]
+        [Authorize(Roles = Roles.Teacher + "," + Roles.Admin)]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateStatus(
-            [FromRoute][Required] int claId,
+            [FromRoute][Required] int id,
             [FromBody][Required] string status
             )
         {
             try
             {
-                var result = await _classService.GetById(claId);
+                var result = await _classService.GetById(id);
                 if (result == null)
                 {
                     return NotFound(new
@@ -559,8 +737,8 @@ namespace CEG_WebAPI.Controllers
                 bool isValid = CEG_BAL_Library.IsClassNewStatusValid(result.Status, status);
                 if (isValid)
                 {
-                    await _classService.UpdateStatus(claId, status);
-                    result = await _classService.GetById(claId);
+                    await _classService.UpdateStatus(id, status);
+                    result = await _classService.GetById(id);
                     return Ok(new
                     {
                         Status = true,
@@ -586,8 +764,8 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPut("{id}/Update")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -634,12 +812,12 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPost("Create")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(ClassViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateClass(
+        public async Task<IActionResult> Create(
             [FromBody][Required] CreateNewClass newCla
             )
         {

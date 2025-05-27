@@ -51,6 +51,39 @@ namespace CEG_DAL.Repositories.Implements
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<List<StudentProgress>> GetListByStudentId(int stuId)
+        {
+            return await _dbContext.StudentProgresses
+                .AsNoTrackingWithIdentityResolution()
+                .Where(stuPro => stuPro.StudentId == stuId)
+                .Select(stuPro => new StudentProgress()
+                {
+                    StudentId = stuPro.StudentId,
+                    TotalPoint = stuPro.TotalPoint,
+                    Playtime = stuPro.Playtime,
+                    StudentHomeworks = stuPro.StudentHomeworks.Select(stuHom => new StudentHomework()
+                    {
+                        HomeworkId = stuHom.HomeworkId,
+                        Point = stuHom.Point,
+                        CorrectAnswers = stuHom.CorrectAnswers,
+                        Playtime = stuHom.Playtime,
+                        StudentAnswers = stuHom.StudentAnswers,
+                        HomeworkResult = stuHom.HomeworkResult,
+                        Homework = new Homework()
+                        {
+                            HomeworkId = stuHom.HomeworkId,
+                            Title = stuHom.Homework.Title,
+                        },
+                        Status = stuHom.Status,
+                        StudentProgress = new StudentProgress()
+                        {
+                            StudentId = stuPro.StudentId,
+                        },
+                    }).ToList()
+                })
+                .ToListAsync();
+        }
+
         public async Task<List<StudentProgress>> GetList()
         {
             return await _dbContext.StudentProgresses.AsNoTrackingWithIdentityResolution().ToListAsync();

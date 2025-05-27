@@ -35,14 +35,14 @@ public class ClickStart : MonoBehaviour
             Wizard.GetComponent<Rigidbody2D>().velocity = new Vector2(0, -1);
             Enemies.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 1);
             yield return new WaitForSeconds(1);
-            Application.Quit();
+            //Application.Quit();
             if (isFirstPlay(path))
             {
                 SceneManager.LoadScene("ComicScene0");
             }
             else
             {
-                SceneManager.LoadScene("Menu");
+                SceneManager.LoadScene("Menu2");
             }
         }
     }

@@ -326,7 +326,7 @@ html body {
     display: flex;
     text-decoration: none;
     border-radius: 5px;
-    transition: all 0.3s ease-in-out;
+    /*transition: all 0.3s ease-in-out;*/
     font-size: 17px;
 }
 
@@ -558,7 +558,7 @@ html body {
         left: 100px;
     }
 
-.card1{
+.card1 {
     position: relative;
     display: -ms-flexbox;
     display: flex;
@@ -569,7 +569,8 @@ html body {
     background-color: #fff;
     background-clip: border-box;
     border: 1px solid rgba(0, 0, 0, .125);
-    border-radius: 3rem;
+    /*border-radius: 3rem;*/
+    border-radius: 20px;
 }
 
 
@@ -589,7 +590,6 @@ html body {
         padding: 25px;
         display: flex;
         border-radius: 20px;
-        justify-content: space-between;
         cursor: pointer;
         flex-direction: row;
         color: #fff;
@@ -632,17 +632,20 @@ html body {
             font-weight: 600;
             font-size: 5rem;
         }
-    .cardBox .card .number {
-        position: relative;
-        font-weight: 600;
-        font-size: 30px;
+    .cardBox .card .amount {
+        /*margin-left: 10px;*/
     }
+        .cardBox .card .amount .number {
+            position: relative;
+            font-weight: 600;
+            font-size: 30px;
+        }
 
-    .cardBox .card .cardName {
-        color: #fff;
-        font-size: 1em;
-        margin-top: 5px;
-    }
+        .cardBox .card .amount .cardName {
+            color: #fff;
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
 
     .cardBox .card .inconBx {
         font-size: 2.5em;
@@ -951,6 +954,26 @@ html body {
         margin-right: 15px;
         background: inherit;
     }
+.search .input-group input[type="text"].form-control {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    border-radius: 0.25rem;
+    padding-left: 35px;
+    outline: none;
+}
+
+/*.search .input-group>.form-control:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}*/
+
+.search i.search-icon {
+    position: absolute;
+    top: 10px;
+    margin-left: 10px;
+    font-size: 1.2em;
+}
 
 .card .card-body .row {
     display: -ms-flexbox;
@@ -962,6 +985,16 @@ html body {
     margin-left: -15px;
     padding: 0.25rem;
 }
+.card1.card-child {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fff;
+}
+
+    .card1.card-child:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
     .card-child .add-club {
         position: relative;
         display: flex;
@@ -1002,7 +1035,7 @@ html body {
         text-transform: uppercase;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
-        padding: 10px 0;
+        padding: 20px;
         color: #fff;
     }
 
@@ -1011,6 +1044,13 @@ html body {
             display: flex;
             justify-content: center;
         }
+.card-child .club-footer {
+    padding: 0.75rem 1.25rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
 
     .status .stt1 {
         display: flex;

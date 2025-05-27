@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -13,27 +14,39 @@ public class PauseMenu : MonoBehaviour
     [SerializeField]
     private GameObject
 
-            pauseMenuUI,
-            optionMenu;
+            pauseMenuUI;
+    //        optionMenu;
 
-    [SerializeField]
-
-
-
-
-    private GameObject mainMenu;
-
+    //[SerializeField]
 
     // Update is called once per frame
-
-    public void Resume()
+    void Update()
     {
-        Cursor.lockState = CursorLockMode.None;
-        pauseMenuUI.SetActive(false);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (Time.timeScale == 1)
+            {
+                Pause();
+            }
+            else
+            {
+                Resume();
+            }
+        }
+    }
+
+
+    //private GameObject mainMenu;
+public void Resume()
+    {     
+        pauseMenuUI.SetActive(false);  
         Time.timeScale = 1f;
         GameIsPause = false;
-
+        Cursor.lockState = CursorLockMode.None;
     }
+
+
+        
 
     public void Quit()
     {
@@ -43,7 +56,6 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
-
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPause = true;
@@ -52,23 +64,26 @@ public class PauseMenu : MonoBehaviour
 
     public void Return()
     {
-        Time.timeScale = 1f;
         GameIsPause = false;
+        Time.timeScale = 1f;
     }
 
-    public void Options()
-    {
-        if (GameIsPause)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Time.timeScale = 0f;
-            GameIsPause = true;
+    //public void Options()
+    //{
+    //    if (GameIsPause)
+    //    {
+    //        Cursor.lockState = CursorLockMode.None;
+    //        Cursor.visible = true;
+    //        Time.timeScale = 0f;
+    //        GameIsPause = true;
 
-        }
-        else
-        {
-            Resume();
-        }
-    }
+    //    }
+    //    else
+    //    {
+    //        Resume();
+    //        pauseMenuUI.SetActive(false);
+    //        optionMenu.SetActive(false);
+    //        mainMenu.SetActive(false);
+    //    }
+    //}
 }

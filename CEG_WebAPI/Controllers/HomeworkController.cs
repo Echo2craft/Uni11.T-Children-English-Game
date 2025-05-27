@@ -3,6 +3,7 @@ using CEG_BAL.Services.Interfaces;
 using CEG_BAL.ViewModels;
 using CEG_BAL.ViewModels.Admin;
 using CEG_BAL.ViewModels.Admin.Update;
+using CEG_WebAPI.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,12 +25,45 @@ namespace CEG_WebAPI.Controllers
             _sessionService = sessionService;
             _config = config;
         }
-
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
         [HttpGet("All")]
         [ProducesResponseType(typeof(List<HomeworkViewModel>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetHomeworkList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateHomework(
+            [FromBody][Required] CreateNewHomework newHw
+            )
+        {
+            return await Create(newHw);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{id}/Update")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateHomework(
+            [FromRoute][Required] int id,
+            [FromBody][Required] UpdateHomework upHw
+            )
+        {
+            return await Update(id, upHw);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<HomeworkViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
         {
             try
             {
@@ -63,7 +97,7 @@ namespace CEG_WebAPI.Controllers
         [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetHomeworkById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             try
             {
@@ -93,11 +127,11 @@ namespace CEG_WebAPI.Controllers
             }
         }
 
-        [HttpPost("Create")]
+        [HttpPost]
         [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateHomework(
+        public async Task<IActionResult> Create(
             [FromBody][Required] CreateNewHomework newHw
             )
         {
@@ -130,14 +164,14 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpPut("{id}/Update")]
-        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(
             [FromRoute][Required] int id,
-            [FromBody][Required] UpdateHomework homework
+            [FromBody][Required] UpdateHomework upHw
             )
         {
             try
@@ -152,7 +186,7 @@ namespace CEG_WebAPI.Controllers
                     });
                 }
                 // homework.HomeworkId = id;
-                await _homeworkService.Update(id,homework);
+                await _homeworkService.Update(id,upHw);
                 result = await _homeworkService.GetHomeworkById(id);
                 return Ok(new
                 {
@@ -170,8 +204,8 @@ namespace CEG_WebAPI.Controllers
                 });
             }
         }
-        [HttpDelete("{id}/Delete")]
-        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(typeof(HomeworkViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

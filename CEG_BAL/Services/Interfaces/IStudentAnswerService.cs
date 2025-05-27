@@ -16,5 +16,6 @@ namespace CEG_BAL.Services.Interfaces
         Task Update(int stuAnsId, UpdateStudentAnswer upStuAns);
         Task<List<StudentAnswerViewModel>> GetList();
         Task<StudentAnswerViewModel?> GetById(int id);
+        Task<List<StudentAnswerViewModel>> GetListByStudentId(int id);
     }
 }

@@ -1,4 +1,4 @@
-﻿@page "/Parent/Student/Index"
+﻿@page "/parent/students"
 @model CEG_RazorWebApp.Pages.Parent.Children.StudentIndexModel
 @{
     ViewData["Title"] = "Parent All Children Page";
@@ -25,7 +25,7 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Parent/Student/Index">Children</a>
+                                <a href="/parent/students">Children</a>
                             </li>
                         </ol>
                     </div>
@@ -216,7 +216,7 @@
         
         function callApiGetStudentList() {
             $.ajax({
-                url: apiUrl + `Student/ByParent/${id}`, // API endpoint
+                url: apiUrl + `student/parent/${id}`, // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token // Include the JWT token

@@ -1,9 +1,10 @@
-﻿@page "/Parent/Class/Index"
+﻿@page "/parent/classes"
 @model CEG_RazorWebApp.Pages.Parent.Class.ClassIndexModel
 @{
     Layout = null;
     ViewData["Title"] = "Parent All Classes Page";
-    string? search = string.Empty;
+    string? searchAvailable = string.Empty;
+    string? searchEnrolled = string.Empty;
     Layout = "~/Pages/Shared/_PLayout.cshtml";
 }
 <html lang="en">
@@ -27,7 +28,7 @@
                                 <span>/</span>
                             </li>
                             <li class="breadcrumd-item">
-                                <a href="/Parent/Class/Index">Class</a>
+                                <a href="/parent/classes">Class</a>
                             </li>
                         </ol>
                     </div>
@@ -41,7 +42,7 @@
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link class-tab active flex-sm-fill text-sm-center" data-toggle="tab" href="#all_class_Tab" role="tab" aria-controls="class" aria-selected="true">
                                         <i class='bx bx-home-alt-2'></i>
-                                        <span>All Classes</span>
+                                        <span>Available Classes</span>
                                     </a>
                                 </li>
                                 <li class="nav-item" role="presentation">
@@ -56,42 +57,68 @@
                                 <!-- all_class_Tab -->
                                 <div class="tab-pane fade show active" id="all_class_Tab" role="tabpanel">
                                     <div class="row search">
-                                        <div class="col-sm-12 d-flex">
-                                            <div class="col-sm-6 d-flex address-home">
+                                        <div class="col-sm-12 d-flex justify-content-between align-items-center">
+                                            <div class="col-sm-6">
+                                                <h4 class="m-0">All Available Classes</h4>
                                             </div>
                                             <div class="col-sm-6 d-flex justify-content-end">
-                                                <form method="get" asp-route-search="@search">
-                                                    <div>
-                                                        <label>
-                                                            <input asp-for="@search" class="form-control" type="text" placeholder="Search..." value="@search">
-                                                            <i class='bx bx-search-alt'></i>
-                                                        </label>
+                                                <div class="input-group w-auto">
+                                                    <select class="custom-select w-auto" id="select-status">
+                                                        <option value="" selected>All Status</option>
+                                                        <option value="Ongoing">Ongoing</option>
+                                                        <option value="Open">Open</option>
+                                                        <option value="Ended">Ended</option>
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        @* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div role="separator" class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Separated link</a>
+                                                </div> *@
+                                                        <div class="col p-0 m-0">
+                                                            <input asp-for="@searchAvailable" class="form-control" type="text" placeholder="Search class name..." value="@searchAvailable">
+                                                            <i class='bx bx-search-alt search-icon'></i>
+                                                        </div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row card-content" id="classList"></div>
+                                    <div class="row card-content" id="classes">
+                                        <!-- dung vong for o day -->
+                                    </div>
                                 </div>
                                 <!-- all_enroll_Tab -->
                                 <div class="tab-pane fade" id="all_enroll_Tab" role="tabpanel">
                                     <div class="row search">
-                                        <div class="col-sm-12 d-flex">
-                                            <div class="col-sm-6 d-flex address-home">
+                                        <div class="col-sm-12 d-flex justify-content-between align-items-center">
+                                            <div class="col-sm-6">
+                                                <h4 class="m-0">All Enrolled Classes</h4>
                                             </div>
                                             <div class="col-sm-6 d-flex justify-content-end">
-                                                <form method="get" asp-route-search="@search">
-                                                    <div>
-                                                        <label>
-                                                            <input asp-for="@search" class="form-control" type="text" placeholder="Search..." value="@search">
-                                                            <i class='bx bx-search-alt'></i>
-                                                        </label>
+                                                <div class="input-group w-auto">
+                                                    <select class="custom-select w-auto" id="select-status">
+                                                        <option value="" selected>All Status</option>
+                                                        <option value="Ongoing">Ongoing</option>
+                                                        <option value="Open">Open</option>
+                                                        <option value="Ended">Ended</option>
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <div class="col p-0 m-0">
+                                                            <input asp-for="@searchEnrolled" class="form-control" type="text" placeholder="Search class name..." value="@searchEnrolled">
+                                                            <i class='bx bx-search-alt search-icon'></i>
+                                                        </div>
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row card-content" id="enrollList"></div>
+                                    <div class="row card-content" id="enrolledClasses">
+                                        <!-- dung vong for o day -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -104,8 +131,10 @@
         var token = sessionStorage.getItem('token');
         var apiUrl = sessionStorage.getItem('apiUrl');
         var id = sessionStorage.getItem('usrId');
-        var classList = [];
-        var enrollList = [];
+        var classes = [];
+        var enrolledClasses = [];
+        var filteredClassList = [];
+        var filteredEnrolledClassList = [];
         $(document).ready(function () {
             // Registering the custom feature with DataTables
             DataTable.feature.register('searchIcon', function (settings, opts) {
@@ -154,28 +183,78 @@
             });
             callApiGetClassList();
             callApiGetEnrollList();
-            // Search event handler for all_class_Tab
-            $('#all_class_Tab #search').on('keyup', function (event) {
+
+            $('#all_class_Tab #select-status').off('change').on('change', function () {
+                // Get the search term
+                var selectedValue = $(this).val().toLowerCase();
+
+                // Filter the classes based on the search term
+                filteredClassList = classes.filter(function (classObject) {
+                    var searchTerm = $('#searchAvailable').val().toLowerCase();
+                    if(searchTerm != ""){
+                        return classObject.className.toLowerCase().includes(searchTerm) &&
+                                classObject.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.status.toLowerCase().includes(selectedValue);
+                });
+
+                // Display the filtered classList
+                setClassDisplay(filteredClassList, true);
+            });
+            $('#searchAvailable').off('keyup').on('keyup', function () {
+                // Get the search term
                 var searchTerm = $(this).val().toLowerCase();
-                var filteredclassList = classList.filter(classObject =>
-                    classObject.className.toLowerCase().includes(searchTerm)
-                );
-                setClassDisplay(filteredclassList);
+                // Filter the classes based on the search term
+                filteredClassList = classes.filter(function (classObject) {
+                    var selectedValue = $('#all_class_Tab #select-status').val().toLowerCase();
+                    if(selectedValue != ""){
+                        return classObject.className.toLowerCase().includes(searchTerm) &&
+                                classObject.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.className.toLowerCase().includes(searchTerm);
+                });
+
+                // Display the filtered classList
+                setClassDisplay(filteredClassList, true);
             });
 
-            // Search event handler for all_enroll_Tab
-            $('#all_enroll_Tab #search').on('keyup', function (event) {
+            $('#all_enroll_Tab #select-status').off('change').on('change', function () {
+                // Get the search term
+                var selectedValue = $(this).val().toLowerCase();
+
+                // Filter the classes based on the search term
+                filteredEnrolledClassList = enrolledClasses.filter(function (classObject) {
+                    var searchTerm = $('#searchEnrolled').val().toLowerCase();
+                    if(searchTerm != ""){
+                        return classObject.class.className.toLowerCase().includes(searchTerm) &&
+                                classObject.class.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.class.status.toLowerCase().includes(selectedValue);
+                });
+
+                // Display the filtered classList
+                setEnrollDisplay(filteredEnrolledClassList, true);
+            });
+            $('#searchEnrolled').off('keyup').on('keyup', function () {
+                // Get the search term
                 var searchTerm = $(this).val().toLowerCase();
-                var filteredenrollList = enrollList.filter(enroll =>
-                    enroll.class.className.toLowerCase().includes(searchTerm)
-                    // enroll.student.account.fullName.toLowerCase().includes(searchTerm)
-                );
-                setEnrollDisplay(filteredenrollList);
+                // Filter the classes based on the search term
+                filteredEnrolledClassList = enrolledClasses.filter(function (classObject) {
+                    var selectedValue = $('#all_enroll_Tab #select-status').val().toLowerCase();
+                    if(selectedValue != ""){
+                        return classObject.class.className.toLowerCase().includes(searchTerm) &&
+                                classObject.class.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.class.className.toLowerCase().includes(searchTerm);
+                });
+
+                // Display the filtered classList
+                setEnrollDisplay(filteredEnrolledClassList, true);
             });
         });
         function callApiGetClassList() {
             $.ajax({
-                url: apiUrl + 'Class/Parent/All', // API endpoint
+                url: apiUrl + 'class/parent', // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token// Include the JWT token
@@ -185,8 +264,8 @@
 
                     // Check if the status is true
                     if (response.status) {
-                        classList = response.data;
-                        setClassDisplay(classList);
+                        classes = response.data;
+                        setClassDisplay(classes, false);
                     } else {
                         console.error("API returned false status.");
                     }
@@ -210,10 +289,30 @@
                 }
             });
         }
-        function setClassDisplay(data) {
-            var classList = $('#classList');
+        function setClassDisplay(data, isFiltered) {
+            var classDiv = $('#classes');
             // Reference to the <classList> element
-            classList.empty(); // Clear any existing options
+            classDiv.empty(); // Clear any existing options
+            if (!data || data.length === 0) {
+                if(isFiltered){
+                classDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn’t find any available classes that fit your filter settings.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+                }
+                classDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn't find any available classes for you, sorry.'.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+            }
             // Loop through the data array and append each class div
             $.each(data, function (index, classObj) {
                 var formattedStartDate = formatDate(classObj.startDate, { ignoreHour: true });
@@ -238,45 +337,40 @@
                 }
                 // Construct card HTML
                 var cardHtml = `
-                            <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
-                                <div class="card1 card-child">
-                                    <div class="club-name">
-                                        Class Code: ${classObj.className}
-                                        <div class="status">
-                                            ${statusText}
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="club-title">
-                                            <ul>
-                                                <li><h6>Course:</h6><span>${classObj.course.courseName}</span></li>
-                                                <li><h6>Teacher:</h6><span>${classObj.teacher.account.fullname}</span></li>
-                                                <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
-                                                <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
-                                                <li><h6>Minimum students amount:</h6><span>${classObj.minimumStudents}</span></li>
-                                                <li><h6>Maximum students amount:</h6><span>${classObj.maximumStudents}</span></li>
-                                                <li><h6>Current students amount:</h6><span>${filteredEnrollList.length}</span></li>
-                                                <li><h6>Weekly scheduled sessions amount:</h6><span>${classObj.schedules.length}</span></li>
-                                                <li><h6>Current enrolls amount:</h6><span>${classObj.enrolls.length}</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="form-group mx-auto">
-                                        <a class="btn btn-primary clickable-row" href="/Parent/Class/${classObj.classId}/Info" role="button">Details</a>
-                                    </div>
-                                </div>
+                    <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                        <div class="card1 card-child shadow-sm h-100">
+                            <div class="club-name d-flex justify-content-between align-items-center flex-wrap">
+                                <strong class="text-truncate" style="max-width: 200px;">${classObj.className}</strong>
+                                ${statusText}
                             </div>
-                        `;
+                            <div class="card-body">
+                                <h5 class="card-title h-14"><strong>Course: </strong><br/> ${classObj.course.courseName}</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-book-reader mr-2'></i><span> Teacher: ${classObj.teacher.account.fullname}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-calendar-event mr-2'></i><span> Class start at ${formattedStartDate} and ends at ${formattedEndDate}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-user-circle mr-2'></i><span> Require ${classObj.minimumStudents} - ${classObj.maximumStudents} students</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-money mr-2'></i><span> ${vnd.format(classObj.enrollmentFee)}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-child mr-2'></i><span> ${filteredEnrollList.length} enrolled students - ${classObj.enrolls.length} enrolls</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-spreadsheet mr-2'></i><span> ${classObj.schedules.length} scheduled session(s)</span></li>
+                            </ul>
+                            <div class="club-footer d-flex justify-content-around">
+                                <a class="btn btn-primary clickable-row d-flex align-items-center" href="/parent/classes/${classObj.classId}" role="button"><i class='bx bx-info-circle mr-2'></i> Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
                 // Append the constructed HTML to the class list container
                 // <form method="get" asp-route-id="${classObj.classId}">
                 //     <button class="btn btn-primary clickable-row" type="submit">See Detail</button>
                 // </form>
-                classList.append(cardHtml);
+                classDiv.append(cardHtml);
             });
         }
         function callApiGetEnrollList() {
             $.ajax({
-                url: apiUrl + `Enroll/Parent/${id}`, // API Endpoint
+                url: apiUrl + `enroll/parent/account/${id}`, // API Endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token // Include the JWT token
@@ -286,8 +380,8 @@
 
                     // Check if the status is true
                     if (response.status) {
-                        enrollList = response.data;
-                        setEnrollDisplay(enrollList);
+                        enrolledClasses = response.data;
+                        setEnrollDisplay(enrolledClasses, false);
                     } else {
                         console.error("API returned false status.");
                     }
@@ -312,68 +406,83 @@
                 }
             });
         }
-        function setEnrollDisplay(data) {
-            var enrollList = $('#enrollList');
+        function setEnrollDisplay(data, isFiltered) {
+            var enrolledClassesDiv = $('#enrolledClasses');
             // Reference to the <enrollList> element
-            enrollList.empty();
+            enrolledClassesDiv.empty();
+            if (!data || data.length === 0) {
+                if(isFiltered){
+                enrolledClassesDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn’t find any enrolled classes that fit your filter settings.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+                }
+                enrolledClassesDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> Your children are not currently enrolled in any classes.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+            }
             // Loop through the data array and append each class div
-            $.each(data, function (index, enroll) {
-                var formattedStartDate = formatDate(enroll.class.startDate);
-                var formattedEndDate = formatDate(enroll.class.endDate);
-                var filteredEnrollList = enroll.class.enrolls.filter(function (enroll) {
+            $.each(data, function (index, classObj) {
+                var formattedStartDate = formatDate(classObj.class.startDate);
+                var formattedEndDate = formatDate(classObj.class.endDate);
+                var filteredEnrollList = classObj.class.enrolls.filter(function (enroll) {
                     return enroll.status === 'Enrolled';
                 });
                 var statusText = '';
-                switch (enroll.class.status) {
+                switch (classObj.class.status) {
                     case 'Open':
                     case 'Ongoing':
-                        statusText = `<span class="outcome" style="float: left;">Status: ${enroll.class.status}</span>`
+                        statusText = `<span class="outcome" style="float: left;">Status: ${classObj.class.status}</span>`
                         break;
                     case 'Draft':
                     case 'Postponed':
-                        statusText = `<span class="approval" style="float: left;">Status: ${enroll.class.status}</span>`
+                        statusText = `<span class="approval" style="float: left;">Status: ${classObj.class.status}</span>`
                         break;
                     case 'Ended':
                     case 'Cancelled':
-                        statusText = `<span class="destroy" style="float: left;">Status: ${enroll.class.status}</span>`
+                        statusText = `<span class="destroy" style="float: left;">Status: ${classObj.class.status}</span>`
                         break;
                 }
                 // Construct card HTML
                 var cardHtml = `
-                            <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
-                                <div class="card1 card-child">
-                                    <div class="club-name">
-                                        Class Code: ${enroll.class.className}
-                                        <div class="status">
-                                            ${statusText}
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="club-title">
-                                            <ul>
-                                                <li><h6>Course:</h6><span>${enroll.class.course.courseName}</span></li>
-                                                <li><h6>Teacher:</h6><span>${enroll.class.teacher.account.fullname}</span></li>
-                                                <li><h6>Start date:</h6><span>${formattedStartDate}</span></li>
-                                                <li><h6>End date:</h6><span>${formattedEndDate}</span></li>
-                                                <li><h6>Minimum students amount:</h6><span>${enroll.class.minimumStudents}</span></li>
-                                                <li><h6>Maximum students amount:</h6><span>${enroll.class.maximumStudents}</span></li>
-                                                <li><h6>Current students amount:</h6><span>${filteredEnrollList.length}</span></li>
-                                                <li><h6>Weekly scheduled sessions amount:</h6><span>${enroll.class.schedules.length}</span></li>
-                                                <li><h6>Current enrolls amount:</h6><span>${enroll.class.enrolls.length}</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="form-group mx-auto">
-                                        <a class="btn btn-primary clickable-row" href="/Parent/Class/${enroll.class.classId}/Info" role="button">Details</a>
-                                    </div>
-                                </div>
+                    <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                        <div class="card1 card-child shadow-sm h-100">
+                            <div class="club-name d-flex justify-content-between align-items-center flex-wrap">
+                                <strong class="text-truncate" style="max-width: 200px;">${classObj.class.className}</strong>
+                                ${statusText}
                             </div>
-                        `;
+                            <div class="card-body">
+                                <h5 class="card-title h-14"><strong>Course: </strong><br/> ${classObj.class.course.courseName}</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-book-reader mr-2'></i><span> Teacher: ${classObj.class.teacher.account.fullname}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-calendar-event mr-2'></i><span> Class start at ${formattedStartDate} and ends at ${formattedEndDate}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-user-circle mr-2'></i><span> Require ${classObj.class.minimumStudents} - ${classObj.class.maximumStudents} students</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-money mr-2'></i><span> ${vnd.format(classObj.class.enrollmentFee)}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-child mr-2'></i><span> ${filteredEnrollList.length} enrolled students - ${classObj.class.enrolls.length} enrolls</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-spreadsheet mr-2'></i><span> ${classObj.class.schedules.length} scheduled session(s)</span></li>
+                            </ul>
+                            <div class="club-footer d-flex justify-content-around">
+                                <a class="btn btn-primary clickable-row d-flex align-items-center" href="/parent/classes/${classObj.class.classId}" role="button"><i class='bx bx-info-circle mr-2'></i> Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
                 // Append the constructed HTML to the enroll list container
                 // <form method="get" asp-route-id="${classObj.classId}">
                 //     <button class="btn btn-primary clickable-row" type="submit">See Detail</button>
                 // </form>
-                enrollList.append(cardHtml);
+                enrolledClassesDiv.append(cardHtml);
             });
         }
     </script>

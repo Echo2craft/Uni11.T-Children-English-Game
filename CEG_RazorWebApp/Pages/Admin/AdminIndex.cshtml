@@ -1,4 +1,4 @@
-﻿@page "/Admin/Index"
+﻿@page "/admin/dashboard"
 @model CEG_RazorWebApp.Pages.Admin.AdminIndexModel
 @{
     ViewData["Title"] = "Admin Index Page";
@@ -16,40 +16,110 @@
     <div class="main-content">
         <!-- num of data -->
         <div class="cardBox">
-            <div class="card event">
+            <div class="align-items-center justify-content-between card event">
                 <div class="inconBx">
                     <i class='bx bx-user'></i>
                 </div>
-                <div>
-                    <div id="account-amount">0</div>
+                <div class="amount">
+                    <span id="account-amount" class="number">0</span>
                     <div class="cardName">Accounts</div>
                 </div>
             </div>
-            <div class="card feedback">
+            <div class="align-items-center justify-content-between card feedback">
                 <div class="inconBx">
                     <i class='bx bx-calendar'></i>
                 </div>
-                <div>
-                    <div id="class-amount">0</div>
+                <div class="amount">
+                    <span id="class-amount" class="number">0</span>
                     <div class="cardName">Classes</div>
                 </div>
             </div>
-            <div class="card report">
+            <div class="align-items-center justify-content-between card report">
                 <div class="inconBx">
                     <i class='bx bx-briefcase-alt-2'></i>
                 </div>
-                <div>
-                    <div id="course-amount">0</div>
+                <div class="amount">
+                    <span id="course-amount" class="number">0</span>
                     <div class="cardName">Courses</div>
                 </div>
             </div>
-            <div class="card turnover">
+            <div class="align-items-center justify-content-between card turnover">
                 <div class="inconBx">
                     <i class='bx bx-money'></i>
                 </div>
-                <div>
-                    <div id="transaction-amount">0</div>
+                <div class="amount">
+                    <span id="transaction-amount" class="number">0</span>
                     <div class="cardName">Transactions</div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-around m-0">
+            <!-- Area Chart -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h5 class="m-0 font-weight-bold">Transactions Overview</h5>
+                        <div class="dropdown">
+                            <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class='bx bx-sm bx-dots-vertical-rounded text-gray-400'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" style="">
+                                <div class="dropdown-header">Dropdown Header:</div>
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                            <canvas id="transactionChart" width="550" height="320" style="display: block; width: 550px; height: 320px;" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h5 class="m-0 font-weight-bold text-primary">Revenue Sources</h5>
+                        <div class="dropdown">
+                            <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class='bx bx-sm bx-dots-vertical-rounded text-gray-400'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" style="">
+                                <div class="dropdown-header">Dropdown Header:</div>
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                            <canvas id="myPieChart" width="551" height="245" style="display: block; width: 551px; height: 245px;" class="chartjs-render-monitor"></canvas>
+                        </div>
+                        <div class="mt-4 text-center small">
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-primary"></i> Direct
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-success"></i> Social
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-info"></i> Referral
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -61,11 +131,12 @@
             callApiGetAccountCount();
             callApiGetCourseCount();
             callApiGetClassCount();
-            callApiGetTransactionCount();
+            // callApiGetTransactionCount();
+            callApiGetTransactionList();
         });
         function callApiGetAccountCount() {
             $.ajax({
-                url: apiUrl + 'Account/All/Count', // API endpoint
+                url: apiUrl + 'account/count', // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token, // Token for authentication
@@ -121,7 +192,7 @@
         }
         function callApiGetCourseCount() {
             $.ajax({
-                url: apiUrl + 'Course/All/Count', // API endpoint
+                url: apiUrl + 'course/count', // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token, // Token for authentication
@@ -159,7 +230,7 @@
         }
         function callApiGetClassCount() {
             $.ajax({
-                url: apiUrl + 'Class/All/Count', // API endpoint
+                url: apiUrl + 'class/count', // API endpoint
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token, // Token for authentication
@@ -195,20 +266,76 @@
                 }
             });
         }
-        function callApiGetTransactionCount() {
+        // function callApiGetTransactionCount() {
+        //     $.ajax({
+        //         url: apiUrl + 'Transaction/All/Count', API endpoint
+        //         type: 'GET',
+        //         headers: {
+        //             'Authorization': 'Bearer ' + token, Token for authentication
+        //         },
+        //         success: function (response) {
+        //             Check if the status is true
+        //             if (response.status) {
+        //                 $('#transaction-amount').empty();
+        //                 $('#transaction-amount').text(response.data);
+        //             } else {
+        //                 showAlert('error', "Error: \n" + response.errorMessage);
+        //             }
+        //         },
+        //         error: function (xhr, status, error) {
+        //             Attempt to parse the response text if it is available
+        //             var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+        //             Extract the custom error message if it exists
+        //             var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+        //             Check if errorResponse.errors exists and is an object
+        //             if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+        //                 Loop through each field in the errors object and append to the errorMessage
+        //                 for (var field in errorResponse.errors) {
+        //                     if (errorResponse.errors.hasOwnProperty(field)) {
+        //                         Add each error message for the field, joining multiple messages if they exist
+        //                         var fieldErrors = errorResponse.errors[field].join(", ");
+        //                         errorMessage += `\n${field}: ${fieldErrors}`;
+        //                     }
+        //                 }
+        //             }
+        //             Display the error message using your custom showAlert function
+        //             showAlert('error', "Error: \n" + errorMessage);
+        //         }
+        //     });
+        // }
+        function callApiGetTransactionList() {
             $.ajax({
-                url: apiUrl + 'Transaction/All/Count', // API endpoint
+                url: apiUrl + 'transaction', // API endpoint
                 type: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + token, // Token for authentication
+                    'Authorization': 'Bearer ' + token// Include the JWT token
                 },
                 success: function (response) {
+                    // Log the entire response to the console for debugging
+
                     // Check if the status is true
                     if (response.status) {
+                        console.log(response.data);
                         $('#transaction-amount').empty();
-                        $('#transaction-amount').text(response.data);
+                        $('#transaction-amount').text(response.data.length);
+                        const monthlyTotals = {};
+                        response.data.forEach(tx => {
+                            const month = tx.transactionDate.slice(0, 7); // YYYY-MM
+                            if (!monthlyTotals[month]) monthlyTotals[month] = 0;
+                            monthlyTotals[month] += tx.transactionAmount;
+                        });
+
+                        const labels = Object.keys(monthlyTotals).sort();
+                        const values = labels.map(month => monthlyTotals[month]);
+                        buildFilteredChart(labels,values,'transactionChart','line','Total Transaction Amount','#42a5f5');
+                        // transactionList = response.data;
+                        // transactionTable.clear().rows.add(transactionList).draw();
+                        // callApiGetParentNameList();
+                        // $('#createTransaction_TransactionStatus').empty();
+                        // $('#createTransaction_TransactionStatus').append(getTransactionStatusOptions());
                     } else {
-                        showAlert('error', "Error: \n" + response.errorMessage);
+                        console.error("API returned false status.");
                     }
                 },
                 error: function (xhr, status, error) {
