@@ -108,14 +108,14 @@
         <div class="row">
             <div class="col-12 club__content container-fluid">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5><i class="fa fa-sort-amount-down"></i> Our available courses</h5>
+                    <h5 class="listTitle"><i class="fa fa-sort-amount-down"></i> Our available courses</h5>
                     <a href="/courses" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
                 </div>
                 <!-- Carousel for Courses -->
                 <div class="courseList-carousel owl-carousel owl-theme">
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5><i class="fa fa-sort-amount-down"></i> Our available classes</h5>
+                    <h5 class="listTitle"><i class="fa fa-sort-amount-down"></i> Our available classes</h5>
                     <a href="/classes" class="font-a"> See All <i class="fa fa-angle-right"></i></a>
                 </div>
                 <!-- Carousel for Classes -->
@@ -381,38 +381,37 @@
                 // var formattedEndDate = formatDate(courseObj.endDate, { ignoreHour: true });
                 var statusText = '';
                 switch (courseObj.status) {
-                    case 'Open':
+                    case 'Available':
                     case 'Ongoing':
-                        statusText = `<span class="outcome" style="float: left;">Status: ${courseObj.status}</span>`
+                        statusText = `<span class="badge badge-success" style="float: left;">${courseObj.status}</span>`
                         break;
                     case 'Draft':
                     case 'Postponed':
-                        statusText = `<span class="approval" style="float: left;">Status: ${courseObj.status}</span>`
+                        statusText = `<span class="badge badge-warning" style="float: left;">${courseObj.status}</span>`
                         break;
                     case 'Ended':
                     case 'Cancelled':
-                        statusText = `<span class="destroy" style="float: left;">Status: ${courseObj.status}</span>`
+                        statusText = `<span class="badge badge-danger" style="float: left;">${courseObj.status}</span>`
                         break;
                 }
                 // Construct card HTML
                 var cardHtml = `
-                    <div class="club-item">
+                    <div class="club-item course-item">
                         <a href="#" class="club-image">
                             <img class="img-fluid" src="../images/middleSchoolers2.png" alt="nt1">
                         </a>
-                        <div class="club-title">
-                            <div class="d-flex justify-content-between">
-                                <a href="/courses/${courseObj.courseId}" class="text-decoration-none truncate">${courseObj.courseName}</a>
-                            </div>
+                        <div class="club-title course-title">
+                            <a href="/courses/${courseObj.courseId}" class="text-decoration-none truncate">${courseObj.courseName}</a>
+                            <h5 class="club-status">
+                                ${statusText}
+                            </h5>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <p class="club-price">
+                            <p class="">
                                 <i class="fas fa-calendar"></i>
                             </p>
-                            <button class="button--primary">
-                                <a class="text-decoration-none text-black"
+                            <a class="text-view-details-button text-decoration-none text-black"
                                     href="/courses/${courseObj.courseId}">See More</a>
-                            </button>
                         </div>
                     </div>
                 `;
@@ -461,38 +460,37 @@
                 switch (classObj.status) {
                     case 'Open':
                     case 'Ongoing':
-                        statusText = `<span class="outcome" style="float: left;">Status: ${classObj.status}</span>`
+                        statusText = `<span class="badge badge-success" style="float: left;">${classObj.status}</span>`
                         break;
                     case 'Draft':
                     case 'Postponed':
-                        statusText = `<span class="approval" style="float: left;">Status: ${classObj.status}</span>`
+                        statusText = `<span class="badge badge-warning" style="float: left;">${classObj.status}</span>`
                         break;
                     case 'Ended':
                     case 'Cancelled':
-                        statusText = `<span class="destroy" style="float: left;">Status: ${classObj.status}</span>`
+                        statusText = `<span class="badge badge-danger" style="float: left;">${classObj.status}</span>`
                         break;
                 }
                 // Construct card HTML
                 var cardHtml = `
-                    <div class="club-item item">
+                    <div class="club-item class-item">
                         <a href="#" class="club-image">
                             <img class="img-fluid" src="../images/middleSchoolers2.png" alt="nt1">
                         </a>
-                        <div class="club-title">
-                            <div class="d-flex justify-content-between">
-                                <a href="/classes/${classObj.classId}" class="text-decoration-none truncate">${classObj.className}</a>
-                            </div>
+                        <div class="club-title class-title">
+                            <a href="/classes/${classObj.classId}" class="text-decoration-none truncate">${classObj.className}</a>
+                            <h5 class="club-status">
+                                ${statusText}
+                            </h5>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <p class="club-price">
+                            <p class="">
                                 <i class="fas fa-calendar"></i>
                                 From ${formattedStartDate}
                                 to ${formattedEndDate}
                             </p>
-                            <button class="button--primary">
-                                <a class="text-decoration-none text-black"
-                                    href="/classes/${classObj.classId}">See More</a>
-                            </button>
+                            <a class="text-view-details-button text-decoration-none text-black"
+                                    href="/classes/${classObj.courseId}">See More</a>
                         </div>
                     </div>
                 `;
