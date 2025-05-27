@@ -221,7 +221,7 @@ namespace CEG_WebAPI.Controllers
         }
 
         [HttpGet("count/{id}")]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Parent)]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
