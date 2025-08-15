@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace CEG_DAL.Models;
+
+public partial class Class
+{
+    public int ClassId { get; set; }
+
+    public int TeacherId { get; set; }
+
+    public int CourseId { get; set; }
+
+    public string ClassName { get; set; } = null!;
+
+    public int? MinimumStudents { get; set; }
+
+    public int? MaximumStudents { get; set; }
+
+    public int? NumberOfStudents { get; set; }
+
+    public DateTime? StartDate { get; set; }
+
+    public DateTime? EndDate { get; set; }
+
+    public int EnrollmentFee { get; set; }
+
+    public string Status { get; set; } = null!;
+
+    public virtual Course? Course { get; set; }
+
+    public virtual ICollection<Enroll>? Enrolls { get; set; } = new List<Enroll>();
+
+    public virtual ICollection<Schedule>? Schedules { get; set; } = new List<Schedule>();
+
+    public virtual ICollection<StudentProgress>? StudentProgresses { get; set; } = new List<StudentProgress>();
+
+    public virtual Teacher? Teacher { get; set; }
+}

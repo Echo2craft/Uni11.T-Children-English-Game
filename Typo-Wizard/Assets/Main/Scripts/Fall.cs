@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class Fall : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class Fall : MonoBehaviour
             throw new Exception("Go up?");
         }
 
-        gameObject.GetComponent<Rigidbody2D>().AddForce(Vector3.down * 5); // initial speed;
+        gameObject.GetComponent<Rigidbody2D>().AddForce(Vector3.down * 2); // initial speed;
     }
 
     void Update()

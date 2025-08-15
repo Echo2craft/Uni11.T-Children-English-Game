@@ -1,0 +1,490 @@
+﻿@page "/parent/classes"
+@model CEG_RazorWebApp.Pages.Parent.Class.ClassIndexModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Parent All Classes Page";
+    string? searchAvailable = string.Empty;
+    string? searchEnrolled = string.Empty;
+    Layout = "~/Pages/Shared/_PLayout.cshtml";
+}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="main-content">
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-sm-6 col-sm-6  d-flex justify-content-sm-end p-md-0 mt-2 mt-sm-0 ">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumd-item">
+                                <a href="#">Manage</a>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <span>/</span>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <a href="/parent/classes">Class</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <section>
+                    <div id="alertContainer"></div>
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills nav-fill flex-column flex-sm-row" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab active flex-sm-fill text-sm-center" data-toggle="tab" href="#all_class_Tab" role="tab" aria-controls="class" aria-selected="true">
+                                        <i class='bx bx-home-alt-2'></i>
+                                        <span>Available Classes</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link class-tab flex-sm-fill text-sm-center" data-toggle="tab" href="#all_enroll_Tab" role="tab" aria-controls="enroll" aria-selected="true">
+                                        <i class='bx bx-home-alt-2'></i>
+                                        <span>Enrolled Classes</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <!-- all_class_Tab -->
+                                <div class="tab-pane fade show active" id="all_class_Tab" role="tabpanel">
+                                    <div class="row search">
+                                        <div class="col-sm-12 d-flex justify-content-between align-items-center">
+                                            <div class="col-sm-6">
+                                                <h4 class="m-0">All Available Classes</h4>
+                                            </div>
+                                            <div class="col-sm-6 d-flex justify-content-end">
+                                                <div class="input-group w-auto">
+                                                    <select class="custom-select w-auto" id="select-status">
+                                                        <option value="" selected>All Status</option>
+                                                        <option value="Ongoing">Ongoing</option>
+                                                        <option value="Open">Open</option>
+                                                        <option value="Ended">Ended</option>
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        @* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div role="separator" class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Separated link</a>
+                                                </div> *@
+                                                        <div class="col p-0 m-0">
+                                                            <input asp-for="@searchAvailable" class="form-control" type="text" placeholder="Search class name..." value="@searchAvailable">
+                                                            <i class='bx bx-search-alt search-icon'></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row card-content" id="classes">
+                                        <!-- dung vong for o day -->
+                                    </div>
+                                </div>
+                                <!-- all_enroll_Tab -->
+                                <div class="tab-pane fade" id="all_enroll_Tab" role="tabpanel">
+                                    <div class="row search">
+                                        <div class="col-sm-12 d-flex justify-content-between align-items-center">
+                                            <div class="col-sm-6">
+                                                <h4 class="m-0">All Enrolled Classes</h4>
+                                            </div>
+                                            <div class="col-sm-6 d-flex justify-content-end">
+                                                <div class="input-group w-auto">
+                                                    <select class="custom-select w-auto" id="select-status">
+                                                        <option value="" selected>All Status</option>
+                                                        <option value="Ongoing">Ongoing</option>
+                                                        <option value="Open">Open</option>
+                                                        <option value="Ended">Ended</option>
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <div class="col p-0 m-0">
+                                                            <input asp-for="@searchEnrolled" class="form-control" type="text" placeholder="Search class name..." value="@searchEnrolled">
+                                                            <i class='bx bx-search-alt search-icon'></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row card-content" id="enrolledClasses">
+                                        <!-- dung vong for o day -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script>
+        var token = sessionStorage.getItem('token');
+        var apiUrl = sessionStorage.getItem('apiUrl');
+        var id = sessionStorage.getItem('usrId');
+        var classes = [];
+        var enrolledClasses = [];
+        var filteredClassList = [];
+        var filteredEnrolledClassList = [];
+        $(document).ready(function () {
+            // Registering the custom feature with DataTables
+            DataTable.feature.register('searchIcon', function (settings, opts) {
+                // Set default options
+                let options = Object.assign({
+                    iconClass: 'bx bx-search-alt question-search-icon',
+                    hideLabel: true // Hide search label
+                }, opts);
+
+                // Create a container for the icon
+                let container = document.createElement('div');
+                // container.classList.add('dt-custom-toolbar'); // Optional custom class for styling
+
+                // Create the icon element
+                let icon = document.createElement('i');
+                icon.className = options.iconClass;
+
+                // Check if pagination is enabled
+                // if (settings.oFeatures.bFilter) {
+                //     console.log(settings.oFeatures.bFilter);
+                //     console.log('Pagination is enabled for this DataTable.');
+                // }
+
+                setTimeout(() => {
+                    // Find the .dt-search container inside the DataTable wrapper
+                    let searchContainer = $(settings.nTableWrapper).find('.dt-search');
+                    if (searchContainer.length) {
+                        searchContainer.append(icon);
+                    } else {
+                        // Append icon to container
+                        container.appendChild(icon);
+                        // If .dt-search doesn't exist, insert the container in the DataTable toolbar instead
+                        $(settings.nTableWrapper).prepend(container);
+                    }
+                    if (options.hideLabel) {
+                        // Find the .dt-search label container inside the DataTable wrapper
+                        let searchLabel = searchContainer.find('label');
+                        if (searchLabel.length) {
+                            searchLabel.text('');
+                        } else {
+                            console.log('Label of search div not found!');
+                        }
+                    }
+                }, 100);
+                return '';
+            });
+            callApiGetClassList();
+            callApiGetEnrollList();
+
+            $('#all_class_Tab #select-status').off('change').on('change', function () {
+                // Get the search term
+                var selectedValue = $(this).val().toLowerCase();
+
+                // Filter the classes based on the search term
+                filteredClassList = classes.filter(function (classObject) {
+                    var searchTerm = $('#searchAvailable').val().toLowerCase();
+                    if(searchTerm != ""){
+                        return classObject.className.toLowerCase().includes(searchTerm) &&
+                                classObject.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.status.toLowerCase().includes(selectedValue);
+                });
+
+                // Display the filtered classList
+                setClassDisplay(filteredClassList, true);
+            });
+            $('#searchAvailable').off('keyup').on('keyup', function () {
+                // Get the search term
+                var searchTerm = $(this).val().toLowerCase();
+                // Filter the classes based on the search term
+                filteredClassList = classes.filter(function (classObject) {
+                    var selectedValue = $('#all_class_Tab #select-status').val().toLowerCase();
+                    if(selectedValue != ""){
+                        return classObject.className.toLowerCase().includes(searchTerm) &&
+                                classObject.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.className.toLowerCase().includes(searchTerm);
+                });
+
+                // Display the filtered classList
+                setClassDisplay(filteredClassList, true);
+            });
+
+            $('#all_enroll_Tab #select-status').off('change').on('change', function () {
+                // Get the search term
+                var selectedValue = $(this).val().toLowerCase();
+
+                // Filter the classes based on the search term
+                filteredEnrolledClassList = enrolledClasses.filter(function (classObject) {
+                    var searchTerm = $('#searchEnrolled').val().toLowerCase();
+                    if(searchTerm != ""){
+                        return classObject.class.className.toLowerCase().includes(searchTerm) &&
+                                classObject.class.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.class.status.toLowerCase().includes(selectedValue);
+                });
+
+                // Display the filtered classList
+                setEnrollDisplay(filteredEnrolledClassList, true);
+            });
+            $('#searchEnrolled').off('keyup').on('keyup', function () {
+                // Get the search term
+                var searchTerm = $(this).val().toLowerCase();
+                // Filter the classes based on the search term
+                filteredEnrolledClassList = enrolledClasses.filter(function (classObject) {
+                    var selectedValue = $('#all_enroll_Tab #select-status').val().toLowerCase();
+                    if(selectedValue != ""){
+                        return classObject.class.className.toLowerCase().includes(searchTerm) &&
+                                classObject.class.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.class.className.toLowerCase().includes(searchTerm);
+                });
+
+                // Display the filtered classList
+                setEnrollDisplay(filteredEnrolledClassList, true);
+            });
+        });
+        function callApiGetClassList() {
+            $.ajax({
+                url: apiUrl + 'class/parent', // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token// Include the JWT token
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+
+                    // Check if the status is true
+                    if (response.status) {
+                        classes = response.data;
+                        setClassDisplay(classes, false);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+        }
+        function setClassDisplay(data, isFiltered) {
+            var classDiv = $('#classes');
+            // Reference to the <classList> element
+            classDiv.empty(); // Clear any existing options
+            if (!data || data.length === 0) {
+                if(isFiltered){
+                classDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn’t find any available classes that fit your filter settings.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+                }
+                classDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn't find any available classes for you, sorry.'.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+            }
+            // Loop through the data array and append each class div
+            $.each(data, function (index, classObj) {
+                var formattedStartDate = formatDate(classObj.startDate, { ignoreHour: true });
+                var formattedEndDate = formatDate(classObj.endDate, { ignoreHour: true });
+                var filteredEnrollList = classObj.enrolls.filter(function (enroll) {
+                    return enroll.status === 'Enrolled';
+                });
+                var statusText = '';
+                switch (classObj.status) {
+                    case 'Open':
+                    case 'Ongoing':
+                        statusText = `<span class="outcome" style="float: left;">Status: ${classObj.status}</span>`
+                        break;
+                    case 'Draft':
+                    case 'Postponed':
+                        statusText = `<span class="approval" style="float: left;">Status: ${classObj.status}</span>`
+                        break;
+                    case 'Ended':
+                    case 'Cancelled':
+                        statusText = `<span class="destroy" style="float: left;">Status: ${classObj.status}</span>`
+                        break;
+                }
+                // Construct card HTML
+                var cardHtml = `
+                    <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                        <div class="card1 card-child shadow-sm h-100">
+                            <div class="club-name d-flex justify-content-between align-items-center flex-wrap">
+                                <strong class="text-truncate" style="max-width: 200px;">${classObj.className}</strong>
+                                ${statusText}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title h-14"><strong>Course: </strong><br/> ${classObj.course.courseName}</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-book-reader mr-2'></i><span> Teacher: ${classObj.teacher.account.fullname}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-calendar-event mr-2'></i><span> Class start at ${formattedStartDate} and ends at ${formattedEndDate}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-user-circle mr-2'></i><span> Require ${classObj.minimumStudents} - ${classObj.maximumStudents} students</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-money mr-2'></i><span> ${vnd.format(classObj.enrollmentFee)}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-child mr-2'></i><span> ${filteredEnrollList.length} enrolled students - ${classObj.enrolls.length} enrolls</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-spreadsheet mr-2'></i><span> ${classObj.schedules.length} scheduled session(s)</span></li>
+                            </ul>
+                            <div class="club-footer d-flex justify-content-around">
+                                <a class="btn btn-primary clickable-row d-flex align-items-center" href="/parent/classes/${classObj.classId}" role="button"><i class='bx bx-info-circle mr-2'></i> Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // Append the constructed HTML to the class list container
+                // <form method="get" asp-route-id="${classObj.classId}">
+                //     <button class="btn btn-primary clickable-row" type="submit">See Detail</button>
+                // </form>
+                classDiv.append(cardHtml);
+            });
+        }
+        function callApiGetEnrollList() {
+            $.ajax({
+                url: apiUrl + `enroll/parent/account/${id}`, // API Endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token // Include the JWT token
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+
+                    // Check if the status is true
+                    if (response.status) {
+                        enrolledClasses = response.data;
+                        setEnrollDisplay(enrolledClasses, false);
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error:" + errorMessage);
+                }
+            });
+        }
+        function setEnrollDisplay(data, isFiltered) {
+            var enrolledClassesDiv = $('#enrolledClasses');
+            // Reference to the <enrollList> element
+            enrolledClassesDiv.empty();
+            if (!data || data.length === 0) {
+                if(isFiltered){
+                enrolledClassesDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn’t find any enrolled classes that fit your filter settings.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+                }
+                enrolledClassesDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> Your children are not currently enrolled in any classes.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+            }
+            // Loop through the data array and append each class div
+            $.each(data, function (index, classObj) {
+                var formattedStartDate = formatDate(classObj.class.startDate);
+                var formattedEndDate = formatDate(classObj.class.endDate);
+                var filteredEnrollList = classObj.class.enrolls.filter(function (enroll) {
+                    return enroll.status === 'Enrolled';
+                });
+                var statusText = '';
+                switch (classObj.class.status) {
+                    case 'Open':
+                    case 'Ongoing':
+                        statusText = `<span class="outcome" style="float: left;">Status: ${classObj.class.status}</span>`
+                        break;
+                    case 'Draft':
+                    case 'Postponed':
+                        statusText = `<span class="approval" style="float: left;">Status: ${classObj.class.status}</span>`
+                        break;
+                    case 'Ended':
+                    case 'Cancelled':
+                        statusText = `<span class="destroy" style="float: left;">Status: ${classObj.class.status}</span>`
+                        break;
+                }
+                // Construct card HTML
+                var cardHtml = `
+                    <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                        <div class="card1 card-child shadow-sm h-100">
+                            <div class="club-name d-flex justify-content-between align-items-center flex-wrap">
+                                <strong class="text-truncate" style="max-width: 200px;">${classObj.class.className}</strong>
+                                ${statusText}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title h-14"><strong>Course: </strong><br/> ${classObj.class.course.courseName}</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-book-reader mr-2'></i><span> Teacher: ${classObj.class.teacher.account.fullname}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-calendar-event mr-2'></i><span> Class start at ${formattedStartDate} and ends at ${formattedEndDate}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-user-circle mr-2'></i><span> Require ${classObj.class.minimumStudents} - ${classObj.class.maximumStudents} students</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-money mr-2'></i><span> ${vnd.format(classObj.class.enrollmentFee)}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-child mr-2'></i><span> ${filteredEnrollList.length} enrolled students - ${classObj.class.enrolls.length} enrolls</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-spreadsheet mr-2'></i><span> ${classObj.class.schedules.length} scheduled session(s)</span></li>
+                            </ul>
+                            <div class="club-footer d-flex justify-content-around">
+                                <a class="btn btn-primary clickable-row d-flex align-items-center" href="/parent/classes/${classObj.class.classId}" role="button"><i class='bx bx-info-circle mr-2'></i> Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // Append the constructed HTML to the enroll list container
+                // <form method="get" asp-route-id="${classObj.classId}">
+                //     <button class="btn btn-primary clickable-row" type="submit">See Detail</button>
+                // </form>
+                enrolledClassesDiv.append(cardHtml);
+            });
+        }
+    </script>
+</body>
+</html>

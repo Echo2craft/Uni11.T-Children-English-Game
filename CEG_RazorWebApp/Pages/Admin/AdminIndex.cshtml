@@ -1,0 +1,428 @@
+﻿@page "/admin/dashboard"
+@model CEG_RazorWebApp.Pages.Admin.AdminIndexModel
+@{
+    ViewData["Title"] = "Admin Index Page";
+    Layout = Model.LayoutUrl;
+}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- num of data -->
+        <div class="cardBox">
+            <div class="align-items-center justify-content-between card event">
+                <div class="inconBx">
+                    <i class='bx bx-user'></i>
+                </div>
+                <div class="amount">
+                    <span id="account-amount" class="number">0</span>
+                    <div class="cardName">Accounts</div>
+                </div>
+            </div>
+            <div class="align-items-center justify-content-between card feedback">
+                <div class="inconBx">
+                    <i class='bx bx-calendar'></i>
+                </div>
+                <div class="amount">
+                    <span id="class-amount" class="number">0</span>
+                    <div class="cardName">Classes</div>
+                </div>
+            </div>
+            <div class="align-items-center justify-content-between card report">
+                <div class="inconBx">
+                    <i class='bx bx-briefcase-alt-2'></i>
+                </div>
+                <div class="amount">
+                    <span id="course-amount" class="number">0</span>
+                    <div class="cardName">Courses</div>
+                </div>
+            </div>
+            <div class="align-items-center justify-content-between card turnover">
+                <div class="inconBx">
+                    <i class='bx bx-money'></i>
+                </div>
+                <div class="amount">
+                    <span id="transaction-amount" class="number">0</span>
+                    <div class="cardName">Transactions</div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-around m-0">
+            <!-- Area Chart -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h5 class="m-0 font-weight-bold">Transactions Overview</h5>
+                        <div class="dropdown">
+                            <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class='bx bx-sm bx-dots-vertical-rounded text-gray-400'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" style="">
+                                <div class="dropdown-header">Dropdown Header:</div>
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                            <canvas id="transactionChart" width="550" height="320" style="display: block; width: 550px; height: 320px;" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h5 class="m-0 font-weight-bold text-primary">Revenue Sources</h5>
+                        <div class="dropdown">
+                            <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class='bx bx-sm bx-dots-vertical-rounded text-gray-400'></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" style="">
+                                <div class="dropdown-header">Dropdown Header:</div>
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            <div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                            <canvas id="myPieChart" width="551" height="245" style="display: block; width: 551px; height: 245px;" class="chartjs-render-monitor"></canvas>
+                        </div>
+                        <div class="mt-4 text-center small">
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-primary"></i> Direct
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-success"></i> Social
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-info"></i> Referral
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var token = sessionStorage.getItem('token');
+        var apiUrl = sessionStorage.getItem('apiUrl');
+        $(document).ready(function () {
+            callApiGetAccountCount();
+            callApiGetCourseCount();
+            callApiGetClassCount();
+            // callApiGetTransactionCount();
+            callApiGetTransactionList();
+        });
+        function callApiGetAccountCount() {
+            $.ajax({
+                url: apiUrl + 'account/count', // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                success: function (response) {
+                    // Check if the status is true
+                    if (response.status) {
+                        $('#account-amount').empty();
+                        $('#account-amount').text(response.data);
+                        // setIndexDisplay(response.data);
+                        // Check if homeworkAnswers is empty
+                        // if (response.data.enrolls && response.data.enrolls.length > 0) {
+                        //     table.clear().rows.add(response.data.enrolls).draw();
+                        // }
+                        // if (response.data.schedules && response.data.schedules.length > 0) {
+                        //     Clear any existing answers
+                        //     $('#schedule_list').empty();
+                        //     console.log(response.data.schedules);
+                        //     scheduleTable.clear().rows.add(response.data.schedules).draw();
+                        //     Loop through each answer and generate the HTML
+                        //     response.data.homeworkAnswers.forEach(function (answer) {
+                        //         let answerHtml = generateAnswerHtml(answer,response.data.courseStatus); Assuming both answerInfo and updateAnswer are the same structure
+                        //         $('#schedule_list').append(answerHtml);
+                        //     });
+
+                        // }
+                        // console.log(response.data);
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiGetCourseCount() {
+            $.ajax({
+                url: apiUrl + 'course/count', // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                success: function (response) {
+                    // Check if the status is true
+                    if (response.status) {
+                        $('#course-amount').empty();
+                        $('#course-amount').text(response.data);
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        function callApiGetClassCount() {
+            $.ajax({
+                url: apiUrl + 'class/count', // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token, // Token for authentication
+                },
+                success: function (response) {
+                    // Check if the status is true
+                    if (response.status) {
+                        $('#class-amount').empty();
+                        $('#class-amount').text(response.data);
+                    } else {
+                        showAlert('error', "Error: \n" + response.errorMessage);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        // function callApiGetTransactionCount() {
+        //     $.ajax({
+        //         url: apiUrl + 'Transaction/All/Count', API endpoint
+        //         type: 'GET',
+        //         headers: {
+        //             'Authorization': 'Bearer ' + token, Token for authentication
+        //         },
+        //         success: function (response) {
+        //             Check if the status is true
+        //             if (response.status) {
+        //                 $('#transaction-amount').empty();
+        //                 $('#transaction-amount').text(response.data);
+        //             } else {
+        //                 showAlert('error', "Error: \n" + response.errorMessage);
+        //             }
+        //         },
+        //         error: function (xhr, status, error) {
+        //             Attempt to parse the response text if it is available
+        //             var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+        //             Extract the custom error message if it exists
+        //             var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+        //             Check if errorResponse.errors exists and is an object
+        //             if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+        //                 Loop through each field in the errors object and append to the errorMessage
+        //                 for (var field in errorResponse.errors) {
+        //                     if (errorResponse.errors.hasOwnProperty(field)) {
+        //                         Add each error message for the field, joining multiple messages if they exist
+        //                         var fieldErrors = errorResponse.errors[field].join(", ");
+        //                         errorMessage += `\n${field}: ${fieldErrors}`;
+        //                     }
+        //                 }
+        //             }
+        //             Display the error message using your custom showAlert function
+        //             showAlert('error', "Error: \n" + errorMessage);
+        //         }
+        //     });
+        // }
+        function callApiGetTransactionList() {
+            $.ajax({
+                url: apiUrl + 'transaction', // API endpoint
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token// Include the JWT token
+                },
+                success: function (response) {
+                    // Log the entire response to the console for debugging
+
+                    // Check if the status is true
+                    if (response.status) {
+                        console.log(response.data);
+                        $('#transaction-amount').empty();
+                        $('#transaction-amount').text(response.data.length);
+                        const monthlyTotals = {};
+                        response.data.forEach(tx => {
+                            const month = tx.transactionDate.slice(0, 7); // YYYY-MM
+                            if (!monthlyTotals[month]) monthlyTotals[month] = 0;
+                            monthlyTotals[month] += tx.transactionAmount;
+                        });
+
+                        const labels = Object.keys(monthlyTotals).sort();
+                        const values = labels.map(month => monthlyTotals[month]);
+                        buildFilteredChart(labels,values,'transactionChart','line','Total Transaction Amount','#42a5f5');
+                        // transactionList = response.data;
+                        // transactionTable.clear().rows.add(transactionList).draw();
+                        // callApiGetParentNameList();
+                        // $('#createTransaction_TransactionStatus').empty();
+                        // $('#createTransaction_TransactionStatus').append(getTransactionStatusOptions());
+                    } else {
+                        console.error("API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+        // function setIndexDisplay(data) {
+        //     var titleStatusHtml = data.status === 'Draft' || data.status === 'Postponed' ? `
+        //                             <div class="edit-info" id="class-class-status">
+        //                                 <i class='bx bxs-adjust bx-sm' data-toggle="modal" data-target="#changeClassStatus"></i>
+        //                                 <i class='bx bxs-edit bx-sm' data-toggle="modal" data-target="#editClass"></i>
+        //                             </div>
+        //                             ` : '';
+        //     var filteredEnrollList = data.enrolls.filter(function (enroll) {
+        //         return enroll.status === 'Enrolled';
+        //     });
+        //     var statusText = '';
+        //     switch (data.status) {
+        //         case 'Open':
+        //         case 'Ongoing':
+        //             statusText = `<span class="outcome" style="float: left;">${data.status}</span>`
+        //             break;
+        //         case 'Draft':
+        //         case 'Postponed':
+        //             statusText = `<span class="approval" style="float: left;">${data.status}</span>`
+        //             break;
+        //         case 'Ended':
+        //         case 'Cancelled':
+        //             statusText = `<span class="destroy" style="float: left;">${data.status}</span>`
+        //             break;
+        //     }
+        //     if (data.status != 'Draft' && data.status != 'Postponed') {
+        //         let dadiv = $('div.dt-modal-toggle').parent();
+        //         dadiv.find('div.dt-modal-toggle').remove();
+        //     }
+        //     formatter = new Intl.NumberFormat('vi-VN', {
+        //         style: 'currency',
+        //         currency: 'VND',
+        //     });
+        //     Display Class Info
+        //     $('#class-title-status').find('#class-class-status').remove();
+        //     $('#class-status').empty();
+        //     $('select[id="updateClassStatus_Status"]').empty();
+        //     $('#class-status').append(statusText);
+        //     $('#class-id').text(data.classId);
+        //     $('#class-class-title').text(data.className);
+        //     $('#class-name').text(data.className);
+        //     $('#class-teacher').text(data.teacher.account.fullname);
+        //     $('#class-teacher').attr('href', `/Admin/Teacher/${data.teacher.accountId}/Info`);
+        //     $('#class-course').text(data.course.courseName);
+        //     $('#class-course').attr('href', `/Admin/Course/${data.course.courseId}/Info`);
+        //     $('#class-start-date').text(formatDate(data.startDate, { ignoreHour: true }));
+        //     $('#class-end-date').text(formatDate(data.endDate, { ignoreHour: true }));
+        //     $('#class-current-students-amount').text(filteredEnrollList.length + ' Student(s)');
+        //     $('#class-minimum-students-amount').text(data.minimumStudents);
+        //     $('#class-maximum-students-amount').text(data.maximumStudents);
+        //     $('#class-enroll-fee').text(formatter.format(data.enrollmentFee));
+        //     $('#class-title-status').append(titleStatusHtml);
+        //     $('#class-schedules-amount').text(data.schedules.length + ' Scheduled Session(s)');
+
+        //     Update Class Info
+        //     $('input[id="updateClass_ClassName"]').val(data.className);
+        //     $('input[id="updateClass_MinStudents"]').val(data.minimumStudents);
+        //     $('input[id="updateClass_MaxStudents"]').val(data.maximumStudents);
+        //     $('input[id="updateClass_StartDate"]').val(data.startDate);
+        //     $('input[id="updateClass_EndDate"]').val(data.endDate);
+        //     Update Class Status
+        //     $('select[id="updateClassStatus_Status"]').append(getStatusOptions(data.status));
+        // }
+    </script>
+</body>
+</html>

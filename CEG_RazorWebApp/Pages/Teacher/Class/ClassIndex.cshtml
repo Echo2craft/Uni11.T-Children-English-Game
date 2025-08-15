@@ -1,0 +1,238 @@
+﻿@page "/teacher/classes"
+@model CEG_RazorWebApp.Pages.Teacher.Class.ClassIndexModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Teacher All Classes Page";
+    string? search = string.Empty;
+
+    Layout = "~/Pages/Shared/_TLayout.cshtml";
+}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="main-content">
+        <div id="alertContainer"></div>
+        <div class="main">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="offset-sm-6 col-sm-6  d-flex justify-content-sm-end p-md-0 mt-2 mt-sm-0 ">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumd-item">
+                                <a href="#">Manage</a>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <span>/</span>
+                            </li>
+                            <li class="breadcrumd-item">
+                                <a href="/teacher/classes">Class</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <section>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row search">
+                                <div class="col-sm-12 d-flex justify-content-between align-items-center">
+                                    <div class="col-sm-6">
+                                        <h4 class="m-0">All Assigned Classes</h4>
+                                    </div>
+                                    <div class="col-sm-6 d-flex justify-content-end">
+                                        <div class="input-group w-auto">
+                                            <select class="custom-select w-auto" id="select-status">
+                                                <option value="" selected>All Status</option>
+                                                <option value="Ongoing">Ongoing</option>
+                                                <option value="Open">Open</option>
+                                                <option value="Ended">Ended</option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                @* <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div role="separator" class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Separated link</a>
+                                                </div> *@
+                                                <div class="col p-0 m-0">
+                                                    <input asp-for="@search" class="form-control" type="text" placeholder="Search class name..." value="@search">
+                                                    <i class='bx bx-search-alt search-icon'></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row card-content" id="classList">
+                                <!-- dung vong for o day -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script>
+        var id = sessionStorage.getItem('usrId');
+        var token = sessionStorage.getItem('token');
+        var apiUrl = sessionStorage.getItem('apiUrl');
+        var filteredclassList = [];
+        var classList = [];
+        $(document).ready(function () {
+            callApiGetClassList();
+            // Search event handler
+            $('#select-status').off('change').on('change', function () {
+                // Get the search term
+                var selectedValue = $(this).val().toLowerCase();
+
+                // Filter the classes based on the search term
+                filteredclassList = classList.filter(function (classObject) {
+                    var searchTerm = $('#search').val().toLowerCase();
+                    if(searchTerm != ""){
+                        return classObject.className.toLowerCase().includes(searchTerm) &&
+                                classObject.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.status.toLowerCase().includes(selectedValue);
+                });
+
+                // Display the filtered classList
+                setClassDisplay(filteredclassList, true);
+            });
+            $('#search').off('keyup').on('keyup', function () {
+                // Get the search term
+                var searchTerm = $(this).val().toLowerCase();
+                // Filter the classes based on the search term
+                filteredclassList = classList.filter(function (classObject) {
+                    var selectedValue = $('#select-status').val().toLowerCase();
+                    if(selectedValue != ""){
+                        return classObject.className.toLowerCase().includes(searchTerm) &&
+                                classObject.status.toLowerCase().includes(selectedValue);
+                    }
+                    return classObject.className.toLowerCase().includes(searchTerm);
+                });
+
+                // Display the filtered classList
+                setClassDisplay(filteredclassList, true);
+            });
+        });
+        // Function to call API for class list
+        function callApiGetClassList() {
+            $.ajax({
+                url: apiUrl + `class/teacher/account/${id}`, // Use teacher account Id in the API URL
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                success: function (response) {
+                    if (response.status) {
+                        classList = response.data;
+                        setClassDisplay(classList, false);
+                    } else {
+                        showAlert('error',"API returned false status.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Attempt to parse the response text if it is available
+                    var errorResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+
+                    // Extract the custom error message if it exists
+                    var errorMessage = errorResponse.errorMessage || errorResponse.title || "An unknown error occurred.";
+                    // Check if errorResponse.errors exists and is an object
+                    if (errorResponse.errors && typeof errorResponse.errors === 'object') {
+                        // Loop through each field in the errors object and append to the errorMessage
+                        for (var field in errorResponse.errors) {
+                            if (errorResponse.errors.hasOwnProperty(field)) {
+                                // Add each error message for the field, joining multiple messages if they exist
+                                var fieldErrors = errorResponse.errors[field].join(", ");
+                                errorMessage += `\n${field}: ${fieldErrors}`;
+                            }
+                        }
+                    }
+                    // Display the error message using your custom showAlert function
+                    showAlert('error', "Error: \n" + errorMessage);
+                }
+            });
+        }
+
+        // Function to display class list
+        function setClassDisplay(data, isFiltered) {
+            var classDiv = $('#classList');
+            classDiv.empty();
+            if (!data || data.length === 0) {
+                if(isFiltered){
+                classDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn’t find any assigned classes that fit your filter settings.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+                }
+                classDiv.append(`
+                    <div class="col-12 text-center my-5">
+                        <div class="alert alert-warning" role="alert">
+                            <i class='bx bx-sm bx-error-circle mr-2'></i> We couldn't find any assigned classes for you, sorry.'.
+                        </div>
+                    </div>
+                `);
+                return; // Stop execution if no classes
+            }
+            $.each(data, function (index, classObj) {
+                var formattedStartDate = formatDate(classObj.startDate, { ignoreHour: true });
+                var formattedEndDate = formatDate(classObj.endDate, { ignoreHour: true });
+                var filteredEnrollList = classObj.enrolls.filter(function (enroll) {
+                    return enroll.status === 'Enrolled';
+                });
+                var statusText = '';
+                switch (classObj.status) {
+                    case 'Open':
+                    case 'Ongoing':
+                        statusText = `<span class="outcome" style="float: left;">Status: ${classObj.status}</span>`
+                        break;
+                    case 'Draft':
+                    case 'Postponed':
+                        statusText = `<span class="approval" style="float: left;">Status: ${classObj.status}</span>`
+                        break;
+                    case 'Ended':
+                    case 'Cancelled':
+                        statusText = `<span class="destroy" style="float: left;">Status: ${classObj.status}</span>`
+                        break;
+                }
+                // Construct card HTML
+                var cardHtml = `
+                    <div class="col-xl-3 col-lg-6 col-sm-6 my-3">
+                        <div class="card1 card-child shadow-sm h-100">
+                            <div class="club-name d-flex justify-content-between align-items-center flex-wrap">
+                                <strong class="text-truncate" style="max-width: 200px;">${classObj.className}</strong>
+                                ${statusText}
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title h-14"><strong>Course: </strong><br/> ${classObj.course.courseName}</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-book-reader mr-2'></i><span> Teacher: ${classObj.teacher.account.fullname}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-calendar-event mr-2'></i><span> Class start at ${formattedStartDate} and ends at ${formattedEndDate}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-user-circle mr-2'></i><span> Require ${classObj.minimumStudents} - ${classObj.maximumStudents} students</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-money mr-2'></i><span> ${vnd.format(classObj.enrollmentFee)}</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-child mr-2'></i><span> ${filteredEnrollList.length} enrolled students - ${classObj.enrolls.length} enrolls</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-sm bx-spreadsheet mr-2'></i><span> ${classObj.schedules.length} scheduled session(s)</span></li>
+                            </ul>
+                            <div class="club-footer d-flex justify-content-around">
+                                <a class="btn btn-primary clickable-row d-flex align-items-center" href="/teacher/classes/${classObj.classId}" role="button"><i class='bx bx-info-circle mr-2'></i> Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                classDiv.append(cardHtml);
+            });
+        }
+    </script>
+</body>
+</html>

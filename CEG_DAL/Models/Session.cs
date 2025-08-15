@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace CEG_DAL.Models;
+
+public partial class Session
+{
+    public int SessionId { get; set; }
+
+    public int CourseId { get; set; }
+
+    public string Title { get; set; } = null!;
+
+    public string? Description { get; set; }
+
+    public int? Hours { get; set; }
+
+    public int? SessionNumber { get; set; }
+
+    public virtual Course Course { get; set; } = null!;
+
+    public virtual ICollection<Homework> Homeworks { get; set; } = new List<Homework>();
+
+    public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+}

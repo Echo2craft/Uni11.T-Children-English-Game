@@ -1,0 +1,321 @@
+﻿using CEG_BAL.Configurations;
+using CEG_BAL.Services.Implements;
+using CEG_BAL.Services.Interfaces;
+using CEG_BAL.ViewModels;
+using CEG_BAL.ViewModels.Admin;
+using CEG_BAL.ViewModels.Admin.Update;
+using CEG_WebAPI.Constants;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+
+namespace CEG_WebAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class SessionController : ControllerBase
+    {
+        private readonly ISessionService _sessionService;
+        private readonly ICourseService _courseService;
+        private readonly IConfiguration _config;
+
+        public SessionController(ISessionService sessionService, ICourseService courseService, IConfiguration config)
+        {
+            _sessionService = sessionService;
+            _courseService = courseService;
+            _config = config;
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("All")]
+        [ProducesResponseType(typeof(List<SessionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSessionList()
+        {
+            return await GetList();
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpGet("ByCourse/{courseId}")]
+        [ProducesResponseType(typeof(List<SessionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSessionListByCourseId([FromRoute] int courseId)
+        {
+            return await GetListByCourseId(courseId);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPost("Create")]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateSession(
+            [FromBody][Required] CreateNewSession newSes
+            )
+        {
+            return await Create(newSes);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpPut("{sesId}/Update")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateSession(
+            [FromRoute][Required] int sesId,
+            [FromBody][Required] UpdateSession ses
+            )
+        {
+            return await Update(sesId, ses);
+        }
+        [Obsolete("This api use old Api mapping that is not correct. Use new api instead", false)]
+        [HttpDelete("{id}/Delete")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteSession(
+            [FromRoute][Required] int id
+            )
+        {
+            return await Delete(id);
+        }
+        [HttpGet]
+        [ProducesResponseType(typeof(List<SessionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetList()
+        {
+            try
+            {
+                var result = await _sessionService.GetSessionList();
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Session List Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSessionById([FromRoute] int id)
+        {
+            try
+            {
+                var result = await _sessionService.GetSessionById(id);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Session Not Found!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpGet("course/{courseId}")]
+        [ProducesResponseType(typeof(List<SessionViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetListByCourseId([FromRoute] int courseId)
+        {
+            try
+            {
+                var result = await _sessionService.GetSessionListByCourseId(courseId);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "No Sessions Found With This Course!"
+                    });
+                }
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Create(
+            [FromBody][Required] CreateNewSession newSes
+            )
+        {
+            try
+            {
+                var isCourseExist = await _courseService.GetByIdNoTracking(newSes.CourseId);
+                if (isCourseExist == null)
+                {
+                    return BadRequest(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Course not found!"
+                    });
+                }
+                await _sessionService.Create(newSes);
+                return Ok(new
+                {
+                    Data = true,
+                    Status = true,
+                    SuccessMessage = "Session create successfully!"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpPut("{sesId}")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update(
+            [FromRoute][Required] int sesId, 
+            [FromBody][Required] UpdateSession ses
+            )
+        {
+            try
+            {
+                var result = await _sessionService.GetSessionById(sesId);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Session Does Not Exist"
+                    });
+                }
+                await _sessionService.Update(sesId, ses);
+                result = await _sessionService.GetSessionById(sesId);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin)]
+        [ProducesResponseType(typeof(SessionViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(
+            [FromRoute][Required] int id
+            )
+        {
+            try
+            {
+                var ses = await _sessionService.GetSessionById(id);
+                if (ses == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "session with given id does not exist."
+                    });
+                }
+                /*var result = await _courseService.GetByIdNoTracking(ses.CourseId.Value);
+                if (result == null)
+                {
+                    return NotFound(new
+                    {
+                        Status = false,
+                        ErrorMessage = "Course Does Not Exist!"
+                    });
+                }
+                bool isValid = CEG_BAL_Library.IsCourseNewStatusValid(result.Status, status) && result.Classes?.Count == 0;
+                if (isValid)
+                {
+                    _courseService.UpdateStatus(id, status);
+                    result = await _courseService.GetByIdNoTracking(id);
+                    return Ok(new
+                    {
+                        Status = true,
+                        Data = result
+                    });
+                }*/
+                await _sessionService.Delete(id);
+                return Ok(new
+                {
+                    Status = true,
+                    Data = ses
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Status = false,
+                    ErrorMessage = ex.Message,
+                    InnerExceptionMessage = ex.InnerException?.Message
+                });
+            }
+        }
+    }
+}
